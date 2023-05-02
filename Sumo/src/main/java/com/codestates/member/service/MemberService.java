@@ -4,8 +4,6 @@ import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,18 +11,16 @@ import java.util.Optional;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final ApplicationEventPublisher publisher;
-    private final PasswordEncoder passwordEncoder;
 
-    public MemberService(MemberRepository memberRepository,
-                         ApplicationEventPublisher publisher,
-                         PasswordEncoder passwordEncoder) {
+    public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        this.publisher = publisher;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public Member createMember(Member member){
+
+        verifyExistsEmail(member.getEmail());
+        verifyExistsNickname(member.getNickname());
+
         Member returnMember = memberRepository.save(member);
         return returnMember;
     }

@@ -1,4 +1,4 @@
-package com.codestates.Sumo;
+package com.codestates;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

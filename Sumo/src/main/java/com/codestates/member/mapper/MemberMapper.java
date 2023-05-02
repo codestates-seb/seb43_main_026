@@ -27,6 +27,7 @@ public class MemberMapper {
             member.setMemberId(patchDto.getMemberId());
             member.setNickname(patchDto.getNickname());
             member.setEmail(patchDto.getEmail());
+            return member;
         }
     }
 

@@ -17,7 +17,6 @@ public class MemberService {
     }
 
     public Member createMember(Member member){
-
         verifyExistsEmail(member.getEmail());
         verifyExistsNickname(member.getNickname());
 

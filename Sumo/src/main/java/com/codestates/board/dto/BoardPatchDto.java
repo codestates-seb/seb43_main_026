@@ -18,6 +18,8 @@ public class BoardPatchDto {
 
     private String content;
 
+    private String writer;
+
     private LocalDateTime modifiedAt;
 
 

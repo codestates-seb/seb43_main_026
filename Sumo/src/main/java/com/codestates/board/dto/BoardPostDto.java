@@ -20,6 +20,8 @@ public class BoardPostDto {
 
     private String content;
 
+    private String writer;
+
     private LocalDateTime createAt;
 
 

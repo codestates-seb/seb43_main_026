@@ -2,11 +2,13 @@ package com.codestates.board.entity;
 
 
 import com.codestates.audit.Auditable;
+import com.codestates.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -19,13 +21,26 @@ public class Board extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long boardId;
 
+
     @Column(nullable = false)
     private String title;
 
     @Column
     private String content;
 
-    @Column
-    private String nickname;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @Column(nullable = false)
+    private String writer;
+
+    public String getMemberNickname() {
+        return this.member.getNickname();
+    }
+
+
+
+
 
 }

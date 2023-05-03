@@ -22,6 +22,8 @@ public class BoardResponseDto {
 
     private LocalDateTime createAt;
 
+    private String writer;
+
     public void setMember(Member member) {this.memberId = member.getMemberId(); }
 
 

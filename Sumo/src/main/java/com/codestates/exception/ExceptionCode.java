@@ -24,9 +24,7 @@ public enum ExceptionCode {
     ANSWER_NOT_MATCH(404,"Answer is not match"),
     ANSWER_MEMBER_NOT_MATCH(404,"Answer's member not match"),
     ANSWER_NOT_FOUND(404,"Answer not found"),
-    OPTION_NOT_FOUND(404,"Option not found"),
-    EMAIL_CONFLICT(409,"Email already exists"),
-    NICKNAME_CONFLICT(409,"Nickname already exists");
+    OPTION_NOT_FOUND(404,"Option not found");
     @Getter
     private int status;
 

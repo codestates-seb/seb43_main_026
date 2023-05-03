@@ -22,4 +22,7 @@ server:
   servlet:
     encoding:
       force-response: true
-
+jwt:
+  key: TheKeyIsSensitiveInformationSoYouShouldChangeItLaterUsingTheEnvironmentalVariablesOfTheOS
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 420

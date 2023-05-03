@@ -20,6 +20,8 @@ public class MemberService {
         verifyExistsEmail(member.getEmail());
         verifyExistsNickname(member.getNickname());
 
+        // TODO : Calendar Service를 끌어와서 create해줘야 한다.
+
         Member returnMember = memberRepository.save(member);
         return returnMember;
     }

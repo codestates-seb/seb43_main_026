@@ -32,8 +32,6 @@ public class MemberController {
         Member member = mapper.memberPostDtoToMember(postDto);
         Member response = memberService.createMember(member);
 
-        // TODO : Calendar를 create해줘야 한다.
-
         return new ResponseEntity<>(mapper.memberToMemberResponseDto(response),
                 HttpStatus.CREATED);
     }

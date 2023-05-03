@@ -8,6 +8,7 @@ import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -57,6 +58,10 @@ public class CalendarService {
         CalendarContent calendarContent =
                 optionalCalendarContent.orElseThrow(() -> new BusinessLogicException(ExceptionCode.CALENDARCONTENT_NOT_FOUND));
         return calendarContent;
+    }
+
+    public List<CalendarContent> findCalendarContents(long calendarId) {
+        return calendarContentRepository.findByCalendar_CalendarId(calendarId);
     }
 
     public void deleteCalendarContent(long calendarContentId) {

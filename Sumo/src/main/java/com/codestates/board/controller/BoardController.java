@@ -76,7 +76,7 @@ public class BoardController {
 
 
 
-    // todo: 모든 카테고리의 게시판 글을 가지고오는 메서드 관련된거는 category로 가야하나 물어보기
+    // todo: 하나의 카테고리의 모든 게시판 글을 가지고오는 GET 요청은 category로 옮길까 생각중입니다.
 //    @GetMapping("/{category-id}")
 //    public ResponseEntity <List<BoardResponseDto>> getboards(@PathVariable("category-id") @Positive long categoryId){
 //        List<Board> boardList = boardService.findBoards(categoryId);

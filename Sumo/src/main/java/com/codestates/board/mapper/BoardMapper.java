@@ -5,6 +5,7 @@ import com.codestates.board.dto.BoardPatchDto;
 import com.codestates.board.dto.BoardPostDto;
 import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
+import com.codestates.category.entity.Category;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
@@ -18,7 +19,7 @@ public interface BoardMapper {
         board.setBoardId(boardPostDto.getBoardId());
         board.setTitle(boardPostDto.getTitle());
         board.setContent(boardPostDto.getContent());
-        board.setWriter(board.getWriter());
+        board.setWriter(boardPostDto.getWriter());
 
         return board;
     }
@@ -28,7 +29,7 @@ public interface BoardMapper {
 
         board.setTitle(boardPatchDto.getTitle());
         board.setContent(boardPatchDto.getContent());
-        board.setWriter(board.getWriter());
+        board.setWriter(boardPatchDto.getWriter());
 
         return board;
     }

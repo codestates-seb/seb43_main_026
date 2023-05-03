@@ -39,7 +39,7 @@ public class BoardService {
 
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
-        Optional.ofNullable(board.getMember().getNickname()).ifPresent(nickname -> findBoard.setWriter(nickname));
+        Optional.ofNullable(board.getWriter()).ifPresent(nickname -> findBoard.setWriter(nickname));
         return boardRepository.save(findBoard);
     }
 
@@ -51,16 +51,17 @@ public class BoardService {
             throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
         }
 
-
         boardRepository.deleteById(boardId);
     }
-
-
 
 
     public Board findBoard(long boardId){
         return findVerifiedBoard(boardId);
     }
+
+//    public List<Board> findBoards (long categoryId) {
+//        return boardRepository.findByCategoryId(categoryId);
+//    }
 
     private Board findVerifiedBoard(long boardId){
         Optional<Board> optionalBoard = boardRepository.findById(boardId);

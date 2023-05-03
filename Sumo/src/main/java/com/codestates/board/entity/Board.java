@@ -2,6 +2,7 @@ package com.codestates.board.entity;
 
 
 import com.codestates.audit.Auditable;
+import com.codestates.category.entity.Category;
 import com.codestates.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,10 @@ public class Board extends Auditable {
 
     @Column
     private String content;
+
+    @ManyToOne
+    @JoinColumn(name= "category_id")
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "member_id")

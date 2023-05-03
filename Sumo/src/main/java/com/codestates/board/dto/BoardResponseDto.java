@@ -20,11 +20,13 @@ public class BoardResponseDto {
 
     private String content;
 
+    private Long categoryId;
+
     private LocalDateTime createAt;
 
     private String writer;
 
-    public void setMember(Member member) {this.memberId = member.getMemberId(); }
+    public void setMemberIdFromMember(Member member) {this.memberId = member.getMemberId(); }
 
 
 }

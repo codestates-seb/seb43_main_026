@@ -23,33 +23,36 @@ public class BoardService {
 
 
     public Board createBoard(Board board){
+    // TODO: login여부 확인. 아니면 exception 던지기
+    //    spring security context holder? ->
 
         return boardRepository.save(board);
     }
 
 
 
-    public Board updateBoard(Board board, Long memberId){
-        //TODO: 작성한 사람이 UPDATE 할 수 있어야함. 완료.
-        Board findBoard = findVerifiedBoard(board.getBoardId());
+    public Board updateBoard(Board board){
 
-        if(!findBoard.getMember().getMemberId().equals(memberId)){
-            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
-        }
+        Board findBoard = findVerifiedBoard(board.getBoardId());
+        // TODO: login여부 확인. 아니면 exception 던지기
+        //    spring security context holder? ->
+//        if(!findBoard.getMember().getMemberId().equals(memberId)){
+//            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
+//        }
 
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
-        Optional.ofNullable(board.getWriter()).ifPresent(nickname -> findBoard.setWriter(nickname));
         return boardRepository.save(findBoard);
     }
 
-    public void deleteBoard(long boardId, Long memberId){
-        //TODO: 작성한 사람이 DELETE 할 수 있어야함. 완료.
-        Board board = findVerifiedBoard(boardId);
+    public void deleteBoard(long boardId){
 
-        if(!board.getMember().getMemberId().equals(memberId)){
-            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
-        }
+        Board board = findVerifiedBoard(boardId);
+        // TODO: login여부 확인. 아니면 exception 던지기
+        //    spring security context holder? ->
+//        if(!board.getMember().getMemberId().equals(memberId)){
+//            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
+//        }
 
         boardRepository.deleteById(boardId);
     }
@@ -59,9 +62,6 @@ public class BoardService {
         return findVerifiedBoard(boardId);
     }
 
-//    public List<Board> findBoards (long categoryId) {
-//        return boardRepository.findByCategoryId(categoryId);
-//    }
 
     private Board findVerifiedBoard(long boardId){
         Optional<Board> optionalBoard = boardRepository.findById(boardId);

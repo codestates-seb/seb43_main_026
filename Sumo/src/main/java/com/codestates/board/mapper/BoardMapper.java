@@ -5,7 +5,7 @@ import com.codestates.board.dto.BoardPatchDto;
 import com.codestates.board.dto.BoardPostDto;
 import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
-import com.codestates.category.entity.Category;
+import com.codestates.member.entity.Member;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
@@ -15,11 +15,11 @@ public interface BoardMapper {
 
         // 엔티티 객체인 board 객체를 생성합니다.
         Board board = new Board();
-        // Board 객체의 id 값을 설정합니다.
-        board.setBoardId(boardPostDto.getBoardId());
+        Member member= new Member();
+
         board.setTitle(boardPostDto.getTitle());
         board.setContent(boardPostDto.getContent());
-        board.setWriter(boardPostDto.getWriter());
+        board.setMember(member);
 
         return board;
     }
@@ -27,9 +27,9 @@ public interface BoardMapper {
     default Board boardPatchDtoToBoard(BoardPatchDto boardPatchDto){
         Board board = new Board();
 
+        board.setBoardId(boardPatchDto.getBoardId());
         board.setTitle(boardPatchDto.getTitle());
         board.setContent(boardPatchDto.getContent());
-        board.setWriter(boardPatchDto.getWriter());
 
         return board;
     }
@@ -40,7 +40,7 @@ public interface BoardMapper {
         boardResponseDto.setBoardId(board.getBoardId());
         boardResponseDto.setTitle(board.getTitle());
         boardResponseDto.setContent(board.getContent());
-        boardResponseDto.setWriter(board.getWriter());
+        boardResponseDto.setWriter(board.getMember().getNickname());
 
         return boardResponseDto;
 

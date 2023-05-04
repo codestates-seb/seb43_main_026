@@ -35,29 +35,26 @@ public class BoardController {
     }
 
 
+    @PostMapping("/{board-id}")
+    public ResponseEntity postBoard(@Valid @RequestBody BoardPostDto boardPostDto){
 
-    @PostMapping("/{category-id}")
-    public ResponseEntity postBoard(@Valid @RequestBody BoardPostDto boardPostDto,
-                                    @PathVariable("category-id") @Positive long categoryId){
-
-        boardPostDto.setCategoryId(categoryId);
         Board board = boardService.createBoard(boardMapper.boardPostDtoToboard(boardPostDto));
 
         URI location = UriComponentsBuilder
                 .newInstance()
-                .path(BOARD_DEFAULT_URL + "/{category-id}/{board-id}")
-                .buildAndExpand(categoryId, board.getBoardId())
+                .path(BOARD_DEFAULT_URL + "/{board-id}")
+                .buildAndExpand(board.getBoardId())
                 .toUri();
 
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{category-id}/{board-id}")
+    @PatchMapping("/{board-id}")
     public ResponseEntity patchBoard(@Valid @RequestBody BoardPatchDto boardPatchDto,
-                                     @PathVariable("board-id") @Positive long boardId,
-                                     @RequestParam("memberId") Long memberId) {
+                                     @PathVariable("board-id") @Positive long boardId) {
         boardPatchDto.setBoardId(boardId);
-        Board board = boardService.updateBoard(boardMapper.boardPatchDtoToBoard(boardPatchDto), memberId);
+
+        Board board = boardService.updateBoard(boardMapper.boardPatchDtoToBoard(boardPatchDto));
         BoardResponseDto boardResponseDto = boardMapper.boardToBoardResponseDto(board);
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
@@ -66,7 +63,15 @@ public class BoardController {
     }
 
 
-    @GetMapping("/{category-id}/{board-id}")
+    @DeleteMapping("/{board-id}")
+    public ResponseEntity deleteBoard(@PathVariable("board-id")@Positive long boardId) {
+        boardService.deleteBoard(boardId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //todo: 하나의 게시글 GET 요청
+    @GetMapping("/{board-id}")
     public ResponseEntity getBoard(@PathVariable("board-id") @Positive long boardId) {
         Board board = boardService.findBoard(boardId);
         BoardResponseDto response = boardMapper.boardToBoardResponseDto(board);
@@ -74,11 +79,9 @@ public class BoardController {
     }
 
 
-
-
-    // todo: 하나의 카테고리의 모든 게시판 글을 가지고오는 GET 요청은 category로 옮길까 생각중입니다.
-//    @GetMapping("/{category-id}")
-//    public ResponseEntity <List<BoardResponseDto>> getboards(@PathVariable("category-id") @Positive long categoryId){
+    // todo:모든 게시판 글을 가지고오는 GET 요청
+//    @GetMapping("/boards")
+//    public ResponseEntity <List<BoardResponseDto>> getboards(@PathVariable("board-id") @Positive long categoryId){
 //        List<Board> boardList = boardService.findBoards(categoryId);
 //        List<BoardResponseDto> responses = boardList.stream()
 //                .map(boardMapper::boardToBoardResponseDto)
@@ -88,14 +91,7 @@ public class BoardController {
 
 
 
-//
-    @DeleteMapping("/{category-id}/{board-id}")
-    public ResponseEntity deleteBoard(@PathVariable("board-id")@Positive long boardId,
-                                      @RequestParam("memberId") @Positive Long memberId) {
-        boardService.deleteBoard(boardId, memberId);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-   }
 
 
 }

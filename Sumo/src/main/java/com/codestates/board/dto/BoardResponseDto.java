@@ -13,20 +13,23 @@ public class BoardResponseDto {
 
     private long boardId;
 
-    @Setter(AccessLevel.NONE)
-    private long memberId;
-
     private String title;
 
     private String content;
 
-    private Long categoryId;
+    private String writer;
 
     private LocalDateTime createAt;
 
-    private String writer;
+    private LocalDateTime modifiedAt;
 
-    public void setMemberIdFromMember(Member member) {this.memberId = member.getMemberId(); }
+//    private long commentId;
+//
+//    private String commentContent;
+//
+//    private LocalDateTime createAt;
+//
+//    private LocalDateTime modifiedAt;
 
 
 }

@@ -6,11 +6,6 @@ import Header from './layout/Header';
 import Footer from './layout/Footer';
 import Nav from './layout/Nav';
 
-//레이아웃
-import Header from './layout/Header';
-import Footer from './layout/Footer';
-import Nav from './layout/Nav';
-
 function App() {
   return (
     <div className="App">

@@ -38,6 +38,8 @@ public class Board extends Auditable {
     @Column
     private int likeCount;
 
+    private String board_Image_Address;
+
 //    public int getLikesCount(){
 //        return boardLikes.size();
 //    }

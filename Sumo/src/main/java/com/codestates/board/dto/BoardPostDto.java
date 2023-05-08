@@ -19,6 +19,7 @@ public class BoardPostDto {
 
     private String writer;
 
+    private String board_Image_Address;
 
 
 }

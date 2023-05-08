@@ -30,6 +30,8 @@ public class BoardResponseDto {
 
     private List<Long> commentId;
 
+    private String board_Image_Address;
+
     // comment 부분
 //    private long commentId;
 //

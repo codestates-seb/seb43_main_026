@@ -25,6 +25,7 @@ public interface BoardMapper {
         board.setTitle(boardPostDto.getTitle());
         board.setContent(boardPostDto.getContent());
         board.setMember(member);
+        board.setBoard_Image_Address(boardPostDto.getBoard_Image_Address());
 
         return board;
     }
@@ -46,6 +47,7 @@ public interface BoardMapper {
         boardResponseDto.setTitle(board.getTitle());
         boardResponseDto.setContent(board.getContent());
         boardResponseDto.setWriter(board.getMember().getNickname());
+        boardResponseDto.setBoard_Image_Address(board.getBoard_Image_Address());
         boardResponseDto.setCreatedAt(board.getCreatedAt());
         boardResponseDto.setModifiedAt(board.getModifiedAt());
         boardResponseDto.setBoardLikesId(board.getBoardLikes().stream().map(BoardLikes::getBoardLikesId).collect(Collectors.toList()));
@@ -55,8 +57,6 @@ public interface BoardMapper {
         // 예를 들어, Board 엔티티에 Comment 엔티티에 대한 참조가 있다면 다음과 같이 설정할 수 있습니다.
         // boardResponseDto.setCommentIds(board.getComments().stream().map(Comment::getCommentId).collect(Collectors.toList()));
         // 댓글 수도 가지고 와야 할 수 있음.
-
-
 
 
         return boardResponseDto;

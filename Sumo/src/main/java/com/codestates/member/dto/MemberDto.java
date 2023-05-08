@@ -15,6 +15,7 @@ public class MemberDto {
 
     @Getter
     @Setter
+    @AllArgsConstructor
     public static class Post{
         @Email
         @NotBlank(message = "이메일을 입력하여 주십시오.")

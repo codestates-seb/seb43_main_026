@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -38,7 +37,7 @@ public class Board extends Auditable {
     @Column
     private int likeCount;
 
-    private String board_Image_Address;
+    private String boardImageAddress;
 
 //    public int getLikesCount(){
 //        return boardLikes.size();

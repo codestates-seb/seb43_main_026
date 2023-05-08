@@ -20,6 +20,6 @@ public class BoardPatchDto {
 
     private String content;
 
-
+    private String boardImageAddress;
 
 }

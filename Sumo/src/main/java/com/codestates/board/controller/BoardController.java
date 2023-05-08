@@ -37,7 +37,7 @@ public class BoardController {
     }
 
 
-    @PostMapping("/{board-id}")
+    @PostMapping
     public ResponseEntity postBoard(@Valid @RequestBody BoardPostDto boardPostDto){
 
         Board board = boardService.createBoard(boardMapper.boardPostDtoToboard(boardPostDto));
@@ -109,6 +109,20 @@ public class BoardController {
     }
 
 
+    @PostMapping("/{board-id}/likes")
+    public ResponseEntity addLikeToBoard(@PathVariable("board-id") @Positive long boardId,
+                                        @RequestParam("member-id") @Positive long memberId){
+
+        boardService.toggleLike(boardId, memberId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{board-id}/likes")
+    public ResponseEntity getLikesCount(@PathVariable("board-id") @Positive long boardId) {
+
+        int likesCount = boardService.getLikesCount(boardId);
+        return new ResponseEntity<>(likesCount, HttpStatus.OK);
+    }
 
 
 

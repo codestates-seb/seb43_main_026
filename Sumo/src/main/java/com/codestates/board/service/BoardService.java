@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,8 +39,9 @@ public class BoardService {
     // TODO: spring security context holder 적용
     @Transactional
     public Board createBoard(Board board){
-        Member currentMember = getCurrentMember();
-        board.setMember(currentMember);
+//        Member currentMember = getCurrentMember();
+//        board.setMember(currentMember);
+
 
         return boardRepository.save(board);
     }
@@ -51,28 +52,30 @@ public class BoardService {
     @Transactional
     public Board updateBoard(Board board){
 
-        Member currentMember = getCurrentMember();
+//        Member currentMember = getCurrentMember();
         Board findBoard = findVerifiedBoard(board.getBoardId());
 
-        if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
-            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
-        }
+//        if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
+//            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
+//        }
 
 
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
+
+        findBoard.setModifiedAt(LocalDateTime.now());
         return boardRepository.save(findBoard);
     }
 
     // 게시글 삭제
     // TODO: spring security context holder 적용
     public void deleteBoard(long boardId){
-        Member currentMember = getCurrentMember();
+//        Member currentMember = getCurrentMember();
         Board board = findVerifiedBoard(boardId);
 
-        if (!board.getMember().getMemberId().equals(currentMember.getMemberId())) {
-            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
-        }
+//        if (!board.getMember().getMemberId().equals(currentMember.getMemberId())) {
+//            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
+//        }
 
         boardRepository.deleteById(boardId);
     }
@@ -108,13 +111,15 @@ public class BoardService {
             BoardLikes existingBoardLike = existingBoardLikeOpt.get();
             boardLikesRepository.delete(existingBoardLike);
 
-            List<BoardLikes> boardLikes = board.getBoardLikes();
-            int likeCount = boardLikes.size();
-            board.setLikeCount(likeCount - 1);
+//            List<BoardLikes> boardLikes = board.getBoardLikes();
+//            int likeCount = boardLikes.size();
+//            board.setLikeCount(likeCount - 1);
+            board.setLikeCount(board.getLikeCount() -1);
         } else {
-            List<BoardLikes> boardLikes = board.getBoardLikes();
-            int likeCount = boardLikes.size();
-            board.setLikeCount(likeCount + 1);
+//            List<BoardLikes> boardLikes = board.getBoardLikes();
+//            int likeCount = boardLikes.size();
+//            board.setLikeCount(likeCount + 1);
+            board.setLikeCount(board.getLikeCount() +1);
 
             BoardLikes newBoardLike = new BoardLikes();
             newBoardLike.setBoard(board);
@@ -122,6 +127,8 @@ public class BoardService {
             newBoardLike.setBoardLikes(1);
             boardLikesRepository.save(newBoardLike);
         }
+
+        boardRepository.save(board);
     }
 
 
@@ -188,10 +195,16 @@ public class BoardService {
 //    }
 
     // TODO: 현재 로그인한 회원 정보 가지고오기.
-    private Member getCurrentMember() {
-        String nickname = SecurityContextHolder.getContext().getAuthentication().getName();
-        return memberRepository.findByNickname(nickname)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+//    private Member getCurrentMember() {
+//        String nickname = SecurityContextHolder.getContext().getAuthentication().getName();
+//        return memberRepository.findByNickname(nickname)
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+//    }
+
+    public int getLikesCount(long boardId){
+        Board board = findVerifiedBoard(boardId);
+        List<BoardLikes> boardLikes = board.getBoardLikes();
+        return boardLikes.size();
     }
 
 

@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
-import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -17,9 +15,7 @@ public class BoardPostDto {
 
     private String content;
 
-    private String writer;
-
-    private String board_Image_Address;
+    private String boardImageAddress;
 
 
 }

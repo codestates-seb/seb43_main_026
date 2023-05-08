@@ -9,7 +9,6 @@ import com.codestates.member.entity.Member;
 import com.codestates.board.entity.BoardLikes;
 import org.mapstruct.Mapper;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -20,12 +19,12 @@ public interface BoardMapper {
 
         // 엔티티 객체인 board 객체를 생성합니다.
         Board board = new Board();
-        Member member= new Member();
+//        Member member= new Member();
 
         board.setTitle(boardPostDto.getTitle());
         board.setContent(boardPostDto.getContent());
-        board.setMember(member);
-        board.setBoard_Image_Address(boardPostDto.getBoard_Image_Address());
+//        board.setMember(member);
+        board.setBoardImageAddress(boardPostDto.getBoardImageAddress());
 
         return board;
     }
@@ -36,7 +35,7 @@ public interface BoardMapper {
         board.setBoardId(boardPatchDto.getBoardId());
         board.setTitle(boardPatchDto.getTitle());
         board.setContent(boardPatchDto.getContent());
-
+        board.setBoardImageAddress(boardPatchDto.getBoardImageAddress());
         return board;
     }
 
@@ -46,8 +45,8 @@ public interface BoardMapper {
         boardResponseDto.setBoardId(board.getBoardId());
         boardResponseDto.setTitle(board.getTitle());
         boardResponseDto.setContent(board.getContent());
-        boardResponseDto.setWriter(board.getMember().getNickname());
-        boardResponseDto.setBoard_Image_Address(board.getBoard_Image_Address());
+//        boardResponseDto.setWriter(board.getMember().getNickname());
+        boardResponseDto.setBoardImageAddress(board.getBoardImageAddress());
         boardResponseDto.setCreatedAt(board.getCreatedAt());
         boardResponseDto.setModifiedAt(board.getModifiedAt());
         boardResponseDto.setBoardLikesId(board.getBoardLikes().stream().map(BoardLikes::getBoardLikesId).collect(Collectors.toList()));

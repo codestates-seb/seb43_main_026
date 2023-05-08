@@ -1,7 +1,5 @@
 package com.codestates.board.dto;
 
-import com.codestates.member.entity.Member;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,9 +28,10 @@ public class BoardResponseDto {
 
     private List<Long> commentId;
 
-    private String board_Image_Address;
+    private String boardImageAddress;
 
-    // comment 부분
+
+//     comment 부분
 //    private long commentId;
 //
 //    private String commentContent;
@@ -40,6 +39,7 @@ public class BoardResponseDto {
 //    private LocalDateTime createAt;
 //
 //    private LocalDateTime modifiedAt;
+
 
 
 }

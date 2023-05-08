@@ -1,11 +1,13 @@
 import styled from 'styled-components';
-// import LogoImage from '../assets/images/logo.png';
+import LogoImage from '../assets/image/logo.png';
 
 const Footer = () => {
   return (
     <Container>
       <div>
-        <div className="logo">{/* <Logo src={LogoImage} alt="logo" /> */}</div>
+        <div className="logo">
+          <Logo src={LogoImage} alt="logo" />
+        </div>
         <div className="github">
           <GithubProfile profileUrl="52683129" name="rsuubinn" />
           <GithubProfile profileUrl="119961147" name="kijiwon" />
@@ -61,7 +63,7 @@ const Container = styled.div`
   }
 `;
 
-// const Logo = styled.img``;
+const Logo = styled.img``;
 
 const GithubContainer = styled.div`
   display: flex;

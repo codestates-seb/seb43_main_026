@@ -1,5 +1,5 @@
-const btn = () => {
+const Btn = () => {
   return <></>;
 };
 
-export default btn;
+export default Btn;

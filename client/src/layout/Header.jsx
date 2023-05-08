@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { FiMenu } from 'react-icons/fi';
 import { useState } from 'react';
-// import LogoImage from '../assets/images/로고.png';
+import LogoImage from '../assets/image/logo.png';
 
 const HeaderCon = styled.header`
   width: 100%;
@@ -34,7 +34,7 @@ const Header = () => {
 
   return (
     <HeaderCon>
-      {/* <img src={LogoImage} alt="로고" className="logo_img" /> */}
+      <img src={LogoImage} alt="로고" className="logo_img" />
       <FiMenu size={30} className="nav_icon" onClick={handleNav} />
     </HeaderCon>
   );

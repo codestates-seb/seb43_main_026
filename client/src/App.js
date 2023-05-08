@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
 import Nav from './layout/Nav';
+import ImageUpload from './component/common/ImageUpload';
 
 function App() {
   const [nav, setNav] = useState(false);
@@ -18,6 +19,9 @@ function App() {
         <Header handleNav={handleNav} />
         <Nav nav={nav} />
         <Footer />
+        <div>
+          <ImageUpload />
+        </div>
       </BrowserRouter>
     </div>
   );

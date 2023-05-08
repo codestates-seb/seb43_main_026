@@ -8,7 +8,8 @@ const HeaderCon = styled.header`
   height: 50px;
   background-color: ${(props) => props.theme.color.main_blue};
   box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.3);
-  position: fixed;
+  position: absolute;
+  top: 0px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class CustomAuthorityUtils {
     @Value("${mail.address.admin}")
     private String adminMailAddress;
-    
+
     private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN");
     private final List<String> USER_ROLES_STRING = List.of("USER");
 

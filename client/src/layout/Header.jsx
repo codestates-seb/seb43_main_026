@@ -5,7 +5,7 @@ import { FiMenu } from 'react-icons/fi';
 // eslint-disable-next-line import/no-unresolved
 import { useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
-import LogoImage from '../assets/images/logo.png';
+// import LogoImage from '../assets/images/logo.png';
 
 const HeaderCon = styled.header`
   width: 100%;
@@ -38,7 +38,7 @@ const Header = () => {
 
   return (
     <HeaderCon>
-      <img src={LogoImage} alt="로고" className="logo_img" />
+      {/* <img src={LogoImage} alt="로고" className="logo_img" /> */}
       <FiMenu size={30} className="nav_icon" onClick={handleNav} />
     </HeaderCon>
   );

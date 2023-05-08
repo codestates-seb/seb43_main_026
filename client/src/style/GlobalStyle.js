@@ -35,7 +35,6 @@ html {
 }
 body {
 	line-height: 1;
-	padding-top: 50px;
 }
 ol, ul {
 	list-style: none;

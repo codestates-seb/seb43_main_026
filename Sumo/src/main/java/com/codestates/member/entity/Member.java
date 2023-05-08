@@ -1,5 +1,6 @@
 package com.codestates.member.entity;
 
+import com.codestates.calendar.entity.Calendar;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,4 +27,7 @@ public class Member {
 
     @Column(nullable = false, unique = true)
     private String nickname;
+
+    @OneToOne(mappedBy = "member",cascade = CascadeType.ALL)
+    private Calendar calendar;
 }

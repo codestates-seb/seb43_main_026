@@ -6,6 +6,7 @@ import com.codestates.calendar.repository.CalendarContentRepository;
 import com.codestates.calendar.repository.CalendarRepository;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.member.entity.Member;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,9 +24,10 @@ public class CalendarService {
     }
 
     // memberService의 createMember 메서드 안에 추가하면 됨.
-    public Calendar initCalendar(long memberId) {
+    public Calendar initCalendar(Member member) {
         Calendar calendar = new Calendar();
         // TODO 캘린더의 memberId 세팅하기
+        calendar.setMember(member);
 
         return calendarRepository.save(calendar);
     }

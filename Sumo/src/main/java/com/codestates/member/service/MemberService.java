@@ -1,5 +1,6 @@
 package com.codestates.member.service;
 
+import com.codestates.calendar.service.CalendarService;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
@@ -11,9 +12,11 @@ import java.util.Optional;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final CalendarService calendarService;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository, CalendarService calendarService) {
         this.memberRepository = memberRepository;
+        this.calendarService = calendarService;
     }
 
     public Member createMember(Member member){
@@ -21,6 +24,7 @@ public class MemberService {
         verifyExistsNickname(member.getNickname());
 
         Member returnMember = memberRepository.save(member);
+        calendarService.initCalendar(member);
         return returnMember;
     }
 

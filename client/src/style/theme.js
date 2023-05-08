@@ -15,7 +15,7 @@ const widthSize = {
 };
 const color = {
   bg: '#FFFFFF',
-  main_blue: '#eff5ff',
+  main_blue: `#85B6FF`,
   main_dark_blue: `#2C599B`,
   main_gray: `#f2f3f7`,
   bg_light_blue: `#F0F9FF`,

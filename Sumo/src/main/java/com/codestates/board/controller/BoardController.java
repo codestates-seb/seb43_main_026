@@ -7,7 +7,9 @@ import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
 import com.codestates.board.mapper.BoardMapper;
 import com.codestates.board.service.BoardService;
+import com.codestates.dto.MultiResponseDto;
 import com.codestates.member.dto.MemberDto;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -77,6 +79,24 @@ public class BoardController {
         BoardResponseDto response = boardMapper.boardToBoardResponseDto(board);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    //todo: 최신순으로 GET 요청
+    @GetMapping
+    public ResponseEntity getInOrderOfRecentBoards (@Positive @RequestParam int page,
+                                                    @Positive @RequestParam int size){
+        Page<Board> pageBoards = boardService.findBoards(page -1, size);
+        List<Board> boards = pageBoards.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(boardMapper.boardToBoardResponseDto())
+        )
+    }
+
+    //todo: 좋아요순으로 GET 요청
+    @GetMapping
+    public ResponseEntity
+
+    //todo: 댓글순으로 GET 요청
 
 
     // todo:모든 게시판 글을 가지고오는 GET 요청

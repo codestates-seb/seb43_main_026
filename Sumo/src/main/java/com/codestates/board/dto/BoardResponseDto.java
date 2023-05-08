@@ -19,9 +19,11 @@ public class BoardResponseDto {
 
     private String writer;
 
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
+
+    private long boardLikesId;
 
 //    private long commentId;
 //

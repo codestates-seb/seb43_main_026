@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -31,10 +32,15 @@ public class Board extends Auditable {
     @JoinColumn(name = "member_id")
     private Member member;
 
-//    public String getMemberNickname() {
-//        return this.member.getNickname();
-//    }
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<BoardLikes> boardLikes;
 
+    public int getLikesCount(){
+        return boardLikes.size();
+    }
+
+//    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+//    private List<Comment> comments;
 
 
 

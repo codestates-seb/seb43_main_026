@@ -21,4 +21,5 @@ public class BoardPatchDto {
     private String content;
 
 
+
 }

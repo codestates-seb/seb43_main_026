@@ -8,8 +8,13 @@ import com.codestates.board.entity.Board;
 import com.codestates.member.entity.Member;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface BoardMapper {
+
+
+
 
     default Board boardPostDtoToboard(BoardPostDto boardPostDto){
 

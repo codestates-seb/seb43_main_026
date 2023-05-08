@@ -1,11 +1,12 @@
 import styled from 'styled-components';
+import LogoImage from '../assets/images/logo.png';
 
 const Footer = () => {
   return (
     <Container>
       <div>
         <div className="logo">
-          <h3>로고</h3>
+          <Logo src={LogoImage} alt="logo" />
         </div>
         <div className="github">
           <GithubProfile profileUrl="52683129" name="rsuubinn" />
@@ -49,7 +50,9 @@ const Container = styled.div`
     width: 50%;
     height: 100%;
     .logo {
-      background-color: orange;
+      img {
+        width: 10rem;
+      }
     }
     .github {
       display: flex;
@@ -59,6 +62,8 @@ const Container = styled.div`
     }
   }
 `;
+
+const Logo = styled.img``;
 
 const GithubContainer = styled.div`
   display: flex;

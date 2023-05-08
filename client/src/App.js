@@ -6,16 +6,12 @@ import Header from './layout/Header';
 
 import Footer from './layout/Footer.jsx';
 
-
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-
         <Header />
-
         <Footer />
-
       </BrowserRouter>
     </div>
   );

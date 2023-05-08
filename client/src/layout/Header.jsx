@@ -5,7 +5,7 @@ import { FiMenu } from 'react-icons/fi';
 // eslint-disable-next-line import/no-unresolved
 import { useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
-import LogoImage from '../assets/images/로고.png';
+import LogoImage from '../assets/images/logo.png';
 
 const HeaderCon = styled.header`
   width: 100%;

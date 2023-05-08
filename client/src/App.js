@@ -1,11 +1,10 @@
 //리액트 모듈
-import { useState } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from 'react-router-dom';
 
 //레이아웃
-import Header from "./layout/Header";
-import Footer from "./layout/Header";
-import Nav from "./layout/Nav";
+import Header from './layout/Header';
+import Footer from './layout/Footer';
+import Nav from './layout/Nav';
 
 function App() {
   return (

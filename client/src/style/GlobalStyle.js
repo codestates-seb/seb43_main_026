@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 // reset.css
 const GlobalStyle = createGlobalStyle`
@@ -35,6 +35,7 @@ html {
 }
 body {
 	line-height: 1;
+	padding-top: 50px;
 }
 ol, ul {
 	list-style: none;

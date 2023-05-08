@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,8 +24,13 @@ public class BoardResponseDto {
 
     private LocalDateTime modifiedAt;
 
-    private long boardLikesId;
+    private int likesCount;
 
+    private List<Long> boardLikesId;
+
+    private List<Long> commentId;
+
+    // comment 부분
 //    private long commentId;
 //
 //    private String commentContent;

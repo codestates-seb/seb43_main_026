@@ -35,13 +35,15 @@ public class Board extends Auditable {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<BoardLikes> boardLikes;
 
-    public int getLikesCount(){
-        return boardLikes.size();
-    }
+    @Column
+    private int likeCount;
+
+//    public int getLikesCount(){
+//        return boardLikes.size();
+//    }
 
 //    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
 //    private List<Comment> comments;
-
 
 
 

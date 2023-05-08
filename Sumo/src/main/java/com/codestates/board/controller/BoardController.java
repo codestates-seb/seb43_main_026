@@ -80,34 +80,31 @@ public class BoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    //todo: 최신순으로 GET 요청
-    @GetMapping
-    public ResponseEntity getInOrderOfRecentBoards (@Positive @RequestParam int page,
-                                                    @Positive @RequestParam int size){
-        Page<Board> pageBoards = boardService.findBoards(page -1, size);
-        List<Board> boards = pageBoards.getContent();
 
-        return new ResponseEntity<>(
-                new MultiResponseDto<>(boardMapper.boardToBoardResponseDto())
-        )
+
+    // 게시판 목록 조회
+    @GetMapping
+    public ResponseEntity getBoards(@Positive @RequestParam int page,
+                                    @Positive @RequestParam int size,
+                                    @RequestParam(required = false) String orderBy) {
+        List<Board> boards;
+        if (orderBy == null || orderBy.equalsIgnoreCase("latest")) {
+            boards = boardService.findBoardsSortedByLatest();
+        } else if (orderBy.equalsIgnoreCase("oldest")) {
+            boards = boardService.findBoardsSortedByOldest();
+        } else if (orderBy.equalsIgnoreCase("likes")) {
+            boards = boardService.findBoardsSortedByLikes();
+        } else if (orderBy.equalsIgnoreCase("comments")) {
+            boards = boardService.findBoardsSortedByComments();
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        List<BoardResponseDto> responses = boards.stream()
+                .map(boardMapper::boardToBoardResponseDto)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
-
-    //todo: 좋아요순으로 GET 요청
-    @GetMapping
-    public ResponseEntity
-
-    //todo: 댓글순으로 GET 요청
-
-
-    // todo:모든 게시판 글을 가지고오는 GET 요청
-//    @GetMapping("/boards")
-//    public ResponseEntity <List<BoardResponseDto>> getboards(@PathVariable("board-id") @Positive long categoryId){
-//        List<Board> boardList = boardService.findBoards(categoryId);
-//        List<BoardResponseDto> responses = boardList.stream()
-//                .map(boardMapper::boardToBoardResponseDto)
-//                .collect(Collectors.toList());
-//        return new ResponseEntity<>(responses, HttpStatus.OK);
-//    }
 
 
 

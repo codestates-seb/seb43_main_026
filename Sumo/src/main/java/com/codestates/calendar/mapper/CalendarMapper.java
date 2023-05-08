@@ -20,6 +20,8 @@ public interface CalendarMapper {
         calendarContent.setContent(calendarPostDto.getContent());
         calendarContent.setLocation(calendarPostDto.getLocation());
         calendarContent.setCalendar(calendar);
+        calendarContent.setBeginTime(calendarPostDto.getBeginTime());
+        calendarContent.setEndTime(calendarPostDto.getEndTime());
 
         return calendarContent;
     }
@@ -30,6 +32,8 @@ public interface CalendarMapper {
         calendarContent.setImageAddress(calendarPatchDto.getImageAddress());
         calendarContent.setContent(calendarPatchDto.getContent());
         calendarContent.setLocation(calendarPatchDto.getLocation());
+        calendarContent.setBeginTime(calendarPatchDto.getBeginTime());
+        calendarContent.setEndTime(calendarPatchDto.getEndTime());
 
         return calendarContent;
     }
@@ -43,6 +47,8 @@ public interface CalendarMapper {
         calendarResponseDto.setContent(calendarContent.getContent());
         calendarResponseDto.setLocation(calendarContent.getLocation());
         calendarResponseDto.setCalendarId(calendarContent.getCalendar().getCalendarId());
+        calendarResponseDto.setBeginTime(calendarContent.getBeginTime());
+        calendarResponseDto.setEndTime(calendarContent.getEndTime());
 
         return calendarResponseDto;
     }

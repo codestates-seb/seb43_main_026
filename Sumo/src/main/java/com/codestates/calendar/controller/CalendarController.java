@@ -28,7 +28,7 @@ public class CalendarController {
         this.calendarMapper = calendarMapper;
     }
 
-    @PostMapping("/{calendar-id}")
+    @PostMapping("/{calendar-id}/calendarcontents")
     public ResponseEntity postCalendarContent(@Valid @RequestBody CalendarDto.Post calendarPostDto,
                                               @PathVariable("calendar-id") @Positive long calendarId) {
         calendarPostDto.setCalendarId(calendarId);
@@ -37,14 +37,14 @@ public class CalendarController {
 
         URI location = UriComponentsBuilder
                 .newInstance()
-                .path(CALENDAR_DEFAULT_URL + "/{calendar-id}/{calendarContent-id}")
+                .path(CALENDAR_DEFAULT_URL + "/{calendar-id}/calendarcontents/{calendarContent-id}")
                 .buildAndExpand(calendarId, calendarContent.getCalendarContentId())
                 .toUri();
 
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{calendar-id}/{calendarContent-id}")
+    @PatchMapping("/{calendar-id}/calendarcontents/{calendarContent-id}")
     public ResponseEntity patchCalendarContent(@Valid @RequestBody CalendarDto.Patch calendarPatchDto,
                                                @PathVariable("calendarContent-id") @Positive long calendarContentId) {
         calendarPatchDto.setCalendarContentId(calendarContentId);
@@ -56,7 +56,7 @@ public class CalendarController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{calendar-id}/{calendarContent-id}")
+    @GetMapping("/{calendar-id}/calendarcontents/{calendarContent-id}")
     public ResponseEntity getCalendarContent(@PathVariable("calendarContent-id") @Positive long calendarContentId) {
         CalendarContent calendarContent = calendarService.findCalendarContent(calendarContentId);
         CalendarDto.Response response = calendarMapper.calendarContentToCalendarResponseDto(calendarContent);
@@ -69,9 +69,10 @@ public class CalendarController {
         List<CalendarContent> calendarContents = calendarService.findCalendarContents(calendarId);
         List<CalendarDto.Response> responses = calendarMapper.calendarContentsToCalendarResponseDtos(calendarContents);
         return new ResponseEntity<>(responses, HttpStatus.OK);
+        // TODO 캘린더 제공 시에 출석률과 누적 운동 시간도 제공해야 함!!!
     }
 
-    @DeleteMapping("/{calendar-id}/{calendarContent-id}")
+    @DeleteMapping("/{calendar-id}/calendarcontents/{calendarContent-id}")
     public ResponseEntity deleteCalendarContent(@PathVariable("calendarContent-id") @Positive long calendarContentId) {
         calendarService.deleteCalendarContent(calendarContentId);
 

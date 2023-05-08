@@ -6,6 +6,7 @@ import com.codestates.calendar.repository.CalendarContentRepository;
 import com.codestates.calendar.repository.CalendarRepository;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.member.entity.Member;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,9 @@ public class CalendarService {
     // memberService의 createMember 메서드 안에 추가하면 됨.
     public Calendar initCalendar(long memberId) {
         Calendar calendar = new Calendar();
-        // TODO 캘린더의 memberId 세팅하기
+        Member member = new Member();
+        member.setMemberId(memberId);
+        calendar.setMember(member);
 
         return calendarRepository.save(calendar);
     }
@@ -46,6 +49,9 @@ public class CalendarService {
         Optional.ofNullable(calendarContent.getImageAddress()).ifPresent(imageAddress -> findCalendarContent.setImageAddress(imageAddress));
         Optional.ofNullable(calendarContent.getContent()).ifPresent(content -> findCalendarContent.setContent(content));
         Optional.ofNullable(calendarContent.getLocation()).ifPresent(location -> findCalendarContent.setLocation(location));
+        Optional.ofNullable(calendarContent.getBeginTime()).ifPresent(beginTime -> findCalendarContent.setBeginTime(beginTime));
+        Optional.ofNullable(calendarContent.getEndTime()).ifPresent(endTime -> findCalendarContent.setEndTime(endTime));
+
         return calendarContentRepository.save(findCalendarContent);
     }
 

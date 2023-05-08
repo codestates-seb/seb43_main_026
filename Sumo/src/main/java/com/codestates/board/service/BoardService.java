@@ -174,18 +174,18 @@ public class BoardService {
 
     // TODO: 게시글을 최신순으로 정렬
     public List<Board> findBoardsSortedByLatest(){
-        return boardLikesRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 
     // TODO: 게시글을 오래된 순으로 정렬
     public List<Board> findBoardsSortedByOldest(){
-        return boardLikesRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
+        return boardRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
     }
 
     // TODO: 댓글 수가 많은 순으로 정렬
-    public List<Board> findBoardsSortedByComments(){
-        return boardRepository.findAllByOrderByCommentsDesc();
-    }
+//    public List<Board> findBoardsSortedByComments(){
+//        return boardRepository.findAllByOrderByCommentsDesc();
+//    }
 
     // TODO: 현재 로그인한 회원 정보 가지고오기.
     private Member getCurrentMember() {

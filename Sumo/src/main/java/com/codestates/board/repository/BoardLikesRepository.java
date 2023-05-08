@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface BoardLikesRepository extends JpaRepository {
+public interface BoardLikesRepository extends JpaRepository<BoardLikes, Long> {
 
     Optional <BoardLikes> findByBoard_BoardId(long boardId);
     Optional <BoardLikes> findByBoardAndMember(Board board, Member member);

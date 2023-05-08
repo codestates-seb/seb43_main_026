@@ -1,11 +1,11 @@
 // eslint-disable-next-line import/no-unresolved
-import styled from 'styled-components';
+import styled from "styled-components";
 // eslint-disable-next-line import/no-unresolved
-import { FiMenu } from 'react-icons/fi';
+import { FiMenu } from "react-icons/fi";
 // eslint-disable-next-line import/no-unresolved
-import { useState } from 'react';
+import { useState } from "react";
 // eslint-disable-next-line import/no-unresolved
-import LogoImage from '../assets/images/logo.png';
+import LogoImage from "../assets/images/logo.png";
 
 const HeaderCon = styled.header`
   width: 100%;

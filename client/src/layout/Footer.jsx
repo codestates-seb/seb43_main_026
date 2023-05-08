@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import LogoImage from '../assets/images/logo.png';
+import styled from "styled-components";
+import LogoImage from "../assets/images/logo.png";
 
 const Footer = () => {
   return (

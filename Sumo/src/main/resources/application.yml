@@ -22,4 +22,7 @@ server:
   servlet:
     encoding:
       force-response: true
+mail:
+  address:
+    admin: SoomoAdmin@gmail.com
 

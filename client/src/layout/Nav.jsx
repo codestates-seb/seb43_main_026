@@ -103,9 +103,9 @@ const MenuList = styled.li`
   }
 `;
 
-const Nav = () => {
+const Nav = ({ nav }) => {
   return (
-    <Container>
+    <Container style={{ display: nav ? 'block' : 'none' }}>
       <NavBarContainer>
         <UserBox>
           <ImgBox>

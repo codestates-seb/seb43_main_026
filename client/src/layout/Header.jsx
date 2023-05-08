@@ -1,10 +1,6 @@
-// eslint-disable-next-line import/no-unresolved
 import styled from 'styled-components';
-// eslint-disable-next-line import/no-unresolved
 import { FiMenu } from 'react-icons/fi';
-// eslint-disable-next-line import/no-unresolved
 import { useState } from 'react';
-// eslint-disable-next-line import/no-unresolved
 import LogoImage from '../assets/images/로고.png';
 
 const HeaderCon = styled.header`

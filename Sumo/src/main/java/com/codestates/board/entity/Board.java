@@ -39,9 +39,6 @@ public class Board extends Auditable {
 
     private String boardImageAddress;
 
-//    public int getLikesCount(){
-//        return boardLikes.size();
-//    }
 
 //    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
 //    private List<Comment> comments;

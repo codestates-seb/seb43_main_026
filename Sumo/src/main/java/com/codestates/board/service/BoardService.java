@@ -100,7 +100,7 @@ public class BoardService {
         return findBoard;
     }
 
-    //TODO:  이전에 좋아요를 눌렀던 상태를 체크해서 좋아요 수를 증가 , 감소 로직
+    //TODO:  사용자가 이전에 좋아요를 눌렀던 상태를 체크해서 좋아요 수를 증가, 감소 로직으로 변경
     public void toggleLike(long boardId, long memberId) {
         Board board = findVerifiedBoard(boardId);
         Member member = memberRepository.findById(memberId)
@@ -110,15 +110,9 @@ public class BoardService {
         if (existingBoardLikeOpt.isPresent()) {
             BoardLikes existingBoardLike = existingBoardLikeOpt.get();
             boardLikesRepository.delete(existingBoardLike);
-
-//            List<BoardLikes> boardLikes = board.getBoardLikes();
-//            int likeCount = boardLikes.size();
-//            board.setLikeCount(likeCount - 1);
             board.setLikeCount(board.getLikeCount() -1);
-        } else {
-//            List<BoardLikes> boardLikes = board.getBoardLikes();
-//            int likeCount = boardLikes.size();
-//            board.setLikeCount(likeCount + 1);
+        }
+        else {
             board.setLikeCount(board.getLikeCount() +1);
 
             BoardLikes newBoardLike = new BoardLikes();
@@ -131,46 +125,6 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-
-//    // TODO: 좋아요 수 증가.
-//    @Transactional
-//    public void increaseLike(long boardId, long memberId){
-//        Board board = findVerifiedBoard(boardId);
-//        Member member = memberRepository.findById(memberId)
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//
-//        Optional<BoardLikes> existingBoardLikeOpt = boardLikesRepository.findByBoardAndMember(board, member);
-//        if (existingBoardLikeOpt.isPresent()) {
-//            throw new BusinessLogicException(ExceptionCode.ALREADY_LIKED);
-//        }
-//
-//
-//        List<BoardLikes> boardLikes = board.getBoardLikes();
-//        int likeCount = boardLikes.size();
-//        board.setLikeCount(likeCount + 1);
-//
-//
-//        BoardLikes newBoardLike = new BoardLikes();
-//        newBoardLike.setBoard(board);
-//        newBoardLike.setMember(member);
-//        newBoardLike.setBoardLikes(1);
-//        boardLikesRepository.save(newBoardLike);
-//
-//    }
-//
-//    // TODO: 좋아요 수 감소
-//    @Transactional
-//    public void decreaseLike(long boardId, long memberId){
-//        Board board = findVerifiedBoard(boardId);
-//        Member member = memberRepository.findById(memberId)
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//
-//        Optional<BoardLikes> existingBoardLikeOpt = boardLikesRepository.findByBoardAndMember(board, member);
-//        if (!existingBoardLikeOpt.isPresent()) {
-//            throw new BusinessLogicException(ExceptionCode.NOT_LIKED_YET);
-//        }
-//        boardLikesRepository.delete(existingBoardLikeOpt.get());
-//    }
 
 
     // TODO: 게시글 좋아요가 많은 순으로 정렬

@@ -61,7 +61,6 @@ public class BoardController {
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
 
-        // return ResponseEntity.ok().body(boardResponseDto); 이런식으로도 쓰이니 알아가면 좋음
     }
 
 

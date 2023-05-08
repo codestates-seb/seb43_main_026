@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,14 +48,12 @@ public class BoardService {
     @Transactional
     public Board updateBoard(Board board){
 
+        Member currentMember = getCurrentMember();
         Board findBoard = findVerifiedBoard(board.getBoardId());
 
-//        Member currentMember = getCurrentMember();
-//        Board findBoard = findVerifiedBoard(board.getBoardId());
-//
-//        if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
-//            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
-//        }
+        if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
+        }
 
 
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));

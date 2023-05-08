@@ -14,8 +14,6 @@ import java.util.List;
 public interface BoardMapper {
 
 
-
-
     default Board boardPostDtoToboard(BoardPostDto boardPostDto){
 
         // 엔티티 객체인 board 객체를 생성합니다.

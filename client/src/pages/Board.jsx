@@ -12,6 +12,9 @@ const Container = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  button {
+    cursor: pointer;
+  }
   @media ${(props) => props.theme.breakpoints.mobileMax} {
     width: 100%;
     height: fit-content;
@@ -25,17 +28,14 @@ const Title = styled.article`
   display: flex;
   align-items: center;
   background-color: ${(props) => props.theme.color.bg};
-
-  @media ${(props) => props.theme.breakpoints.mobileMax} {
-    padding: 0 10px;
-  }
+  padding: 0 10px;
 `;
 
 const TxtCal = styled.div`
   display: flex;
   span {
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 20px;
   }
 `;
@@ -52,14 +52,40 @@ const SortBox = styled.article`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 5px;
   background-color: ${(props) => props.theme.color.main_gray};
   @media ${(props) => props.theme.breakpoints.mobileMax} {
   }
 `;
-const View = styled.div``;
-const TXTView = styled(RiListUnordered)``;
-const ImgView = styled(RxDashboard)``;
-const Sort = styled.div``;
+
+const View = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 5px;
+  button {
+    display: flex;
+  }
+`;
+
+const SortBtn = styled.button`
+  border: none;
+  padding: 0 3px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+`;
+
+const Sort = styled.div`
+  display: flex;
+`;
+
+const TXTView = styled(RiListUnordered)`
+  color: ${(props) => props.theme.color.main_dark_blue};
+`;
+const ImgView = styled(RxDashboard)`
+  color: ${(props) => props.theme.color.main_dark_blue};
+`;
 
 //보드 작성페이지 이동
 const UploadBox = styled.article`
@@ -68,11 +94,21 @@ const UploadBox = styled.article`
   background-color: ${(props) => props.theme.color.bg_blue};
   display: flex;
   flex-direction: row-reverse;
+  padding: 0 5px;
   @media ${(props) => props.theme.breakpoints.mobileMax} {
   }
 `;
 
-const ListBox = styled.article`
+//텍스트 버튼 이후 공통 컴포넌트로 작성
+const UploadBtn = styled.button`
+  border: none;
+  background-color: transparent;
+  font-size: 15px;
+  font-weight: 600;
+  color: ${(props) => props.theme.color.main_dark_blue};
+`;
+
+const ListBox = styled.ul`
   @media ${(props) => props.theme.breakpoints.mobileMax} {
   }
 `;
@@ -88,21 +124,21 @@ const Board = () => {
       </Title>
       <SortBox>
         <View>
-          <button>
-            <TXTView size={20} />
-          </button>
-          <button>
-            <ImgView size={20} />
-          </button>
+          <SortBtn>
+            <TXTView size={19} />
+          </SortBtn>
+          <SortBtn>
+            <ImgView size={18} />
+          </SortBtn>
         </View>
         <Sort>
-          <button>최신순</button>
-          <button>추천순</button>
-          <button>댓글순</button>
+          <SortBtn>최신순</SortBtn>
+          <SortBtn>추천순</SortBtn>
+          <SortBtn>댓글순</SortBtn>
         </Sort>
       </SortBox>
       <UploadBox>
-        <button>등록하기</button>
+        <UploadBtn>등록하기</UploadBtn>
       </UploadBox>
       <ListBox></ListBox>
     </Container>

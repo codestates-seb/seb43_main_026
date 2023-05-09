@@ -94,9 +94,9 @@ public class BoardController {
         } else if (orderBy.equalsIgnoreCase("likes")) {
             boards = boardService.findBoardsSortedByLikes();
         }
-//         else if (orderBy.equalsIgnoreCase("comments")) {
-//            boards = boardService.findBoardsSortedByComments();
-//        }
+         else if (orderBy.equalsIgnoreCase("comments")) {
+            boards = boardService.findBoardsSortedByComments();
+        }
         else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

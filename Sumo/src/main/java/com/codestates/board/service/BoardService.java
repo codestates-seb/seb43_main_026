@@ -144,9 +144,9 @@ public class BoardService {
     }
 
     // TODO: 댓글 수가 많은 순으로 정렬
-//    public List<Board> findBoardsSortedByComments(){
-//        return boardRepository.findAllByOrderByCommentsDesc();
-//    }
+    public List<Board> findBoardsSortedByComments(){
+        return boardRepository.findAllByOrderByCommentsDesc();
+    }
 
     // TODO: 현재 로그인한 회원 정보 가지고오기. // // TODO: SECURITY 적용시 주석해제
 //    private Member getCurrentMember() {

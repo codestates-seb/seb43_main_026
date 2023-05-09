@@ -47,5 +47,12 @@ public class MemberDto {
         private long memberId;
         private String email;
         private String nickname;
+        private long calendarId;
+
+        public Response(long memberId, String email, String nickname) {
+            this.memberId = memberId;
+            this.email = email;
+            this.nickname = nickname;
+        }
     }
 }

@@ -54,7 +54,7 @@ public class MemberController {
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId){
         Member member = memberService.findMember(memberId);
 
-        return new ResponseEntity<>(mapper.memberToMemberResponseDto(member),
+        return new ResponseEntity<>(mapper.memberToMemberResponseDtoWithCalendarId(member),
                 HttpStatus.OK);
     }
 

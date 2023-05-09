@@ -16,6 +16,9 @@ const HeaderCon = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 0 30px;
+  @media ${(props) => props.theme.breakpoints.mobileMax} {
+    padding: 0 15px;
+  }
   .logo_img {
     width: 120px;
     margin-top: 10px;

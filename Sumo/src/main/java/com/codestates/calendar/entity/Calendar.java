@@ -1,5 +1,6 @@
 package com.codestates.calendar.entity;
 
+import com.codestates.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,9 +15,9 @@ public class Calendar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long calendarId;
 
-    // TODO 수정
-//    @OneToOne
-//    private Member member;
+
+    @OneToOne
+    private Member member;
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.REMOVE)
     private List<CalendarContent> calendarContents;

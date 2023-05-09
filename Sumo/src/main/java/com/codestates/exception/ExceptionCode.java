@@ -26,9 +26,15 @@ public enum ExceptionCode {
     ANSWER_NOT_FOUND(404,"Answer not found"),
     OPTION_NOT_FOUND(404,"Option not found"),
     CALENDARCONTENT_NOT_FOUND(404, "CalendarContent not found"),
-    CALENDAR_NOT_FOUND(404, "Calendar not found");
+    CALENDAR_NOT_FOUND(404, "Calendar not found"),
     EMAIL_CONFLICT(409,"Email already exists"),
-    NICKNAME_CONFLICT(409,"Nickname already exists");
+    NICKNAME_CONFLICT(409,"Nickname already exists"),
+    BOARD_NOT_FOUND(404,"Board not found"),
+    BOARD_ACCESS_DENIED(404, "Only the Author can modify it"),
+    ALREADY_LIKED(404, "Already liked"),
+    NOT_LIKED_YET(404, "Not liked yet");
+
+
     @Getter
     private int status;
 

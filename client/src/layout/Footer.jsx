@@ -39,15 +39,17 @@ const Container = styled.div`
   width: 100%;
   height: 15vh;
   background-color: ${(props) => props.theme.color.main_blue};
-  position: absolute;
   bottom: 0;
 
+  @media ${(props) => props.theme.breakpoints.mobileMax} {
+    display: none;
+  }
+
   & > div {
-    display: grid;
-    grid-template-columns: 0.5fr 1fr;
-    grid-gap: 1rem;
-    margin: 0 auto;
-    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
     height: 100%;
     .logo {
       img {
@@ -57,7 +59,7 @@ const Container = styled.div`
     .github {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       font-size: 0.7rem;
     }
   }
@@ -70,7 +72,7 @@ const GithubContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-right: 1rem;
+  margin-right: 1.5rem;
   img {
     width: 4rem;
     border-radius: 100%;

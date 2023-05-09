@@ -1,7 +1,7 @@
 const size = {
-  mobile: '640px',
-  tablet: '980px',
-  desktop: '981px',
+  mobile: '767px',
+  tablet: '1023px',
+  desktop: '1024px',
 };
 const breakpoints = {
   mobileMax: `screen and (max-width: ${size.mobile})`,
@@ -30,6 +30,7 @@ const color = {
   font_post_title: `#434446`,
   font_forget_pw: `#2592FF`,
   pc_bg: `#FAFAFA`,
+  input_border: `#CADAE5`,
 };
 
 const theme = {

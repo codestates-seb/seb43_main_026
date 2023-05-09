@@ -1,11 +1,11 @@
 //리액트 모듈
 import { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-
 //레이아웃
 import Header from './layout/Header';
-import Footer from './layout/Footer';
+// import Footer from './layout/Footer';
 import Nav from './layout/Nav';
+// import MyCalendar from './pages/Calendar';
 
 // 페이지
 import SignUp from './pages/SignUp';
@@ -21,7 +21,10 @@ function App() {
       <BrowserRouter>
         <Header handleNav={handleNav} />
         <Nav nav={nav} />
-        <Footer />
+        {/* <Routes>
+          <Route path="/" element={<MyCalendar />} />
+        </Routes>
+        <Footer /> */}
         <SignUp />
       </BrowserRouter>
     </div>

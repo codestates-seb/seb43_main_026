@@ -28,6 +28,4 @@ public class Comment extends Auditable {
     private Board board;
 
 
-
-
 }

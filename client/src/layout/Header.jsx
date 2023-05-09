@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { FiMenu } from 'react-icons/fi';
-import { useState } from 'react';
 import LogoImage from '../assets/image/logo.png';
 
 const HeaderCon = styled.header`
@@ -25,13 +24,7 @@ const HeaderCon = styled.header`
     color: white;
   }
 `;
-const Header = () => {
-  const [nav, setNav] = useState(false);
-
-  const handleNav = () => {
-    setNav(!nav);
-  };
-
+const Header = ({ handleNav }) => {
   return (
     <HeaderCon>
       <img src={LogoImage} alt="로고" className="logo_img" />

@@ -1,5 +1,5 @@
 //리액트 모듈
-// import { useState } from "react";
+import { useState } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 //레이아웃
@@ -11,11 +11,16 @@ import Nav from './layout/Nav';
 import SignUp from './pages/SignUp';
 
 function App() {
+  const [nav, setNav] = useState(false);
+
+  const handleNav = () => {
+    setNav(!nav);
+  };
   return (
     <div className="App">
       <BrowserRouter>
-        <Header />
-        <Nav />
+        <Header handleNav={handleNav} />
+        <Nav nav={nav} />
         <Footer />
         <SignUp />
       </BrowserRouter>

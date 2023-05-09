@@ -8,7 +8,7 @@ const HeaderCon = styled.header`
   min-width: 360px;
   height: 50px;
   background-color: ${(props) => props.theme.color.main_blue};
-  box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0px;
   display: flex;

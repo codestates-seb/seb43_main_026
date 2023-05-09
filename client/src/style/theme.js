@@ -26,10 +26,12 @@ const color = {
   bg_place: `#c8d3e1`,
   bg_comment: `rgba(201, 214, 233, 0.5)`,
   bg_comment_btn: `C8D3E1`,
+  font_main: `#393939`,
   font_comment: `#696969`,
   font_post_title: `#434446`,
   font_forget_pw: `#2592FF`,
   pc_bg: `#FAFAFA`,
+  input_border: `#CADAE5`,
 };
 
 const theme = {

@@ -1,14 +1,15 @@
 //리액트 모듈
 import { useState } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 //레이아웃
 import Header from './layout/Header';
-// import Footer from './layout/Footer';
+import Footer from './layout/Footer';
 import Nav from './layout/Nav';
-// import MyCalendar from './pages/Calendar';
-// import Board from './pages/Board';
+import MyCalendar from './pages/Calendar';
 
 // 페이지
+import Board from './pages/Board';
 import SignUp from './pages/SignUp';
 
 function App() {
@@ -22,12 +23,12 @@ function App() {
       <BrowserRouter>
         <Header handleNav={handleNav} />
         <Nav nav={nav} />
-        {/* <Routes>
+        <Routes>
           <Route path="/" element={<MyCalendar />} />
           <Route path="/board" element={<Board />} />
+          <Route path="/signup" element={<SignUp />} />
         </Routes>
-        <Footer /> */}
-        <SignUp />
+        <Footer />
       </BrowserRouter>
     </div>
   );

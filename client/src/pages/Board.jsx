@@ -1,10 +1,18 @@
 //모듈
 import styled from 'styled-components';
+import { useState } from 'react';
+
+//컴포넌트
+import Dash from '../component/Board/Dash';
+import List from '../component/Board/List';
 
 //아이콘
 import { BsCalendar2Heart } from 'react-icons/bs';
 import { RxDashboard } from 'react-icons/rx';
 import { RiListUnordered } from 'react-icons/ri';
+
+//더미데이터
+import boardData from '../component/Board/boardData';
 
 //전체 컨테이너
 const Container = styled.section`
@@ -14,6 +22,10 @@ const Container = styled.section`
   align-items: center;
   button {
     cursor: pointer;
+    background-color: transparent;
+  }
+  .del {
+    display: none;
   }
   @media ${(props) => props.theme.breakpoints.mobileMax} {
     width: 100%;
@@ -114,6 +126,21 @@ const ListBox = styled.ul`
 `;
 
 const Board = () => {
+  const [posts, setPosts] = useState(boardData);
+  const [view, setView] = useState('dash');
+
+  // 첫 번째 게시글의 제목을 "New Title"로 업데이트
+  //setPost안쓰면 eslint오류나서 그냥 쓰는 코드
+  const updatePost = () => {
+    const newPosts = [...posts];
+    newPosts[0].title = 'New Title';
+    setPosts(newPosts);
+  };
+
+  const handleViewChange = (viewType) => {
+    setView(viewType);
+  };
+
   return (
     <Container>
       <Title>
@@ -124,11 +151,11 @@ const Board = () => {
       </Title>
       <SortBox>
         <View>
-          <SortBtn>
-            <TXTView size={19} />
-          </SortBtn>
-          <SortBtn>
+          <SortBtn onClick={() => handleViewChange('dash')}>
             <ImgView size={18} />
+          </SortBtn>
+          <SortBtn onClick={() => handleViewChange('list')}>
+            <TXTView size={20} />
           </SortBtn>
         </View>
         <Sort>
@@ -140,7 +167,13 @@ const Board = () => {
       <UploadBox>
         <UploadBtn>등록하기</UploadBtn>
       </UploadBox>
-      <ListBox></ListBox>
+      <ListBox>
+        {view === 'dash' && <Dash posts={posts} />}
+        {view === 'list' && <List posts={posts} />}
+      </ListBox>
+      <button className="del" onClick={updatePost}>
+        Update Post
+      </button>
     </Container>
   );
 };

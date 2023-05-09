@@ -50,7 +50,7 @@ public class MemberService {
         verifyExistsEmail(member.getEmail());
         verifyExistsNickname(member.getNickname());
 
-        Optional.ofNullable(member.getEmail())
+        Optional.ofNullable(member.getNickname())
                 .ifPresent(nickname -> findMember.setNickname(nickname));
         Optional.ofNullable(member.getEmail())
                 .ifPresent(email -> findMember.setEmail(email));

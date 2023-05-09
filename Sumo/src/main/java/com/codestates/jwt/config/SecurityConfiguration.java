@@ -3,6 +3,8 @@ package com.codestates.jwt.config;
 import com.codestates.jwt.JwtTokenizer;
 import com.codestates.jwt.auth.filter.JwtAuthenticationFilter;
 import com.codestates.jwt.auth.filter.JwtVerificationFilter;
+import com.codestates.jwt.auth.handler.MemberAccessDeniedHandler;
+import com.codestates.jwt.auth.handler.MemberAuthenticationEntryPoint;
 import com.codestates.jwt.auth.handler.MemberAuthenticationFailureHandler;
 import com.codestates.jwt.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.jwt.auth.utils.CustomAuthorityUtils;
@@ -46,9 +48,28 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                .accessDeniedHandler(new MemberAccessDeniedHandler())
+                .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers(HttpMethod.POST,"/members/signup").permitAll()
+                        .antMatchers(HttpMethod.PATCH,"/members/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/members/**").hasAnyRole("USER","ADMIN")
+                        .antMatchers(HttpMethod.POST,"/boards").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/boards/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/boards/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/boards/**").hasAnyRole("USER","ADMIN")
+                        .antMatchers(HttpMethod.POST, "/calendars/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/calendars/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/calendars/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET,"/calendars/**").hasAnyRole("USER","ADMIN")
+                        .antMatchers(HttpMethod.POST,"/boards/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/boards/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE,"/boards/**").hasRole("USER")
                         .anyRequest().permitAll());
 
         return http.build();

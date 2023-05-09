@@ -36,10 +36,8 @@ public class MemberDto {
     public static class Patch{
         private long memberId;
 
-        @NotBlank
         private String email;
 
-        @NotBlank
         private String nickname;
     }
 

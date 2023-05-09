@@ -27,6 +27,8 @@ public enum ExceptionCode {
     OPTION_NOT_FOUND(404,"Option not found"),
     CALENDARCONTENT_NOT_FOUND(404, "CalendarContent not found"),
     CALENDAR_NOT_FOUND(404, "Calendar not found"),
+    INVALID_CALENDARCONTENT_TIME_SETTING(400, "EndTime must be later"),
+    INVALID_CALENDAR_ID(400, "CalendarId is invalid"),
     EMAIL_CONFLICT(409,"Email already exists"),
     NICKNAME_CONFLICT(409,"Nickname already exists");
     @Getter

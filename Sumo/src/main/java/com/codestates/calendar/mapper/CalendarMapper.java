@@ -29,6 +29,7 @@ public interface CalendarMapper {
     default CalendarContent calendarPatchDtoToCalendarContent(CalendarDto.Patch calendarPatchDto) {
         CalendarContent calendarContent = new CalendarContent();
 
+        calendarContent.setCalendarContentId(calendarPatchDto.getCalendarContentId());
         calendarContent.setImageAddress(calendarPatchDto.getImageAddress());
         calendarContent.setContent(calendarPatchDto.getContent());
         calendarContent.setLocation(calendarPatchDto.getLocation());

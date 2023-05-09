@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "Calendar_Contents")
@@ -17,7 +15,7 @@ public class CalendarContent {
     private long calendarContentId;
 
     @Column(nullable = false)
-    private LocalDate date;
+    private String date;
 
     @Column(nullable = false)
     private String imageAddress;
@@ -29,10 +27,10 @@ public class CalendarContent {
     private String location;
 
     @Column(nullable = false)
-    private LocalTime beginTime;
+    private String beginTime;
 
     @Column(nullable = false)
-    private LocalTime endTime;
+    private String endTime;
 
     @ManyToOne
     @JoinColumn(name = "Calendar_id")

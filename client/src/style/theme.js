@@ -31,6 +31,7 @@ const color = {
   font_post_title: `#434446`,
   font_forget_pw: `#2592FF`,
   pc_bg: `#FAFAFA`,
+  input_border: `#CADAE5`,
 };
 
 const theme = {

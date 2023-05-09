@@ -6,7 +6,7 @@ import com.codestates.board.dto.BoardPostDto;
 import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
 import com.codestates.member.entity.Member;
-import com.codestates.comment.entity.Comment
+import com.codestates.comment.entity.Comment;
 import com.codestates.board.entity.BoardLikes;
 import org.mapstruct.Mapper;
 

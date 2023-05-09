@@ -6,6 +6,7 @@ import Header from './layout/Header';
 import Footer from './layout/Footer';
 import Nav from './layout/Nav';
 import MyCalendar from './pages/Calendar';
+import Board from './pages/Board';
 
 function App() {
   const [nav, setNav] = useState(false);
@@ -20,6 +21,7 @@ function App() {
         <Nav nav={nav} />
         <Routes>
           <Route path="/" element={<MyCalendar />} />
+          <Route path="/board" element={<Board />} />
         </Routes>
         <Footer />
       </BrowserRouter>

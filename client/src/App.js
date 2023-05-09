@@ -5,7 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 import Header from './layout/Header';
 // import Footer from './layout/Footer';
 import Nav from './layout/Nav';
-// import MyCalendar from './pages/Calendar';
+import MyCalendar from './pages/Calendar';
+import Board from './pages/Board';
 
 // 페이지
 import SignUp from './pages/SignUp';
@@ -23,6 +24,7 @@ function App() {
         <Nav nav={nav} />
         {/* <Routes>
           <Route path="/" element={<MyCalendar />} />
+          <Route path="/board" element={<Board />} />
         </Routes>
         <Footer /> */}
         <SignUp />

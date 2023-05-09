@@ -18,7 +18,7 @@ const NavBarContainer = styled.nav`
   width: 306px;
   height: 100vh;
   background-color: white;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
   padding-top: 20px;
 `;
 
@@ -60,7 +60,6 @@ const NavList = styled.ul`
   justify-content: center;
   align-items: center;
   margin-top: 15px;
-  /* background-color: aquamarine; */
 `;
 
 const MenuList = styled.li`

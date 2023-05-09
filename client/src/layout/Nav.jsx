@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 const Container = styled.section`
   position: fixed;
+  z-index: 1000;
   top: 50px;
   width: 100%;
   height: 100vh;

@@ -3,12 +3,14 @@ import { FiMenu } from 'react-icons/fi';
 import LogoImage from '../assets/image/logo.png';
 
 const HeaderCon = styled.header`
+  z-index: 1000;
   width: 100%;
   min-width: 360px;
   height: 50px;
   background-color: ${(props) => props.theme.color.main_blue};
   box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.3);
-  position: fixed;
+  position: sticky;
+  top: 0px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

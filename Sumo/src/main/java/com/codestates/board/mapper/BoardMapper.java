@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface BoardMapper {
 
-
+// TODO: SECURITY 적용시 주석해제
     default Board boardPostDtoToboard(BoardPostDto boardPostDto){
 
         // 엔티티 객체인 board 객체를 생성합니다.

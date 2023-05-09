@@ -107,7 +107,7 @@ public class BoardController {
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
-
+    //TODO : jwt토큰으로 인증하는것이 안전할것임
     @PostMapping("/{board-id}/likes")
     public ResponseEntity addLikeToBoard(@PathVariable("board-id") @Positive long boardId,
                                         @RequestParam("member-id") @Positive long memberId){
@@ -116,6 +116,7 @@ public class BoardController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //TODO : jwt토큰으로 인증하는것이 안전할것임
     @GetMapping("/{board-id}/likes")
     public ResponseEntity getLikesCount(@PathVariable("board-id") @Positive long boardId) {
 

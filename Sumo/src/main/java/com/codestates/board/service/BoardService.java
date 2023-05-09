@@ -36,7 +36,7 @@ public class BoardService {
 
 
     // 게시글 생성
-    // TODO: spring security context holder 적용
+    // TODO: SECURITY 적용시 주석해제
     @Transactional
     public Board createBoard(Board board){
 //        Member currentMember = getCurrentMember();
@@ -48,7 +48,7 @@ public class BoardService {
 
 
     // 게시글 수정
-    // TODO: spring security context holder 적용
+    // TODO: SECURITY 적용시 주석해제
     @Transactional
     public Board updateBoard(Board board){
 
@@ -68,7 +68,7 @@ public class BoardService {
     }
 
     // 게시글 삭제
-    // TODO: spring security context holder 적용
+    // TODO: SECURITY 적용시 주석해제
     public void deleteBoard(long boardId){
 //        Member currentMember = getCurrentMember();
         Board board = findVerifiedBoard(boardId);
@@ -148,7 +148,7 @@ public class BoardService {
 //        return boardRepository.findAllByOrderByCommentsDesc();
 //    }
 
-    // TODO: 현재 로그인한 회원 정보 가지고오기.
+    // TODO: 현재 로그인한 회원 정보 가지고오기. // // TODO: SECURITY 적용시 주석해제
 //    private Member getCurrentMember() {
 //        String nickname = SecurityContextHolder.getContext().getAuthentication().getName();
 //        return memberRepository.findByNickname(nickname)

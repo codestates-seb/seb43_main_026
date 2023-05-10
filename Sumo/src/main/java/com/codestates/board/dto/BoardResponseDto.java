@@ -30,16 +30,9 @@ public class BoardResponseDto {
 
     private String boardImageAddress;
 
+    private int viewCount;
 
-//     comment 부분
-//    private long commentId;
-//
-//    private String commentContent;
-//
-//    private LocalDateTime createAt;
-//
-//    private LocalDateTime modifiedAt;
-
+    private int commentCount;
 
 
 }

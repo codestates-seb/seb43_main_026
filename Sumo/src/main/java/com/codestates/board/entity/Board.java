@@ -2,12 +2,14 @@ package com.codestates.board.entity;
 
 
 import com.codestates.audit.Auditable;
+import com.codestates.comment.entity.Comment;
 import com.codestates.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,6 +29,13 @@ public class Board extends Auditable {
     @Column
     private String content;
 
+
+    @Column
+    private String boardImageAddress;
+
+    @Column
+    private int viewCount;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -34,15 +43,15 @@ public class Board extends Auditable {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<BoardLikes> boardLikes;
 
-    @Column
-    private int likeCount;
 
-    private String boardImageAddress;
+    //ARRAYLIST 사용한이유.
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<Comment> comments = new ArrayList<>();
 
-
-//    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
-//    private List<Comment> comments;
-
+    public void addComment(Comment comment){
+        this.comments.add(comment);
+        comment.setBoard(this);
+    }
 
 
 }

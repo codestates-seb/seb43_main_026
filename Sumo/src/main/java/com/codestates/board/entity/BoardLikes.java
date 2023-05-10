@@ -16,8 +16,9 @@ public class BoardLikes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long boardLikesId;
 
+    //TODO: boolean, enum 도 좋을것 같다.
     @Column
-    private int boardLikes;
+    private int likeStatus;
 
     @ManyToOne
     @JoinColumn(name = "Board_id")
@@ -27,4 +28,8 @@ public class BoardLikes {
     @JoinColumn(name = "Member_id")
     private Member member;
 
+    public BoardLikes(Board board, Member member) {
+        this.board = board;
+        this.member = member;
+    }
 }

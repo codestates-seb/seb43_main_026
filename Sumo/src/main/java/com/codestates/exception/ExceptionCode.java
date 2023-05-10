@@ -32,7 +32,10 @@ public enum ExceptionCode {
     BOARD_NOT_FOUND(404,"Board not found"),
     BOARD_ACCESS_DENIED(404, "Only the Author can modify it"),
     ALREADY_LIKED(404, "Already liked"),
-    NOT_LIKED_YET(404, "Not liked yet");
+    NOT_LIKED_YET(404, "Not liked yet"),
+    INVALID_ORDER_BY_PARAMETER(404, "Invalid order by parameter"),
+    COMMENT_NOT_FOUND(404,"Comment not found"),
+    COMMENT_ACCESS_DENIED(404, "Comment Access Denied");
 
 
     @Getter

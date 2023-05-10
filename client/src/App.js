@@ -10,6 +10,7 @@ import Board from './pages/Board';
 
 // 페이지
 import SignUp from './pages/SignUp';
+import Login from './pages/Login';
 
 function App() {
   const [nav, setNav] = useState(false);
@@ -29,7 +30,6 @@ function App() {
           <Route path="/login" element={<Login />} />
         </Routes>
         <Footer />
-        {/* <SignUp /> */}
       </BrowserRouter>
     </div>
   );

@@ -148,7 +148,7 @@ public class BoardService {
     }
 
     // TODO: 현재 로그인한 회원 정보 가지고오기. // // TODO: SECURITY 적용시 주석해제
-    // → 이메일로 변경을 해야함. check해보기.
+
 //    private Member getCurrentMember() {
 //        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 //        return memberRepository.findByEmail(email)

@@ -32,5 +32,4 @@ public class Comment extends Auditable {
     @JoinColumn(name = "member_id")
     private Member member;
 
-
 }

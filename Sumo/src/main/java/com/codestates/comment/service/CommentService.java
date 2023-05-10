@@ -7,7 +7,6 @@ import com.codestates.comment.entity.Comment;
 import com.codestates.comment.repository.CommentRepository;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
-import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +35,7 @@ public class CommentService {
     public Comment createComment(Comment comment){
 //        Member currentMember = getCurrentMember();
 //        comment.setMember(currentMember);
+
 
         return commentRepository.save(comment);
     }

@@ -3,6 +3,7 @@ package com.codestates.board.entity;
 
 import com.codestates.member.entity.Member;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Table(name = "Board_Likes")
 @Getter
 @Setter
+@NoArgsConstructor
 public class BoardLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

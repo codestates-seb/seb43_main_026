@@ -1,6 +1,8 @@
 package com.codestates.comment.service;
 
 
+import com.codestates.board.entity.Board;
+import com.codestates.board.repository.BoardRepository;
 import com.codestates.comment.entity.Comment;
 import com.codestates.comment.repository.CommentRepository;
 import com.codestates.exception.BusinessLogicException;
@@ -9,9 +11,10 @@ import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -23,6 +26,9 @@ public class CommentService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private BoardRepository boardRepository;
 
     //댓글 생성
     //Todo : Security 적용시 주석해제
@@ -91,6 +97,13 @@ public class CommentService {
 //
 //    }
 
+    @Transactional(readOnly = true)
+    public List<Comment> findCommentsByBoardId(long boardId){
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
 
+        return commentRepository.findByBoard(board);
+    }
 
 }

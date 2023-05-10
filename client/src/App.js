@@ -22,14 +22,13 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Header handleNav={handleNav} />
-        <Nav nav={nav} />
+        <Nav nav={nav} setNav={setNav} handleNav={handleNav} />
         <Routes>
           <Route path="/" element={<MyCalendar />} />
           <Route path="/board" element={<Board />} />
           <Route path="/signup" element={<SignUp />} />
         </Routes>
         <Footer />
-        <SignUp />
       </BrowserRouter>
     </div>
   );

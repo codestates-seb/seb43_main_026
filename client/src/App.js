@@ -9,7 +9,8 @@ import MyCalendar from './pages/Calendar';
 import Board from './pages/Board';
 
 // 페이지
-// import SignUp from './pages/SignUp';
+import SignUp from './pages/SignUp';
+import Login from './pages/Login';
 
 function App() {
   const [nav, setNav] = useState(false);
@@ -25,9 +26,10 @@ function App() {
         <Routes>
           <Route path="/" element={<MyCalendar />} />
           <Route path="/board" element={<Board />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
         <Footer />
-        {/* <SignUp /> */}
       </BrowserRouter>
     </div>
   );

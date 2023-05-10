@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import LogoImg from '../assets/image/logo.png';
+import LogoImg from '../assets/image/logo2.png';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
@@ -17,7 +17,7 @@ const SignUp = () => {
   const onSubmit = (data) => {
     console.log(data);
     axios
-      .post(`${SERVER_URL}/members`, { ...data })
+      .post(`${SERVER_URL}/members/signup`, { data })
       .then((res) => console.log(res))
       .catch((error) => console.log(error));
   };

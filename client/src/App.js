@@ -6,10 +6,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './layout/Header';
 import Footer from './layout/Footer';
 import Nav from './layout/Nav';
-import MyCalendar from './pages/Calendar';
 
 // 페이지
+import MyCalendar from './pages/Calendar';
 import Board from './pages/Board';
+import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/" element={<MyCalendar />} />
           <Route path="/board" element={<Board />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
         <Footer />
       </BrowserRouter>

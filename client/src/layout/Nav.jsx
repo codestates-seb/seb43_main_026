@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 const Container = styled.section`
@@ -104,6 +105,7 @@ const MenuList = styled.li`
 `;
 
 const Nav = ({ nav, handleNav }) => {
+  const navigate = useNavigate();
   return (
     <Container style={{ display: nav ? 'block' : 'none' }} onClick={handleNav}>
       <NavBarContainer onClick={(e) => e.stopPropagation()}>
@@ -122,7 +124,7 @@ const Nav = ({ nav, handleNav }) => {
           <MenuList>이번달 수영왕</MenuList>
           <MenuList>캘린더 자랑하기</MenuList>
           <MenuList>
-            <button>로그인</button>
+            <button onClick={() => navigate('/login')}>로그인</button>
           </MenuList>
         </NavList>
       </NavBarContainer>

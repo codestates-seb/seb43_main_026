@@ -10,8 +10,6 @@ import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,11 +32,11 @@ public class BoardService {
 
 
 
-
     // 게시글 생성
     // TODO: SECURITY 적용시 주석해제
     @Transactional
     public Board createBoard(Board board){
+
 //        Member currentMember = getCurrentMember();
 //        board.setMember(currentMember);
 

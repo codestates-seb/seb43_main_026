@@ -1,6 +1,5 @@
 package com.codestates.board.dto;
 
-import com.codestates.board.entity.Board;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,11 +33,6 @@ public class BoardResponseDto {
     private int viewCount;
 
     private int commentCount;
-
-    public BoardResponseDto(Board board) {
-        this.commentCount = board.getComments().size();
-    }
-
 
 
 }

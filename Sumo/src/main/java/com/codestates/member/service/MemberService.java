@@ -1,26 +1,46 @@
 package com.codestates.member.service;
 
+import com.codestates.calendar.service.CalendarService;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
+import com.codestates.jwt.auth.utils.CustomAuthorityUtils;
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
+    private final CalendarService calendarService;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository,
+                         PasswordEncoder passwordEncoder,
+                         CustomAuthorityUtils authorityUtils,
+                         CalendarService calendarService) {
         this.memberRepository = memberRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authorityUtils = authorityUtils;
+        this.calendarService = calendarService;
     }
 
     public Member createMember(Member member){
         verifyExistsEmail(member.getEmail());
         verifyExistsNickname(member.getNickname());
 
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
+
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
+
         Member returnMember = memberRepository.save(member);
+        calendarService.initCalendar(member);
         return returnMember;
     }
 
@@ -30,7 +50,7 @@ public class MemberService {
         verifyExistsEmail(member.getEmail());
         verifyExistsNickname(member.getNickname());
 
-        Optional.ofNullable(member.getEmail())
+        Optional.ofNullable(member.getNickname())
                 .ifPresent(nickname -> findMember.setNickname(nickname));
         Optional.ofNullable(member.getEmail())
                 .ifPresent(email -> findMember.setEmail(email));

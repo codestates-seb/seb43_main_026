@@ -15,7 +15,6 @@ public class Calendar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long calendarId;
 
-
     @OneToOne
     private Member member;
 

@@ -15,6 +15,7 @@ public class MemberDto {
 
     @Getter
     @Setter
+    @AllArgsConstructor
     public static class Post{
         @Email
         @NotBlank(message = "이메일을 입력하여 주십시오.")
@@ -35,10 +36,8 @@ public class MemberDto {
     public static class Patch{
         private long memberId;
 
-        @NotBlank
         private String email;
 
-        @NotBlank
         private String nickname;
     }
 
@@ -48,5 +47,12 @@ public class MemberDto {
         private long memberId;
         private String email;
         private String nickname;
+        private long calendarId;
+
+        public Response(long memberId, String email, String nickname) {
+            this.memberId = memberId;
+            this.email = email;
+            this.nickname = nickname;
+        }
     }
 }

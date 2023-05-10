@@ -41,6 +41,7 @@ public class Member {
     private List<String> roles = new ArrayList<>();
 
     public void addBoard(Board board){
-        boards.add(board);
+        this.boards.add(board);
+        board.setMember(this);
     }
 }

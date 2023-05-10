@@ -32,7 +32,8 @@ public class BoardService {
     @Autowired
     private MemberRepository memberRepository;
 
-
+    @Autowired
+    private Member member;
 
 
     // 게시글 생성
@@ -41,7 +42,7 @@ public class BoardService {
     public Board createBoard(Board board){
 //        Member currentMember = getCurrentMember();
 //        board.setMember(currentMember);
-
+        member.addBoard(board);
 
         return boardRepository.save(board);
     }

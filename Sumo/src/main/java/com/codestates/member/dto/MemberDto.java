@@ -48,6 +48,7 @@ public class MemberDto {
         private String email;
         private String nickname;
         private long calendarId;
+        private int boardCount;
 
         public Response(long memberId, String email, String nickname) {
             this.memberId = memberId;

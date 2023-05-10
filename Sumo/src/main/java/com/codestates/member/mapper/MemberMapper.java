@@ -46,7 +46,7 @@ public class MemberMapper {
         }
     }
 
-    public MemberDto.Response memberToMemberResponseDtoWithCalendarId(Member member){
+    public MemberDto.Response memberToMemberResponseDtoPlus(Member member){
         if(member == null){
             return null;
         } else {
@@ -54,11 +54,13 @@ public class MemberMapper {
             String email = null;
             String nickname = null;
             long calendarId = 0L;
+            int boardCount = 0;
             memberId = member.getMemberId();
             email = member.getEmail();
             nickname = member.getNickname();
             calendarId = member.getCalendar().getCalendarId();
-            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname,calendarId);
+            boardCount = member.getBoards().size();
+            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname,calendarId,boardCount);
             return response;
         }
     }

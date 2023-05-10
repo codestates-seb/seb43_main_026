@@ -80,7 +80,6 @@ public class BoardService {
 
     // 게시글 조회
     public Board findBoard(long boardId){
-
         Board findBoard = findVerifiedBoard(boardId);
 
         findBoard.setViewCount(findBoard.getViewCount() +1);
@@ -88,8 +87,6 @@ public class BoardService {
 
         return findBoard;
     }
-
-
 
     // 게시글 확인
     private Board findVerifiedBoard(long boardId){
@@ -99,11 +96,13 @@ public class BoardService {
                         new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
         return findBoard;
     }
+
     //TODO: TOGGLELIKE 수정
     public void toggleLike(Long memberId, Long boardId){
         Board board = findVerifiedBoard(boardId);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
 
         Optional<BoardLikes> boardLike = boardLikesRepository.findByBoardAndMember(board, member);
 
@@ -123,33 +122,6 @@ public class BoardService {
         board.setBoardLikes(boardLikesRepository.findByBoard(board));
     }
 
-
-//    //TODO:  사용자가 이전에 좋아요를 눌렀던 상태를 체크해서 좋아요 수를 증가, 감소 로직으로 변경
-//    public void toggleLike(long boardId, long memberId) {
-//        Board board = findVerifiedBoard(boardId);
-//        Member member = memberRepository.findById(memberId)
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//
-//        Optional<BoardLikes> existingBoardLikeOpt = boardLikesRepository.findByBoardAndMember(board, member);
-//        if (existingBoardLikeOpt.isPresent()) {
-//            BoardLikes existingBoardLike = existingBoardLikeOpt.get();
-//            boardLikesRepository.delete(existingBoardLike);
-//            board.setLikeCount(board.getLikeCount() -1);
-//        }
-//        else {
-//            board.setLikeCount(board.getLikeCount() +1);
-//
-//            BoardLikes newBoardLike = new BoardLikes();
-//            newBoardLike.setBoard(board);
-//            newBoardLike.setMember(member);
-//            newBoardLike.setLikeStatus(1);
-//            boardLikesRepository.save(newBoardLike);
-//        }
-//
-//        boardRepository.save(board);
-//    }
-
-
     public List<Board> findBoardsSortedByLikes(){
         return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "likes"));
 
@@ -168,6 +140,7 @@ public class BoardService {
     }
 
     // TODO: 현재 로그인한 회원 정보 가지고오기. // // TODO: SECURITY 적용시 주석해제
+
 
     private Member getCurrentMember() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -194,7 +167,4 @@ public class BoardService {
             throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
         }
     }
-
-
-
 }

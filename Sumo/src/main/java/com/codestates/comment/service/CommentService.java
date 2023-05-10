@@ -1,6 +1,7 @@
 package com.codestates.comment.service;
 
 
+
 import com.codestates.board.entity.Board;
 import com.codestates.board.repository.BoardRepository;
 import com.codestates.comment.entity.Comment;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 
+
 @Service
 public class CommentService {
 
@@ -26,6 +28,7 @@ public class CommentService {
 
     @Autowired
     private MemberRepository memberRepository;
+
 
     @Autowired
     private BoardRepository boardRepository;
@@ -106,5 +109,4 @@ public class CommentService {
 
         return commentRepository.findByBoard(board);
     }
-
 }

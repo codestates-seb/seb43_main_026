@@ -33,6 +33,4 @@ public class BoardResponseDto {
     private int viewCount;
 
     private int commentCount;
-
-
 }

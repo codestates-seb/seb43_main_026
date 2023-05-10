@@ -27,6 +27,8 @@ public enum ExceptionCode {
     OPTION_NOT_FOUND(404,"Option not found"),
     CALENDARCONTENT_NOT_FOUND(404, "CalendarContent not found"),
     CALENDAR_NOT_FOUND(404, "Calendar not found"),
+    INVALID_CALENDARCONTENT_TIME_SETTING(400, "EndTime must be later"),
+    INVALID_CALENDAR_ID(400, "CalendarId is invalid"),
     EMAIL_CONFLICT(409,"Email already exists"),
     NICKNAME_CONFLICT(409,"Nickname already exists"),
     BOARD_NOT_FOUND(404,"Board not found"),
@@ -36,6 +38,7 @@ public enum ExceptionCode {
     INVALID_ORDER_BY_PARAMETER(404, "Invalid order by parameter"),
     COMMENT_NOT_FOUND(404,"Comment not found"),
     COMMENT_ACCESS_DENIED(404, "Comment Access Denied");
+
 
 
     @Getter

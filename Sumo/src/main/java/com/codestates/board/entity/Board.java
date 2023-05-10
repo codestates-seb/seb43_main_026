@@ -29,7 +29,6 @@ public class Board extends Auditable {
     @Column
     private String content;
 
-
     @Column
     private String boardImageAddress;
 
@@ -43,7 +42,6 @@ public class Board extends Auditable {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<BoardLikes> boardLikes;
 
-
     //ARRAYLIST 사용한이유.
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
@@ -52,6 +50,4 @@ public class Board extends Auditable {
         this.comments.add(comment);
         comment.setBoard(this);
     }
-
-
 }

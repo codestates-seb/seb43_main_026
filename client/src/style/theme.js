@@ -1,11 +1,13 @@
 const size = {
-  mobile: '767px',
-  tablet: '1023px',
+  mobileMin: '360px',
+  mobileMax: '767px',
+  tablet: '768px',
   desktop: '1024px',
 };
 const breakpoints = {
-  mobileMax: `screen and (max-width: ${size.mobile})`,
-  tabletMax: `screen and (max-width: ${size.tablet})`,
+  mobileMin: `screen and (min-width: ${size.mobileMin})`,
+  mobileMax: `screen and (max-width: ${size.mobileMax})`,
+  tabletMin: `screen and (min-width: ${size.tablet})`,
   desktopMin: `screen and (min-width: ${size.desktop})`,
 };
 const widthSize = {

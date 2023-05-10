@@ -52,7 +52,7 @@ public interface BoardMapper {
         boardResponseDto.setBoardLikesId(board.getBoardLikes().stream().map(BoardLikes::getBoardLikesId).collect(Collectors.toList()));
         boardResponseDto.setLikesCount(board.getBoardLikes().size());
         boardResponseDto.setCommentId(board.getComments().stream().map(Comment::getCommentId).collect(Collectors.toList()));
-
+        boardResponseDto.setViewCount(board.getViewCount());
         // 댓글 수도 가지고 와야 할 수 있음.
 
         return boardResponseDto;

@@ -83,7 +83,13 @@ public class BoardService {
 
     // 게시글 조회
     public Board findBoard(long boardId){
-        return findVerifiedBoard(boardId);
+
+        Board findBoard = findVerifiedBoard(boardId);
+
+        findBoard.setViewCount(findBoard.getViewCount() +1);
+        boardRepository.save(findBoard);
+
+        return findBoard;
     }
 
 
@@ -191,5 +197,7 @@ public class BoardService {
             throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
         }
     }
+
+
 
 }

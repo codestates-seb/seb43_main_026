@@ -32,6 +32,8 @@ public class Board extends Auditable {
     @Column
     private String boardImageAddress;
 
+    @Column
+    private int viewCount;
 
     @ManyToOne
     @JoinColumn(name = "member_id")

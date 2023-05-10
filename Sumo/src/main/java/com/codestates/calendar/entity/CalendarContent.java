@@ -26,6 +26,12 @@ public class CalendarContent {
     @Column
     private String location;
 
+    @Column(nullable = false)
+    private String beginTime;
+
+    @Column(nullable = false)
+    private String endTime;
+
     @ManyToOne
     @JoinColumn(name = "Calendar_id")
     private Calendar calendar;

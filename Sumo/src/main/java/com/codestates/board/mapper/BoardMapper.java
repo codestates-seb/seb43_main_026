@@ -5,9 +5,8 @@ import com.codestates.board.dto.BoardPatchDto;
 import com.codestates.board.dto.BoardPostDto;
 import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
-import com.codestates.member.entity.Member;
-import com.codestates.comment.entity.Comment;
 import com.codestates.board.entity.BoardLikes;
+import com.codestates.comment.entity.Comment;
 import org.mapstruct.Mapper;
 
 import java.util.stream.Collectors;
@@ -46,7 +45,7 @@ public interface BoardMapper {
         boardResponseDto.setBoardId(board.getBoardId());
         boardResponseDto.setTitle(board.getTitle());
         boardResponseDto.setContent(board.getContent());
-//        boardResponseDto.setWriter(board.getMember().getNickname());
+        boardResponseDto.setWriter(board.getMember().getNickname());
         boardResponseDto.setBoardImageAddress(board.getBoardImageAddress());
         boardResponseDto.setCreatedAt(board.getCreatedAt());
         boardResponseDto.setModifiedAt(board.getModifiedAt());
@@ -56,9 +55,20 @@ public interface BoardMapper {
 
         // 댓글 수도 가지고 와야 할 수 있음.
 
-
         return boardResponseDto;
 
+    }
+
+    default BoardResponseDto boardToBoardPagingResponseDto(Board board){
+        BoardResponseDto boardPagingResponseDto = new BoardResponseDto();
+
+        boardPagingResponseDto.setBoardId(board.getBoardId());
+        boardPagingResponseDto.setTitle(board.getTitle());
+        boardPagingResponseDto.setWriter(board.getMember().getNickname());
+        boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
+        boardPagingResponseDto.setModifiedAt(board.getModifiedAt());
+
+        return boardPagingResponseDto;
     }
 
 

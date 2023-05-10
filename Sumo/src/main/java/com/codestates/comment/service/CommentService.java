@@ -97,6 +97,7 @@ public class CommentService {
 //
 //    }
 
+    // boardId를 통해서 comment리스트 목록 뽑아오기
     @Transactional(readOnly = true)
     public List<Comment> findCommentsByBoardId(long boardId){
         Board board = boardRepository.findById(boardId)

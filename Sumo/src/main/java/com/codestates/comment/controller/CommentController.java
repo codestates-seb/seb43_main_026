@@ -69,8 +69,8 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //TODO: 특정 게시글의 COMMENT 리스트 출력.
-    //특정 댓글 GET 요청
+
+    //특정 게시글의 댓글 GET 요청
     @GetMapping("/comments")
     public ResponseEntity getCommentsByBoardId(@PathVariable("board-id")@Positive long boardId){
         List<Comment> comments = commentService.findCommentsByBoardId(boardId);

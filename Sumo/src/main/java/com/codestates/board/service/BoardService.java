@@ -87,12 +87,6 @@ public class BoardService {
     }
 
 
-    // 게시글 목록 조회
-    public Page<Board> findBoards(int page, int size){
-        return boardRepository.findAll(PageRequest.of(page, size,
-                Sort.by("createdAt").descending()));
-    }
-
 
     // 게시글 확인
     private Board findVerifiedBoard(long boardId){
@@ -102,32 +96,55 @@ public class BoardService {
                         new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
         return findBoard;
     }
-
-
-    //TODO:  사용자가 이전에 좋아요를 눌렀던 상태를 체크해서 좋아요 수를 증가, 감소 로직으로 변경
-    public void toggleLike(long boardId, long memberId) {
+    //TODO: TOGGLELIKE 수정
+    public void toggleLike(Long memberId, Long boardId){
         Board board = findVerifiedBoard(boardId);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        Optional<BoardLikes> existingBoardLikeOpt = boardLikesRepository.findByBoardAndMember(board, member);
-        if (existingBoardLikeOpt.isPresent()) {
-            BoardLikes existingBoardLike = existingBoardLikeOpt.get();
-            boardLikesRepository.delete(existingBoardLike);
-            board.setLikeCount(board.getLikeCount() -1);
-        }
-        else {
-            board.setLikeCount(board.getLikeCount() +1);
+        Optional<BoardLikes> boardLike = boardLikesRepository.findByBoardAndMember(board, member);
 
-            BoardLikes newBoardLike = new BoardLikes();
-            newBoardLike.setBoard(board);
-            newBoardLike.setMember(member);
+        if(boardLike.isPresent()) {
+            if (boardLike.get().getLikeStatus() == 1){
+                boardLike.get().setLikeStatus(0);
+            } else {
+                boardLike.get().setLikeStatus(1);
+            }
+            boardLikesRepository.save(boardLike.get());
+        } else{
+            BoardLikes newBoardLike = new BoardLikes(board, member);
             newBoardLike.setLikeStatus(1);
             boardLikesRepository.save(newBoardLike);
         }
 
-        boardRepository.save(board);
+        board.setBoardLikes(boardLikesRepository.findByBoard(board));
     }
+
+
+//    //TODO:  사용자가 이전에 좋아요를 눌렀던 상태를 체크해서 좋아요 수를 증가, 감소 로직으로 변경
+//    public void toggleLike(long boardId, long memberId) {
+//        Board board = findVerifiedBoard(boardId);
+//        Member member = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+//
+//        Optional<BoardLikes> existingBoardLikeOpt = boardLikesRepository.findByBoardAndMember(board, member);
+//        if (existingBoardLikeOpt.isPresent()) {
+//            BoardLikes existingBoardLike = existingBoardLikeOpt.get();
+//            boardLikesRepository.delete(existingBoardLike);
+//            board.setLikeCount(board.getLikeCount() -1);
+//        }
+//        else {
+//            board.setLikeCount(board.getLikeCount() +1);
+//
+//            BoardLikes newBoardLike = new BoardLikes();
+//            newBoardLike.setBoard(board);
+//            newBoardLike.setMember(member);
+//            newBoardLike.setLikeStatus(1);
+//            boardLikesRepository.save(newBoardLike);
+//        }
+//
+//        boardRepository.save(board);
+//    }
 
 
     public List<Board> findBoardsSortedByLikes(){

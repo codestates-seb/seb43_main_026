@@ -28,8 +28,6 @@ public class Board extends Auditable {
     @Column
     private String content;
 
-    @Column
-    private int likeCount;
 
     @Column
     private String boardImageAddress;

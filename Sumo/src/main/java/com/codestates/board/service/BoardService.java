@@ -59,9 +59,9 @@ public class BoardService {
 //            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
 //        }
 
-
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
+        Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> findBoard.setBoardImageAddress(boardImageAddress));
 
         findBoard.setModifiedAt(LocalDateTime.now());
         return boardRepository.save(findBoard);
@@ -80,16 +80,19 @@ public class BoardService {
         boardRepository.deleteById(boardId);
     }
 
+
     // 게시글 조회
     public Board findBoard(long boardId){
         return findVerifiedBoard(boardId);
     }
+
 
     // 게시글 목록 조회
     public Page<Board> findBoards(int page, int size){
         return boardRepository.findAll(PageRequest.of(page, size,
                 Sort.by("createdAt").descending()));
     }
+
 
     // 게시글 확인
     private Board findVerifiedBoard(long boardId){
@@ -99,6 +102,7 @@ public class BoardService {
                         new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
         return findBoard;
     }
+
 
     //TODO:  사용자가 이전에 좋아요를 눌렀던 상태를 체크해서 좋아요 수를 증가, 감소 로직으로 변경
     public void toggleLike(long boardId, long memberId) {
@@ -118,7 +122,7 @@ public class BoardService {
             BoardLikes newBoardLike = new BoardLikes();
             newBoardLike.setBoard(board);
             newBoardLike.setMember(member);
-            newBoardLike.setBoardLikes(1);
+            newBoardLike.setLikeStatus(1);
             boardLikesRepository.save(newBoardLike);
         }
 
@@ -126,32 +130,28 @@ public class BoardService {
     }
 
 
-
-    // TODO: 게시글 좋아요가 많은 순으로 정렬
     public List<Board> findBoardsSortedByLikes(){
         return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "likes"));
 
     }
 
-    // TODO: 게시글을 최신순으로 정렬
     public List<Board> findBoardsSortedByLatest(){
         return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 
-    // TODO: 게시글을 오래된 순으로 정렬
     public List<Board> findBoardsSortedByOldest(){
         return boardRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
     }
 
-    // TODO: 댓글 수가 많은 순으로 정렬
-//    public List<Board> findBoardsSortedByComments(){
-//        return boardRepository.findAllByOrderByCommentsDesc();
-//    }
+    public List<Board> findBoardsSortedByComments(){
+        return boardRepository.findAllByOrderByCommentsDesc();
+    }
 
     // TODO: 현재 로그인한 회원 정보 가지고오기. // // TODO: SECURITY 적용시 주석해제
+    // → 이메일로 변경을 해야함. check해보기.
 //    private Member getCurrentMember() {
-//        String nickname = SecurityContextHolder.getContext().getAuthentication().getName();
-//        return memberRepository.findByNickname(nickname)
+//        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+//        return memberRepository.findByEmail(email)
 //                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 //    }
 
@@ -161,5 +161,18 @@ public class BoardService {
         return boardLikes.size();
     }
 
+    public List<Board> findBoards(String orderBy){
+        if(orderBy == null || orderBy.equalsIgnoreCase("latest")){
+            return findBoardsSortedByLatest();
+        } else if (orderBy.equalsIgnoreCase("oldest")){
+            return findBoardsSortedByOldest();
+        } else if (orderBy.equalsIgnoreCase("likes")){
+            return findBoardsSortedByLikes();
+        } else if (orderBy.equalsIgnoreCase("comments")){
+            return findBoardsSortedByComments();
+        } else {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
+        }
+    }
 
 }

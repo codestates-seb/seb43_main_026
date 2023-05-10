@@ -2,6 +2,7 @@ package com.codestates.board.entity;
 
 
 import com.codestates.audit.Auditable;
+import com.codestates.comment.entity.Comment;
 import com.codestates.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,13 @@ public class Board extends Auditable {
     @Column
     private String content;
 
+    @Column
+    private int likeCount;
+
+    @Column
+    private String boardImageAddress;
+
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -34,14 +42,9 @@ public class Board extends Auditable {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<BoardLikes> boardLikes;
 
-    @Column
-    private int likeCount;
 
-    private String boardImageAddress;
-
-
-//    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
-//    private List<Comment> comments;
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 
 
 

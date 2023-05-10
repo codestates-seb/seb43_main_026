@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<Board> findByMember_MemberId(long memberId);
 
-//    List<Board> findAllByOrderByCommentsDesc();
+    List<Board> findAllByOrderByCommentsDesc();
 
 }

@@ -5,8 +5,8 @@ import com.codestates.board.dto.BoardPatchDto;
 import com.codestates.board.dto.BoardPostDto;
 import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
-import com.codestates.member.entity.Member;
 import com.codestates.board.entity.BoardLikes;
+import com.codestates.comment.entity.Comment;
 import org.mapstruct.Mapper;
 
 import java.util.stream.Collectors;
@@ -45,21 +45,30 @@ public interface BoardMapper {
         boardResponseDto.setBoardId(board.getBoardId());
         boardResponseDto.setTitle(board.getTitle());
         boardResponseDto.setContent(board.getContent());
-//        boardResponseDto.setWriter(board.getMember().getNickname());
+        boardResponseDto.setWriter(board.getMember().getNickname());
         boardResponseDto.setBoardImageAddress(board.getBoardImageAddress());
         boardResponseDto.setCreatedAt(board.getCreatedAt());
         boardResponseDto.setModifiedAt(board.getModifiedAt());
         boardResponseDto.setBoardLikesId(board.getBoardLikes().stream().map(BoardLikes::getBoardLikesId).collect(Collectors.toList()));
         boardResponseDto.setLikesCount(board.getBoardLikes().size());
+        boardResponseDto.setCommentId(board.getComments().stream().map(Comment::getCommentId).collect(Collectors.toList()));
 
-        // 댓글 ID를 설정하려면 게시글에 있는 댓글 엔티티에 접근하여 ID를 가져와야 합니다.
-        // 예를 들어, Board 엔티티에 Comment 엔티티에 대한 참조가 있다면 다음과 같이 설정할 수 있습니다.
-        // boardResponseDto.setCommentIds(board.getComments().stream().map(Comment::getCommentId).collect(Collectors.toList()));
         // 댓글 수도 가지고 와야 할 수 있음.
-
 
         return boardResponseDto;
 
+    }
+
+    default BoardResponseDto boardToBoardPagingResponseDto(Board board){
+        BoardResponseDto boardPagingResponseDto = new BoardResponseDto();
+
+        boardPagingResponseDto.setBoardId(board.getBoardId());
+        boardPagingResponseDto.setTitle(board.getTitle());
+        boardPagingResponseDto.setWriter(board.getMember().getNickname());
+        boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
+        boardPagingResponseDto.setModifiedAt(board.getModifiedAt());
+
+        return boardPagingResponseDto;
     }
 
 

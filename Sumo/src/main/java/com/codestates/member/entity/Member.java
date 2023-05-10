@@ -1,13 +1,17 @@
 package com.codestates.member.entity;
 
+
+import com.codestates.calendar.entity.Calendar;
+import com.codestates.board.entity.Board;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -26,4 +30,10 @@ public class Member {
 
     @Column(nullable = false, unique = true)
     private String nickname;
+
+    @OneToOne(mappedBy = "member",cascade = CascadeType.ALL)
+    private Calendar calendar;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 }

@@ -33,7 +33,7 @@ public class CalendarService {
     }
 
     // memberService의 createMember 메서드 안에 추가하면 됨.
-    public Calendar initCalendar(long memberId) {
+    public Calendar initCalendar(Member member) {
         Calendar calendar = new Calendar();
         Member member = new Member();
         member.setMemberId(memberId);
@@ -149,7 +149,6 @@ public class CalendarService {
     }
 
     private int calculateTimeDifference(String beginTime, String endTime) {
-        // 12:12
         int beginHour = Integer.parseInt(beginTime.substring(0, 2));
         int endHour = Integer.parseInt(endTime.substring(0, 2));
         int beginMinute = Integer.parseInt(beginTime.substring(3, 5));

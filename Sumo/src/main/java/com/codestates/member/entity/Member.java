@@ -34,6 +34,13 @@ public class Member {
     @OneToOne(mappedBy = "member",cascade = CascadeType.ALL)
     private Calendar calendar;
 
+    @OneToMany(mappedBy = "member")
+    private List<Board> boards = new ArrayList<>();
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
+    public void addBoard(Board board){
+        boards.add(board);
+    }
 }

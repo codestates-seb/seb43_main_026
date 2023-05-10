@@ -104,11 +104,11 @@ const MenuList = styled.li`
   }
 `;
 
-const Nav = ({ nav }) => {
+const Nav = ({ nav, handleNav }) => {
   const navigate = useNavigate();
   return (
-    <Container style={{ display: nav ? 'block' : 'none' }}>
-      <NavBarContainer>
+    <Container style={{ display: nav ? 'block' : 'none' }} onClick={handleNav}>
+      <NavBarContainer onClick={(e) => e.stopPropagation()}>
         <UserBox>
           <ImgBox>
             <img

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface BoardLikesRepository extends JpaRepository<BoardLikes, Long> {
 
-    Optional <BoardLikes> findByBoardAndMember(Board board, Member member);
+    Optional<BoardLikes> findByBoardAndMember(Board board, Member member);
     List<BoardLikes> findByBoard(Board board);
 
 }

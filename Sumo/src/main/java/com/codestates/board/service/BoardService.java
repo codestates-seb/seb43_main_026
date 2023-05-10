@@ -11,6 +11,7 @@ import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,17 +31,14 @@ public class BoardService {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired
-    private Member member;
-
     // 게시글 생성
     // TODO: SECURITY 적용시 주석해제
     @Transactional
     public Board createBoard(Board board){
 
-//        Member currentMember = getCurrentMember();
+        Member currentMember = getCurrentMember();
 //        board.setMember(currentMember);
-        member.addBoard(board);
+        currentMember.addBoard(board);
 
         return boardRepository.save(board);
     }
@@ -171,11 +169,11 @@ public class BoardService {
 
     // TODO: 현재 로그인한 회원 정보 가지고오기. // // TODO: SECURITY 적용시 주석해제
 
-//    private Member getCurrentMember() {
-//        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//        return memberRepository.findByEmail(email)
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//    }
+    private Member getCurrentMember() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
 
     public int getLikesCount(long boardId){
         Board board = findVerifiedBoard(boardId);

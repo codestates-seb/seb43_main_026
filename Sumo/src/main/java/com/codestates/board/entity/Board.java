@@ -2,6 +2,7 @@ package com.codestates.board.entity;
 
 
 import com.codestates.audit.Auditable;
+import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.comment.entity.Comment;
 import com.codestates.member.entity.Member;
 import lombok.Getter;
@@ -35,6 +36,7 @@ public class Board extends Auditable {
     @Column
     private int viewCount;
 
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -45,6 +47,7 @@ public class Board extends Auditable {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
+
 
 
 

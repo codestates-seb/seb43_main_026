@@ -1,5 +1,6 @@
 package com.codestates.calendar.controller;
 
+import com.codestates.calendar.dto.CalendarContentDto;
 import com.codestates.calendar.dto.CalendarDto;
 import com.codestates.calendar.dto.MultiResponseDto;
 import com.codestates.calendar.entity.CalendarContent;
@@ -31,7 +32,7 @@ public class CalendarController {
     }
 
     @PostMapping("/{calendar-id}/calendarcontents")
-    public ResponseEntity postCalendarContent(@Valid @RequestBody CalendarDto.Post calendarPostDto,
+    public ResponseEntity postCalendarContent(@Valid @RequestBody CalendarContentDto.Post calendarPostDto,
                                               @PathVariable("calendar-id") @Positive long calendarId) {
         calendarPostDto.setCalendarId(calendarId);
 
@@ -47,14 +48,14 @@ public class CalendarController {
     }
 
     @PatchMapping("/{calendar-id}/calendarcontents/{calendarContent-id}")
-    public ResponseEntity patchCalendarContent(@Valid @RequestBody CalendarDto.Patch calendarPatchDto,
+    public ResponseEntity patchCalendarContent(@Valid @RequestBody CalendarContentDto.Patch calendarPatchDto,
                                                @PathVariable("calendar-id") @Positive long calendarId,
                                                @PathVariable("calendarContent-id") @Positive long calendarContentId) {
         calendarPatchDto.setCalendarContentId(calendarContentId);
 
         CalendarContent calendarContent = calendarService.updateCalendarContent(calendarMapper.calendarPatchDtoToCalendarContent(calendarPatchDto), calendarId);
 
-        CalendarDto.Response response = calendarMapper.calendarContentToCalendarResponseDto(calendarContent);
+        CalendarContentDto.Response response = calendarMapper.calendarContentToCalendarResponseDto(calendarContent);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -63,11 +64,10 @@ public class CalendarController {
     public ResponseEntity getCalendarContent(@PathVariable("calendar-id") @Positive long calendarId,
                                              @PathVariable("calendarContent-id") @Positive long calendarContentId) {
         CalendarContent calendarContent = calendarService.findCalendarContent(calendarContentId, calendarId);
-        CalendarDto.Response response = calendarMapper.calendarContentToCalendarResponseDto(calendarContent);
+        CalendarContentDto.Response response = calendarMapper.calendarContentToCalendarResponseDto(calendarContent);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 해당 캘린더에 포함된 모든 컨텐츠를 가져오는 핸들러 메서드
     @GetMapping("/{calendar-id}")
     public ResponseEntity getCalendar(@PathVariable("calendar-id") @Positive long calendarId,
                                       @Positive @RequestParam int year,
@@ -77,14 +77,23 @@ public class CalendarController {
         int attendanceRate = calendarService.calculateAttendanceRate(calendarContents, month);
         int totalMinutes = calendarService.calculateTotalTime(calendarContents);
 
-        List<CalendarDto.Response> responses = calendarMapper.calendarContentsToCalendarResponseDtos(calendarContents);
+        List<CalendarContentDto.Response> responses = calendarMapper.calendarContentsToCalendarResponseDtos(calendarContents);
         return new ResponseEntity<>(new MultiResponseDto<>(responses, attendanceRate, totalMinutes), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity getCalendars(@Positive @RequestParam int year,
+                                       @Positive @Max(12) @RequestParam int month) {
+        List<CalendarDto.Response> responses = calendarService.findCalendars(year, month);
+
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     @DeleteMapping("/{calendar-id}/calendarcontents/{calendarContent-id}")
     public ResponseEntity deleteCalendarContent(@PathVariable("calendar-id") @Positive long calendarId,
                                                 @PathVariable("calendarContent-id") @Positive long calendarContentId) {
-        calendarService.deleteCalendarContent(calendarContentId);
+
+        calendarService.deleteCalendarContent(calendarContentId, calendarId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

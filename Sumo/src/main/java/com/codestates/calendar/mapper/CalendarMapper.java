@@ -1,6 +1,6 @@
 package com.codestates.calendar.mapper;
 
-import com.codestates.calendar.dto.CalendarDto;
+import com.codestates.calendar.dto.CalendarContentDto;
 import com.codestates.calendar.entity.Calendar;
 import com.codestates.calendar.entity.CalendarContent;
 import org.mapstruct.Mapper;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface CalendarMapper {
-    default CalendarContent calendarPostDtoToCalendarContent(CalendarDto.Post calendarPostDto) {
+    default CalendarContent calendarPostDtoToCalendarContent(CalendarContentDto.Post calendarPostDto) {
         CalendarContent calendarContent = new CalendarContent();
         Calendar calendar = new Calendar();
         calendar.setCalendarId(calendarPostDto.getCalendarId());
@@ -26,7 +26,7 @@ public interface CalendarMapper {
         return calendarContent;
     }
 
-    default CalendarContent calendarPatchDtoToCalendarContent(CalendarDto.Patch calendarPatchDto) {
+    default CalendarContent calendarPatchDtoToCalendarContent(CalendarContentDto.Patch calendarPatchDto) {
         CalendarContent calendarContent = new CalendarContent();
 
         calendarContent.setCalendarContentId(calendarPatchDto.getCalendarContentId());
@@ -39,8 +39,8 @@ public interface CalendarMapper {
         return calendarContent;
     }
 
-    default CalendarDto.Response calendarContentToCalendarResponseDto(CalendarContent calendarContent) {
-        CalendarDto.Response calendarResponseDto = new CalendarDto.Response();
+    default CalendarContentDto.Response calendarContentToCalendarResponseDto(CalendarContent calendarContent) {
+        CalendarContentDto.Response calendarResponseDto = new CalendarContentDto.Response();
 
         calendarResponseDto.setCalendarContentId(calendarContent.getCalendarContentId());
         calendarResponseDto.setDate(calendarContent.getDate());
@@ -54,7 +54,7 @@ public interface CalendarMapper {
         return calendarResponseDto;
     }
 
-    default List<CalendarDto.Response> calendarContentsToCalendarResponseDtos(List<CalendarContent> calendarContents) {
+    default List<CalendarContentDto.Response> calendarContentsToCalendarResponseDtos(List<CalendarContent> calendarContents) {
         return calendarContents.stream()
                 .map(calendarContent -> calendarContentToCalendarResponseDto(calendarContent))
                 .collect(Collectors.toList());

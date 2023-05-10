@@ -3,6 +3,8 @@ import LogoImg from '../assets/image/logo.png';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
 const SignUp = () => {
   const {
     handleSubmit,
@@ -14,8 +16,13 @@ const SignUp = () => {
   // 회원가입 완료 시
   const onSubmit = (data) => {
     console.log(data);
-    axios.post();
+    axios
+      .post(`${SERVER_URL}/members`, { ...data })
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error));
   };
+
+  // 에러 발생 시
   const onError = (error) => console.log(error);
   return (
     <SignUpContainer>

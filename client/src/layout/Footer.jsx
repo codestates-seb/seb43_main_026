@@ -40,7 +40,6 @@ const Container = styled.div`
   height: 15vh;
   background-color: ${(props) => props.theme.color.main_blue};
   bottom: 0;
-
   @media ${(props) => props.theme.breakpoints.mobileMax} {
     display: none;
   }

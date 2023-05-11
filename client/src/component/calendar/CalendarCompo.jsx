@@ -1,5 +1,7 @@
+/* eslint-disable import/named */
 import styled from 'styled-components';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+// import { useState } from 'react';
 import moment from 'moment';
 // 스타일링을 위해 import해야함
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -13,6 +15,7 @@ import { BsArrowClockwise } from 'react-icons/bs';
 import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { TbCapture } from 'react-icons/tb';
+import { Link } from 'react-router-dom';
 
 // toolbar styled-component
 const ToolbarCon = styled.div`
@@ -115,6 +118,9 @@ const CalendarCon = styled.div`
       .rbc-header {
         padding: 10px 0px;
       }
+      .rbc-day-bg {
+        cursor: pointer;
+      }
     }
     /* 캘린더 아래 버튼 */
     .cal-bottom {
@@ -128,6 +134,7 @@ const CalendarCon = styled.div`
         height: 44px;
         width: 44px;
         border-radius: 50%;
+        border: none;
         padding-top: 5px;
         background-color: ${(props) => props.theme.color.main_blue};
         text-align: center;
@@ -219,21 +226,34 @@ const Toolbar = (props) => {
 const CalendarCompo = () => {
   moment.locale('ko-KR');
   const localizer = momentLocalizer(moment);
+  // const [selectedDate, setSelectedDate] = useState(null);
+  // 캘린더 날짜 데이터 형식 변경
+  // const activeDate = moment(selectedDate).format('YYYY-MM-DD');
+  // const handleSelectSlot = (slotInfo) => {
+  //   // console.log('Selected date:', slotInfo);
+  //   setSelectedDate(slotInfo.start);
+  // };
+  // console.log(activeDate);
   return (
     <CalendarCon>
       <Calendar
+        id="calMain"
         className="cal-main"
         localizer={localizer}
         views={['month']}
         components={{
           toolbar: Toolbar,
         }}
+        // selectable
+        // onSelectSlot={handleSelectSlot}
       />
       <section className="cal-bottom">
-        <div className="cal-cap">
+        <button className="cal-cap">
           <TbCapture size={33} />
-        </div>
-        <IoMdAddCircle className="cal-add-btn" size={50} />
+        </button>
+        <Link to={'/calendar/add'}>
+          <IoMdAddCircle className="cal-add-btn" size={50} />
+        </Link>
       </section>
     </CalendarCon>
   );

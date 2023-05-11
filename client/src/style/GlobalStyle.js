@@ -2,6 +2,8 @@ import { createGlobalStyle } from 'styled-components';
 
 // reset.css
 const GlobalStyle = createGlobalStyle`
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css");
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -66,6 +68,9 @@ a {
 	color: inherit;
 }
 
+body {
+	font-family: Pretendard;
+}
 /* @font-face {
     font-family: 'Pretendard-Regular';
     src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');

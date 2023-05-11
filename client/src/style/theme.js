@@ -1,21 +1,11 @@
-const size = {
+export const SIZE = {
   mobileMin: '360px',
   mobileMax: '767px',
   tablet: '768px',
   desktop: '1024px',
 };
-const breakpoints = {
-  mobileMin: `screen and (min-width: ${size.mobileMin})`,
-  mobileMax: `screen and (max-width: ${size.mobileMax})`,
-  tabletMin: `screen and (min-width: ${size.tablet})`,
-  desktopMin: `screen and (min-width: ${size.desktop})`,
-};
-const widthSize = {
-  navbar: '164px',
-  contentMax: '1264px',
-  sidebar: '298px',
-};
-const color = {
+
+export const COLOR = {
   bg: '#FFFFFF',
   main_blue: `#85B6FF`,
   main_blue_hover: `#5d9afd`,
@@ -35,12 +25,3 @@ const color = {
   pc_bg: `#FAFAFA`,
   input_border: `#CADAE5`,
 };
-
-const theme = {
-  breakpoints,
-  color,
-  widthSize,
-  size,
-};
-
-export default theme;

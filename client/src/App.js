@@ -26,6 +26,7 @@ function App() {
         <Nav nav={nav} setNav={setNav} handleNav={handleNav} />
         <Routes>
           <Route path="/" element={<MyCalendar />} />
+          <Route path="/calendar/add" element={<CalendarAdd />} />
           <Route path="/board" element={<Board />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />

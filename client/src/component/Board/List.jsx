@@ -8,7 +8,7 @@ import { COLOR, SIZE } from '../../style/theme';
 import { FaHeart } from 'react-icons/fa';
 import { BiComment } from 'react-icons/bi';
 
-const ListContainter = styled.ul`
+const Containter = styled.ul`
   width: 100%;
 `;
 
@@ -101,7 +101,7 @@ const CreatDate = styled.span``;
 
 const List = ({ posts }) => {
   return (
-    <ListContainter>
+    <Containter>
       {posts.length
         ? posts.map((post) => (
             <Lists key={post.id}>
@@ -125,7 +125,7 @@ const List = ({ posts }) => {
             </Lists>
           ))
         : null}
-    </ListContainter>
+    </Containter>
   );
 };
 

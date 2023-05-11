@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { useState } from 'react';
 
 //공통 스타일
-import { COLOR, SIZE } from '../style/theme';
+import { COLOR, SIZE } from '../../style/theme';
 
 //컴포넌트
-import Dash from '../component/Board/Dash';
-import List from '../component/Board/List';
+import Dash from '../../component/Board/Dash';
+import List from '../../component/Board/List';
 
 //아이콘
 import { BsCalendar2Heart } from 'react-icons/bs';
@@ -16,7 +16,7 @@ import { RiListUnordered } from 'react-icons/ri';
 import { HiPlus } from 'react-icons/hi';
 
 //더미데이터
-import boardData from '../component/Board/boardData';
+import boardData from '../../component/Board/boardData';
 
 //전체 컨테이너
 const Container = styled.section`
@@ -163,7 +163,7 @@ const Board = () => {
   const [posts, setPosts] = useState(boardData);
   const [isDash, setIsDash] = useState(true);
 
-  // 첫 번째 게시글의 제목을 "New Title"로 업데이트
+  //첫 번째 게시글의 제목을 "New Title"로 업데이트
   //setPost안쓰면 eslint오류나서 그냥 쓰는 코드
   const updatePost = () => {
     const newPosts = [...posts];

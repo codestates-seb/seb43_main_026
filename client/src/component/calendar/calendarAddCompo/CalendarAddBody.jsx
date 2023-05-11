@@ -95,7 +95,6 @@ const InputPlace = () => {
   return (
     <InputPlaceContainer>
       <span className="input-place">장소 :</span>
-      <div></div>
     </InputPlaceContainer>
   );
 };

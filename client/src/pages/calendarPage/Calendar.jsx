@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import CalendarCompo from '../../component/calendar/CalendarCompo';
+import CalendarComponent from '../../component/calendar/CalendarComponent';
 import { SIZE, COLOR } from '../../style/theme';
 const MyCalendarContainer = styled.div`
   /* 모바일 기준 */
@@ -35,7 +35,7 @@ const MyCalendarContainer = styled.div`
 const MyCalendar = () => {
   return (
     <MyCalendarContainer>
-      <CalendarCompo />
+      <CalendarComponent />
     </MyCalendarContainer>
   );
 };

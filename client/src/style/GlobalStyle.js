@@ -2,7 +2,6 @@ import { createGlobalStyle } from 'styled-components';
 
 // reset.css
 const GlobalStyle = createGlobalStyle`
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css");
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -22,7 +21,6 @@ time, mark, audio, video {
 	font-size: 100%;
 	box-sizing: border-box;
 	font: inherit;
-	font-family: 'Pretendard';
 	vertical-align: baseline;
 
 	-webkit-user-select: none;
@@ -40,14 +38,14 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 html {
-	/* font-family: -apple-system, "system-ui", Segoe UI, BlinkMacSystemFont
+	font-family: -apple-system, "system-ui", Segoe UI, BlinkMacSystemFont
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-    sans-serif; */
-	font-family: 'Pretendard';
-
+    sans-serif;
+	
 }
 body {
 	line-height: 1;
+	font-family: 'Pretendard';
 	
 }
 ol, ul {
@@ -70,6 +68,7 @@ a {
 	text-decoration: none;
 	color: inherit;
 }
+
 `;
 
 export default GlobalStyle;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import LogoImage from '../assets/image/logo.png';
-
+import { SIZE, COLOR } from '../style/theme';
 const Footer = () => {
   return (
     <Container>
@@ -38,9 +38,9 @@ export default Footer;
 const Container = styled.div`
   width: 100%;
   height: 15vh;
-  background-color: ${(props) => props.theme.color.main_blue};
+  background-color: ${COLOR.main_blue};
   bottom: 0;
-  @media ${(props) => props.theme.breakpoints.mobileMax} {
+  @media screen and (max-width: ${SIZE.mobileMax}) {
     display: none;
   }
 

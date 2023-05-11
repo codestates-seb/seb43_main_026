@@ -13,6 +13,7 @@ import CalendarAdd from './pages/calendarPage/CalendarAdd';
 import Board from './pages/Board';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import CalendarAdd from './pages/calendarPage/CalendarAdd';
 
 function App() {
   const [nav, setNav] = useState(false);

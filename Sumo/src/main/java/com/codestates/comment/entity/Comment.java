@@ -25,8 +25,6 @@ public class Comment extends Auditable {
     @Column
     private String commentContent;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
-    private List<CommentLikes> commentLikes;
 
     @ManyToOne
     @JoinColumn(name = "Board_id")
@@ -35,5 +33,8 @@ public class Comment extends Auditable {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<CommentLikes> commentLikes;
 
 }

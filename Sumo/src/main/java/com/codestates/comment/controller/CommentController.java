@@ -79,7 +79,7 @@ public class CommentController {
     }
 
     //댓글 좋아요 추가
-    @PostMapping("/{comment-id/likes}")
+    @PostMapping("/{comment-id}/likes")
     public ResponseEntity addLikeToComment(@PathVariable("comment-id") @Positive long commentId,
                                            @RequestParam("member-id") @Positive long memberId){
         commentService.toggleLike(commentId, memberId);

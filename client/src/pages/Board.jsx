@@ -22,7 +22,7 @@ const Container = styled.section`
   background-color: ${(props) =>
     props.view === 'list' ? '#ffffff' : props.theme.color.bg_blue};
   display: flex;
-  max-width: 1090px;
+  max-width: 1200px;
   flex-direction: column;
   justify-content: center;
   align-items: center;

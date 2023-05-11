@@ -20,29 +20,30 @@ const Lists = styled.li`
   }
 `;
 
-const MainInfo = styled.div`
+const TitleAndReaction = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 3px;
-  h2 {
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 20px;
-    display: inline-block;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
 `;
 
-const ReactBox = styled.div`
+const Title = styled.h2`
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const Reaction = styled.div`
   display: flex;
 
   width: 65px;
 `;
 
-const LikeBox = styled.div`
+const Like = styled.div`
   display: flex;
   width: 50%;
 
@@ -59,7 +60,7 @@ const HeartIcon = styled(FaHeart)`
   color: ${(props) => props.theme.color.main_blue};
 `;
 
-const CommentBox = styled.div`
+const Comment = styled.div`
   display: flex;
   width: 50%;
   justify-content: center;
@@ -76,7 +77,7 @@ const CommentIcon = styled(BiComment)`
   transform: scaleX(-1);
   color: ${(props) => props.theme.color.main_blue};
 `;
-const SubInfo = styled.div`
+const WriterAndCreateAt = styled.div`
   font-size: 12px;
   height: 15px;
   display: flex;
@@ -101,23 +102,23 @@ const List = ({ posts }) => {
       {posts &&
         posts.map((post) => (
           <Lists key={post.id}>
-            <MainInfo>
-              <h2>{post.title}</h2>
-              <ReactBox>
-                <LikeBox>
+            <TitleAndReaction>
+              <Title>{post.title}</Title>
+              <Reaction>
+                <Like>
                   <HeartIcon size={13} />
                   <span>{post.likeCount}</span>
-                </LikeBox>
-                <CommentBox>
+                </Like>
+                <Comment>
                   <CommentIcon size={13} />
                   <span>{post.commentCount}</span>
-                </CommentBox>
-              </ReactBox>
-            </MainInfo>
-            <SubInfo>
+                </Comment>
+              </Reaction>
+            </TitleAndReaction>
+            <WriterAndCreateAt>
               <Writer>{post.writer}</Writer>
               <CreatDate>{post.date}</CreatDate>
-            </SubInfo>
+            </WriterAndCreateAt>
           </Lists>
         ))}
     </ListContainter>

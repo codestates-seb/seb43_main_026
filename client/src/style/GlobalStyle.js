@@ -2,6 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 // reset.css
 const GlobalStyle = createGlobalStyle`
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css");
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -21,7 +22,9 @@ time, mark, audio, video {
 	font-size: 100%;
 	box-sizing: border-box;
 	font: inherit;
+	font-family: 'Pretendard';
 	vertical-align: baseline;
+
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -37,9 +40,11 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 html {
-	font-family: -apple-system, "system-ui", Segoe UI, BlinkMacSystemFont
+	/* font-family: -apple-system, "system-ui", Segoe UI, BlinkMacSystemFont
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-    sans-serif;
+    sans-serif; */
+	font-family: 'Pretendard';
+
 }
 body {
 	line-height: 1;
@@ -65,13 +70,6 @@ a {
 	text-decoration: none;
 	color: inherit;
 }
-
-/* @font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-} */
 `;
 
 export default GlobalStyle;

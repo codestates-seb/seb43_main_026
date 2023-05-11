@@ -8,10 +8,11 @@ import Footer from './layout/Footer';
 import Nav from './layout/Nav';
 
 // 페이지
-import MyCalendar from './pages/Calendar';
+import MyCalendar from './pages/calendarPage/Calendar';
 import Board from './pages/Board';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import CalendarAdd from './pages/calendarPage/CalendarAdd';
 
 function App() {
   const [nav, setNav] = useState(false);

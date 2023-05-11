@@ -1,46 +1,13 @@
 import styled from 'styled-components';
 import LogoImage from '../assets/image/logo.png';
-
-const Footer = () => {
-  return (
-    <Container>
-      <div>
-        <div className="logo">
-          <Logo src={LogoImage} alt="logo" />
-        </div>
-        <div className="github">
-          <GithubProfile profileUrl="52683129" name="rsuubinn" />
-          <GithubProfile profileUrl="119961147" name="kijiwon" />
-          <GithubProfile profileUrl="104323906" name="chochojj" />
-          <GithubProfile profileUrl="117034592" name="Seohabin6078" />
-          <GithubProfile profileUrl="70518135" name="yhj0076" />
-          <GithubProfile profileUrl="113077033" name="mins-git" />
-        </div>
-      </div>
-    </Container>
-  );
-};
-
-const GithubProfile = ({ profileUrl, name }) => {
-  return (
-    <GithubContainer>
-      <img
-        src={`https://avatars.githubusercontent.com/u/${profileUrl}?v=4`}
-        alt="github profile img"
-      />
-      <a href={`https://github.com/${name}`}>@{name}</a>
-    </GithubContainer>
-  );
-};
-
-export default Footer;
+import { COLOR, SIZE } from '../style/theme';
 
 const Container = styled.div`
   width: 100%;
   height: 15vh;
-  background-color: ${(props) => props.theme.color.main_blue};
+  background-color: ${COLOR.main_blue};
   bottom: 0;
-  @media ${(props) => props.theme.breakpoints.mobileMax} {
+  @media ${SIZE.mobileMax} {
     display: none;
   }
 
@@ -78,3 +45,37 @@ const GithubContainer = styled.div`
     margin-bottom: 0.5rem;
   }
 `;
+
+const Footer = () => {
+  return (
+    <Container>
+      <div>
+        <div className="logo">
+          <Logo src={LogoImage} alt="logo" />
+        </div>
+        <div className="github">
+          <GithubProfile profileUrl="52683129" name="rsuubinn" />
+          <GithubProfile profileUrl="119961147" name="kijiwon" />
+          <GithubProfile profileUrl="104323906" name="chochojj" />
+          <GithubProfile profileUrl="117034592" name="Seohabin6078" />
+          <GithubProfile profileUrl="70518135" name="yhj0076" />
+          <GithubProfile profileUrl="113077033" name="mins-git" />
+        </div>
+      </div>
+    </Container>
+  );
+};
+
+const GithubProfile = ({ profileUrl, name }) => {
+  return (
+    <GithubContainer>
+      <img
+        src={`https://avatars.githubusercontent.com/u/${profileUrl}?v=4`}
+        alt="github profile img"
+      />
+      <a href={`https://github.com/${name}`}>@{name}</a>
+    </GithubContainer>
+  );
+};
+
+export default Footer;

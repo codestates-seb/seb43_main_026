@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router';
 import { IoArrowBack } from 'react-icons/io5';
 import { COLOR } from '../../style/theme';
-
 // 뒤로가기 버튼
 const BackBtnCon = styled.button`
   border: none;

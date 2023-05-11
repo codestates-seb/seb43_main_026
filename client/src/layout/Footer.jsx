@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import LogoImage from '../assets/image/logo.png';
 import { SIZE, COLOR } from '../style/theme';
+
 const Footer = () => {
   return (
     <Container>

@@ -3,11 +3,12 @@ import LogoImg from '../assets/image/logo2.png';
 import styled from 'styled-components';
 import axios from 'axios';
 import { FcGoogle } from 'react-icons/fc';
+import { COLOR } from '../style/theme';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const Login = () => {
-  // 회원가입 완료 시
+  // 로그인 완료 시
   const onSubmit = (data) => {
     console.log(data);
     axios
@@ -25,7 +26,7 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   return (
-    <LoginContainer>
+    <Container>
       <div>
         <Logo src={LogoImg} alt="logo" />
         <h1>로그인</h1>
@@ -58,17 +59,17 @@ const Login = () => {
           <FcGoogle size="30" />
         </form>
       </div>
-    </LoginContainer>
+    </Container>
   );
 };
 
 export default Login;
 
-const LoginContainer = styled.div`
+const Container = styled.div`
   width: 100vw;
   height: 100vh;
   padding-top: 50px;
-  background-color: ${(props) => props.theme.color.bg_light_blue};
+  background-color: ${COLOR.bg_light_blue};
   & > div {
     display: flex;
     flex-direction: column;
@@ -81,7 +82,7 @@ const LoginContainer = styled.div`
       border-top-right-radius: 40px;
       border-top-left-radius: 40px;
       background-color: white;
-      border: 1px solid ${(props) => props.theme.color.main_blue};
+      border: 1px solid ${COLOR.main_blue};
       display: flex;
       flex-direction: column;
       padding: 6rem 2rem;
@@ -94,13 +95,13 @@ const LoginContainer = styled.div`
         margin-top: 3rem;
         height: 5vh;
         border: none;
-        background-color: ${(props) => props.theme.color.main_blue};
+        background-color: ${COLOR.main_blue};
         color: white;
         font-weight: 300;
         border-radius: 5px;
         cursor: pointer;
         &:hover {
-          background-color: ${(props) => props.theme.color.main_blue_hover};
+          background-color: ${COLOR.main_blue_hover};
         }
       }
     }
@@ -115,7 +116,7 @@ const Input = styled.input`
   margin-bottom: 0.5rem;
   height: 4.5vh;
   border-radius: 10px;
-  border: 1px solid ${(props) => props.theme.color.input_border};
+  border: 1px solid ${COLOR.input_border};
   padding: 0 0.5rem;
 `;
 

@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { FiMenu } from 'react-icons/fi';
 import LogoImage from '../assets/image/logo.png';
 import { COLOR, SIZE } from '../style/theme';
-const HeaderContainer = styled.header`
+
+const Container = styled.header`
   z-index: 1000;
   width: 100%;
   min-width: 360px;
@@ -31,10 +32,10 @@ const HeaderContainer = styled.header`
 `;
 const Header = ({ handleNav }) => {
   return (
-    <HeaderContainer>
+    <Container>
       <img src={LogoImage} alt="로고" className="logo_img" />
       <FiMenu size={30} className="nav_icon" onClick={handleNav} />
-    </HeaderContainer>
+    </Container>
   );
 };
 

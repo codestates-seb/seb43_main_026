@@ -1,11 +1,14 @@
 //모듈
 import styled from 'styled-components';
 
+//공통 스타일
+import { COLOR } from '../../style/theme';
+
 //아이콘
 import { FaHeart } from 'react-icons/fa';
 import { BiComment } from 'react-icons/bi';
 
-const ListContainter = styled.ul`
+const Container = styled.ul`
   padding-top: 3px;
   display: flex;
   flex-wrap: wrap;
@@ -13,13 +16,13 @@ const ListContainter = styled.ul`
   justify-content: center;
 `;
 
-const Dashlist = styled.li`
+const DashBorad = styled.li`
   margin-top: 13px;
   padding: 0 1.5%;
   display: flex;
   flex-direction: column;
 `;
-const ImgBox = styled.div`
+const Image = styled.div`
   width: 177px;
   height: 288px;
   overflow: hidden;
@@ -38,7 +41,7 @@ const ImgBox = styled.div`
     }
   }
 `;
-const InfoBox = styled.div`
+const Info = styled.div`
   margin: 5px 0px;
   width: 177px;
   display: flex;
@@ -46,30 +49,31 @@ const InfoBox = styled.div`
   @media screen and (max-width: 385px) {
     width: 320px;
   }
-  h2 {
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 20px;
-    display: inline-block;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
 `;
 
-const ReactBox = styled.div`
+const Title = styled.h2`
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const Reaction = styled.div`
   display: flex;
   span {
     font-size: 13px;
-    color: ${(props) => props.theme.color.font_comment};
+    color: ${COLOR.font_comment};
   }
   div {
     margin-right: 4px;
   }
 `;
 
-const LikeBox = styled.div`
+const Like = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,10 +84,10 @@ const LikeBox = styled.div`
 
 const HeartIcon = styled(FaHeart)`
   margin-right: 2px;
-  color: ${(props) => props.theme.color.main_dark_blue};
+  color: ${COLOR.main_dark_blue};
 `;
 
-const CommentBox = styled.div`
+const Comment = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -95,34 +99,34 @@ const CommentBox = styled.div`
 const CommentIcon = styled(BiComment)`
   margin-right: 2px;
   transform: scaleX(-1);
-  color: ${(props) => props.theme.color.main_dark_blue};
+  color: ${COLOR.main_dark_blue};
 `;
 
 const Dash = ({ posts }) => {
   return (
-    <ListContainter>
+    <Container>
       {posts &&
         posts.map((post) => (
-          <Dashlist key={post.id}>
-            <ImgBox>
+          <DashBorad key={post.id}>
+            <Image>
               <img src={post.image} alt="캘린더 이미지" />
-            </ImgBox>
-            <InfoBox>
-              <h2>{post.title}</h2>
-              <ReactBox>
-                <LikeBox>
+            </Image>
+            <Info>
+              <Title>{post.title}</Title>
+              <Reaction>
+                <Like>
                   <HeartIcon size={15} />
                   <span>{post.likeCount}</span>
-                </LikeBox>
-                <CommentBox>
+                </Like>
+                <Comment>
                   <CommentIcon size={15} />
                   <span>{post.commentCount}</span>
-                </CommentBox>
-              </ReactBox>
-            </InfoBox>
-          </Dashlist>
+                </Comment>
+              </Reaction>
+            </Info>
+          </DashBorad>
         ))}
-    </ListContainter>
+    </Container>
   );
 };
 

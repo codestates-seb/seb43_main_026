@@ -1,5 +1,6 @@
 package com.codestates.member.service;
 
+import com.codestates.calendar.entity.Calendar;
 import com.codestates.calendar.service.CalendarService;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
@@ -40,7 +41,8 @@ public class MemberService {
         member.setRoles(roles);
 
         Member returnMember = memberRepository.save(member);
-        calendarService.initCalendar(member);
+        Calendar calendar = calendarService.initCalendar(returnMember);
+        returnMember.setCalendar(calendar);
         return returnMember;
     }
 

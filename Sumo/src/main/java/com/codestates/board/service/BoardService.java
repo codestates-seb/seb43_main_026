@@ -10,9 +10,8 @@ import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,16 +31,14 @@ public class BoardService {
     @Autowired
     private MemberRepository memberRepository;
 
-
-
-
     // 게시글 생성
     // TODO: SECURITY 적용시 주석해제
     @Transactional
     public Board createBoard(Board board){
-//        Member currentMember = getCurrentMember();
-//        board.setMember(currentMember);
 
+        Member currentMember = getCurrentMember();
+//        board.setMember(currentMember);
+        currentMember.addBoard(board);
 
         return boardRepository.save(board);
     }
@@ -83,16 +80,13 @@ public class BoardService {
 
     // 게시글 조회
     public Board findBoard(long boardId){
-        return findVerifiedBoard(boardId);
+        Board findBoard = findVerifiedBoard(boardId);
+
+        findBoard.setViewCount(findBoard.getViewCount() +1);
+        boardRepository.save(findBoard);
+
+        return findBoard;
     }
-
-
-    // 게시글 목록 조회
-    public Page<Board> findBoards(int page, int size){
-        return boardRepository.findAll(PageRequest.of(page, size,
-                Sort.by("createdAt").descending()));
-    }
-
 
     // 게시글 확인
     private Board findVerifiedBoard(long boardId){
@@ -103,32 +97,30 @@ public class BoardService {
         return findBoard;
     }
 
-
-    //TODO:  사용자가 이전에 좋아요를 눌렀던 상태를 체크해서 좋아요 수를 증가, 감소 로직으로 변경
-    public void toggleLike(long boardId, long memberId) {
+    //TODO: TOGGLELIKE 수정
+    public void toggleLike(Long memberId, Long boardId){
         Board board = findVerifiedBoard(boardId);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        Optional<BoardLikes> existingBoardLikeOpt = boardLikesRepository.findByBoardAndMember(board, member);
-        if (existingBoardLikeOpt.isPresent()) {
-            BoardLikes existingBoardLike = existingBoardLikeOpt.get();
-            boardLikesRepository.delete(existingBoardLike);
-            board.setLikeCount(board.getLikeCount() -1);
-        }
-        else {
-            board.setLikeCount(board.getLikeCount() +1);
 
-            BoardLikes newBoardLike = new BoardLikes();
-            newBoardLike.setBoard(board);
-            newBoardLike.setMember(member);
+        Optional<BoardLikes> boardLike = boardLikesRepository.findByBoardAndMember(board, member);
+
+        if(boardLike.isPresent()) {
+            if (boardLike.get().getLikeStatus() == 1){
+                boardLike.get().setLikeStatus(0);
+            } else {
+                boardLike.get().setLikeStatus(1);
+            }
+            boardLikesRepository.save(boardLike.get());
+        } else{
+            BoardLikes newBoardLike = new BoardLikes(board, member);
             newBoardLike.setLikeStatus(1);
             boardLikesRepository.save(newBoardLike);
         }
 
-        boardRepository.save(board);
+        board.setBoardLikes(boardLikesRepository.findByBoard(board));
     }
-
 
     public List<Board> findBoardsSortedByLikes(){
         return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "likes"));
@@ -148,12 +140,13 @@ public class BoardService {
     }
 
     // TODO: 현재 로그인한 회원 정보 가지고오기. // // TODO: SECURITY 적용시 주석해제
-    // → 이메일로 변경을 해야함. check해보기.
-//    private Member getCurrentMember() {
-//        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//        return memberRepository.findByEmail(email)
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//    }
+
+
+    private Member getCurrentMember() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
 
     public int getLikesCount(long boardId){
         Board board = findVerifiedBoard(boardId);
@@ -174,5 +167,4 @@ public class BoardService {
             throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
         }
     }
-
 }

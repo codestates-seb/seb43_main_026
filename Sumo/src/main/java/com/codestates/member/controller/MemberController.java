@@ -34,7 +34,7 @@ public class MemberController {
 
         // TODO : Calendar를 create해줘야 한다.
 
-        return new ResponseEntity<>(mapper.memberToMemberResponseDto(response),
+        return new ResponseEntity<>(mapper.memberToMemberResponseDtoPlus(response),
                 HttpStatus.CREATED);
     }
 
@@ -54,7 +54,7 @@ public class MemberController {
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId){
         Member member = memberService.findMember(memberId);
 
-        return new ResponseEntity<>(mapper.memberToMemberResponseDtoWithCalendarId(member),
+        return new ResponseEntity<>(mapper.memberToMemberResponseDtoPlus(member),
                 HttpStatus.OK);
     }
 

@@ -30,6 +30,7 @@ public class BoardResponseDto {
 
     private String boardImageAddress;
 
+    private int viewCount;
 
-
+    private int commentCount;
 }

@@ -28,4 +28,8 @@ public class BoardLikes {
     @JoinColumn(name = "Member_id")
     private Member member;
 
+    public BoardLikes(Board board, Member member) {
+        this.board = board;
+        this.member = member;
+    }
 }

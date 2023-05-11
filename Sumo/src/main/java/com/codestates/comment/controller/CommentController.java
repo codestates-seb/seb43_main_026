@@ -1,15 +1,12 @@
 package com.codestates.comment.controller;
 
 
-import com.codestates.board.mapper.BoardMapper;
-import com.codestates.board.service.BoardService;
 import com.codestates.comment.dto.CommentPatchDto;
 import com.codestates.comment.dto.CommentPostDto;
 import com.codestates.comment.dto.CommentResponseDto;
 import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.comment.service.CommentService;
-import com.codestates.member.dto.MemberDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -80,9 +77,5 @@ public class CommentController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
-
-
 
 }

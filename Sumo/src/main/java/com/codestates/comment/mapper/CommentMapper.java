@@ -19,8 +19,8 @@ public interface CommentMapper {
     }
 
     default Comment commentPatchDtoToComment(CommentPatchDto commentPatchDto){
-        Comment comment = new Comment();
 
+        Comment comment = new Comment();
         comment.setCommentId(commentPatchDto.getCommentId());
         comment.setCommentContent(commentPatchDto.getCommentContent());
 
@@ -31,7 +31,6 @@ public interface CommentMapper {
     default CommentResponseDto commentToCommentResponseDto(Comment comment){
 
         CommentResponseDto commentResponseDto = new CommentResponseDto();
-
         commentResponseDto.setCommentId(comment.getCommentId());
         commentResponseDto.setCommentContent(comment.getCommentContent());
 

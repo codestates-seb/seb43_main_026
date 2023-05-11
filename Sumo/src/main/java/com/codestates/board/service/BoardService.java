@@ -1,6 +1,7 @@
 package com.codestates.board.service;
 
 
+import com.codestates.auth.LoginUtils;
 import com.codestates.board.entity.Board;
 import com.codestates.board.entity.BoardLikes;
 import com.codestates.board.repository.BoardLikesRepository;
@@ -11,7 +12,6 @@ import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,12 +32,11 @@ public class BoardService {
     private MemberRepository memberRepository;
 
     // 게시글 생성
-    // TODO: SECURITY 적용시 주석해제
     @Transactional
     public Board createBoard(Board board){
 
         Member currentMember = getCurrentMember();
-//        board.setMember(currentMember);
+        board.setMember(currentMember);
         currentMember.addBoard(board);
 
         return boardRepository.save(board);
@@ -45,16 +44,15 @@ public class BoardService {
 
 
     // 게시글 수정
-    // TODO: SECURITY 적용시 주석해제
     @Transactional
     public Board updateBoard(Board board){
 
-//        Member currentMember = getCurrentMember();
+        Member currentMember = getCurrentMember();
         Board findBoard = findVerifiedBoard(board.getBoardId());
 
-//        if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
-//            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
-//        }
+        if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
+        }
 
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
@@ -65,14 +63,13 @@ public class BoardService {
     }
 
     // 게시글 삭제
-    // TODO: SECURITY 적용시 주석해제
     public void deleteBoard(long boardId){
-//        Member currentMember = getCurrentMember();
+        Member currentMember = getCurrentMember();
         Board board = findVerifiedBoard(boardId);
 
-//        if (!board.getMember().getMemberId().equals(currentMember.getMemberId())) {
-//            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
-//        }
+        if (!board.getMember().getMemberId().equals(currentMember.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
+        }
 
         boardRepository.deleteById(boardId);
     }
@@ -88,7 +85,6 @@ public class BoardService {
 
         return findBoard;
     }
-
 
 
     // 게시글 확인
@@ -123,32 +119,33 @@ public class BoardService {
         board.setBoardLikes(boardLikesRepository.findByBoard(board));
     }
 
+/*
+    //TODO:  사용자가 이전에 좋아요를 눌렀던 상태를 체크해서 좋아요 수를 증가, 감소 로직으로 변경
+    public void toggleLike(long boardId, long memberId) {
+        Board board = findVerifiedBoard(boardId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-//    //TODO:  사용자가 이전에 좋아요를 눌렀던 상태를 체크해서 좋아요 수를 증가, 감소 로직으로 변경
-//    public void toggleLike(long boardId, long memberId) {
-//        Board board = findVerifiedBoard(boardId);
-//        Member member = memberRepository.findById(memberId)
-//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-//
-//        Optional<BoardLikes> existingBoardLikeOpt = boardLikesRepository.findByBoardAndMember(board, member);
-//        if (existingBoardLikeOpt.isPresent()) {
-//            BoardLikes existingBoardLike = existingBoardLikeOpt.get();
-//            boardLikesRepository.delete(existingBoardLike);
-//            board.setLikeCount(board.getLikeCount() -1);
-//        }
-//        else {
-//            board.setLikeCount(board.getLikeCount() +1);
-//
-//            BoardLikes newBoardLike = new BoardLikes();
-//            newBoardLike.setBoard(board);
-//            newBoardLike.setMember(member);
-//            newBoardLike.setLikeStatus(1);
-//            boardLikesRepository.save(newBoardLike);
-//        }
-//
-//        boardRepository.save(board);
-//    }
+        Optional<BoardLikes> existingBoardLikeOpt = boardLikesRepository.findByBoardAndMember(board, member);
+        if (existingBoardLikeOpt.isPresent()) {
+            BoardLikes existingBoardLike = existingBoardLikeOpt.get();
+            boardLikesRepository.delete(existingBoardLike);
+            board.setLikeCount(board.getLikeCount() -1);
+        }
+        else {
+            board.setLikeCount(board.getLikeCount() +1);
 
+            BoardLikes newBoardLike = new BoardLikes();
+            newBoardLike.setBoard(board);
+            newBoardLike.setMember(member);
+            newBoardLike.setLikeStatus(1);
+            boardLikesRepository.save(newBoardLike);
+        }
+
+        boardRepository.save(board);
+    }
+
+ */
 
     public List<Board> findBoardsSortedByLikes(){
         return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "likes"));
@@ -167,10 +164,10 @@ public class BoardService {
         return boardRepository.findAllByOrderByCommentsDesc();
     }
 
-    // TODO: 현재 로그인한 회원 정보 가지고오기. // // TODO: SECURITY 적용시 주석해제
 
+    //현재 로그인한 회원 정보 가지고오기
     private Member getCurrentMember() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = LoginUtils.checkLogin();
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }

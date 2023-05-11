@@ -4,22 +4,43 @@ import styled from 'styled-components';
 import { TiCameraOutline } from 'react-icons/ti';
 
 const UploadCon = styled.div`
-  margin-top: 100px;
-  width: 400px;
+  /* 모바일 기준 */
+  width: 100%;
   display: flex;
   justify-content: center;
-  padding: 50px;
-  border-top: 2px dashed ${(props) => props.theme.color.main_blue};
-  border-bottom: 2px dashed ${(props) => props.theme.color.main_blue};
-  cursor: pointer;
   .drop-zone {
+    width: 80%;
+    padding: 20px;
+    border-top: 2px dashed ${(props) => props.theme.color.main_blue};
+    border-bottom: 2px dashed ${(props) => props.theme.color.main_blue};
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     .drop-comment {
-      font-size: 18px;
+      font-size: 16px;
       margin-top: 20px;
+    }
+    .upload-image {
+      width: 40%;
+    }
+  }
+
+  /* 태블릿 버전 */
+  @media ${(props) => props.theme.breakpoints.tabletMin} {
+    .drop-zone {
+      padding: 50px;
+    }
+    .upload-image {
+      width: 40%;
+    }
+  }
+
+  /* pc버전 */
+  @media ${(props) => props.theme.breakpoints.desktopMin} {
+    .upload-image {
+      width: 30%;
     }
   }
 `;
@@ -27,6 +48,7 @@ const ImageUpload = () => {
   const [image, setImage] = useState(null);
 
   const onDrop = useCallback((acceptedFiles) => {
+    console.log(acceptedFiles);
     const file = acceptedFiles[0];
     const imageUrl = URL.createObjectURL(file);
     setImage(imageUrl);
@@ -42,7 +64,7 @@ const ImageUpload = () => {
       ) : (
         <>
           {image ? (
-            <img src={image} alt="Preview" width={400} height={500} />
+            <img src={image} alt="Preview" className="upload-image" />
           ) : (
             <div className="drop-zone">
               <TiCameraOutline size={50} color="gray" />

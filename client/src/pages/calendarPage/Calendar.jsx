@@ -10,17 +10,10 @@ const MyCalendarContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   margin-top: 0px;
-  .cal-main {
-    height: 700px;
-  }
 
   /* 태블릿 버전 */
   @media screen and(min-width: ${SIZE.tablet}) {
     background-color: #fff;
-    .cal-main {
-      padding: 0 40px;
-      height: 900px;
-    }
     .cal-bottom {
       padding: 30px 50px;
     }

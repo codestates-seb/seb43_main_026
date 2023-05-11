@@ -134,9 +134,12 @@ const CalendarContainer = styled.div`
   /* 모바일 기준 */
   width: 100%;
   background-color: #fff;
-
+  .rbc-calendar {
+    height: 700px;
+  }
   /* 캘린더 본체 */
   .rbc-month-view {
+    height: 700px;
     margin-top: 10px;
     border-top: none;
     .rbc-header {
@@ -161,6 +164,10 @@ const CalendarContainer = styled.div`
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
     /* 캘린더 본체 */
+    .rbc-calendar {
+      padding: 0 40px;
+      height: 900px;
+    }
     .rbc-month-view {
       margin-top: 20px;
       border: 1px solid #ddd;
@@ -255,14 +262,13 @@ const CalendarComponent = () => {
     <CalendarContainer>
       <Calendar
         id="calMain"
-        className="cal-main"
         localizer={localizer}
         views={['month']}
         components={{
           toolbar: Toolbar,
         }}
       />
-      <CalendarBottom className="cal-bottom"></CalendarBottom>
+      <CalendarBottom></CalendarBottom>
     </CalendarContainer>
   );
 };

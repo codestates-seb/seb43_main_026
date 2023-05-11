@@ -95,7 +95,9 @@ public class BoardService {
                         new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
         return findBoard;
     }
-    //TODO: TOGGLELIKE 수정
+
+
+    //TOGGLELIKE
     public void toggleLike(Long memberId, Long boardId){
         Board board = findVerifiedBoard(boardId);
         Member member = memberRepository.findById(memberId)
@@ -119,8 +121,61 @@ public class BoardService {
         board.setBoardLikes(boardLikesRepository.findByBoard(board));
     }
 
-/*
-    //TODO:  사용자가 이전에 좋아요를 눌렀던 상태를 체크해서 좋아요 수를 증가, 감소 로직으로 변경
+
+    public List<Board> findBoardsSortedByLikes(){
+        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "likes"));
+
+    }
+
+    public List<Board> findBoardsSortedByLatest(){
+        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+    }
+
+    public List<Board> findBoardsSortedByOldest(){
+        return boardRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
+    }
+
+    public List<Board> findBoardsSortedByComments(){
+
+        return boardRepository.findAllByOrderByCommentsDesc();
+    }
+
+
+    //현재 로그인한 회원 정보 가지고오기
+    private Member getCurrentMember() {
+        String email = LoginUtils.checkLogin();
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+
+    public List<Board> findBoards(String orderBy){
+        if(orderBy == null || orderBy.equalsIgnoreCase("latest")){
+            return findBoardsSortedByLatest();
+        } else if (orderBy.equalsIgnoreCase("oldest")){
+            return findBoardsSortedByOldest();
+        } else if (orderBy.equalsIgnoreCase("likes")){
+            return findBoardsSortedByLikes();
+        } else if (orderBy.equalsIgnoreCase("comments")){
+            return findBoardsSortedByComments();
+        } else {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
+        }
+    }
+
+    /*
+    게시글 당 좋아요 수 반환
+
+    public int getLikesCount(long boardId){
+        Board board = findVerifiedBoard(boardId);
+        List<BoardLikes> boardLikes = board.getBoardLikes();
+        return boardLikes.size();
+    }
+    */
+
+    /*
+    게시글 좋아요 토글방식
+
     public void toggleLike(long boardId, long memberId) {
         Board board = findVerifiedBoard(boardId);
         Member member = memberRepository.findById(memberId)
@@ -146,52 +201,6 @@ public class BoardService {
     }
 
  */
-
-    public List<Board> findBoardsSortedByLikes(){
-        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "likes"));
-
-    }
-
-    public List<Board> findBoardsSortedByLatest(){
-        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
-    }
-
-    public List<Board> findBoardsSortedByOldest(){
-        return boardRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
-    }
-
-    public List<Board> findBoardsSortedByComments(){
-        return boardRepository.findAllByOrderByCommentsDesc();
-    }
-
-
-    //현재 로그인한 회원 정보 가지고오기
-    private Member getCurrentMember() {
-        String email = LoginUtils.checkLogin();
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
-
-    public int getLikesCount(long boardId){
-        Board board = findVerifiedBoard(boardId);
-        List<BoardLikes> boardLikes = board.getBoardLikes();
-        return boardLikes.size();
-    }
-
-    public List<Board> findBoards(String orderBy){
-        if(orderBy == null || orderBy.equalsIgnoreCase("latest")){
-            return findBoardsSortedByLatest();
-        } else if (orderBy.equalsIgnoreCase("oldest")){
-            return findBoardsSortedByOldest();
-        } else if (orderBy.equalsIgnoreCase("likes")){
-            return findBoardsSortedByLikes();
-        } else if (orderBy.equalsIgnoreCase("comments")){
-            return findBoardsSortedByComments();
-        } else {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
-        }
-    }
-
 
 
 }

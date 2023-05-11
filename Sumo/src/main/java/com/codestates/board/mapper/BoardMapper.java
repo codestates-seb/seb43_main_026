@@ -47,9 +47,10 @@ public interface BoardMapper {
         boardResponseDto.setCreatedAt(board.getCreatedAt());
         boardResponseDto.setModifiedAt(board.getModifiedAt());
         boardResponseDto.setBoardLikesId(board.getBoardLikes().stream().map(BoardLikes::getBoardLikesId).collect(Collectors.toList()));
-        boardResponseDto.setLikesCount(board.getBoardLikes().size());
-        boardResponseDto.setCommentCount(board.getComments().size());
+        boardResponseDto.setBoardLikesCount(board.getBoardLikes().size());
         boardResponseDto.setCommentId(board.getComments().stream().map(Comment::getCommentId).collect(Collectors.toList()));
+        boardResponseDto.setCommentCount(board.getComments().size());
+        boardResponseDto.setCommentLikesCount(board.getCommentLikes().size());
         boardResponseDto.setViewCount(board.getViewCount());
         return boardResponseDto;
     }

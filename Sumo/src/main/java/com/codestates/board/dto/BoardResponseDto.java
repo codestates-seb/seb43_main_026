@@ -22,7 +22,7 @@ public class BoardResponseDto {
 
     private LocalDateTime modifiedAt;
 
-    private int likesCount;
+    private int boardLikesCount;
 
     private List<Long> boardLikesId;
 
@@ -33,6 +33,8 @@ public class BoardResponseDto {
     private int viewCount;
 
     private int commentCount;
+
+    private int commentLikesCount;
 
 
 }

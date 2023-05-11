@@ -5,6 +5,8 @@ import com.codestates.auth.LoginUtils;
 import com.codestates.board.entity.Board;
 import com.codestates.board.repository.BoardRepository;
 import com.codestates.comment.entity.Comment;
+import com.codestates.comment.entity.CommentLikes;
+import com.codestates.comment.repository.CommentLikesRepository;
 import com.codestates.comment.repository.CommentRepository;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
@@ -30,6 +32,9 @@ public class CommentService {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private CommentLikesRepository commentLikesRepository;
 
 
 
@@ -107,4 +112,29 @@ public class CommentService {
 
         return commentRepository.findByBoard(board);
     }
+
+
+    public void toggleLike(Long memberId, Long commentId){
+        Comment comment = findVerifiedComment(commentId);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
+        Optional<CommentLikes> commentLike = commentLikesRepository.findByCommentAndMember(comment, member);
+
+        if(commentLike.isPresent()) {
+            if (commentLike.get().getCommentLikesStatus() == 1){
+                commentLike.get().setCommentLikesStatus(0);
+            } else {
+                commentLike.get().setCommentLikesId(1);
+            }
+            commentLikesRepository.save(commentLike.get());
+        } else{
+            CommentLikes newCommentLike = new CommentLikes(comment, member);
+            newCommentLike.setCommentLikesStatus(1);
+            commentLikesRepository.save(newCommentLike);
+        }
+
+        comment.setCommentLikes(commentLikesRepository.findByComment(comment));
+    }
+
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -23,6 +24,9 @@ public class Comment extends Auditable {
 
     @Column
     private String commentContent;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<CommentLikes> commentLikes;
 
     @ManyToOne
     @JoinColumn(name = "Board_id")

@@ -33,7 +33,7 @@ public interface CommentMapper {
         CommentResponseDto commentResponseDto = new CommentResponseDto();
         commentResponseDto.setCommentId(comment.getCommentId());
         commentResponseDto.setCommentContent(comment.getCommentContent());
-
+        commentResponseDto.setCommentLikesCount(comment.getCommentLikes().size());
         return commentResponseDto;
     }
 

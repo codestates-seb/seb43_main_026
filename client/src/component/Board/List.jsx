@@ -1,6 +1,9 @@
 //모듈
 import styled from 'styled-components';
 
+//공통 스타일
+import { COLOR, SIZE } from '../../style/theme';
+
 //아이콘
 import { FaHeart } from 'react-icons/fa';
 import { BiComment } from 'react-icons/bi';
@@ -15,7 +18,7 @@ const Lists = styled.li`
   padding: 13px 18px 13px 18px;
   border-bottom: 1px solid rgba(230, 231, 235, 1);
   cursor: pointer;
-  @media ${(props) => props.theme.breakpoints.tabletMin} {
+  @media screen and(min-width: ${SIZE.tablet}) {
     padding: 10px 13px 10px 13px;
   }
 `;
@@ -51,13 +54,13 @@ const Like = styled.div`
   span {
     line-height: 20px;
     font-size: 12px;
-    color: ${(props) => props.theme.color.font_comment};
+    color: ${COLOR.font_comment};
   }
 `;
 
 const HeartIcon = styled(FaHeart)`
   margin-right: 3px;
-  color: ${(props) => props.theme.color.main_blue};
+  color: ${COLOR.main_blue};
 `;
 
 const Comment = styled.div`
@@ -68,14 +71,14 @@ const Comment = styled.div`
   span {
     line-height: 20px;
     font-size: 12px;
-    color: ${(props) => props.theme.color.font_comment};
+    color: ${COLOR.font_comment};
   }
 `;
 
 const CommentIcon = styled(BiComment)`
   margin-right: 3px;
   transform: scaleX(-1);
-  color: ${(props) => props.theme.color.main_blue};
+  color: ${COLOR.main_blue};
 `;
 const WriterAndCreateAt = styled.div`
   font-size: 12px;
@@ -92,7 +95,7 @@ const Writer = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 600;
-  color: ${(props) => props.theme.color.main_dark_blue};
+  color: ${COLOR.main_dark_blue};
 `;
 const CreatDate = styled.span``;
 

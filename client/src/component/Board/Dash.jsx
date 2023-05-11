@@ -1,6 +1,9 @@
 //모듈
 import styled from 'styled-components';
 
+//공통 스타일
+import { COLOR } from '../../style/theme';
+
 //아이콘
 import { FaHeart } from 'react-icons/fa';
 import { BiComment } from 'react-icons/bi';
@@ -63,7 +66,7 @@ const Reaction = styled.div`
   display: flex;
   span {
     font-size: 13px;
-    color: ${(props) => props.theme.color.font_comment};
+    color: ${COLOR.font_comment};
   }
   div {
     margin-right: 4px;
@@ -81,7 +84,7 @@ const Like = styled.div`
 
 const HeartIcon = styled(FaHeart)`
   margin-right: 2px;
-  color: ${(props) => props.theme.color.main_dark_blue};
+  color: ${COLOR.main_dark_blue};
 `;
 
 const Comment = styled.div`
@@ -96,7 +99,7 @@ const Comment = styled.div`
 const CommentIcon = styled(BiComment)`
   margin-right: 2px;
   transform: scaleX(-1);
-  color: ${(props) => props.theme.color.main_dark_blue};
+  color: ${COLOR.main_dark_blue};
 `;
 
 const Dash = ({ posts }) => {

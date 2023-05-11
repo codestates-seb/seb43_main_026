@@ -102,28 +102,29 @@ const CreatDate = styled.span``;
 const List = ({ posts }) => {
   return (
     <ListContainter>
-      {posts &&
-        posts.map((post) => (
-          <Lists key={post.id}>
-            <TitleAndReaction>
-              <Title>{post.title}</Title>
-              <Reaction>
-                <Like>
-                  <HeartIcon size={13} />
-                  <span>{post.likeCount}</span>
-                </Like>
-                <Comment>
-                  <CommentIcon size={13} />
-                  <span>{post.commentCount}</span>
-                </Comment>
-              </Reaction>
-            </TitleAndReaction>
-            <WriterAndCreateAt>
-              <Writer>{post.writer}</Writer>
-              <CreatDate>{post.date}</CreatDate>
-            </WriterAndCreateAt>
-          </Lists>
-        ))}
+      {posts.length
+        ? posts.map((post) => (
+            <Lists key={post.id}>
+              <TitleAndReaction>
+                <Title>{post.title}</Title>
+                <Reaction>
+                  <Like>
+                    <HeartIcon size={13} />
+                    <span>{post.likeCount}</span>
+                  </Like>
+                  <Comment>
+                    <CommentIcon size={13} />
+                    <span>{post.commentCount}</span>
+                  </Comment>
+                </Reaction>
+              </TitleAndReaction>
+              <WriterAndCreateAt>
+                <Writer>{post.writer}</Writer>
+                <CreatDate>{post.date}</CreatDate>
+              </WriterAndCreateAt>
+            </Lists>
+          ))
+        : null}
     </ListContainter>
   );
 };

@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import { TiCameraOutline } from 'react-icons/ti';
+import { COLOR } from '../../style/theme';
 
 const UploadCon = styled.div`
   /* 모바일 기준 */
@@ -11,8 +12,8 @@ const UploadCon = styled.div`
   .drop-zone {
     width: 80%;
     padding: 20px;
-    border-top: 2px dashed ${(props) => props.theme.color.main_blue};
-    border-bottom: 2px dashed ${(props) => props.theme.color.main_blue};
+    border-top: 2px dashed ${COLOR.main_blue};
+    border-bottom: 2px dashed ${COLOR.main_blue};
     cursor: pointer;
     display: flex;
     flex-direction: column;

@@ -7,6 +7,64 @@ import { COLOR } from '../style/theme';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
+const Login = () => {
+  // 로그인 완료 시
+  const onSubmit = (data) => {
+    console.log(data);
+    axios
+      .post(`${SERVER_URL}/login`, { data })
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error));
+  };
+
+  // 에러 발생 시
+  const onError = (error) => console.log(error);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm();
+  return (
+    <Container>
+      <div>
+        <Logo src={LogoImg} alt="logo" />
+        <h1>로그인</h1>
+        <form onSubmit={handleSubmit(onSubmit, onError)}>
+          <label htmlFor="email">이메일</label>
+          <Input
+            id="email"
+            type="text"
+            aria-invalid={errors.email ? '#ff0000' : '#dadada'}
+            {...register('email', { required: true })}
+          />
+          {errors.email && errors.email?.type === 'required' && (
+            <AlertMessage>이메일을 입력해주세요.</AlertMessage>
+          )}
+
+          <label htmlFor="password">비밀번호</label>
+          <Input
+            id="password"
+            type="password"
+            aria-invalid={errors.password ? '#ff0000' : '#dadada'}
+            {...register('password', {
+              required: true,
+            })}
+          />
+          {errors.password && errors.password?.type === 'required' && (
+            <AlertMessage>비밀번호를 입력해주세요.</AlertMessage>
+          )}
+
+          <button type="submit">로그인</button>
+          <FcGoogle size="30" />
+        </form>
+      </div>
+    </Container>
+  );
+};
+
+export default Login;
+
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -65,61 +123,3 @@ const Input = styled.input`
 const AlertMessage = styled.span`
   color: red;
 `;
-
-const Login = () => {
-  // 로그인 완료 시
-  const onSubmit = (data) => {
-    console.log(data);
-    axios
-      .post(`${SERVER_URL}/login`, { data })
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));
-  };
-
-  // 에러 발생 시
-  const onError = (error) => console.log(error);
-
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
-  return (
-    <Container>
-      <div>
-        <Logo src={LogoImg} alt="logo" />
-        <h1>로그인</h1>
-        <form onSubmit={handleSubmit(onSubmit, onError)}>
-          <label htmlFor="email">이메일</label>
-          <Input
-            id="email"
-            type="text"
-            aria-invalid={errors.email ? '#ff0000' : '#dadada'}
-            {...register('email', { required: true })}
-          />
-          {errors.email && errors.email?.type === 'required' && (
-            <AlertMessage>이메일을 입력해주세요.</AlertMessage>
-          )}
-
-          <label htmlFor="password">비밀번호</label>
-          <Input
-            id="password"
-            type="password"
-            aria-invalid={errors.password ? '#ff0000' : '#dadada'}
-            {...register('password', {
-              required: true,
-            })}
-          />
-          {errors.password && errors.password?.type === 'required' && (
-            <AlertMessage>비밀번호를 입력해주세요.</AlertMessage>
-          )}
-
-          <button type="submit">로그인</button>
-          <FcGoogle size="30" />
-        </form>
-      </div>
-    </Container>
-  );
-};
-
-export default Login;

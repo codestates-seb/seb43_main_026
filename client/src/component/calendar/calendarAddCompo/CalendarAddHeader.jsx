@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import BackBtn from '../../common/Button';
+import { BackButton } from '../../common/BackButton';
 import { COLOR } from '../../../style/theme';
 
 // styled-component
@@ -34,7 +34,7 @@ const CalendarSaveButton = () => {
 const CalendarAddHeader = () => {
   return (
     <CalendarAddHeaderContainer>
-      <BackBtn />
+      <BackButton />
       <CalendarSaveButton />
     </CalendarAddHeaderContainer>
   );

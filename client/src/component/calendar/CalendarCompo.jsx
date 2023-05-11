@@ -16,57 +16,55 @@ import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { TbCapture } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
-
+import { SIZE, COLOR } from '../../style/theme';
 // toolbar styled-component
 const ToolbarCon = styled.div`
   /* 모바일 기준 */
-  @media ${(props) => props.theme.breakpoints.mobileMin} {
-    width: 100%;
-    height: 80px;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  /* 캘린더 이동 버튼 */
+  .tool-btn-group {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    /* 캘린더 이동 버튼 */
-    .tool-btn-group {
-      display: flex;
-      flex-direction: row;
-      > button {
-        border: none;
-        background-color: inherit;
-        cursor: pointer;
-      }
-      .toolbar-label {
-        font-size: 18px;
-        padding-top: 5px;
-        > span:first-child {
-          margin-right: 12px;
-        }
+    > button {
+      border: none;
+      background-color: inherit;
+      cursor: pointer;
+    }
+    .toolbar-label {
+      font-size: 18px;
+      padding-top: 5px;
+      > span:first-child {
+        margin-right: 12px;
       }
     }
-    /* 출석률 & 총 운동 시간 */
-    .cal-info {
-      display: flex;
-      flex-direction: column;
-      padding-top: 25px;
-      > p {
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        :first-of-type {
-          margin-bottom: 5px;
-        }
-        > span {
-          margin-left: 10px;
-        }
-      }
-    }
-    background-color: ${(props) => props.theme.color.main_gray};
   }
+  /* 출석률 & 총 운동 시간 */
+  .cal-info {
+    display: flex;
+    flex-direction: column;
+    padding-top: 25px;
+    > p {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      :first-of-type {
+        margin-bottom: 5px;
+      }
+      > span {
+        margin-left: 10px;
+      }
+    }
+  }
+  background-color: ${COLOR.main_gray};
 
   /* 태블릿 버전 */
-  @media ${(props) => props.theme.breakpoints.tabletMin} {
+  @media screen and (min-width: ${SIZE.tablet}) {
     background-color: #ffff;
     height: 120px;
     display: flex;
@@ -97,69 +95,62 @@ const ToolbarCon = styled.div`
       }
     }
   }
-
-  /* pc버전 */
-  /* @media ${(props) => props.theme.breakpoints.desktopMin} {
-    background-color: ${(props) => props.theme.color.pc_bg};
-  } */
 `;
 
 // calender styled-component
 const CalendarCon = styled.div`
   /* 모바일 기준 */
-  @media ${(props) => props.theme.breakpoints.mobileMin} {
-    width: 100%;
-    background-color: #fff;
+  width: 100%;
+  background-color: #fff;
 
-    /* 캘린더 본체 */
-    .rbc-month-view {
-      margin-top: 10px;
-      border-top: none;
-      .rbc-header {
-        padding: 10px 0px;
-      }
-      .rbc-day-bg {
-        cursor: pointer;
-      }
+  /* 캘린더 본체 */
+  .rbc-month-view {
+    margin-top: 10px;
+    border-top: none;
+    .rbc-header {
+      padding: 10px 0px;
     }
-    /* 캘린더 아래 버튼 */
-    .cal-bottom {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      margin: 20px;
-      /* 캡쳐 버튼 */
-      .cal-cap {
-        height: 44px;
-        width: 44px;
-        border-radius: 50%;
-        border: none;
-        padding-top: 5px;
-        background-color: ${(props) => props.theme.color.main_blue};
-        text-align: center;
-        color: #ffff;
-        cursor: pointer;
-      }
-      /* 캘린더 등록버튼 */
-      .cal-add-btn {
-        color: ${(props) => props.theme.color.main_blue};
-        cursor: pointer;
-      }
+    .rbc-day-bg {
+      cursor: pointer;
     }
-    /* 캘린더 오늘 날짜 표시 */
-    .rbc-today {
-      background-color: ${(props) => props.theme.color.main_blue};
-    }
-    /* 캘린더 날짜 */
-    .rbc-date-cell {
-      text-align: center;
+  }
+  /* 캘린더 아래 버튼 */
+  .cal-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;
+    /* 캡쳐 버튼 */
+    .cal-cap {
+      height: 44px;
+      width: 44px;
+      border-radius: 50%;
+      border: none;
       padding-top: 5px;
+      background-color: ${COLOR.main_blue};
+      text-align: center;
+      color: #ffff;
+      cursor: pointer;
     }
+    /* 캘린더 등록버튼 */
+    .cal-add-btn {
+      color: ${COLOR.main_blue};
+      cursor: pointer;
+    }
+  }
+  /* 캘린더 오늘 날짜 표시 */
+  .rbc-today {
+    background-color: ${COLOR.main_blue};
+  }
+  /* 캘린더 날짜 */
+  .rbc-date-cell {
+    text-align: center;
+    padding-top: 5px;
   }
 
   /* 태블릿 버전 */
-  @media ${(props) => props.theme.breakpoints.tabletMin} {
+  @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
     /* 캘린더 본체 */
     .rbc-month-view {
@@ -169,7 +160,7 @@ const CalendarCon = styled.div`
   }
 
   /* pc버전 */
-  @media ${(props) => props.theme.breakpoints.desktopMin} {
+  @media screen and (min-width: ${SIZE.desktop}) {
     width: 60%;
     margin: 0 auto 40px;
     box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.1);

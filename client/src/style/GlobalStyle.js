@@ -28,7 +28,9 @@ time, mark, audio, video {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	
 }
+
 span, h1, h2, h3, h4, h5, h6, p, button{
 	color: #393939;
 }

@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
-
+import { COLOR } from '../style/theme';
 const Container = styled.section`
   position: fixed;
   z-index: 1000;
   top: 50px;
   width: 100%;
   height: 100vh;
-  background-color: ${(props) => props.theme.color.bg_dark};
+  background-color: ${COLOR.bg_dark};
 `;
 
 const NavBarContainer = styled.nav`
@@ -32,7 +32,7 @@ const UserBox = styled.div`
   align-items: center;
 
   span {
-    color: ${(props) => props.theme.color.main_dark_blue};
+    color: ${COLOR.main_dark_blue};
     font-weight: 700;
     font-size: 15px;
   }
@@ -42,7 +42,7 @@ const ImgBox = styled.div`
   overflow: hidden;
   width: 90px;
   height: 90px;
-  border: 2px solid ${(props) => props.theme.color.main_dark_blue};
+  border: 2px solid ${COLOR.main_dark_blue};
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -72,30 +72,30 @@ const MenuList = styled.li`
   background-color: white;
   font-size: 15px;
   font-weight: 500;
-  color: ${(props) => props.theme.color.main_blue};
+  color: ${COLOR.main_blue};
   &:hover {
     cursor: pointer;
-    color: ${(props) => props.theme.color.main_blue_hover};
+    color: ${COLOR.main_blue_hover};
   }
   &:active {
-    color: ${(props) => props.theme.color.main_blue_active};
+    color: ${COLOR.main_blue_active};
   }
 
   button {
     width: 110px;
     height: 40px;
     border-radius: 5px;
-    background-color: ${(props) => props.theme.color.main_blue};
+    background-color: ${COLOR.main_blue};
     border: none;
     font-size: 15px;
     font-weight: 500;
     color: white;
     &:hover {
       cursor: pointer;
-      background-color: ${(props) => props.theme.color.main_blue_hover};
+      background-color: ${COLOR.main_blue_hover};
     }
     &:active {
-      background-color: ${(props) => props.theme.color.main_blue_active};
+      background-color: ${COLOR.main_blue_active};
     }
   }
 

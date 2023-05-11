@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import LogoImage from '../assets/image/logo.png';
-import { COLOR, SIZE } from '../style/theme';
+import { SIZE, COLOR } from '../style/theme';
 
 const Container = styled.div`
   width: 100%;
   height: 15vh;
   background-color: ${COLOR.main_blue};
   bottom: 0;
-  @media ${SIZE.mobileMax} {
+  @media screen and (max-width: ${SIZE.mobileMax}) {
     display: none;
   }
 

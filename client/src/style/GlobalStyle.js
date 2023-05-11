@@ -22,7 +22,6 @@ time, mark, audio, video {
 	box-sizing: border-box;
 	font: inherit;
 	vertical-align: baseline;
-
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -66,6 +65,13 @@ a {
 	text-decoration: none;
 	color: inherit;
 }
+
+/* @font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+} */
 `;
 
 export default GlobalStyle;

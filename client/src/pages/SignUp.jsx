@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import LogoImg from '../assets/image/logo2.png';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import GoogleLogin from '../component/oAuth/GoogleLogin';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -25,7 +26,7 @@ const SignUp = () => {
   // 에러 발생 시
   const onError = (error) => console.log(error);
   return (
-    <SignUpContainer>
+    <Container>
       <div>
         <Logo src={LogoImg} alt="logo" />
         <h1>회원가입</h1>
@@ -104,14 +105,17 @@ const SignUp = () => {
               <AlertMessage>입력한 패스워드와 다릅니다.</AlertMessage>
             )}
           <button type="submit">회원가입</button>
+          <OAuthContainer>
+            <GoogleLogin />
+          </OAuthContainer>
         </form>
       </div>
-    </SignUpContainer>
+    </Container>
   );
 };
 export default SignUp;
 
-const SignUpContainer = styled.div`
+const Container = styled.div`
   width: 100vw;
   height: 100%;
   padding-top: 50px;
@@ -168,4 +172,15 @@ const Input = styled.input`
 
 const AlertMessage = styled.span`
   color: red;
+`;
+
+const OAuthContainer = styled.div`
+  width: 100%;
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    cursor: pointer;
+  }
 `;

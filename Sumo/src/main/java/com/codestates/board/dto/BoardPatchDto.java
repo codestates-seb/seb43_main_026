@@ -20,5 +20,6 @@ public class BoardPatchDto {
 
     private String boardImageAddress;
 
-    private boolean boardCheckBox;
+    private Boolean showOffCheckBox;
+
 }

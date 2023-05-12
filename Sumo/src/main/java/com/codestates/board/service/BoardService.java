@@ -38,7 +38,9 @@ public class BoardService {
         Member currentMember = getCurrentMember();
         board.setMember(currentMember);
         currentMember.addBoard(board);
-        board.setCheckBoxValue(board.isCheckBoxValue());
+        if(board.getShowOffCheckBox() == null){
+            board.setShowOffCheckBox(false);
+        }
 
         return boardRepository.save(board);
     }
@@ -58,7 +60,8 @@ public class BoardService {
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
         Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> findBoard.setBoardImageAddress(boardImageAddress));
-        findBoard.setCheckBoxValue(board.isCheckBoxValue());
+        Optional.ofNullable(board.getShowOffCheckBox()).ifPresent(showOffCheckBox -> findBoard.setShowOffCheckBox(showOffCheckBox));
+
 
         findBoard.setModifiedAt(LocalDateTime.now());
         return boardRepository.save(findBoard);
@@ -143,24 +146,12 @@ public class BoardService {
     }
 
 
-
-
-
-
-    //현재 로그인한 회원 정보 가지고오기
-    private Member getCurrentMember() {
-        String email = LoginUtils.checkLogin();
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
-
-
     public List<Board> getGeneralSortedBoards(String orderBy){
         if(orderBy == null || orderBy.equalsIgnoreCase("latest")){
             return findBoardsSortedByLatest();
         } else if (orderBy.equalsIgnoreCase("oldest")){
             return findBoardsSortedByOldest();
-        } else if (orderBy.equalsIgnoreCase("likes")){
+        } else if (orderBy.equalsIgnoreCase("boardLikes")){
             return findBoardsSortedByLikes();
         } else if (orderBy.equalsIgnoreCase("comments")){
             return findBoardsSortedByComments();
@@ -168,20 +159,41 @@ public class BoardService {
             throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
         }
     }
-//
-//    public List<Board> findBoardsWithCheckBoxTrue(String orderBy){
-//        return getCheckboxSortedBoards(true,orderBy);
-//    }
-//    public List<Board> findBoardsWithCheckBoxFalse(String orderBy){
-//        return getCheckboxSortedBoards(false, orderBy);
-//    }
-//
-//    private List<Board> getCheckboxSortedBoards(boolean checkBoxValue, String orderBy) {
-//        if (orderBy == null || orderBy.equalsIgnoreCase("latest")){
-//            return checkBoxValue ? boardRepository.findAllByCheckBoxTrue(Sort.by(Sort.Direction.DESC, "createdAt"))
-//                                 : boardRepository.findAllByCheckBoxFalse(Sort.by(Sort.Direction.DESC, "createdAt"));
-//        }
-//    }
+
+
+    public List<Board> getBoardsWithCheckbox(boolean showOffCheckBox, String orderBy) {
+        return getCheckboxSortedBoards(showOffCheckBox, orderBy);
+    }
+
+    private List<Board> getCheckboxSortedBoards(boolean checkBoxValue, String orderBy) {
+        if (orderBy == null || orderBy.equalsIgnoreCase("latest")){
+            return checkBoxValue ? boardRepository.findAllByShowOffCheckBoxTrue(Sort.by(Sort.Direction.DESC, "createdAt"))
+                                 : boardRepository.findAllByShowOffCheckBoxFalse(Sort.by(Sort.Direction.DESC, "createdAt"));
+        }
+        else if (orderBy.equalsIgnoreCase("oldest")){
+            return checkBoxValue ? boardRepository.findAllByShowOffCheckBoxTrue(Sort.by(Sort.Direction.DESC, "createdAt"))
+                                 : boardRepository.findAllByShowOffCheckBoxFalse(Sort.by(Sort.Direction.DESC,"createdAt"));
+        }
+        else if (orderBy.equalsIgnoreCase("boardLikes")){
+            return checkBoxValue ? boardRepository.findAllByShowOffCheckBoxTrue(Sort.by(Sort.Direction.DESC, "boardLikes"))
+                                 : boardRepository.findAllByShowOffCheckBoxFalse(Sort.by(Sort.Direction.DESC, "boardLikes"));
+        }
+        else if (orderBy.equalsIgnoreCase("comments")){
+            return checkBoxValue ? boardRepository.findAllByShowOffCheckBoxTrue(Sort.by(Sort.Direction.DESC, "commentCount"))
+                                 : boardRepository.findAllByShowOffCheckBoxFalse(Sort.by(Sort.Direction.DESC, "commentCount"));
+        }
+        else {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
+        }
+
+    }
+
+    //현재 로그인한 회원 정보 가지고오기
+    private Member getCurrentMember() {
+        String email = LoginUtils.checkLogin();
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
 
 
 

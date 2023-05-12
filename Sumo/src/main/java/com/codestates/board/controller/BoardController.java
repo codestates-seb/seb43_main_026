@@ -76,12 +76,25 @@ public class BoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 게시글 리스트 정렬
+
+
+    // 일반적인 게시글 리스트 정렬
     @GetMapping
     public ResponseEntity getBoards(@Positive @RequestParam int page,
                                     @Positive @RequestParam int size,
-                                    @RequestParam(required = false) String orderBy) {
-        List<Board> boards = boardService.getGeneralSortedBoards(orderBy);
+                                    @RequestParam(required = false) String orderBy,
+                                    @RequestParam(required = false) Boolean showOffCheckBox) {
+        List<Board> boards;
+
+
+        if(showOffCheckBox == null) {
+            boards = boardService.getGeneralSortedBoards(orderBy);
+        } else if (showOffCheckBox) {
+            boards = boardService.getBoardsWithCheckbox(true, orderBy);
+        } else {
+            boards = boardService.getBoardsWithCheckbox(false, orderBy);
+        }
+
 
         List<BoardResponseDto> responses = boards.stream()
                 .map(boardMapper::boardToBoardPagingResponseDto)
@@ -99,4 +112,31 @@ public class BoardController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    /*
+    @GetMapping("/true")
+    public ResponseEntity getBoardsFilteredByCheckboxTrue(@Positive @RequestParam int page,
+                                                      @Positive @RequestParam int size,
+                                                      @RequestParam(required = false) String orderBy) {
+
+        List<Board> boards = boardService.getBoardsWithCheckbox(true, orderBy);
+
+        List<BoardResponseDto> responses = boards.stream()
+                .map(boardMapper::boardToBoardPagingResponseDto)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+    @GetMapping("/false")
+    public ResponseEntity getBoardsFilteredByCheckboxFalse(@Positive @RequestParam int page,
+                                                           @Positive @RequestParam int size,
+                                                           @RequestParam(required = false) String orderBy) {
+
+        List<Board> boards = boardService.getBoardsWithCheckbox(false, orderBy);
+
+        List<BoardResponseDto> responses = boards.stream()
+                .map(boardMapper::boardToBoardPagingResponseDto)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+*/
 }

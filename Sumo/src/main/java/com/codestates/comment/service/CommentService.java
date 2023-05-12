@@ -55,7 +55,7 @@ public class CommentService {
         board.addComment(comment);
 
         board.setCommentCount(board.getCommentCount()+1);
-        boardRepository.save(board);
+        boardRepository.save(board); //있어도, 없어도됨 @Transactional 있음.
 
         return commentRepository.save(comment);
     }

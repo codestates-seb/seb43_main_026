@@ -17,7 +17,8 @@ public class BoardPostDto {
 
     private String boardImageAddress;
 
-    private boolean boardCheckBox;
+    //여기에 not null이 될 수 있는 어노테이션을 입력해보기.
+    private boolean showOffCheckBox;
 
 
 }

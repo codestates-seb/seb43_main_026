@@ -51,7 +51,7 @@ public interface BoardMapper {
         boardResponseDto.setCommentCount(board.getComments().size());
         boardResponseDto.setCommentLikesCount(board.getCommentLikes().size());
         boardResponseDto.setViewCount(board.getViewCount());
-        boardResponseDto.setBoardCheckBox(board.isCheckBoxValue());
+        boardResponseDto.setShowOffCheckBox(board.getShowOffCheckBox());
         return boardResponseDto;
     }
 
@@ -62,7 +62,7 @@ public interface BoardMapper {
         boardPagingResponseDto.setWriter(board.getMember().getNickname());
         boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
         boardPagingResponseDto.setModifiedAt(board.getModifiedAt());
-        boardPagingResponseDto.setBoardCheckBox(board.isCheckBoxValue());
+        boardPagingResponseDto.setShowOffCheckBox(board.getShowOffCheckBox());
         return boardPagingResponseDto;
     }
 

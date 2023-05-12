@@ -37,7 +37,7 @@ public class Board extends Auditable {
     private int viewCount;
 
     @Column
-    private boolean checkBoxValue;
+    private Boolean showOffCheckBox;
 
     @Column
     private int commentCount = 0;
@@ -60,7 +60,6 @@ public class Board extends Auditable {
         this.comments.add(comment);
         comment.setBoard(this);
     }
-
 
 
 

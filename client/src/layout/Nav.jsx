@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { COLOR } from '../style/theme';
 const Container = styled.section`
@@ -63,7 +64,7 @@ const NavList = styled.ul`
   margin-top: 15px;
 `;
 
-const MenuList = styled.li`
+const MenuList = styled(Link)`
   width: 100%;
   height: 40px;
   text-align: center;
@@ -119,10 +120,10 @@ const Nav = ({ nav, handleNav }) => {
           <span>로그인을 해주세요</span>
         </UserBox>
         <NavList>
-          <MenuList>마이페이지</MenuList>
-          <MenuList>내 캘린더</MenuList>
-          <MenuList>이번달 수영왕</MenuList>
-          <MenuList>캘린더 자랑하기</MenuList>
+          <MenuList to="">마이페이지</MenuList>
+          <MenuList to="/">내 캘린더</MenuList>
+          <MenuList to="">이번달 수영왕</MenuList>
+          <MenuList to="/board">커뮤니티</MenuList>
           <MenuList>
             <button onClick={() => navigate('/login')}>로그인</button>
           </MenuList>

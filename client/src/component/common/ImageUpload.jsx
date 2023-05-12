@@ -6,7 +6,7 @@ import { COLOR, SIZE } from '../../style/theme';
 
 // styled-component
 const DropZoneContainer = styled.div`
-  width: 80%;
+  width: 100%;
   padding: 20px;
   border-top: 2px dashed ${COLOR.main_blue};
   border-bottom: 2px dashed ${COLOR.main_blue};
@@ -32,19 +32,18 @@ const UploadContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  > image {
-    width: 40%;
-  }
-  /* 태블릿 버전 */
-  @media screen and (min-width: ${SIZE.tablet}) {
-    > image {
-      width: 40%;
+  margin-bottom: 30px;
+  > div {
+    display: flex;
+    justify-content: center;
+    > img {
+      max-width: 60%;
     }
   }
 
   /* pc버전 */
   @media screen and (min-width: ${SIZE.desktop}) {
-    > image {
+    > img {
       width: 30%;
     }
   }
@@ -78,13 +77,9 @@ const ImageUpload = () => {
       {isDragActive ? (
         <p>Drop the files here ...</p>
       ) : (
-        <>
-          {image ? (
-            <img src={image} alt="Preview" className="upload-image" />
-          ) : (
-            <DropZone></DropZone>
-          )}
-        </>
+        <div>
+          {image ? <img src={image} alt="Preview" /> : <DropZone></DropZone>}
+        </div>
       )}
     </UploadContainer>
   );

@@ -29,7 +29,8 @@ const ToolbarButtonsContainer = styled.div`
     cursor: pointer;
   }
   > p {
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: 600;
     padding-top: 5px;
     > span:first-child {
       margin-right: 12px;
@@ -134,30 +135,29 @@ const CalendarContainer = styled.div`
   /* 모바일 기준 */
   width: 100%;
   background-color: #fff;
-  .rbc-calendar {
-    height: 700px;
-  }
   /* 캘린더 본체 */
-  .rbc-month-view {
-    height: 700px;
-    margin-top: 10px;
-    border-top: none;
-    .rbc-header {
-      padding: 10px 0px;
+  .rbc-calendar {
+    height: 650px;
+    .rbc-month-view {
+      margin-top: 10px;
+      border-top: none;
+      .rbc-header {
+        padding: 10px 0px;
+      }
+      .rbc-day-bg {
+        cursor: pointer;
+      }
     }
-    .rbc-day-bg {
-      cursor: pointer;
-    }
-  }
 
-  /* 캘린더 오늘 날짜 표시 */
-  .rbc-today {
-    background-color: ${COLOR.main_blue};
-  }
-  /* 캘린더 날짜 */
-  .rbc-date-cell {
-    text-align: center;
-    padding-top: 5px;
+    /* 캘린더 오늘 날짜 표시 */
+    .rbc-today {
+      background-color: ${COLOR.main_blue};
+    }
+    /* 캘린더 날짜 */
+    .rbc-date-cell {
+      text-align: center;
+      padding-top: 5px;
+    }
   }
 
   /* 태블릿 버전 */
@@ -167,10 +167,10 @@ const CalendarContainer = styled.div`
     .rbc-calendar {
       padding: 0 40px;
       height: 900px;
-    }
-    .rbc-month-view {
-      margin-top: 20px;
-      border: 1px solid #ddd;
+      .rbc-month-view {
+        margin-top: 20px;
+        border: 1px solid #ddd;
+      }
     }
   }
 
@@ -218,11 +218,11 @@ const CalendarInfo = () => {
   return (
     <CalendarInfoContainer>
       <p>
-        <MdOutlineCalendarMonth size={16} className="tool-icon" />
+        <MdOutlineCalendarMonth size={16} />
         출석률:<span>80%</span>
       </p>
       <p>
-        <AiOutlineClockCircle size={16} className="tool-icon" />총 운동 시간:
+        <AiOutlineClockCircle size={16} />총 운동 시간:
         <span>20시간</span>
       </p>
     </CalendarInfoContainer>

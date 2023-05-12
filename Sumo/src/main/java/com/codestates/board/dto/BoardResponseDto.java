@@ -36,5 +36,7 @@ public class BoardResponseDto {
 
     private int commentLikesCount;
 
+    private boolean boardCheckBox;
+
 
 }

@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface BoardMapper {
 
-// TODO: SECURITY 적용시 주석해제
     default Board boardPostDtoToboard(BoardPostDto boardPostDto){
 
         Board board = new Board();
@@ -52,6 +51,7 @@ public interface BoardMapper {
         boardResponseDto.setCommentCount(board.getComments().size());
         boardResponseDto.setCommentLikesCount(board.getCommentLikes().size());
         boardResponseDto.setViewCount(board.getViewCount());
+        boardResponseDto.setBoardCheckBox(board.isCheckBoxValue());
         return boardResponseDto;
     }
 
@@ -62,6 +62,7 @@ public interface BoardMapper {
         boardPagingResponseDto.setWriter(board.getMember().getNickname());
         boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
         boardPagingResponseDto.setModifiedAt(board.getModifiedAt());
+        boardPagingResponseDto.setBoardCheckBox(board.isCheckBoxValue());
         return boardPagingResponseDto;
     }
 

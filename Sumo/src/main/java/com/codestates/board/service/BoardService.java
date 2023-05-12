@@ -38,6 +38,7 @@ public class BoardService {
         Member currentMember = getCurrentMember();
         board.setMember(currentMember);
         currentMember.addBoard(board);
+        board.setCheckBoxValue(board.isCheckBoxValue());
 
         return boardRepository.save(board);
     }
@@ -57,6 +58,7 @@ public class BoardService {
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
         Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> findBoard.setBoardImageAddress(boardImageAddress));
+        findBoard.setCheckBoxValue(board.isCheckBoxValue());
 
         findBoard.setModifiedAt(LocalDateTime.now());
         return boardRepository.save(findBoard);
@@ -123,8 +125,13 @@ public class BoardService {
 
 
     public List<Board> findBoardsSortedByLikes(){
-        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "likes"));
+        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "boardLikes"));
 
+    }
+
+    public List<Board> findBoardsSortedByComments(){
+
+        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "commentCount"));
     }
 
     public List<Board> findBoardsSortedByLatest(){
@@ -135,10 +142,9 @@ public class BoardService {
         return boardRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
     }
 
-    public List<Board> findBoardsSortedByComments(){
 
-        return boardRepository.findAllByOrderByCommentsDesc();
-    }
+
+
 
 
     //현재 로그인한 회원 정보 가지고오기
@@ -149,7 +155,7 @@ public class BoardService {
     }
 
 
-    public List<Board> findBoards(String orderBy){
+    public List<Board> getGeneralSortedBoards(String orderBy){
         if(orderBy == null || orderBy.equalsIgnoreCase("latest")){
             return findBoardsSortedByLatest();
         } else if (orderBy.equalsIgnoreCase("oldest")){
@@ -162,6 +168,22 @@ public class BoardService {
             throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
         }
     }
+//
+//    public List<Board> findBoardsWithCheckBoxTrue(String orderBy){
+//        return getCheckboxSortedBoards(true,orderBy);
+//    }
+//    public List<Board> findBoardsWithCheckBoxFalse(String orderBy){
+//        return getCheckboxSortedBoards(false, orderBy);
+//    }
+//
+//    private List<Board> getCheckboxSortedBoards(boolean checkBoxValue, String orderBy) {
+//        if (orderBy == null || orderBy.equalsIgnoreCase("latest")){
+//            return checkBoxValue ? boardRepository.findAllByCheckBoxTrue(Sort.by(Sort.Direction.DESC, "createdAt"))
+//                                 : boardRepository.findAllByCheckBoxFalse(Sort.by(Sort.Direction.DESC, "createdAt"));
+//        }
+//    }
+
+
 
     /*
     게시글 당 좋아요 수 반환

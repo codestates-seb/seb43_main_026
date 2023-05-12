@@ -24,18 +24,23 @@ public class Board extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long boardId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 45)
     private String title;
 
-    @Column
+    @Column(columnDefinition = "text")
     private String content;
 
-
-    @Column
+    @Column(length = 255)
     private String boardImageAddress;
 
     @Column
     private int viewCount;
+
+    @Column
+    private boolean checkBoxValue;
+
+    @Column
+    private int commentCount = 0;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -55,6 +60,8 @@ public class Board extends Auditable {
         this.comments.add(comment);
         comment.setBoard(this);
     }
+
+
 
 
 }

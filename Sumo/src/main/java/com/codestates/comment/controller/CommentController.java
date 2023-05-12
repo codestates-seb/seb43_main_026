@@ -36,8 +36,9 @@ public class CommentController {
 
 
     @PostMapping
-    public ResponseEntity postComment(@Valid @RequestBody CommentPostDto commentPostDto){
-        Comment comment = commentService.createComment(commentMapper.commentPostDtoToComment(commentPostDto));
+    public ResponseEntity postComment(@Valid @RequestBody CommentPostDto commentPostDto,
+                                      @PathVariable("board-id") @Positive Long boardId){
+        Comment comment = commentService.createComment(commentMapper.commentPostDtoToComment(commentPostDto), boardId);
 
         URI location = UriComponentsBuilder
                 .newInstance()

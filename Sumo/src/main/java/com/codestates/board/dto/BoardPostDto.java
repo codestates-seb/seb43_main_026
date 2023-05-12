@@ -17,5 +17,7 @@ public class BoardPostDto {
 
     private String boardImageAddress;
 
+    private boolean boardCheckBox;
+
 
 }

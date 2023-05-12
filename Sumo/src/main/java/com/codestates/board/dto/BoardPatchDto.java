@@ -20,4 +20,5 @@ public class BoardPatchDto {
 
     private String boardImageAddress;
 
+    private boolean boardCheckBox;
 }

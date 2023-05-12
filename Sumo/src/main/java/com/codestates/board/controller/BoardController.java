@@ -81,7 +81,7 @@ public class BoardController {
     public ResponseEntity getBoards(@Positive @RequestParam int page,
                                     @Positive @RequestParam int size,
                                     @RequestParam(required = false) String orderBy) {
-        List<Board> boards = boardService.findBoards(orderBy);
+        List<Board> boards = boardService.getGeneralSortedBoards(orderBy);
 
         List<BoardResponseDto> responses = boards.stream()
                 .map(boardMapper::boardToBoardPagingResponseDto)

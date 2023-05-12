@@ -40,10 +40,22 @@ public class CommentService {
 
     //댓글 생성
     @Transactional
-    public Comment createComment(Comment comment){
+    public Comment createComment(Comment comment, Long boardId){
         Member currentMember = getCurrentMember();
         comment.setMember(currentMember);
 
+        //해당 보드찾고
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
+
+        // comment 에 board 설정하고
+        comment.setBoard(board);
+
+        //board 에 comment 추가
+        board.addComment(comment);
+
+        board.setCommentCount(board.getCommentCount()+1);
+        boardRepository.save(board);
 
         return commentRepository.save(comment);
     }
@@ -75,6 +87,11 @@ public class CommentService {
             throw new BusinessLogicException(ExceptionCode.COMMENT_ACCESS_DENIED);
         }
 
+        Board board = findComment.getBoard();
+        if(board != null){
+            board.setCommentCount(board.getCommentCount()-1);
+            boardRepository.save(board);
+        }
         commentRepository.deleteById(commentId);
     }
 

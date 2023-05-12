@@ -45,21 +45,4 @@ public class MemberMapper {
             return response;
         }
     }
-
-    public MemberDto.Response memberToMemberResponseDtoWithCalendarId(Member member){
-        if(member == null){
-            return null;
-        } else {
-            long memberId = 0L;
-            String email = null;
-            String nickname = null;
-            long calendarId = 0L;
-            memberId = member.getMemberId();
-            email = member.getEmail();
-            nickname = member.getNickname();
-            calendarId = member.getCalendar().getCalendarId();
-            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname,calendarId);
-            return response;
-        }
-    }
 }

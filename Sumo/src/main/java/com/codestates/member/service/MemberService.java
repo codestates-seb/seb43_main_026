@@ -1,6 +1,5 @@
 package com.codestates.member.service;
 
-import com.codestates.calendar.service.CalendarService;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.jwt.auth.utils.CustomAuthorityUtils;
@@ -17,16 +16,13 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
-    private final CalendarService calendarService;
 
     public MemberService(MemberRepository memberRepository,
                          PasswordEncoder passwordEncoder,
-                         CustomAuthorityUtils authorityUtils,
-                         CalendarService calendarService) {
+                         CustomAuthorityUtils authorityUtils) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
-        this.calendarService = calendarService;
     }
 
     public Member createMember(Member member){
@@ -39,12 +35,8 @@ public class MemberService {
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
 
-        Member returnMember = memberRepository.save(member);
-        calendarService.initCalendar(returnMember);
-        return returnMember;
+        return memberRepository.save(member);
     }
-
-
 
     public Member updateMember(Member member){
         Member findMember = findVerifiedmember(member.getMemberId());

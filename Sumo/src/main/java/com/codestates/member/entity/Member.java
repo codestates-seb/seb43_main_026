@@ -1,7 +1,7 @@
 package com.codestates.member.entity;
 
 
-import com.codestates.calendar.entity.Calendar;
+import com.codestates.board.entity.Board;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,14 +28,14 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String nickname;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Calendar> calendars = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<Board> boards = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    public void addCalendar(Calendar calendar) {
-        this.calendars.add(calendar);
-        calendar.setMember(this);
+    public void addBoard(Board board){
+        this.boards.add(board);
+        board.setMember(this);
     }
 }

@@ -32,9 +32,8 @@ public class MemberController {
         Member member = mapper.memberPostDtoToMember(postDto);
         Member response = memberService.createMember(member);
 
-        // TODO : Calendar를 create해줘야 한다.
 
-        return new ResponseEntity<>(mapper.memberToMemberResponseDtoWithCalendarId(response),
+        return new ResponseEntity<>(mapper.memberToMemberResponseDto(response),
                 HttpStatus.CREATED);
     }
 
@@ -54,7 +53,7 @@ public class MemberController {
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId){
         Member member = memberService.findMember(memberId);
 
-        return new ResponseEntity<>(mapper.memberToMemberResponseDtoWithCalendarId(member),
+        return new ResponseEntity<>(mapper.memberToMemberResponseDto(member),
                 HttpStatus.OK);
     }
 

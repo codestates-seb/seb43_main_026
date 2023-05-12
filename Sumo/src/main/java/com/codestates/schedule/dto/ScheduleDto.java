@@ -1,4 +1,4 @@
-package com.codestates.calendar.dto;
+package com.codestates.schedule.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-public class CalendarContentDto {
+public class ScheduleDto {
 
     @Getter
     @Setter
@@ -19,37 +19,35 @@ public class CalendarContentDto {
         @NotBlank(message = "이미지는 필수 항목입니다.")
         private String imageAddress;
 
-        private String content;
+        private String memo;
 
         private String location;
 
         @NotBlank(message = "운동 시작 시간은 필수 항목입니다.")
         @Pattern(regexp = "^([01][0-9]|2[0-3]):([0-5][0-9])$",
                 message = "HH:mm 형식으로 작성해야 합니다.")
-        private String beginTime;
+        private String startTime;
 
         @NotBlank(message = "운동 종료 시간은 필수 항목입니다.")
         @Pattern(regexp = "^([01][0-9]|2[0-3]):([0-5][0-9])$",
                 message = "HH:mm 형식으로 작성해야 합니다.")
         private String endTime;
-
-        private long calendarId;
     }
 
     @Getter
     @Setter
     public static class Patch {
-        private long calendarContentId;
+        private long scheduleId;
 
         private String imageAddress;
 
-        private String content;
+        private String memo;
 
         private String location;
 
         @Pattern(regexp = "^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$",
                 message = "HH:mm 형식으로 작성해야 합니다.")
-        private String beginTime;
+        private String startTime;
 
         @Pattern(regexp = "^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$",
                 message = "HH:mm 형식으로 작성해야 합니다.")
@@ -59,20 +57,20 @@ public class CalendarContentDto {
     @Setter
     @Getter
     public static class Response {
-        private long calendarContentId;
+        private long scheduleId;
 
         private String date;
 
         private String imageAddress;
 
-        private String content;
+        private String memo;
 
         private String location;
 
-        private String beginTime;
+        private String startTime;
 
         private String endTime;
 
-        private long calendarId;
+        private long memberId;
     }
 }

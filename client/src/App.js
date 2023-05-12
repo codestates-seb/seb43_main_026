@@ -10,7 +10,8 @@ import Nav from './layout/Nav';
 // 페이지
 import MyCalendar from './pages/calendarPage/Calendar';
 import CalendarAdd from './pages/calendarPage/CalendarAdd';
-import Board from './pages/Board';
+import Board from './pages/Board/Board';
+import BoardAdd from './pages/Board/BoardAdd';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<MyCalendar />} />
           <Route path="/calendar/add" element={<CalendarAdd />} />
           <Route path="/board" element={<Board />} />
+          <Route path="/board/add" element={<BoardAdd />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
         </Routes>

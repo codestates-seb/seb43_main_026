@@ -16,7 +16,7 @@ const Container = styled.header`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 30px;
+  padding: 0 20px 0 15px;
   @media screen and (min-width: ${SIZE.tablet}) {
     padding: 0 15px;
   }

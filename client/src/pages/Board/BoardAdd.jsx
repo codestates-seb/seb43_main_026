@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { COLOR } from '../../style/theme';
 
 //공통 컴포넌트
-import BackBtn from '../../component/common/Button';
+import { BackButton } from '../../component/common/Button';
 import ImageUpload from '../../component/common/ImageUpload';
 
 //전체 컨테이너
@@ -90,7 +90,7 @@ const BoardAdd = () => {
     <Container>
       <GobackAndUpload>
         <Goback>
-          <BackBtn />
+          <BackButton />
         </Goback>
         <UploadBtn type="submit" onClick={handleSubmit(onSubmit)}>
           등록

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { BackButton } from '../../common/BackButton';
+import { BackButton } from '../../common/Button';
 import { COLOR } from '../../../style/theme';
 
 // styled-component

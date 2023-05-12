@@ -8,6 +8,51 @@ import Input from '../component/common/Input';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
+const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+  padding-top: 50px;
+  background-color: ${COLOR.bg_light_blue};
+  & > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    button {
+      margin-top: 3rem;
+      height: 5vh;
+      border: none;
+      background-color: ${COLOR.main_blue};
+      color: white;
+      font-weight: 300;
+      border-radius: 5px;
+      cursor: pointer;
+      &:hover {
+        background-color: ${COLOR.main_blue_hover};
+      }
+    }
+  }
+`;
+
+const Logo = styled.img`
+  width: 10rem;
+`;
+
+const Title = styled.h1``;
+
+const Form = styled.form`
+  margin-top: 4rem;
+  width: 100%;
+  height: 100%;
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+  background-color: white;
+  border: 1px solid ${COLOR.main_blue};
+  display: flex;
+  flex-direction: column;
+  padding: 6rem 2rem;
+`;
+
 const Login = () => {
   const {
     handleSubmit,
@@ -66,48 +111,3 @@ const Login = () => {
 };
 
 export default Login;
-
-const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  padding-top: 50px;
-  background-color: ${COLOR.bg_light_blue};
-  & > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    button {
-      margin-top: 3rem;
-      height: 5vh;
-      border: none;
-      background-color: ${COLOR.main_blue};
-      color: white;
-      font-weight: 300;
-      border-radius: 5px;
-      cursor: pointer;
-      &:hover {
-        background-color: ${COLOR.main_blue_hover};
-      }
-    }
-  }
-`;
-
-const Logo = styled.img`
-  width: 10rem;
-`;
-
-const Title = styled.h1``;
-
-const Form = styled.form`
-  margin-top: 4rem;
-  width: 100%;
-  height: 100%;
-  border-top-right-radius: 40px;
-  border-top-left-radius: 40px;
-  background-color: white;
-  border: 1px solid ${COLOR.main_blue};
-  display: flex;
-  flex-direction: column;
-  padding: 6rem 2rem;
-`;

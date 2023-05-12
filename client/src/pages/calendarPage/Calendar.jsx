@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import CalendarCompo from '../../component/calendar/CalendarCompo';
+import CalendarComponent from '../../component/calendar/CalendarComponent';
 import { SIZE, COLOR } from '../../style/theme';
 const MyCalendarContainer = styled.div`
   /* 모바일 기준 */
@@ -10,17 +10,10 @@ const MyCalendarContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   margin-top: 0px;
-  .cal-main {
-    height: 700px;
-  }
 
   /* 태블릿 버전 */
   @media screen and(min-width: ${SIZE.tablet}) {
     background-color: #fff;
-    .cal-main {
-      padding: 0 40px;
-      height: 900px;
-    }
     .cal-bottom {
       padding: 30px 50px;
     }
@@ -35,7 +28,7 @@ const MyCalendarContainer = styled.div`
 const MyCalendar = () => {
   return (
     <MyCalendarContainer>
-      <CalendarCompo />
+      <CalendarComponent />
     </MyCalendarContainer>
   );
 };

@@ -1,6 +1,7 @@
 //모듈
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -19,7 +20,7 @@ import { HiPlus } from 'react-icons/hi';
 import boardData from '../../component/Board/boardData';
 
 //전체 컨테이너
-const Container = styled.section`
+const Container = styled.main`
   margin: 0 auto;
   margin-top: 30px;
   background-color: ${(props) =>
@@ -47,7 +48,7 @@ const Container = styled.section`
 `;
 
 //상단 캘린더 타이틀
-const Title = styled.article`
+const Title = styled.section`
   width: 100%;
   height: 50px;
   display: flex;
@@ -61,7 +62,7 @@ const TxtCal = styled.div`
   span {
     font-size: 15px;
     font-weight: 600;
-    line-height: 20px;
+    line-height: 21px;
   }
 `;
 
@@ -71,9 +72,9 @@ const CalIcon = styled(BsCalendar2Heart)`
 `;
 
 //리스트 조회 방식 및 정렬
-const SortBox = styled.article`
+const SortBox = styled.section`
   width: 100%;
-  height: 40px;
+  height: 42px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -85,7 +86,7 @@ const View = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0px 5px;
+  padding: 0px 6px;
   button {
     display: flex;
   }
@@ -93,15 +94,16 @@ const View = styled.div`
 
 const SortBtn = styled.button`
   border: none;
-  padding: 0 3.5px;
+  padding: 0 4px;
   text-align: center;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   background-color: transparent;
 `;
 
 const Sort = styled.div`
   display: flex;
+  margin-right: 7px;
 `;
 
 const TxtView = styled(RiListUnordered)`
@@ -115,7 +117,7 @@ const ImgView = styled(RxDashboard)`
 //보드 작성페이지 이동
 const Upload = styled.article`
   width: 100%;
-  height: 35px;
+  height: 38px;
   background-color: ${COLOR.bg_blue};
   display: flex;
   flex-direction: row-reverse;
@@ -128,6 +130,7 @@ const UploadBtn = styled.button`
   font-size: 15px;
   font-weight: 600;
   color: ${COLOR.main_dark_blue};
+  margin-right: 7px;
 `;
 
 const UploadIconBtn = styled.button`
@@ -155,13 +158,19 @@ const PlusIcon = styled(HiPlus)`
   color: ${COLOR.bg};
 `;
 
-const ListBox = styled.article`
+const ListBox = styled.section`
   width: 100%;
 `;
 
 const Board = () => {
   const [posts, setPosts] = useState(boardData);
   const [isDash, setIsDash] = useState(true);
+
+  const navigate = useNavigate();
+
+  const handleUploadClick = () => {
+    navigate('/board/add');
+  };
 
   //첫 번째 게시글의 제목을 "New Title"로 업데이트
   //setPost안쓰면 eslint오류나서 그냥 쓰는 코드
@@ -180,7 +189,7 @@ const Board = () => {
       <Title>
         <TxtCal>
           <CalIcon size={20} />
-          <span>내 캘린더</span>
+          <span>커뮤니티</span>
         </TxtCal>
       </Title>
       <SortBox>
@@ -200,7 +209,7 @@ const Board = () => {
       </SortBox>
       {!isDash && (
         <Upload>
-          <UploadBtn>등록하기</UploadBtn>
+          <UploadBtn onClick={handleUploadClick}>등록하기</UploadBtn>
         </Upload>
       )}
       <ListBox>
@@ -208,7 +217,7 @@ const Board = () => {
         {!isDash && <List posts={posts} />}
       </ListBox>
       {isDash && (
-        <UploadIconBtn>
+        <UploadIconBtn onClick={handleUploadClick}>
           <PlusIcon size={32} color="#ffffff" />
         </UploadIconBtn>
       )}

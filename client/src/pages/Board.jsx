@@ -1,6 +1,7 @@
 //모듈
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -128,6 +129,7 @@ const UploadBtn = styled.button`
   font-size: 15px;
   font-weight: 600;
   color: ${COLOR.main_dark_blue};
+  margin-right: 6px;
 `;
 
 const UploadIconBtn = styled.button`
@@ -144,6 +146,7 @@ const UploadIconBtn = styled.button`
   box-shadow: 1px 1px 10px 0px ${COLOR.bg_dark};
   background-color: ${COLOR.main_blue};
   cursor: pointer;
+
   @media screen and (min-width: ${SIZE.mobileMax}) {
     position: sticky;
     margin-bottom: 30px;
@@ -163,6 +166,8 @@ const Board = () => {
   const [posts, setPosts] = useState(boardData);
   const [isDash, setIsDash] = useState(true);
 
+  const navigate = useNavigate();
+
   //첫 번째 게시글의 제목을 "New Title"로 업데이트
   //setPost안쓰면 eslint오류나서 그냥 쓰는 코드
   const updatePost = () => {
@@ -175,12 +180,16 @@ const Board = () => {
     setIsDash(value);
   };
 
+  const handleUploadClick = () => {
+    navigate('/board/add');
+  };
+
   return (
     <Container isDash={isDash}>
       <Title>
         <TxtCal>
           <CalIcon size={20} />
-          <span>내 캘린더</span>
+          <span>커뮤니티</span>
         </TxtCal>
       </Title>
       <SortBox>
@@ -200,7 +209,7 @@ const Board = () => {
       </SortBox>
       {!isDash && (
         <Upload>
-          <UploadBtn>등록하기</UploadBtn>
+          <UploadBtn onClick={handleUploadClick}>등록하기</UploadBtn>
         </Upload>
       )}
       <ListBox>
@@ -208,7 +217,7 @@ const Board = () => {
         {!isDash && <List posts={posts} />}
       </ListBox>
       {isDash && (
-        <UploadIconBtn>
+        <UploadIconBtn onClick={handleUploadClick}>
           <PlusIcon size={32} color="#ffffff" />
         </UploadIconBtn>
       )}

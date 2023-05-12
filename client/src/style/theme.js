@@ -11,6 +11,8 @@ export const COLOR = {
   main_blue_hover: `#5d9afd`,
   main_blue_active: `#3773fa`,
   main_dark_blue: `#2C599B`,
+  main_dark_blue_hover: `#25487f`,
+  main_dark_blue_active: `#223f6a`,
   main_gray: `#f2f3f7`,
   bg_light_blue: `#F0F9FF`,
   bg_blue: `rgba(228, 235, 244, 1)`,

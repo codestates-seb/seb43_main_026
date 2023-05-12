@@ -42,7 +42,7 @@ public class MemberService {
 
         Member returnMember = memberRepository.save(member);
         Calendar calendar = calendarService.initCalendar(returnMember);
-        returnMember.setCalendar(calendar);
+        returnMember.addCalendar(calendar);
         return returnMember;
     }
 

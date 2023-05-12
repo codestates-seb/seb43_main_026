@@ -29,6 +29,7 @@ public enum ExceptionCode {
     CALENDAR_NOT_FOUND(404, "Calendar not found"),
     INVALID_CALENDARCONTENT_TIME_SETTING(400, "EndTime must be later"),
     INVALID_CALENDAR_ID(400, "CalendarId is invalid"),
+    CANNOT_ACCESS_CALENDAR(403, "Can not access to calendar"),
     EMAIL_CONFLICT(409,"Email already exists"),
     NICKNAME_CONFLICT(409,"Nickname already exists"),
     BOARD_NOT_FOUND(404,"Board not found"),

@@ -40,9 +40,11 @@ public class MemberService {
         member.setRoles(roles);
 
         Member returnMember = memberRepository.save(member);
-        calendarService.initCalendar(member);
+        calendarService.initCalendar(returnMember);
         return returnMember;
     }
+
+
 
     public Member updateMember(Member member){
         Member findMember = findVerifiedmember(member.getMemberId());

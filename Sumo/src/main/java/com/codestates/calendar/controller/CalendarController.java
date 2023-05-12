@@ -1,8 +1,6 @@
 package com.codestates.calendar.controller;
 
 import com.codestates.calendar.dto.CalendarContentDto;
-import com.codestates.calendar.dto.CalendarDto;
-import com.codestates.calendar.dto.MultiResponseDto;
 import com.codestates.calendar.entity.CalendarContent;
 import com.codestates.calendar.mapper.CalendarMapper;
 import com.codestates.calendar.service.CalendarService;
@@ -17,6 +15,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/calendars")
@@ -74,17 +73,22 @@ public class CalendarController {
                                       @Positive @Max(12) @RequestParam int month) {
         List<CalendarContent> calendarContents = calendarService.findCalendarContents(calendarId, year, month);
 
-        int attendanceRate = calendarService.calculateAttendanceRate(calendarContents, month);
-        int totalMinutes = calendarService.calculateTotalTime(calendarContents);
+//        int attendanceRate = calendarService.calculateAttendanceRate(calendarContents, month);
+//        int totalMinutes = calendarService.calculateTotalTime(calendarContents);
 
         List<CalendarContentDto.Response> responses = calendarMapper.calendarContentsToCalendarResponseDtos(calendarContents);
-        return new ResponseEntity<>(new MultiResponseDto<>(responses, attendanceRate, totalMinutes), HttpStatus.OK);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
+    // 관리자만 호출이 가능한 핸들러 메서드
+    // 수영왕 페이지 작성을 위한 요청 핸들러 메서드
     @GetMapping
     public ResponseEntity getCalendars(@Positive @RequestParam int year,
                                        @Positive @Max(12) @RequestParam int month) {
-        List<CalendarDto.Response> responses = calendarService.findCalendars(year, month);
+        List<List<CalendarContent>> calendars = calendarService.findCalendars(year, month);
+        List<List<CalendarContentDto.Response>> responses = calendars.stream()
+                .map(calendarContents -> calendarMapper.calendarContentsToCalendarResponseDtos(calendarContents))
+                .collect(Collectors.toList());
 
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }

@@ -15,7 +15,14 @@ public class Calendar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long calendarId;
 
-    @OneToOne
+    @Column(nullable = false)
+    private Integer year;
+
+    @Column(nullable = false)
+    private Integer month;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.REMOVE)

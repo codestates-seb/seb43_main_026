@@ -8,13 +8,6 @@ const BackBtnCon = styled.button`
   background-color: inherit;
   cursor: pointer;
   color: ${COLOR.main_blue};
-
-  &:hover {
-    color: ${COLOR.main_blue_hover};
-  }
-  &:active {
-    color: ${COLOR.main_blue_active};
-  }
 `;
 
 const BackBtn = () => {

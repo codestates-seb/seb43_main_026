@@ -1,7 +1,6 @@
 package com.codestates.comment.entity;
 
 
-import com.codestates.board.entity.Board;
 import com.codestates.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,10 +29,6 @@ public class CommentLikes {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Member_id")
     private Member member;
-
-    @ManyToOne
-    @JoinColumn(name = "Board_id")
-    private Board board;
 
     public CommentLikes(Comment comment, Member member) {
         this.comment = comment;

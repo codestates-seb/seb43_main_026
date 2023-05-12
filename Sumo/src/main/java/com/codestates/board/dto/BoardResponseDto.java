@@ -26,18 +26,14 @@ public class BoardResponseDto {
 
     private List<Long> boardLikesId;
 
-    private List<Long> commentId;
-
     private String boardImageAddress;
 
     private int viewCount;
 
-    private int commentCount;
-
-    private int commentLikesCount;
 
     private Boolean showOffCheckBox;
 
     private Boolean attendanceExerciseCheckBox;
+
 
 }

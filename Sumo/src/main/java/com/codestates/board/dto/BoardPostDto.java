@@ -17,9 +17,9 @@ public class BoardPostDto {
 
     private String boardImageAddress;
 
-    private boolean showOffCheckBox;
+    private Boolean showOffCheckBox;
 
-    private boolean attendanceExerciseCheckBox;
+    private Boolean attendanceExerciseCheckBox;
 
 
 }

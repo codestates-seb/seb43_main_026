@@ -26,6 +26,9 @@ public class Comment extends Auditable {
     private String commentContent;
 
 
+    @Column
+    private int commentLikesCount = 0;
+
     @ManyToOne
     @JoinColumn(name = "Board_id")
     private Board board;

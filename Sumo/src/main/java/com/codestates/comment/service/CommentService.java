@@ -90,7 +90,6 @@ public class CommentService {
         Board board = findComment.getBoard();
         if(board != null){
             board.setCommentCount(board.getCommentCount()-1);
-            boardRepository.save(board);
         }
         commentRepository.deleteById(commentId);
     }
@@ -141,17 +140,21 @@ public class CommentService {
         if(commentLike.isPresent()) {
             if (commentLike.get().getCommentLikesStatus() == 1){
                 commentLike.get().setCommentLikesStatus(0);
+                comment.setCommentLikesCount(comment.getCommentLikesCount()-1);
             } else {
                 commentLike.get().setCommentLikesId(1);
+                comment.setCommentLikesCount(comment.getCommentLikesCount()+1);
             }
             commentLikesRepository.save(commentLike.get());
         } else{
             CommentLikes newCommentLike = new CommentLikes(comment, member);
             newCommentLike.setCommentLikesStatus(1);
+            comment.setCommentLikesCount(comment.getCommentLikesCount()+1);
             commentLikesRepository.save(newCommentLike);
         }
 
         comment.setCommentLikes(commentLikesRepository.findByComment(comment));
+        commentRepository.save(comment);
     }
 
 }

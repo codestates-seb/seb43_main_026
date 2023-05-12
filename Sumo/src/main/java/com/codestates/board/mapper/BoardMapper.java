@@ -6,7 +6,6 @@ import com.codestates.board.dto.BoardPostDto;
 import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
 import com.codestates.board.entity.BoardLikes;
-import com.codestates.comment.entity.Comment;
 import com.codestates.member.entity.Member;
 import org.mapstruct.Mapper;
 
@@ -23,6 +22,8 @@ public interface BoardMapper {
         board.setContent(boardPostDto.getContent());
         board.setMember(member);
         board.setBoardImageAddress(boardPostDto.getBoardImageAddress());
+        board.setAttendanceExerciseCheckBox(boardPostDto.getAttendanceExerciseCheckBox());
+        board.setShowOffCheckBox(boardPostDto.getShowOffCheckBox());
         return board;
     }
 
@@ -33,6 +34,8 @@ public interface BoardMapper {
         board.setTitle(boardPatchDto.getTitle());
         board.setContent(boardPatchDto.getContent());
         board.setBoardImageAddress(boardPatchDto.getBoardImageAddress());
+        board.setAttendanceExerciseCheckBox(boardPatchDto.getAttendanceExerciseCheckBox());
+        board.setShowOffCheckBox(boardPatchDto.getShowOffCheckBox());
         return board;
     }
 
@@ -47,9 +50,6 @@ public interface BoardMapper {
         boardResponseDto.setModifiedAt(board.getModifiedAt());
         boardResponseDto.setBoardLikesId(board.getBoardLikes().stream().map(BoardLikes::getBoardLikesId).collect(Collectors.toList()));
         boardResponseDto.setBoardLikesCount(board.getBoardLikes().size());
-        boardResponseDto.setCommentId(board.getComments().stream().map(Comment::getCommentId).collect(Collectors.toList()));
-        boardResponseDto.setCommentCount(board.getCommentCount());
-        boardResponseDto.setCommentLikesCount(board.getCommentLikes().size());
         boardResponseDto.setViewCount(board.getViewCount());
         boardResponseDto.setShowOffCheckBox(board.getShowOffCheckBox());
         boardResponseDto.setAttendanceExerciseCheckBox(board.getAttendanceExerciseCheckBox());
@@ -61,12 +61,9 @@ public interface BoardMapper {
         boardPagingResponseDto.setBoardId(board.getBoardId());
         boardPagingResponseDto.setTitle(board.getTitle());
         boardPagingResponseDto.setWriter(board.getMember().getNickname());
-        boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
-        boardPagingResponseDto.setShowOffCheckBox(board.getShowOffCheckBox());
         boardPagingResponseDto.setBoardImageAddress(board.getBoardImageAddress());
         boardPagingResponseDto.setBoardLikesCount(board.getBoardLikes().size());
-        boardPagingResponseDto.setCommentCount(board.getCommentCount());
-        boardPagingResponseDto.setAttendanceExerciseCheckBox(board.getAttendanceExerciseCheckBox());
+        boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
         return boardPagingResponseDto;
     }
 

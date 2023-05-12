@@ -3,7 +3,6 @@ package com.codestates.board.entity;
 
 import com.codestates.audit.Auditable;
 import com.codestates.comment.entity.Comment;
-import com.codestates.comment.entity.CommentLikes;
 import com.codestates.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,13 +36,14 @@ public class Board extends Auditable {
     private int viewCount;
 
     @Column
+    private int commentCount = 0;
+
+    @Column
     private Boolean showOffCheckBox;
 
     @Column
     private Boolean attendanceExerciseCheckBox;
 
-    @Column
-    private int commentCount = 0;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -55,9 +55,6 @@ public class Board extends Auditable {
     //ARRAYLIST 사용한이유.
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
-    private List<CommentLikes> commentLikes = new ArrayList<>();
 
     public void addComment(Comment comment){
         this.comments.add(comment);

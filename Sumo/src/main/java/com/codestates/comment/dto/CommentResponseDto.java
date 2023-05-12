@@ -11,8 +11,11 @@ import java.time.LocalDateTime;
 public class CommentResponseDto {
 
     private long commentId;
+    //    private List<Long> commentId;
 
     private String commentContent;
+
+    private int commentCount;
 
     private int commentLikesCount;
 

@@ -31,8 +31,8 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String nickname;
 
-    @OneToOne(mappedBy = "member",cascade = CascadeType.ALL)
-    private Calendar calendar;
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    private List<Calendar> calendars = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<Board> boards = new ArrayList<>();
@@ -43,5 +43,10 @@ public class Member {
     public void addBoard(Board board){
         this.boards.add(board);
         board.setMember(this);
+    }
+
+    public void addCalendar(Calendar calendar){
+        this.calendars.add(calendar);
+        calendar.setMember(this);
     }
 }

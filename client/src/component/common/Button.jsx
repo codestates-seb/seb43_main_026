@@ -10,17 +10,15 @@ const BackButtonContainer = styled.button`
   color: ${COLOR.main_blue};
 `;
 
-const BackButton = () => {
+export const BackButton = () => {
   // 이전 페이지로 이동하기
   const navigate = useNavigate();
-  const handleBackBtn = () => {
+  const handleBackButton = () => {
     navigate(-1);
   };
   return (
-    <BackButtonContainer onClick={handleBackBtn}>
+    <BackButtonContainer onClick={handleBackButton}>
       <IoArrowBack size={30} />
     </BackButtonContainer>
   );
 };
-
-export default BackButton;

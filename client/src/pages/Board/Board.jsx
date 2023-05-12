@@ -1,13 +1,14 @@
 //모듈
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 //공통 스타일
-import { COLOR, SIZE } from '../style/theme';
+import { COLOR, SIZE } from '../../style/theme';
 
 //컴포넌트
-import Dash from '../component/Board/Dash';
-import List from '../component/Board/List';
+import Dash from '../../component/Board/Dash';
+import List from '../../component/Board/List';
 
 //아이콘
 import { BsCalendar2Heart } from 'react-icons/bs';
@@ -16,14 +17,14 @@ import { RiListUnordered } from 'react-icons/ri';
 import { HiPlus } from 'react-icons/hi';
 
 //더미데이터
-import boardData from '../component/Board/boardData';
+import boardData from '../../component/Board/boardData';
 
 //전체 컨테이너
-const Container = styled.section`
+const Container = styled.main`
   margin: 0 auto;
   margin-top: 30px;
   background-color: ${(props) =>
-    props.view === 'list' ? COLOR.bg : COLOR.bg_blue};
+    props.isDash === false ? COLOR.bg : COLOR.bg_blue};
   display: flex;
   max-width: 1200px;
   flex-direction: column;
@@ -32,23 +33,24 @@ const Container = styled.section`
   margin-top: 0px;
   width: 100%;
   height: fit-content;
+  width: 100%;
+  height: fit-content;
+
   button {
     cursor: pointer;
   }
   .del {
     display: none;
   }
-  @media screen and(min-width: ${SIZE.tablet}) {
+  @media screen and (min-width: ${SIZE.mobileMax}) {
     margin-top: 15px;
-    width: 100%;
-    height: fit-content;
   }
 `;
 
 //상단 캘린더 타이틀
-const Title = styled.article`
+const Title = styled.section`
   width: 100%;
-  height: 40px;
+  height: 50px;
   display: flex;
   align-items: center;
   background-color: ${COLOR.bg};
@@ -60,7 +62,7 @@ const TxtCal = styled.div`
   span {
     font-size: 15px;
     font-weight: 600;
-    line-height: 20px;
+    line-height: 21px;
   }
 `;
 
@@ -70,9 +72,9 @@ const CalIcon = styled(BsCalendar2Heart)`
 `;
 
 //리스트 조회 방식 및 정렬
-const SortBox = styled.article`
+const SortBox = styled.section`
   width: 100%;
-  height: 30px;
+  height: 42px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -84,7 +86,7 @@ const View = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0px 5px;
+  padding: 0px 6px;
   button {
     display: flex;
   }
@@ -92,30 +94,30 @@ const View = styled.div`
 
 const SortBtn = styled.button`
   border: none;
-  padding: 0 3px;
+  padding: 0 4px;
   text-align: center;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   background-color: transparent;
 `;
 
 const Sort = styled.div`
   display: flex;
+  margin-right: 7px;
 `;
 
-const TXTView = styled(RiListUnordered)`
-  color: ${(props) => (props.view === 'list' ? COLOR.dark_blue : `#7F97BA`)};
+const TxtView = styled(RiListUnordered)`
+  color: ${(props) => (props.isDash ? `#7F97BA` : COLOR.dark_blue)};
 `;
 
 const ImgView = styled(RxDashboard)`
-  color: ${(props) =>
-    props.view === 'dash' ? COLOR.main_dark_blue : `#7F97BA`};
+  color: ${(props) => (props.isDash ? COLOR.main_dark_blue : `#7F97BA`)};
 `;
 
 //보드 작성페이지 이동
-const UploadBox = styled.article`
+const Upload = styled.article`
   width: 100%;
-  height: 30px;
+  height: 38px;
   background-color: ${COLOR.bg_blue};
   display: flex;
   flex-direction: row-reverse;
@@ -128,6 +130,7 @@ const UploadBtn = styled.button`
   font-size: 15px;
   font-weight: 600;
   color: ${COLOR.main_dark_blue};
+  margin-right: 7px;
 `;
 
 const UploadIconBtn = styled.button`
@@ -144,10 +147,10 @@ const UploadIconBtn = styled.button`
   box-shadow: 1px 1px 10px 0px ${COLOR.bg_dark};
   background-color: ${COLOR.main_blue};
   cursor: pointer;
-  @media screen and(min-width: ${SIZE.tablet}) {
+  @media screen and (min-width: ${SIZE.mobileMax}) {
     position: sticky;
-    margin-right: -955px;
     margin-bottom: 30px;
+    margin-top: 30px;
   }
 `;
 
@@ -155,15 +158,21 @@ const PlusIcon = styled(HiPlus)`
   color: ${COLOR.bg};
 `;
 
-const ListBox = styled.article`
+const ListBox = styled.section`
   width: 100%;
 `;
 
 const Board = () => {
   const [posts, setPosts] = useState(boardData);
-  const [view, setView] = useState('list');
+  const [isDash, setIsDash] = useState(true);
 
-  // 첫 번째 게시글의 제목을 "New Title"로 업데이트
+  const navigate = useNavigate();
+
+  const handleUploadClick = () => {
+    navigate('/board/add');
+  };
+
+  //첫 번째 게시글의 제목을 "New Title"로 업데이트
   //setPost안쓰면 eslint오류나서 그냥 쓰는 코드
   const updatePost = () => {
     const newPosts = [...posts];
@@ -171,25 +180,25 @@ const Board = () => {
     setPosts(newPosts);
   };
 
-  const handleViewChange = (viewType) => {
-    setView(viewType);
+  const handleViewChange = (value) => {
+    setIsDash(value);
   };
 
   return (
-    <Container view={view}>
+    <Container isDash={isDash}>
       <Title>
         <TxtCal>
           <CalIcon size={20} />
-          <span>내 캘린더</span>
+          <span>커뮤니티</span>
         </TxtCal>
       </Title>
       <SortBox>
         <View>
-          <SortBtn onClick={() => handleViewChange('dash')}>
-            <ImgView size={18} view={view} />
+          <SortBtn onClick={() => handleViewChange(true)}>
+            <ImgView size={19} isDash={isDash} />
           </SortBtn>
-          <SortBtn onClick={() => handleViewChange('list')}>
-            <TXTView size={20} view={view} />
+          <SortBtn onClick={() => handleViewChange(false)}>
+            <TxtView size={21} isDash={isDash} />
           </SortBtn>
         </View>
         <Sort>
@@ -198,17 +207,17 @@ const Board = () => {
           <SortBtn>댓글순</SortBtn>
         </Sort>
       </SortBox>
-      {view === 'list' && (
-        <UploadBox>
-          <UploadBtn>등록하기</UploadBtn>
-        </UploadBox>
+      {!isDash && (
+        <Upload>
+          <UploadBtn onClick={handleUploadClick}>등록하기</UploadBtn>
+        </Upload>
       )}
       <ListBox>
-        {view === 'dash' && <Dash posts={posts} />}
-        {view === 'list' && <List posts={posts} />}
+        {isDash && <Dash posts={posts} />}
+        {!isDash && <List posts={posts} />}
       </ListBox>
-      {view === 'dash' && (
-        <UploadIconBtn>
+      {isDash && (
+        <UploadIconBtn onClick={handleUploadClick}>
           <PlusIcon size={32} color="#ffffff" />
         </UploadIconBtn>
       )}

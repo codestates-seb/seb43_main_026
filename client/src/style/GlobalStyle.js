@@ -14,7 +14,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, 
 figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+time, mark, audio, video, input {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -27,7 +27,9 @@ time, mark, audio, video {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	
 }
+
 span, h1, h2, h3, h4, h5, h6, p, button{
 	color: #393939;
 }
@@ -45,8 +47,7 @@ html {
 }
 body {
 	line-height: 1;
-	font-family: 'Pretendard';
-	
+	font-family: Pretendard;
 }
 ol, ul {
 	list-style: none;

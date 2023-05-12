@@ -23,7 +23,7 @@ const DashBorad = styled.li`
   flex-direction: column;
 `;
 const Image = styled.div`
-  width: 177px;
+  width: 180px;
   height: 288px;
   overflow: hidden;
   border-radius: 5px;
@@ -32,7 +32,7 @@ const Image = styled.div`
     height: 200px;
   }
   img {
-    width: 177px;
+    width: 180px;
     height: 288px;
     object-fit: cover;
     @media screen and (max-width: 385px) {
@@ -105,27 +105,28 @@ const CommentIcon = styled(BiComment)`
 const Dash = ({ posts }) => {
   return (
     <Container>
-      {posts &&
-        posts.map((post) => (
-          <DashBorad key={post.id}>
-            <Image>
-              <img src={post.image} alt="캘린더 이미지" />
-            </Image>
-            <Info>
-              <Title>{post.title}</Title>
-              <Reaction>
-                <Like>
-                  <HeartIcon size={15} />
-                  <span>{post.likeCount}</span>
-                </Like>
-                <Comment>
-                  <CommentIcon size={15} />
-                  <span>{post.commentCount}</span>
-                </Comment>
-              </Reaction>
-            </Info>
-          </DashBorad>
-        ))}
+      {posts.length
+        ? posts.map((post) => (
+            <DashBorad key={post.id}>
+              <Image>
+                <img src={post.image} alt="캘린더 이미지" />
+              </Image>
+              <Info>
+                <Title>{post.title}</Title>
+                <Reaction>
+                  <Like>
+                    <HeartIcon size={15} />
+                    <span>{post.likeCount}</span>
+                  </Like>
+                  <Comment>
+                    <CommentIcon size={15} />
+                    <span>{post.commentCount}</span>
+                  </Comment>
+                </Reaction>
+              </Info>
+            </DashBorad>
+          ))
+        : null}
     </Container>
   );
 };

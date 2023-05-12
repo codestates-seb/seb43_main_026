@@ -31,6 +31,8 @@ const CalendarAddHeaderContainer = styled.header`
 const CalendarSaveButton = () => {
   return <CalendarSaveButtonContainer>저 장</CalendarSaveButtonContainer>;
 };
+
+// 캘린더 작성 상단
 const CalendarAddHeader = () => {
   return (
     <CalendarAddHeaderContainer>

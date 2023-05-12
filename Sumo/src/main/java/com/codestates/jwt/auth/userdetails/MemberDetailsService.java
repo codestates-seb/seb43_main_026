@@ -39,7 +39,6 @@ public class MemberDetailsService implements UserDetailsService {
             setPassword(member.getPassword());
             setNickname(member.getNickname());
             setRoles(member.getRoles());
-            setCalendar(member.getCalendar());
         }
 
         @Override

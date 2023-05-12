@@ -68,6 +68,7 @@ public class BoardController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     // 하나의 게시글 GET 요청
     @GetMapping("/{board-id}")
     public ResponseEntity getBoard(@PathVariable("board-id") @Positive long boardId) {
@@ -78,7 +79,7 @@ public class BoardController {
 
 
 
-    // 일반적인 게시글 리스트 정렬
+    // 페이지 정렬 요청
     @GetMapping
     public ResponseEntity getBoards(@Positive @RequestParam int page,
                                     @Positive @RequestParam int size,

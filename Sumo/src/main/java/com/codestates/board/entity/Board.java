@@ -40,6 +40,9 @@ public class Board extends Auditable {
     private Boolean showOffCheckBox;
 
     @Column
+    private Boolean attendanceExerciseCheckBox;
+
+    @Column
     private int commentCount = 0;
 
     @ManyToOne

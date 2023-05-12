@@ -38,5 +38,6 @@ public class BoardResponseDto {
 
     private Boolean showOffCheckBox;
 
+    private Boolean attendanceExerciseCheckBox;
 
 }

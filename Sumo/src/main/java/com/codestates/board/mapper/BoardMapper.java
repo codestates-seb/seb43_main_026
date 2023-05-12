@@ -48,10 +48,11 @@ public interface BoardMapper {
         boardResponseDto.setBoardLikesId(board.getBoardLikes().stream().map(BoardLikes::getBoardLikesId).collect(Collectors.toList()));
         boardResponseDto.setBoardLikesCount(board.getBoardLikes().size());
         boardResponseDto.setCommentId(board.getComments().stream().map(Comment::getCommentId).collect(Collectors.toList()));
-        boardResponseDto.setCommentCount(board.getComments().size());
+        boardResponseDto.setCommentCount(board.getCommentCount());
         boardResponseDto.setCommentLikesCount(board.getCommentLikes().size());
         boardResponseDto.setViewCount(board.getViewCount());
         boardResponseDto.setShowOffCheckBox(board.getShowOffCheckBox());
+        boardResponseDto.setAttendanceExerciseCheckBox(board.getAttendanceExerciseCheckBox());
         return boardResponseDto;
     }
 
@@ -61,8 +62,11 @@ public interface BoardMapper {
         boardPagingResponseDto.setTitle(board.getTitle());
         boardPagingResponseDto.setWriter(board.getMember().getNickname());
         boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
-        boardPagingResponseDto.setModifiedAt(board.getModifiedAt());
         boardPagingResponseDto.setShowOffCheckBox(board.getShowOffCheckBox());
+        boardPagingResponseDto.setBoardImageAddress(board.getBoardImageAddress());
+        boardPagingResponseDto.setBoardLikesCount(board.getBoardLikes().size());
+        boardPagingResponseDto.setCommentCount(board.getCommentCount());
+        boardPagingResponseDto.setAttendanceExerciseCheckBox(board.getAttendanceExerciseCheckBox());
         return boardPagingResponseDto;
     }
 

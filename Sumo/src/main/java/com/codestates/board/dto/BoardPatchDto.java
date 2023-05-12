@@ -22,4 +22,5 @@ public class BoardPatchDto {
 
     private Boolean showOffCheckBox;
 
+    private Boolean attendanceExerciseCheckBox;
 }

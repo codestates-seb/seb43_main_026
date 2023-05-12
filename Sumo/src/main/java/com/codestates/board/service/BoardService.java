@@ -41,6 +41,9 @@ public class BoardService {
         if(board.getShowOffCheckBox() == null){
             board.setShowOffCheckBox(false);
         }
+        if(board.getAttendanceExerciseCheckBox() == null){
+            board.setAttendanceExerciseCheckBox(false);
+        }
 
         return boardRepository.save(board);
     }
@@ -61,7 +64,7 @@ public class BoardService {
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
         Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> findBoard.setBoardImageAddress(boardImageAddress));
         Optional.ofNullable(board.getShowOffCheckBox()).ifPresent(showOffCheckBox -> findBoard.setShowOffCheckBox(showOffCheckBox));
-
+        Optional.ofNullable(board.getAttendanceExerciseCheckBox()).ifPresent(attendanceExerciseCheckBox -> findBoard.setAttendanceExerciseCheckBox(attendanceExerciseCheckBox));
 
         findBoard.setModifiedAt(LocalDateTime.now());
         return boardRepository.save(findBoard);
@@ -194,6 +197,11 @@ public class BoardService {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
+
+
+
+
+
 
 
 

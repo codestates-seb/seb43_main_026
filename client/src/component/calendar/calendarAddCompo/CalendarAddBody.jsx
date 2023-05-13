@@ -211,15 +211,37 @@ const InputDate = () => {
 const InputPlace = () => {
   // 지도 모달창
   const [openSearchModal, setOpenSearchModal] = useState(false);
-
   const handleSearchModal = () => {
     setOpenSearchModal(!openSearchModal);
+  };
+  console.log(openSearchModal);
+  // 장소 입력
+  const [place, setPlace] = useState('');
+  useEffect(() => {
+    console.log(place);
+  }, [place]);
+  const handlePlace = (e) => {
+    setPlace(e.target.value);
+  };
+  const handleResetPlace = () => {
+    setPlace('');
   };
   return (
     <InputPlaceContainer>
       <span>장소 </span>
-      <input type="text" onClick={handleSearchModal} placeholder="장소 이름" />
-      {openSearchModal ? <SearchPlace /> : null}
+      <input
+        type="read-only"
+        onClick={handleSearchModal}
+        placeholder="장소 이름"
+      />
+      {openSearchModal ? (
+        <SearchPlace
+          handleSearchModal={handleSearchModal}
+          place={place}
+          handlePlace={handlePlace}
+          handleResetPlace={handleResetPlace}
+        />
+      ) : null}
     </InputPlaceContainer>
   );
 };

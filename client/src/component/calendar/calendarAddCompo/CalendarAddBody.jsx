@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 // datepicker 한국어로 변경
 import { ko } from 'date-fns/esm/locale';
 import { COLOR, SIZE } from '../../../style/theme';
-
+import SearchPlace from './SearchPlace';
 // import SearchPlace from './SearchPlace';
 // styled-component
 // 날짜 등록
@@ -219,7 +219,7 @@ const InputPlace = () => {
     <InputPlaceContainer>
       <span>장소 </span>
       <input type="text" onClick={handleSearchModal} placeholder="장소 이름" />
-      {/* {openSearchModal ? <SearchPlace /> : null} */}
+      {openSearchModal ? <SearchPlace /> : null}
     </InputPlaceContainer>
   );
 };

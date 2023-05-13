@@ -48,7 +48,7 @@ const Container = styled.main`
 `;
 
 //상단 캘린더 타이틀
-const Title = styled.section`
+const TitleAndIcon = styled.section`
   width: 100%;
   height: 50px;
   display: flex;
@@ -57,7 +57,13 @@ const Title = styled.section`
   padding: 0 10px;
 `;
 
-const TxtCal = styled.div`
+const TitleIcon = styled.div`
+  width: 25px;
+`;
+
+const MoveIcon = styled.div``;
+
+const Title = styled.div`
   display: flex;
   span {
     font-size: 15px;
@@ -65,6 +71,9 @@ const TxtCal = styled.div`
     line-height: 21px;
   }
 `;
+
+const Community = styled.span``;
+const CalendarShow = styled.span``;
 
 const CalIcon = styled(BsCalendar2Heart)`
   margin-right: 5px;
@@ -172,11 +181,11 @@ const Board = () => {
     navigate('/board/add');
   };
 
-  //첫 번째 게시글의 제목을 "New Title"로 업데이트
+  //첫 번째 게시글의 제목을 "New TitleAndIcon"로 업데이트
   //setPost안쓰면 eslint오류나서 그냥 쓰는 코드
   const updatePost = () => {
     const newPosts = [...posts];
-    newPosts[0].title = 'New Title';
+    newPosts[0].TitleAndIcon = 'New TitleAndIcon';
     setPosts(newPosts);
   };
 
@@ -186,12 +195,16 @@ const Board = () => {
 
   return (
     <Container isDash={isDash}>
-      <Title>
-        <TxtCal>
+      <TitleAndIcon>
+        <TitleIcon>
           <CalIcon size={20} />
-          <span>커뮤니티</span>
-        </TxtCal>
-      </Title>
+          <MoveIcon></MoveIcon>
+        </TitleIcon>
+        <Title>
+          <Community>커뮤니티</Community>
+          <CalendarShow>캘린더 자랑</CalendarShow>
+        </Title>
+      </TitleAndIcon>
       <SortBox>
         <View>
           <SortBtn onClick={() => handleViewChange(true)}>

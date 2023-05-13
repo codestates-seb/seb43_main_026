@@ -232,7 +232,8 @@ const InputPlace = () => {
       <input
         type="read-only"
         onClick={handleSearchModal}
-        placeholder="장소 이름"
+        placeholder="장소를 넣어주세요"
+        defaultValue={place}
       />
       {openSearchModal ? (
         <SearchPlace

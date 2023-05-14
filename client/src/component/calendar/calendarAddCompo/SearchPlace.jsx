@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 import styled from 'styled-components';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 // 아이콘
 import { AiOutlineSearch } from 'react-icons/ai';
@@ -97,39 +98,42 @@ const SearchPlaceContainer = styled.div`
 
 // component
 // 검색창
-const SearchBar = ({ place, handlePlace, handleSearch }) => {
+const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
   };
-
+  useEffect(() => {
+    console.log(place);
+  }, [place]);
   return (
     <SearchBarContainer>
       <input
         type="text"
-        defaultValue={place}
+        value={place}
         onChange={handlePlace}
         onKeyDown={handleKeyDown}
       />
       <AiOutlineSearch
         size={26}
         className="search-icon"
-        onClick={handleSearch}
+        onClick={handleClickSearch}
       />
     </SearchBarContainer>
   );
 };
+
 // 지도
-const SearchMap = ({ place, handlePlace }) => {
+const SearchMap = ({ place, setPlace, handlePlace }) => {
   // 지도에 현재 위치 표시
   const [location, setLocation] = useState(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
   }, []);
+
   const successHandler = (response) => {
-    // console.log(response);
     const { latitude, longitude } = response.coords;
     setLocation({ latitude, longitude });
   };
@@ -143,61 +147,75 @@ const SearchMap = ({ place, handlePlace }) => {
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
   const { kakao } = window;
-  console.log(kakao.maps.services);
-  const handleSearch = () => {
-    if (!map) return;
+
+  const handleSearch = useCallback(() => {
     const ps = new kakao.maps.services.Places();
-    ps.keywordSearch(place, (data, status) => {
+
+    const callback = function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
-        const bounds = new kakao.maps.LatLngBounds();
-        let markers = [];
-
-        for (let i = 0; i < data.length; i++) {
-          markers.push({
-            position: {
-              lat: data[i].y,
-              lng: data[i].x,
-            },
-            content: data[i].place_name,
-          });
-          bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-        }
-
-        setMarkers(markers);
-        console.log(markers);
-        map.setBounds(bounds);
+        result.map((data) => {
+          console.log(data);
+        });
+        setMarkers(result);
       }
-    });
+    };
+    ps.keywordSearch(place, callback);
+  }, [map, place, kakao.maps.services.Places, kakao.maps.services.Status.OK]);
+
+  useEffect(() => {
+    if (map) {
+      console.log(map);
+      handleSearch();
+    }
+  }, [map, handleSearch]);
+  const handleClickSearch = () => {
+    if (!map) {
+      console.log('실패');
+      return;
+    }
+    handleSearch();
+    console.log('클릭!');
   };
 
   return (
     <MapContainer>
       <p>💡장소 찾아보기</p>
-      <SearchBar
-        place={place}
-        handlePlace={handlePlace}
-        handleSearch={handleSearch}
-      />
-      {/* 지도 로딩속도가 느려서 처음 렌더링 시 에러가 뜸 */}
       {location ? (
-        <Map
-          center={{ lat: location.latitude, lng: location.longitude }}
-          style={{ width: '300px', height: '400px' }}
-          level={4}
-          onLoad={(map) => setMap(map)}
-        >
-          {markers.map((marker) => (
-            <MapMarker
-              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-              position={marker.position}
-              onClick={() => setInfo(marker)}
-            >
-              {info && info.content === marker.content && (
-                <div style={{ color: '#000' }}>{marker.content}</div>
-              )}
-            </MapMarker>
-          ))}
-        </Map>
+        <>
+          <SearchBar
+            place={place}
+            handlePlace={handlePlace}
+            handleSearch={handleSearch}
+            handleClickSearch={handleClickSearch}
+          />
+          {/* 지도 로딩속도가 느려서 처음 렌더링 시 에러가 뜸 */}
+          <Map
+            center={{ lat: location.latitude, lng: location.longitude }}
+            style={{ width: '300px', height: '400px' }}
+            level={5}
+            onLoad={(map) => setMap(map)}
+          >
+            {markers
+              ? markers.map((marker) => (
+                  <MapMarker
+                    key={`marker-${marker.place_name}-${marker.x},${marker.y}`}
+                    position={{ lat: Number(marker.y), lng: Number(marker.x) }}
+                    onClick={() => setInfo(marker)}
+                  >
+                    {info && info.content === marker.content && (
+                      <button
+                        style={{ color: '#000' }}
+                        onClick={() => setPlace(marker.place_name)}
+                        value={marker.place_name}
+                      >
+                        {marker.place_name}
+                      </button>
+                    )}
+                  </MapMarker>
+                ))
+              : null}
+          </Map>
+        </>
       ) : null}
     </MapContainer>
   );
@@ -222,12 +240,13 @@ const SearchButtons = ({ handleSearchModal, handleResetPlace }) => {
 const SearchPlace = ({
   handleSearchModal,
   place,
+  setPlace,
   handlePlace,
   handleResetPlace,
 }) => {
   return (
     <SearchPlaceContainer>
-      <SearchMap place={place} handlePlace={handlePlace} />{' '}
+      <SearchMap place={place} setPlace={setPlace} handlePlace={handlePlace} />
       <SearchButtons
         handleSearchModal={handleSearchModal}
         handlePlace={handlePlace}

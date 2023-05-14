@@ -214,7 +214,7 @@ const InputPlace = () => {
   const handleSearchModal = () => {
     setOpenSearchModal(!openSearchModal);
   };
-  console.log(openSearchModal);
+
   // 장소 입력
   const [place, setPlace] = useState('');
   useEffect(() => {
@@ -239,6 +239,7 @@ const InputPlace = () => {
         <SearchPlace
           handleSearchModal={handleSearchModal}
           place={place}
+          setPlace={setPlace}
           handlePlace={handlePlace}
           handleResetPlace={handleResetPlace}
         />

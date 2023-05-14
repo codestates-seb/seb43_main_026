@@ -63,7 +63,6 @@ const ImageUpload = () => {
   const [image, setImage] = useState(null);
 
   const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
     const file = acceptedFiles[0];
     const imageUrl = URL.createObjectURL(file);
     setImage(imageUrl);

@@ -1,11 +1,11 @@
-/* eslint-disable no-unused-vars */
 import styled from 'styled-components';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { useState, useEffect, useCallback } from 'react';
+import { COLOR } from '../../../style/theme';
 
 // 아이콘
 import { AiOutlineSearch } from 'react-icons/ai';
-import { COLOR } from '../../../style/theme';
+
 // styled-component
 // 검색창
 const SearchBarContainer = styled.div`
@@ -44,6 +44,13 @@ const MapContainer = styled.div`
     font-size: 18px;
     font-weight: 700;
     color: black;
+    border-bottom: 2px dashed ${COLOR.main_dark_blue};
+    padding-bottom: 5px;
+  }
+  .place-name {
+    border: none;
+    background-color: inherit;
+    text-align: center;
   }
 `;
 
@@ -114,6 +121,7 @@ const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
         value={place}
         onChange={handlePlace}
         onKeyDown={handleKeyDown}
+        placeholder="예시) 수원 수영장"
       />
       <AiOutlineSearch
         size={26}
@@ -179,7 +187,7 @@ const SearchMap = ({ place, setPlace, handlePlace }) => {
 
   return (
     <MapContainer>
-      <p>💡장소 찾아보기</p>
+      <p>💡 지역 + 수영장으로 더 쉽게 검색할 수 있어요</p>
       {location ? (
         <>
           <SearchBar
@@ -204,6 +212,7 @@ const SearchMap = ({ place, setPlace, handlePlace }) => {
                   >
                     {info && info.content === marker.content && (
                       <button
+                        className="place-name"
                         style={{ color: '#000' }}
                         onClick={() => setPlace(marker.place_name)}
                         value={marker.place_name}
@@ -231,12 +240,13 @@ const SearchButtons = ({ handleSearchModal, handleResetPlace }) => {
           handleSearchModal();
         }}
       >
-        닫기
+        취소
       </button>
       <button onClick={handleSearchModal}>저장</button>
     </SearchButtonContainer>
   );
 };
+
 const SearchPlace = ({
   handleSearchModal,
   place,

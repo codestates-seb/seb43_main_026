@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { ko } from 'date-fns/esm/locale';
 import { COLOR, SIZE } from '../../../style/theme';
 import SearchPlace from './SearchPlace';
-// import SearchPlace from './SearchPlace';
+
 // styled-component
 // 날짜 등록
 const InputDateContainer = styled.div`
@@ -20,13 +20,27 @@ const InputDateContainer = styled.div`
   align-items: center;
   border-bottom: 1px solid ${COLOR.main_blue};
   > span {
-    margin-right: 30px;
+    margin-right: 20px;
     font-size: 18px;
     font-weight: 600;
   }
+
   .date-picker {
+    width: 130px;
     border: none;
     font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    :focus {
+      outline: none;
+    }
+  }
+  .react-datepicker__navigation {
+    color: ${COLOR.main_blue};
+  }
+  .react-datepicker__day--selected {
+    border-radius: 25px;
+    background-color: ${COLOR.main_blue};
   }
 `;
 
@@ -41,14 +55,18 @@ const InputPlaceContainer = styled.div`
   align-items: center;
   border-bottom: 1px solid ${COLOR.main_blue};
   > span {
-    margin-right: 30px;
+    margin-right: 20px;
     font-size: 18px;
     font-weight: 600;
   }
   > input {
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: 600;
     margin-right: 10px;
     border: none;
+    :focus {
+      outline: none;
+    }
   }
 `;
 
@@ -72,6 +90,9 @@ const DropdownContainer = styled.select`
   ::-ms-expand {
     display: none;
   }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    width: 200px;
+  }
 `;
 
 const TimeDropdownContainer = styled.div`
@@ -80,37 +101,49 @@ const TimeDropdownContainer = styled.div`
   flex-direction: column;
   align-items: end;
   font-size: 18px;
-  > section {
+  > div > section {
     display: flex;
     flex-direction: row;
     align-items: center;
-
     :last-of-type {
       margin-top: 15px;
-    }
-    > p {
-      position: absolute;
-      width: 300px;
-      height: 100px;
-      font-size: 12px;
-      margin-top: 5px;
     }
     > label {
       font-size: 15px;
       font-weight: 600;
     }
   }
-
+  > p {
+    width: 100%;
+    font-size: 14px;
+    color: red;
+    margin-top: 10px;
+  }
   /* 태블릿 버전 */
   @media screen and (min-width: ${SIZE.tablet}) {
-    flex-direction: row;
-    > div:first-of-type {
+    /* > div:first-of-type {
       margin-bottom: 0;
       margin-right: 30px;
+    } */
+    > div {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      margin-top: 30px;
+      > section:last-of-type {
+        margin-top: 0px;
+      }
+    }
+    > p {
+      width: 100%;
+      text-align: center;
     }
   }
 `;
 
+// 수영 시간 등록
 const SwimTimeContainer = styled.div`
   /* 모바일 기준 */
   width: 90%;
@@ -121,12 +154,12 @@ const SwimTimeContainer = styled.div`
   margin-top: 40px;
   padding: 0 0 10px 10px;
   > span {
-    margin-right: 30px;
     font-size: 18px;
     font-weight: 600;
   }
 
   @media screen and (min-width: ${SIZE.tablet}) {
+    flex-direction: column;
     justify-content: space-between;
     margin-top: 50px;
   }
@@ -145,9 +178,9 @@ const InputMemoContainer = styled.div`
     font-weight: 600;
   }
   > textarea {
-    max-width: 90%;
+    max-width: 100%;
     margin: 20px 30px 0 10px;
-    min-height: 150px;
+    min-height: 120px;
     border: none;
     border-radius: 10px;
     box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
@@ -301,7 +334,7 @@ const TimeDropdown = () => {
   const getErrorMessage = () => {
     if (isEndTimeValid()) return '';
 
-    return '종료 시간은 시작 시간보다 빠를 수 없습니다.';
+    return '종료는 시작보다 빠를 수 없습니다.';
   };
 
   // 지속 시간 계산
@@ -327,19 +360,25 @@ const TimeDropdown = () => {
 
   return (
     <TimeDropdownContainer>
-      <section>
-        <label htmlFor="startTime">시작</label>
-        <Dropdown
-          timeValue={startTime}
-          setTimeValue={setStartTime}
-          times={times}
-        />
-      </section>
-      <section>
-        <label htmlFor="endTime">종료</label>
-        <Dropdown timeValue={endTime} setTimeValue={setEndTime} times={times} />
-      </section>
-      <p style={{ color: 'red' }}>{getErrorMessage()}</p>
+      <div>
+        <section>
+          <label htmlFor="startTime">시작</label>
+          <Dropdown
+            timeValue={startTime}
+            setTimeValue={setStartTime}
+            times={times}
+          />
+        </section>
+        <section>
+          <label htmlFor="endTime">종료</label>
+          <Dropdown
+            timeValue={endTime}
+            setTimeValue={setEndTime}
+            times={times}
+          />
+        </section>
+      </div>
+      <p>{getErrorMessage()}</p>
     </TimeDropdownContainer>
   );
 };

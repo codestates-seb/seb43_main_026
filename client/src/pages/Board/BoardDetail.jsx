@@ -20,10 +20,10 @@ const Container = styled.main`
   height: fit-content;
   width: 100%;
   height: fit-content;
-  background-color: aliceblue;
 `;
 
-const GobackAndUpload = styled.section`
+//상단바
+const GobackAndModify = styled.section`
   width: 100%;
   height: 40px;
   background-color: ${COLOR.main_gray};
@@ -43,14 +43,31 @@ const Goback = styled.button`
   margin-top: 5px;
 `;
 
+//제목과 작성자
+const TitleAndWriter = styled.section`
+  width: 100%;
+  display: flex;
+  height: 60px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 15px;
+  border-bottom: 1px solid ${COLOR.main_blue};
+`;
+const Writer = styled.span``;
+const Title = styled.span``;
+
 const BoardDetail = () => {
   return (
     <Container>
-      <GobackAndUpload>
+      <GobackAndModify>
         <Goback>
           <BackButton />
         </Goback>
-      </GobackAndUpload>
+      </GobackAndModify>
+      <TitleAndWriter>
+        <Title>제목</Title>
+        <Writer>작성자</Writer>
+      </TitleAndWriter>
     </Container>
   );
 };

@@ -220,7 +220,7 @@ const BoardAdd = () => {
         </div>
         <Image>
           <LabelHidden htmlFor="image">사진</LabelHidden>
-          <UploadImage id="image" />
+          <UploadImage register={register} id="image" />
         </Image>
         <Calendar>
           <label htmlFor="calendarShare">캘린더 결산</label>

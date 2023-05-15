@@ -16,6 +16,8 @@ const UploadContainer = styled.div`
   > div {
     width: 80%;
     max-width: 800px;
+    display: flex;
+    justify-content: center;
   }
 `;
 
@@ -59,11 +61,11 @@ const UploadImage = ({ register }) => {
       const file = acceptedFiles[0];
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
-      register('image', { value: file, type: 'file' }); // 이미지 파일과 타입을 register 함수로 전달
+      register('image', { value: image, type: 'url' });
     },
     [register]
   );
-
+  console.log(image);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (

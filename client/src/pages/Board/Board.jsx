@@ -184,8 +184,8 @@ const Board = () => {
 
   const navigate = useNavigate();
 
-  const Url = process.env.REACT_APP_Url;
-  console.log(Url);
+  // const Url = process.env.REACT_APP_Url;
+  // console.log(Url);
 
   const handleUploadClick = () => {
     navigate('/board/add');

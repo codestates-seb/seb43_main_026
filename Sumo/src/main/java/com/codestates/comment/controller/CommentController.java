@@ -87,4 +87,11 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //댓글 좋아요수 가져오기
+    @GetMapping("/{comment-id}/likes")
+    public ResponseEntity<Integer> checkLikesCountFromComment(@PathVariable("comment-id") @Positive long commentId) {
+
+        int likesCount = commentService.getCommentLikeCount(commentId);
+        return new ResponseEntity<>(likesCount, HttpStatus.OK);
+    }
 }

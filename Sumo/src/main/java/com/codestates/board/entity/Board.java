@@ -57,6 +57,10 @@ public class Board extends Auditable {
         comment.setBoard(this);
     }
 
+    public int getBoardLikeCount() {
+        return boardLike.size();
+    }
+
     public int getCommentCount() {
         return comments.size();
     }

@@ -161,8 +161,8 @@ public class BoardService {
     }
 
 
-    public List<Board> getBoardsWithCheckbox(boolean showOffCheckBox, String orderBy) {
-        return getCheckboxSortedBoards(showOffCheckBox, orderBy);
+    public List<Board> getBoardsWithCheckbox(boolean calendarShare, String orderBy) {
+        return getCheckboxSortedBoards(calendarShare, orderBy);
     }
 
     private List<Board> getCheckboxSortedBoards(boolean checkBoxValue, String orderBy) {
@@ -196,15 +196,12 @@ public class BoardService {
     }
 
 
-
-    /*
-    게시글 당 좋아요 수 반환
-
-    public int getLikesCount(long boardId){
+    //보드 좋아요 개수 체크
+    public int getBoardLikesCount(long boardId){
         Board board = findVerifiedBoard(boardId);
-        List<BoardLikes> boardLikes = board.getBoardLikes();
-        return boardLikes.size();
+        List<BoardLike> boardLike = board.getBoardLike();
+        return boardLike.size();
     }
-    */
+
 
 }

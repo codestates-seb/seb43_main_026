@@ -144,4 +144,11 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+
+    public int getCommentLikeCount(long commentId){
+        Comment comment = findVerifiedComment(commentId);
+        List<CommentLike> commentLike = comment.getCommentLike();
+        return commentLike.size();
+    }
+
 }

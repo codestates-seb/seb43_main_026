@@ -46,10 +46,11 @@ public interface BoardMapper {
         boardResponseDto.setCreatedAt(board.getCreatedAt());
         boardResponseDto.setModifiedAt(board.getModifiedAt());
         boardResponseDto.setBoardLikeId(board.getBoardLike().stream().map(BoardLike::getBoardLikeId).collect(Collectors.toList()));
-        boardResponseDto.setBoardLikeCount(board.getBoardLike().size());
+        boardResponseDto.setBoardLikeCount(board.getBoardLikeCount());
         boardResponseDto.setViewCount(board.getViewCount());
         boardResponseDto.setCalendarShare(board.getCalendarShare());
         boardResponseDto.setWorkoutRecordShare(board.getWorkoutRecordShare());
+        boardResponseDto.setCommentCount(board.getCommentCount());
         return boardResponseDto;
     }
 
@@ -59,7 +60,7 @@ public interface BoardMapper {
         boardPagingResponseDto.setTitle(board.getTitle());
         boardPagingResponseDto.setWriter(board.getMember().getNickname());
         boardPagingResponseDto.setBoardImageAddress(board.getBoardImageAddress());
-        boardPagingResponseDto.setBoardLikeCount(board.getBoardLike().size());
+        boardPagingResponseDto.setBoardLikeCount(board.getBoardLikeCount());
         boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
         return boardPagingResponseDto;
     }

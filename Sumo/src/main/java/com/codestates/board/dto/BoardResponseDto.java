@@ -28,6 +28,8 @@ public class BoardResponseDto {
 
     private String boardImageAddress;
 
+    private int commentCount;
+
     private int viewCount;
 
     private Boolean calendarShare;

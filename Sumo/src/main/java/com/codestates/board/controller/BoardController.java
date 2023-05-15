@@ -84,13 +84,13 @@ public class BoardController {
     public ResponseEntity getBoards(@Positive @RequestParam int page,
                                     @Positive @RequestParam int size,
                                     @RequestParam(required = false) String orderBy,
-                                    @RequestParam(required = false) Boolean showOffCheckBox) {
+                                    @RequestParam(required = false) Boolean calendarShare) {
         List<Board> boards;
 
 
-        if(showOffCheckBox == null) {
+        if(calendarShare == null) {
             boards = boardService.getGeneralSortedBoards(orderBy);
-        } else if (showOffCheckBox) {
+        } else if (calendarShare) {
             boards = boardService.getBoardsWithCheckbox(true, orderBy);
         } else {
             boards = boardService.getBoardsWithCheckbox(false, orderBy);
@@ -110,34 +110,17 @@ public class BoardController {
                                         @RequestParam("member-id") @Positive long memberId){
 
         boardService.toggleLike(boardId, memberId);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //좋아요수 가져오기
+    @GetMapping("/{board-id}/likes")
+    public ResponseEntity<Integer> checkLikesCountFromBoard(@PathVariable("board-id") @Positive long boardId) {
 
-    /*
-    @GetMapping("/true")
-    public ResponseEntity getBoardsFilteredByCheckboxTrue(@Positive @RequestParam int page,
-                                                      @Positive @RequestParam int size,
-                                                      @RequestParam(required = false) String orderBy) {
-
-        List<Board> boards = boardService.getBoardsWithCheckbox(true, orderBy);
-
-        List<BoardResponseDto> responses = boards.stream()
-                .map(boardMapper::boardToBoardPagingResponseDto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(responses, HttpStatus.OK);
+        int likesCount = boardService.getBoardLikesCount(boardId);
+        return new ResponseEntity<>(likesCount, HttpStatus.OK);
     }
-    @GetMapping("/false")
-    public ResponseEntity getBoardsFilteredByCheckboxFalse(@Positive @RequestParam int page,
-                                                           @Positive @RequestParam int size,
-                                                           @RequestParam(required = false) String orderBy) {
 
-        List<Board> boards = boardService.getBoardsWithCheckbox(false, orderBy);
 
-        List<BoardResponseDto> responses = boards.stream()
-                .map(boardMapper::boardToBoardPagingResponseDto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(responses, HttpStatus.OK);
-    }
-*/
 }

@@ -17,6 +17,10 @@ import { BsArrowClockwise } from 'react-icons/bs';
 import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { TbCapture } from 'react-icons/tb';
+// redux
+// import { useSelector } from 'react-redux';
+// import { useEffect } from 'react';
+// import axios from 'axios';
 
 // styled-component
 // 툴바 버튼 그룹
@@ -253,11 +257,21 @@ const CalendarBottom = () => {
   );
 };
 
+// 이벤트 커스텀
+// const CustomEvent = ({ event }) => {
+//   const imageUrl = useSelector((state) => state.image.imageUrl);
+
+//   return <div style={{ backgroundImage: `url(${imageUrl})` }}></div>;
+// };
+
 // 캘린더
 const CalendarComponent = () => {
   moment.locale('ko-KR');
   const localizer = momentLocalizer(moment);
-
+  // useEffect(()=>{
+  //   axios
+  //   .get(`${process.env.REACT_APP_API_URL}`)
+  // })
   return (
     <CalendarContainer>
       <Calendar
@@ -266,6 +280,7 @@ const CalendarComponent = () => {
         views={['month']}
         components={{
           toolbar: Toolbar,
+          event: CustomEvent,
         }}
       />
       <CalendarBottom></CalendarBottom>

@@ -7,6 +7,9 @@ import { useState, useEffect } from 'react';
 import { ko } from 'date-fns/esm/locale';
 import { COLOR, SIZE } from '../../../style/theme';
 import SearchPlace from './SearchPlace';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDate } from '../../../redux/slice/calendarSlice';
+import { format } from 'date-fns';
 
 // styled-component
 // 날짜 등록
@@ -209,21 +212,17 @@ const CalendarAddBodyContainer = styled.section`
 // 날짜 등록
 const InputDate = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  // 날짜 데이터 형식 변환
-  const year = selectedDate.getFullYear();
-  const month =
-    // 10보다 작은 경우, 문자열을 이용하여 2자리 숫자로 만들기
-    //getMonth()는 0부터 11까지의 값을 반환 -> 실제 월 값에 1을 더해야함
-    selectedDate.getMonth() + 1 < 10
-      ? '0' + (selectedDate.getMonth() + 1)
-      : selectedDate.getMonth() + 1;
-  const day =
-    selectedDate.getDate() < 10
-      ? '0' + selectedDate.getDate()
-      : selectedDate.getDate();
+  // const date = useSelector((state) => state.calendar.date);
+  // console.log(date);
+  const dispatch = useDispatch();
+  const handleDate = (date) => {
+    setSelectedDate(date);
+    // 데이터 형식 변환
+    const formattedDate = format(date, 'yyyy-MM-dd');
+    console.log(formattedDate);
+    dispatch(setDate(formattedDate));
+  };
 
-  const dateData = `${year}-${month}-${day}`;
-  console.log(dateData);
   return (
     <InputDateContainer>
       <span>날짜 </span>
@@ -232,7 +231,7 @@ const InputDate = () => {
           className="date-picker"
           locale={ko}
           selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
+          onChange={handleDate}
           dateFormat="yyyy-MM-dd"
         />
       </div>
@@ -248,17 +247,9 @@ const InputPlace = () => {
     setOpenSearchModal(!openSearchModal);
   };
 
-  // 장소 입력
-  const [place, setPlace] = useState('');
-  useEffect(() => {
-    console.log(place);
-  }, [place]);
-  const handlePlace = (e) => {
-    setPlace(e.target.value);
-  };
-  const handleResetPlace = () => {
-    setPlace('');
-  };
+  const place = useSelector((state) => state.calendar.place);
+  console.log(place);
+
   return (
     <InputPlaceContainer>
       <span>장소 </span>
@@ -269,13 +260,7 @@ const InputPlace = () => {
         defaultValue={place}
       />
       {openSearchModal ? (
-        <SearchPlace
-          handleSearchModal={handleSearchModal}
-          place={place}
-          setPlace={setPlace}
-          handlePlace={handlePlace}
-          handleResetPlace={handleResetPlace}
-        />
+        <SearchPlace handleSearchModal={handleSearchModal} />
       ) : null}
     </InputPlaceContainer>
   );

@@ -5,6 +5,8 @@ import { COLOR } from '../../../style/theme';
 
 // 아이콘
 import { AiOutlineSearch } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPlace } from '../../../redux/slice/calendarSlice';
 
 // styled-component
 // 검색창
@@ -47,7 +49,7 @@ const MapContainer = styled.div`
     border-bottom: 2px dashed ${COLOR.main_dark_blue};
     padding-bottom: 5px;
   }
-  .place-name {
+  button {
     border: none;
     background-color: inherit;
     text-align: center;
@@ -104,6 +106,7 @@ const SearchPlaceContainer = styled.div`
 `;
 
 // component
+
 // 검색창
 const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
   const handleKeyDown = (e) => {
@@ -133,7 +136,7 @@ const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
 };
 
 // 지도
-const SearchMap = ({ place, setPlace, handlePlace }) => {
+const SearchMap = () => {
   // 지도에 현재 위치 표시
   const [location, setLocation] = useState(null);
 
@@ -151,6 +154,7 @@ const SearchMap = ({ place, setPlace, handlePlace }) => {
   };
 
   // 키워드 검색
+  const place = useSelector((state) => state.calendar.place);
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
@@ -184,7 +188,11 @@ const SearchMap = ({ place, setPlace, handlePlace }) => {
     handleSearch();
     console.log('클릭!');
   };
-
+  const dispatch = useDispatch();
+  const handlePlace = (e) => {
+    dispatch(setPlace(e.target.value));
+  };
+  console.log(place);
   return (
     <MapContainer>
       <p>💡 지역 + 수영장으로 더 쉽게 검색할 수 있어요</p>
@@ -212,9 +220,8 @@ const SearchMap = ({ place, setPlace, handlePlace }) => {
                   >
                     {info && info.content === marker.content && (
                       <button
-                        className="place-name"
                         style={{ color: '#000' }}
-                        onClick={() => setPlace(marker.place_name)}
+                        onClick={() => dispatch(setPlace(marker.place_name))}
                         value={marker.place_name}
                       >
                         {marker.place_name}
@@ -231,37 +238,25 @@ const SearchMap = ({ place, setPlace, handlePlace }) => {
 };
 
 // 저장&닫기 버튼
-const SearchButtons = ({ handleSearchModal, handleResetPlace }) => {
+const SearchButtons = ({ handleSearchModal }) => {
+  const dispatch = useDispatch();
+  const handleResetPlace = () => {
+    dispatch(setPlace(''));
+    handleSearchModal();
+  };
   return (
     <SearchButtonContainer>
-      <button
-        onClick={() => {
-          handleResetPlace();
-          handleSearchModal();
-        }}
-      >
-        취소
-      </button>
+      <button onClick={handleResetPlace}>취소</button>
       <button onClick={handleSearchModal}>저장</button>
     </SearchButtonContainer>
   );
 };
 
-const SearchPlace = ({
-  handleSearchModal,
-  place,
-  setPlace,
-  handlePlace,
-  handleResetPlace,
-}) => {
+const SearchPlace = ({ handleSearchModal }) => {
   return (
     <SearchPlaceContainer>
-      <SearchMap place={place} setPlace={setPlace} handlePlace={handlePlace} />
-      <SearchButtons
-        handleSearchModal={handleSearchModal}
-        handlePlace={handlePlace}
-        handleResetPlace={handleResetPlace}
-      />
+      <SearchMap />
+      <SearchButtons handleSearchModal={handleSearchModal} />
     </SearchPlaceContainer>
   );
 };

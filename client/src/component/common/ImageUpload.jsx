@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { TiCameraOutline } from 'react-icons/ti';
 import { COLOR, SIZE } from '../../style/theme';
 import { useSelector, useDispatch } from 'react-redux';
-import { setImageUrl, setFile } from '../../redux/slice/imageSlice';
+import { setImageUrl } from '../../redux/slice/imageSlice';
 
 // styled-component
 const DropZoneContainer = styled.div`
@@ -70,8 +70,7 @@ const ImageUpload = () => {
       const file = acceptedFiles[0];
       const imageUrl = URL.createObjectURL(file);
       dispatch(setImageUrl(imageUrl));
-      dispatch(setFile(file));
-      console.log(file);
+      console.log(imageUrl);
     },
     [dispatch]
   );

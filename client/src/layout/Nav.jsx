@@ -1,7 +1,8 @@
-import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useNavigate, Link } from 'react-router-dom';
 import { COLOR } from '../style/theme';
+import Button from '../component/common/Button';
+
 const Container = styled.section`
   position: fixed;
   z-index: 1000;
@@ -81,29 +82,11 @@ const MenuList = styled(Link)`
   &:active {
     color: ${COLOR.main_blue_active};
   }
-
-  button {
-    width: 110px;
-    height: 40px;
-    border-radius: 5px;
-    background-color: ${COLOR.main_blue};
-    border: none;
-    font-size: 15px;
-    font-weight: 500;
-    color: white;
-    &:hover {
-      cursor: pointer;
-      background-color: ${COLOR.main_blue_hover};
-    }
-    &:active {
-      background-color: ${COLOR.main_blue_active};
-    }
-  }
-
-  &:last-of-type {
-    margin-top: 30px;
-  }
 `;
+
+/*
+현재 로그인 되어있는 유저의 id 값 불러와서 마이페이지 라우터에 넘겨줘야 함
+*/
 
 const Nav = ({ nav, handleNav }) => {
   const navigate = useNavigate();
@@ -120,12 +103,28 @@ const Nav = ({ nav, handleNav }) => {
           <span>로그인을 해주세요</span>
         </UserBox>
         <NavList>
-          <MenuList to="">마이페이지</MenuList>
-          <MenuList to="/">내 캘린더</MenuList>
-          <MenuList to="">이번달 수영왕</MenuList>
-          <MenuList to="/board">커뮤니티</MenuList>
+          <MenuList to="/users/1" onClick={handleNav}>
+            마이페이지
+          </MenuList>
+          <MenuList to="/" onClick={handleNav}>
+            내 캘린더
+          </MenuList>
+          <MenuList to="" onClick={handleNav}>
+            이번달 수영왕
+          </MenuList>
+          <MenuList to="/board" onClick={handleNav}>
+            커뮤니티
+          </MenuList>
           <MenuList>
-            <button onClick={() => navigate('/login')}>로그인</button>
+            <Button
+              text={`로그인`}
+              width={'110px'}
+              height={'40px'}
+              handleClick={() => {
+                navigate('/login');
+                handleNav();
+              }}
+            />
           </MenuList>
         </NavList>
       </NavBarContainer>

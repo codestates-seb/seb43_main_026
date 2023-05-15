@@ -58,7 +58,9 @@ public class Board extends Auditable {
     }
 
     public int getBoardLikeCount() {
-        return boardLike.size();
+        return (int) boardLike.stream()
+                .filter(boardLike -> boardLike.getBoardLikeStatus() == BoardLike.BoardLikeStatus.LIKE)
+                .count();
     }
 
     public int getCommentCount() {

@@ -37,7 +37,9 @@ public class Comment extends Auditable {
     private List<CommentLike> commentLike;
 
     public int getCommentLikeCount() {
-        return commentLike.size();
+        return (int) commentLike.stream()
+                .filter(commentLike -> commentLike.getCommentLikeStatus() == CommentLike.CommentLikeStatus.LIKE)
+                .count();
     }
 
 

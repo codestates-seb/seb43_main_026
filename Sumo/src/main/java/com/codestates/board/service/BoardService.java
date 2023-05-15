@@ -116,6 +116,7 @@ public class BoardService {
 
         Optional<BoardLike> boardLike = boardLikeRepository.findByBoardAndMember(board, member);
 
+
         if(boardLike.isPresent()) {
             if (boardLike.get().getBoardLikeStatus() == BoardLike.BoardLikeStatus.LIKE){
                     boardLike.get().setBoardLikeStatus(BoardLike.BoardLikeStatus.DISLIKE);
@@ -205,9 +206,8 @@ public class BoardService {
     //보드 좋아요 개수 체크
     public int getBoardLikesCount(long boardId){
         Board board = findVerifiedBoard(boardId);
-        List<BoardLike> boardLike = board.getBoardLike();
-        return boardLike.size();
+        int boardLike = board.getBoardLikeCount();
+        return boardLike ;
     }
-
 
 }

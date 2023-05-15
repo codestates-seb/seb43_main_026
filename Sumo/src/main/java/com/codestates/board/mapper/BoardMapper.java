@@ -24,6 +24,7 @@ public interface BoardMapper {
         return board;
     }
 
+
     default Board boardPatchDtoToBoard(BoardPatchDto boardPatchDto){
 
         Board board = new Board();
@@ -64,6 +65,7 @@ public interface BoardMapper {
         boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
         return boardPagingResponseDto;
     }
+
 
 
 }

@@ -1,6 +1,8 @@
 //모듈
 import styled from 'styled-components';
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
 import { useNavigate } from 'react-router';
 
 //공통 스타일
@@ -9,6 +11,7 @@ import { COLOR, SIZE } from '../../style/theme';
 //컴포넌트
 import Dash from '../../component/Board/Dash';
 import List from '../../component/Board/List';
+import Pagination from '../../component/Board/Pagination';
 
 //아이콘
 import { BsCalendar2Heart } from 'react-icons/bs';
@@ -17,7 +20,7 @@ import { RiListUnordered } from 'react-icons/ri';
 import { HiPlus } from 'react-icons/hi';
 
 //더미데이터
-import boardData from '../../component/Board/boardData';
+// import boardData from '../../component/Board/boardData';
 
 //전체 컨테이너
 const Container = styled.main`
@@ -179,24 +182,46 @@ const ListBox = styled.section`
 `;
 
 const Board = () => {
-  const [posts, setPosts] = useState(boardData);
+  const [posts, setPosts] = useState([]);
   const [isDash, setIsDash] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [orderBy, setOrderBy] = useState('latest');
 
   const navigate = useNavigate();
 
-  const Url = process.env.REACT_APP_Url;
-  console.log(Url);
+  // const Url = process.env.REACT_APP_Url;
+  // console.log(Url);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [currentPage, pageSize, orderBy]);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get('/boards', {
+        params: {
+          page: currentPage,
+          size: pageSize,
+          orderBy: orderBy,
+        },
+      });
+      setPosts(response.data);
+    } catch (error) {
+      console.log(handlePaginationClick, setPageSize);
+    }
+  };
+
+  const handlePaginationClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleSortClick = (orderByValue) => {
+    setOrderBy(orderByValue);
+  };
 
   const handleUploadClick = () => {
     navigate('/board/add');
-  };
-
-  //첫 번째 게시글의 제목을 "New Title"로 업데이트
-  //setPost안쓰면 eslint오류나서 그냥 쓰는 코드 서버 통신 코드 작성 후 지워야 함
-  const updatePost = () => {
-    const newPosts = [...posts];
-    newPosts[0].title = 'New Title';
-    setPosts(newPosts);
   };
 
   const handleViewChange = (value) => {
@@ -224,9 +249,9 @@ const Board = () => {
           </SortBtn>
         </View>
         <Sort>
-          <SortBtn>최신순</SortBtn>
-          <SortBtn>추천순</SortBtn>
-          <SortBtn>댓글순</SortBtn>
+          <SortBtn onClick={() => handleSortClick('latest')}>최신순</SortBtn>
+          <SortBtn onClick={() => handleSortClick('likes')}>추천순</SortBtn>
+          <SortBtn onClick={() => handleSortClick('comments')}> 댓글순</SortBtn>
         </Sort>
       </SortBox>
       {!isDash && (
@@ -238,15 +263,18 @@ const Board = () => {
         {isDash && <Dash posts={posts} />}
         {!isDash && <List posts={posts} />}
       </ListBox>
-      {isDash && (
+      {isDash ? (
         <UploadIconBtn onClick={handleUploadClick}>
           <PlusIcon size={32} color="#ffffff" />
         </UploadIconBtn>
+      ) : (
+        <Pagination
+          currentPage={currentPage}
+          pageSize={pageSize}
+          totalPosts={posts.length}
+          onPaginationClick={handlePaginationClick}
+        />
       )}
-      {/* 여기도 지워야함 */}
-      <button className="del" onClick={updatePost}>
-        Update Post
-      </button>
     </Container>
   );
 };

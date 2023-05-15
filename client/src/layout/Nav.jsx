@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { COLOR } from '../style/theme';
 import Button from '../component/common/Button';
 
-const Container = styled.section`
+const Overlay = styled.section`
   position: fixed;
   z-index: 1000;
   top: 50px;
@@ -12,7 +12,7 @@ const Container = styled.section`
   background-color: ${COLOR.bg_dark};
 `;
 
-const NavBarContainer = styled.nav`
+const Container = styled.nav`
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -91,8 +91,8 @@ const MenuList = styled(Link)`
 const Nav = ({ nav, handleNav }) => {
   const navigate = useNavigate();
   return (
-    <Container style={{ display: nav ? 'block' : 'none' }} onClick={handleNav}>
-      <NavBarContainer onClick={(e) => e.stopPropagation()}>
+    <Overlay style={{ display: nav ? 'block' : 'none' }} onClick={handleNav}>
+      <Container onClick={(e) => e.stopPropagation()}>
         <UserBox>
           <ImgBox>
             <img
@@ -127,8 +127,8 @@ const Nav = ({ nav, handleNav }) => {
             />
           </MenuList>
         </NavList>
-      </NavBarContainer>
-    </Container>
+      </Container>
+    </Overlay>
   );
 };
 

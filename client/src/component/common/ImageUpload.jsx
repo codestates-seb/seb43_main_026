@@ -1,8 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import { TiCameraOutline } from 'react-icons/ti';
 import { COLOR, SIZE } from '../../style/theme';
+import { useSelector, useDispatch } from 'react-redux';
+import { setImageUrl, setFile } from '../../redux/slice/imageSlice';
 
 // styled-component
 const DropZoneContainer = styled.div`
@@ -60,14 +62,19 @@ const DropZone = () => {
 };
 
 const ImageUpload = () => {
-  const [image, setImage] = useState(null);
+  const imageUrl = useSelector((state) => state.image.imageUrl);
+  const dispatch = useDispatch();
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const file = acceptedFiles[0];
-    const imageUrl = URL.createObjectURL(file);
-    setImage(imageUrl);
-  }, []);
-
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      const imageUrl = URL.createObjectURL(file);
+      dispatch(setImageUrl(imageUrl));
+      dispatch(setFile(file));
+      console.log(file);
+    },
+    [dispatch]
+  );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
@@ -77,7 +84,11 @@ const ImageUpload = () => {
         <p>Drop the files here ...</p>
       ) : (
         <div>
-          {image ? <img src={image} alt="Preview" /> : <DropZone></DropZone>}
+          {imageUrl ? (
+            <img src={imageUrl} alt="Preview" />
+          ) : (
+            <DropZone></DropZone>
+          )}
         </div>
       )}
     </UploadContainer>

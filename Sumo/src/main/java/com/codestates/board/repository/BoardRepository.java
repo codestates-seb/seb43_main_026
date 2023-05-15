@@ -1,9 +1,7 @@
 package com.codestates.board.repository;
 
 import com.codestates.board.entity.Board;
-import com.codestates.calendar.entity.Calendar;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

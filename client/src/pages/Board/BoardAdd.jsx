@@ -124,6 +124,7 @@ const Record = styled.section`
   height: 70px;
   display: flex;
   align-items: center;
+  font-weight: 600;
   border-bottom: 1px solid ${COLOR.main_blue};
   section {
     width: 100%;
@@ -135,12 +136,39 @@ const Record = styled.section`
   }
 `;
 
-const Month = styled.section``;
-const Attendance = styled.section``;
-const TotalTime = styled.section``;
+const Current = styled.section`
+  height: 100%;
+  border-right: 1px solid ${COLOR.main_blue};
+  background-color: ${COLOR.main_gray};
+  span {
+    color: ${COLOR.main_dark_blue};
+  }
+`;
 
-const Name = styled.span``;
-const Rate = styled.span``;
+const Year = styled.span`
+  margin-bottom: 4px;
+  font-size: 14px;
+`;
+const Month = styled.span`
+  font-size: 17px;
+`;
+
+const Attendance = styled.section`
+  height: 100%;
+`;
+const TotalTime = styled.section`
+  height: 100%;
+  border-left: 1px solid ${COLOR.main_blue};
+  background-color: ${COLOR.bg_comment};
+`;
+
+const Name = styled.span`
+  margin-bottom: 4px;
+  font-size: 14px;
+`;
+const Rate = styled.span`
+  font-size: 17px;
+`;
 
 // 내용
 const Content = styled.section`
@@ -161,6 +189,9 @@ const Memo = styled.textarea`
 
 const BoardAdd = () => {
   const { register, handleSubmit } = useForm();
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear(); // 현재 년도
+  const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
 
   const onSubmit = (data, e) => {
     e.preventDefault();
@@ -208,10 +239,10 @@ const BoardAdd = () => {
           />
         </WorkOut>
         <Record>
-          <Month>
-            <span>2023년</span>
-            <span>5월</span>
-          </Month>
+          <Current>
+            <Year>{`${currentYear}년`}</Year>
+            <Month>{`${currentMonth}월`}</Month>
+          </Current>
           <Attendance>
             <Name>출석률</Name>
             <Rate>80%</Rate>

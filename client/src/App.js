@@ -12,8 +12,10 @@ import MyCalendar from './pages/calendarPage/Calendar';
 import CalendarAdd from './pages/calendarPage/CalendarAdd';
 import Board from './pages/Board/Board';
 import BoardAdd from './pages/Board/BoardAdd';
+import BoardDetail from './pages/Board/BoardDetail';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import UserInfo from './pages/UserInfo';
 
 function App() {
   const [nav, setNav] = useState(false);
@@ -31,8 +33,10 @@ function App() {
           <Route path="/calendar/add" element={<CalendarAdd />} />
           <Route path="/board" element={<Board />} />
           <Route path="/board/add" element={<BoardAdd />} />
+          <Route path="/board/detail" element={<BoardDetail />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/users/:id" element={<UserInfo />} />
         </Routes>
         <Footer />
       </BrowserRouter>

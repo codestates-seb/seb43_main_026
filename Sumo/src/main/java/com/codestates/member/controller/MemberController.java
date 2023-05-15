@@ -53,6 +53,7 @@ public class MemberController {
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId){
         Member member = memberService.findMember(memberId);
 
+
         return new ResponseEntity<>(mapper.memberToMemberResponseDto(member),
                 HttpStatus.OK);
     }

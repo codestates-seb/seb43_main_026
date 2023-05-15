@@ -38,10 +38,12 @@ public class MemberMapper {
             long memberId = 0L;
             String email = null;
             String nickname = null;
+            int boardCount = 0;
             memberId = member.getMemberId();
             email = member.getEmail();
             nickname = member.getNickname();
-            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname);
+            boardCount = member.getBoards().size();
+            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname, boardCount);
             return response;
         }
     }

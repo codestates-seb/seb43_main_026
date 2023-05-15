@@ -47,6 +47,6 @@ public class MemberDto {
         private long memberId;
         private String email;
         private String nickname;
-
+        private int boardCount;
     }
 }

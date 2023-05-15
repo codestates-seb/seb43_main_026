@@ -19,6 +19,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.43.9",
     "react-icons": "^4.8.0",
+    "react-kakao-maps-sdk": "^1.1.9",
     "react-router": "^6.11.0",
     "react-router-dom": "^6.11.0",
     "react-scripts": "5.0.1",

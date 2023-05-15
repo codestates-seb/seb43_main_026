@@ -1,10 +1,15 @@
+// 라이브러리
 import styled from 'styled-components';
-import LogoImg from '../assets/image/logo2.png';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-// import GoogleLogin from '../component/oAuth/GoogleLogin';
+
+import LogoImg from '../assets/image/logo2.png';
 import { COLOR } from '../style/theme';
+
+// 컴포넌트
+import GoogleLogin from '../component/oAuth/GoogleLogin';
 import Input from '../component/common/Input';
+import Button from '../component/common/Button';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -13,26 +18,6 @@ const Container = styled.div`
   height: 100%;
   padding-top: 50px;
   background-color: ${COLOR.bg_light_blue};
-  & > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-
-    button {
-      margin-top: 3rem;
-      height: 5vh;
-      border: none;
-      background-color: ${COLOR.main_blue};
-      color: white;
-      font-weight: 300;
-      border-radius: 5px;
-      cursor: pointer;
-      &:hover {
-        background-color: ${COLOR.main_blue_hover};
-      }
-    }
-  }
 `;
 
 const Logo = styled.img`
@@ -52,6 +37,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   padding: 6rem 2rem;
+  align-items: center;
 `;
 
 const OAuthContainer = styled.div`
@@ -114,50 +100,52 @@ const SignUp = () => {
   const onError = (error) => console.log(error);
   return (
     <Container>
-      <div>
-        <Logo src={LogoImg} alt="logo" />
-        <Title>회원가입</Title>
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <Input
-            id="nickname"
-            label="닉네임"
-            type="text"
-            options={nicknameOptions}
-            register={register}
-            errors={errors.nickname}
-          />
+      <Logo src={LogoImg} alt="logo" />
+      <Title>회원가입</Title>
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <Input
+          id="nickname"
+          label="닉네임"
+          type="text"
+          options={nicknameOptions}
+          register={register}
+          errors={errors.nickname}
+        />
 
-          <Input
-            id="email"
-            label="이메일"
-            type="text"
-            options={emailOptions}
-            register={register}
-            errors={errors.email}
-          />
+        <Input
+          id="email"
+          label="이메일"
+          type="text"
+          options={emailOptions}
+          register={register}
+          errors={errors.email}
+        />
 
-          <Input
-            id="password"
-            label="비밀번호"
-            type="password"
-            options={passwordOptions}
-            register={register}
-            errors={errors.password}
-          />
+        <Input
+          id="password"
+          label="비밀번호"
+          type="password"
+          options={passwordOptions}
+          register={register}
+          errors={errors.password}
+          autocomplete="new-password"
+        />
 
-          <Input
-            id="passwordCheck"
-            label="비밀번호 확인"
-            type="password"
-            options={passwordCheckOptions}
-            register={register}
-            errors={errors.passwordCheck}
-          />
+        <Input
+          id="passwordCheck"
+          label="비밀번호 확인"
+          type="password"
+          options={passwordCheckOptions}
+          register={register}
+          errors={errors.passwordCheck}
+          autocomplete="new-password"
+        />
 
-          <button type="submit">회원가입</button>
-          <OAuthContainer>{/* <GoogleLogin /> */}</OAuthContainer>
-        </Form>
-      </div>
+        <Button text={'회원가입'} width={'100%'} height={'5vh'} />
+        <OAuthContainer>
+          <GoogleLogin />
+        </OAuthContainer>
+      </Form>
     </Container>
   );
 };

@@ -8,7 +8,7 @@ import { COLOR, SIZE } from '../../style/theme';
 
 const UploadContainer = styled.div`
   width: 100%;
-  height: 400px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -22,7 +22,7 @@ const UploadContainer = styled.div`
 // component
 const DropZoneContainer = styled.div`
   width: 100%;
-  height: 300px;
+  height: 200px;
   padding: 20px;
   border-top: 2px dashed ${COLOR.main_blue};
   border-bottom: 2px dashed ${COLOR.main_blue};
@@ -51,14 +51,18 @@ const DropZone = () => {
   );
 };
 
-const UploadImage = () => {
+const UploadImage = ({ register }) => {
   const [image, setImage] = useState(null);
 
-  const onDrop = useCallback((acceptedFiles) => {
-    const file = acceptedFiles[0];
-    const imageUrl = URL.createObjectURL(file);
-    setImage(imageUrl);
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+      register('image', { value: file, type: 'file' }); // 이미지 파일과 타입을 register 함수로 전달
+    },
+    [register]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 

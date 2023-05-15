@@ -84,6 +84,8 @@ const MenuList = styled(Link)`
   }
 `;
 
+const Login = styled.div``;
+
 /*
 현재 로그인 되어있는 유저의 id 값 불러와서 마이페이지 라우터에 넘겨줘야 함
 */
@@ -115,7 +117,7 @@ const Nav = ({ nav, handleNav }) => {
           <MenuList to="/board" onClick={handleNav}>
             커뮤니티
           </MenuList>
-          <MenuList>
+          <Login>
             <Button
               text={`로그인`}
               width={'110px'}
@@ -125,7 +127,7 @@ const Nav = ({ nav, handleNav }) => {
                 handleNav();
               }}
             />
-          </MenuList>
+          </Login>
         </NavList>
       </Container>
     </Overlay>

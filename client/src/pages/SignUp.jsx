@@ -18,6 +18,9 @@ const Container = styled.div`
   height: 100%;
   padding-top: 50px;
   background-color: ${COLOR.bg_light_blue};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Logo = styled.img`
@@ -34,10 +37,7 @@ const Form = styled.form`
   border-top-left-radius: 40px;
   background-color: white;
   border: 1px solid ${COLOR.main_blue};
-  display: flex;
-  flex-direction: column;
   padding: 6rem 2rem;
-  align-items: center;
 `;
 
 const OAuthContainer = styled.div`

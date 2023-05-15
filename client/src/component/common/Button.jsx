@@ -16,9 +16,9 @@ const Container = styled.button`
   }
 `;
 
-const Button = ({ text, width, height }) => {
+const Button = ({ text, width, height, handleClick }) => {
   return (
-    <Container width={width} height={height}>
+    <Container width={width} height={height} onClick={handleClick}>
       {text}
     </Container>
   );

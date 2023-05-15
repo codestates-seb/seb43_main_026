@@ -18,6 +18,9 @@ const Container = styled.div`
   height: 100vh;
   padding-top: 50px;
   background-color: ${COLOR.bg_light_blue};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Logo = styled.img`
@@ -28,16 +31,13 @@ const Title = styled.h1``;
 
 const Form = styled.form`
   margin-top: 4rem;
-  width: 100%;
+  min-width: 70vw;
   height: 100%;
   border-top-right-radius: 40px;
   border-top-left-radius: 40px;
   background-color: white;
   border: 1px solid ${COLOR.main_blue};
-  display: flex;
-  flex-direction: column;
   padding: 6rem 2rem;
-  align-items: center;
 `;
 
 const OAuthContainer = styled.div`
@@ -58,6 +58,14 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
+  const emailOptions = {
+    required: '이메일을 입력해주세요.',
+  };
+
+  const passwordOptions = {
+    required: '비밀번호를 입력해주세요.',
+  };
+
   // 로그인 완료 시
   const onSubmit = (data) => {
     console.log(data);
@@ -69,14 +77,6 @@ const Login = () => {
 
   // 에러 발생 시
   const onError = (error) => console.log(error);
-
-  const emailOptions = {
-    required: '이메일을 입력해주세요.',
-  };
-
-  const passwordOptions = {
-    required: '비밀번호를 입력해주세요.',
-  };
 
   return (
     <Container>

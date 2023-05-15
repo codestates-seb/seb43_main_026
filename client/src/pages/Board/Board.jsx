@@ -23,8 +23,7 @@ import boardData from '../../component/Board/boardData';
 const Container = styled.main`
   margin: 0 auto;
   margin-top: 30px;
-  background-color: ${(props) =>
-    props.isDash === false ? COLOR.bg : COLOR.bg_blue};
+  background-color: ${(props) => (!props.isDash ? COLOR.bg : COLOR.bg_blue)};
   display: flex;
   max-width: 1200px;
   flex-direction: column;
@@ -53,30 +52,38 @@ const TitleAndIcon = styled.section`
   height: 50px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: ${COLOR.bg};
-  padding: 0 10px;
+  padding: 0 15px 0 10px;
 `;
 
 const TitleIcon = styled.div`
-  width: 25px;
+  width: 27px;
 `;
-
-const MoveIcon = styled.div``;
 
 const Title = styled.div`
   display: flex;
-  span {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 21px;
-  }
 `;
 
-const Community = styled.span``;
-const CalendarShow = styled.span``;
+const Community = styled.span`
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 21px;
+`;
+
+const CalendarShow = styled.button`
+  width: 100px;
+  height: 35px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  color: ${COLOR.main_dark_blue};
+  background-color: ${COLOR.bg_light_blue};
+`;
 
 const CalIcon = styled(BsCalendar2Heart)`
-  margin-right: 5px;
+  margin-right: 6px;
   color: ${COLOR.main_blue};
 `;
 
@@ -103,7 +110,7 @@ const View = styled.div`
 
 const SortBtn = styled.button`
   border: none;
-  padding: 0 4px;
+  padding: 0 5px;
   text-align: center;
   font-size: 14px;
   font-weight: 600;
@@ -181,11 +188,11 @@ const Board = () => {
     navigate('/board/add');
   };
 
-  //첫 번째 게시글의 제목을 "New TitleAndIcon"로 업데이트
-  //setPost안쓰면 eslint오류나서 그냥 쓰는 코드
+  //첫 번째 게시글의 제목을 "New Title"로 업데이트
+  //setPost안쓰면 eslint오류나서 그냥 쓰는 코드 서버 통신 코드 작성 후 지워야 함
   const updatePost = () => {
     const newPosts = [...posts];
-    newPosts[0].TitleAndIcon = 'New TitleAndIcon';
+    newPosts[0].title = 'New Title';
     setPosts(newPosts);
   };
 
@@ -196,14 +203,13 @@ const Board = () => {
   return (
     <Container isDash={isDash}>
       <TitleAndIcon>
-        <TitleIcon>
-          <CalIcon size={20} />
-          <MoveIcon></MoveIcon>
-        </TitleIcon>
         <Title>
+          <TitleIcon>
+            <CalIcon size={20} />
+          </TitleIcon>
           <Community>커뮤니티</Community>
-          <CalendarShow>캘린더 자랑</CalendarShow>
         </Title>
+        <CalendarShow>캘린더 결산</CalendarShow>
       </TitleAndIcon>
       <SortBox>
         <View>

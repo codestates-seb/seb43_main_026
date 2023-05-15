@@ -7,7 +7,9 @@ import { COLOR } from '../../style/theme';
 
 //공통 컴포넌트
 import { BackButton } from '../../component/common/Button';
-import ImageUpload from '../../component/common/ImageUpload';
+
+//컴포넌트
+import UploadImage from '../../component/Board/UploadImage';
 
 //전체 컨테이너
 const Container = styled.main`
@@ -65,19 +67,29 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
+//제목
 const LabelHidden = styled.label`
   display: none;
 `;
 
 const InputTitle = styled.input`
-  background-color: aqua;
   width: 100%;
   padding: 0 10px;
   height: 40px;
+  border-bottom: 1px solid ${COLOR.main_blue};
   &:focus {
     outline: none;
   }
 `;
+
+// 이미지 업로드
+const Image = styled.div``;
+
+// 운동기록
+const WorkOut = styled.div``;
+
+// 캘린더 공유
+const Calendar = styled.div``;
 
 const BoardAdd = () => {
   const { register, handleSubmit } = useForm();
@@ -106,26 +118,26 @@ const BoardAdd = () => {
             {...register('title')}
           />
         </div>
-        <div>
+        <Image>
           <LabelHidden htmlFor="image">사진</LabelHidden>
-          <ImageUpload id="image" />
-        </div>
-        <div>
+          <UploadImage id="image" register={register} />
+        </Image>
+        <WorkOut>
           <label htmlFor="workoutRecordShare">운동 기록 </label>
           <input
             id="workoutRecordShare"
             type="checkbox"
             {...register('workoutRecordShare')}
           />
-        </div>
-        <div>
+        </WorkOut>
+        <Calendar>
           <label htmlFor="calendarShare">캘린더 자랑하기</label>
           <input
             id="calendarShare"
             type="checkbox"
             {...register('calendarShare')}
           />
-        </div>
+        </Calendar>
         <div>
           <LabelHidden htmlFor="content">내용</LabelHidden>
           <textarea

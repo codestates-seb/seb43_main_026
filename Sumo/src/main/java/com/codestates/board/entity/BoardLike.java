@@ -22,7 +22,7 @@ public class BoardLike {
     private BoardLikeStatus boardLikeStatus;
 
     @ManyToOne
-    @JoinColumn(name = "Board_id")
+    @JoinColumn(name = "board_id")
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)

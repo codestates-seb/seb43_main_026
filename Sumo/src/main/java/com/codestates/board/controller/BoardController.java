@@ -114,6 +114,16 @@ public class BoardController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping("/{board-id}/likes")
+    public ResponseEntity deleteLikeToBoard(@PathVariable("board-id") @Positive long boardId,
+                                         @RequestParam("member-id") @Positive long memberId){
+
+        boardService.toggleLike(boardId, memberId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
     //좋아요수 가져오기
     @GetMapping("/{board-id}/likes")
     public ResponseEntity<Integer> checkLikesCountFromBoard(@PathVariable("board-id") @Positive long boardId) {

@@ -39,8 +39,14 @@ public class BoardService {
         board.setMember(currentMember);
         currentMember.addBoard(board);
 
-        Optional.ofNullable(board.getCalendarShare()).ifPresent(board::setCalendarShare);
-        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(board::setWorkoutRecordShare);
+        if(board.getCalendarShare() != null){
+            board.setCalendarShare(board.getCalendarShare());
+        }
+        if(board.getWorkoutRecordShare() != null){
+            board.setWorkoutRecordShare(board.getWorkoutRecordShare());
+        }
+//        Optional.ofNullable(board.getCalendarShare()).ifPresent(board::setCalendarShare);
+//        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(board::setWorkoutRecordShare);
 
         return boardRepository.save(board);
     }
@@ -112,7 +118,7 @@ public class BoardService {
 
         if(boardLike.isPresent()) {
             if (boardLike.get().getBoardLikeStatus() == BoardLike.BoardLikeStatus.LIKE){
-                boardLike.get().setBoardLikeStatus(BoardLike.BoardLikeStatus.DISLIKE);
+                    boardLike.get().setBoardLikeStatus(BoardLike.BoardLikeStatus.DISLIKE);
             } else {
                 boardLike.get().setBoardLikeStatus(BoardLike.BoardLikeStatus.LIKE);
             }

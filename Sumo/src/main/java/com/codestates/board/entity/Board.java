@@ -36,10 +36,10 @@ public class Board extends Auditable {
     private int viewCount;
 
     @Column
-    private Boolean calendarShare;
+    private Boolean calendarShare = false;
 
     @Column
-    private Boolean workoutRecordShare;
+    private Boolean workoutRecordShare = false;
 
     @ManyToOne
     @JoinColumn(name = "member_id")

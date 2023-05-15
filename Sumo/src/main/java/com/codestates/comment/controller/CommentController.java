@@ -40,10 +40,11 @@ public class CommentController {
                                       @PathVariable("board-id") @Positive Long boardId){
         Comment comment = commentService.createComment(commentMapper.commentPostDtoToComment(commentPostDto), boardId);
 
+
         URI location = UriComponentsBuilder
                 .newInstance()
-                .path(COMMENT_DEFAULT_URL + "{comment-id}")
-                .buildAndExpand(comment.getCommentId())
+                .path(COMMENT_DEFAULT_URL + "/{comment-id}")
+                .buildAndExpand(boardId,comment.getCommentId())
                 .toUri();
         return ResponseEntity.created(location).build();
     }
@@ -82,6 +83,13 @@ public class CommentController {
     //댓글 좋아요 추가
     @PostMapping("/{comment-id}/likes")
     public ResponseEntity addLikeToComment(@PathVariable("comment-id") @Positive long commentId,
+                                           @RequestParam("member-id") @Positive long memberId){
+        commentService.toggleLike(commentId, memberId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{comment-id}/likes")
+    public ResponseEntity deleteLikeToComment(@PathVariable("comment-id") @Positive long commentId,
                                            @RequestParam("member-id") @Positive long memberId){
         commentService.toggleLike(commentId, memberId);
         return new ResponseEntity<>(HttpStatus.OK);

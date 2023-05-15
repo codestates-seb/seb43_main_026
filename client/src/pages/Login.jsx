@@ -1,10 +1,15 @@
-import { useForm } from 'react-hook-form';
-import LogoImg from '../assets/image/logo2.png';
+// 라이브러리
 import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { FcGoogle } from 'react-icons/fc';
+
+import LogoImg from '../assets/image/logo2.png';
 import { COLOR } from '../style/theme';
+
+// 컴포넌트
+import GoogleLogin from '../component/oAuth/GoogleLogin';
 import Input from '../component/common/Input';
+import Button from '../component/common/Button';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -13,25 +18,6 @@ const Container = styled.div`
   height: 100vh;
   padding-top: 50px;
   background-color: ${COLOR.bg_light_blue};
-  & > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    button {
-      margin-top: 3rem;
-      height: 5vh;
-      border: none;
-      background-color: ${COLOR.main_blue};
-      color: white;
-      font-weight: 300;
-      border-radius: 5px;
-      cursor: pointer;
-      &:hover {
-        background-color: ${COLOR.main_blue_hover};
-      }
-    }
-  }
 `;
 
 const Logo = styled.img`
@@ -51,6 +37,18 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   padding: 6rem 2rem;
+  align-items: center;
+`;
+
+const OAuthContainer = styled.div`
+  width: 100%;
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    cursor: pointer;
+  }
 `;
 
 const Login = () => {
@@ -82,30 +80,30 @@ const Login = () => {
 
   return (
     <Container>
-      <div>
-        <Logo src={LogoImg} alt="logo" />
-        <Title>로그인</Title>
-        <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <Input
-            id="email"
-            label="이메일"
-            type="text"
-            options={emailOptions}
-            errors={errors.email}
-            register={register}
-          />
-          <Input
-            id="password"
-            label="비밀번호"
-            type="password"
-            options={passwordOptions}
-            errors={errors.password}
-            register={register}
-          />
-          <button type="submit">로그인</button>
-          <FcGoogle size="30" />
-        </Form>
-      </div>
+      <Logo src={LogoImg} alt="logo" />
+      <Title>로그인</Title>
+      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+        <Input
+          id="email"
+          label="이메일"
+          type="text"
+          options={emailOptions}
+          errors={errors.email}
+          register={register}
+        />
+        <Input
+          id="password"
+          label="비밀번호"
+          type="password"
+          options={passwordOptions}
+          errors={errors.password}
+          register={register}
+        />
+        <Button text={'로그인'} width={'100%'} height={'5vh'} />
+        <OAuthContainer>
+          <GoogleLogin />
+        </OAuthContainer>
+      </Form>
     </Container>
   );
 };

@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { COLOR } from '../../style/theme';
 
 //공통 컴포넌트
-import { BackButton } from '../../component/common/Button';
+import BackButton from '../../component/common/BackButton';
 
 //컴포넌트
 import UploadImage from '../../component/Board/UploadImage';

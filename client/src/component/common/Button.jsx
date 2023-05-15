@@ -1,24 +1,27 @@
 import styled from 'styled-components';
-import { useNavigate } from 'react-router';
-import { IoArrowBack } from 'react-icons/io5';
 import { COLOR } from '../../style/theme';
-// 뒤로가기 버튼
-const BackButtonContainer = styled.button`
+
+const Container = styled.button`
+  width: ${(props) => (props.width ? `${props.width}` : '100%')};
+  height: ${(props) => (props.height ? `${props.height}` : '5vh')};
+  margin-top: 3rem;
   border: none;
-  background-color: inherit;
+  background-color: ${COLOR.main_blue};
+  color: white;
+  font-weight: 300;
+  border-radius: 5px;
   cursor: pointer;
-  color: ${COLOR.main_blue};
+  &:hover {
+    background-color: ${COLOR.main_blue_hover};
+  }
 `;
 
-export const BackButton = () => {
-  // 이전 페이지로 이동하기
-  const navigate = useNavigate();
-  const handleBackButton = () => {
-    navigate(-1);
-  };
+const Button = ({ text, width, height }) => {
   return (
-    <BackButtonContainer onClick={handleBackButton}>
-      <IoArrowBack size={30} />
-    </BackButtonContainer>
+    <Container width={width} height={height}>
+      {text}
+    </Container>
   );
 };
+
+export default Button;

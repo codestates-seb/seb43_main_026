@@ -2,8 +2,6 @@ import { createGlobalStyle } from 'styled-components';
 
 // reset.css
 const GlobalStyle = createGlobalStyle`
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css");
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -24,6 +22,7 @@ time, mark, audio, video, input {
 	box-sizing: border-box;
 	font: inherit;
 	vertical-align: baseline;
+
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -44,6 +43,7 @@ html {
 	font-family: -apple-system, "system-ui", Segoe UI, BlinkMacSystemFont
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
+	
 }
 body {
 	line-height: 1;

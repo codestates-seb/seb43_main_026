@@ -5,7 +5,7 @@ import com.codestates.auth.LoginUtils;
 import com.codestates.board.entity.Board;
 import com.codestates.board.repository.BoardRepository;
 import com.codestates.comment.entity.Comment;
-import com.codestates.comment.entity.CommentLikes;
+import com.codestates.comment.entity.CommentLike;
 import com.codestates.comment.repository.CommentLikesRepository;
 import com.codestates.comment.repository.CommentRepository;
 import com.codestates.exception.BusinessLogicException;
@@ -44,17 +44,11 @@ public class CommentService {
         Member currentMember = getCurrentMember();
         comment.setMember(currentMember);
 
-        //해당 보드찾고
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
 
-        // comment 에 board 설정하고
         comment.setBoard(board);
-
-        //board 에 comment 추가
         board.addComment(comment);
-
-        board.setCommentCount(board.getCommentCount()+1);
         boardRepository.save(board); //있어도, 없어도됨 @Transactional 있음.
 
         return commentRepository.save(comment);
@@ -87,10 +81,6 @@ public class CommentService {
             throw new BusinessLogicException(ExceptionCode.COMMENT_ACCESS_DENIED);
         }
 
-        Board board = findComment.getBoard();
-        if(board != null){
-            board.setCommentCount(board.getCommentCount()-1);
-        }
         commentRepository.deleteById(commentId);
     }
 
@@ -135,25 +125,22 @@ public class CommentService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        Optional<CommentLikes> commentLike = commentLikesRepository.findByCommentAndMember(comment, member);
+        Optional<CommentLike> commentLike = commentLikesRepository.findByCommentAndMember(comment, member);
 
         if(commentLike.isPresent()) {
-            if (commentLike.get().getCommentLikesStatus() == 1){
-                commentLike.get().setCommentLikesStatus(0);
-                comment.setCommentLikesCount(comment.getCommentLikesCount()-1);
+            if (commentLike.get().getCommentLikeStatus() == CommentLike.CommentLikeStatus.LIKE){
+                commentLike.get().setCommentLikeStatus(CommentLike.CommentLikeStatus.DISLIKE);
             } else {
-                commentLike.get().setCommentLikesId(1);
-                comment.setCommentLikesCount(comment.getCommentLikesCount()+1);
+                commentLike.get().setCommentLikeStatus(CommentLike.CommentLikeStatus.LIKE);
             }
             commentLikesRepository.save(commentLike.get());
         } else{
-            CommentLikes newCommentLike = new CommentLikes(comment, member);
-            newCommentLike.setCommentLikesStatus(1);
-            comment.setCommentLikesCount(comment.getCommentLikesCount()+1);
+            CommentLike newCommentLike = new CommentLike(comment, member);
+            newCommentLike.setCommentLikeStatus(CommentLike.CommentLikeStatus.LIKE);
             commentLikesRepository.save(newCommentLike);
         }
 
-        comment.setCommentLikes(commentLikesRepository.findByComment(comment));
+        comment.setCommentLike(commentLikesRepository.findByComment(comment));
         commentRepository.save(comment);
     }
 

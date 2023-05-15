@@ -25,10 +25,6 @@ public class Comment extends Auditable {
     @Column(columnDefinition = "text")
     private String commentContent;
 
-
-    @Column
-    private int commentLikesCount = 0;
-
     @ManyToOne
     @JoinColumn(name = "Board_id")
     private Board board;
@@ -38,6 +34,20 @@ public class Comment extends Auditable {
     private Member member;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
-    private List<CommentLikes> commentLikes;
+    private List<CommentLike> commentLike;
+
+    public int getCommentLikeCount() {
+        return commentLike.size();
+    }
+
+
+    // 좋아요만 카운팅 하도록 로직을 바꿔야하나?
+    /*
+    public int getCommentLikeCount() {
+    return (int) commentLike.stream()
+            .filter(commentLike -> commentLike.getCommentLikeStatus() == CommentLike.CommentLikeStatus.LIKE)
+            .count();
+}
+     */
 
 }

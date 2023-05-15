@@ -36,21 +36,17 @@ public class Board extends Auditable {
     private int viewCount;
 
     @Column
-    private int commentCount = 0;
+    private Boolean calendarShare;
 
     @Column
-    private Boolean showOffCheckBox;
-
-    @Column
-    private Boolean attendanceExerciseCheckBox;
-
+    private Boolean workoutRecordShare;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
-    private List<BoardLikes> boardLikes;
+    private List<BoardLike> boardLike;
 
     //ARRAYLIST 사용한이유.
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
@@ -59,6 +55,10 @@ public class Board extends Auditable {
     public void addComment(Comment comment){
         this.comments.add(comment);
         comment.setBoard(this);
+    }
+
+    public int getCommentCount() {
+        return comments.size();
     }
 
 

@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<Board> findByMember_MemberId(long memberId);
 
-    List<Board> findAllByShowOffCheckBoxTrue(Sort sort);
-    List<Board> findAllByShowOffCheckBoxFalse(Sort sort);
+    List<Board> findAllByCalendarShareTrue(Sort sort);
+    List<Board> findAllByCalendarShareFalse(Sort sort);
 
 }

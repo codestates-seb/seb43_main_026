@@ -5,8 +5,7 @@ import com.codestates.board.dto.BoardPatchDto;
 import com.codestates.board.dto.BoardPostDto;
 import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
-import com.codestates.board.entity.BoardLikes;
-import com.codestates.member.entity.Member;
+import com.codestates.board.entity.BoardLike;
 import org.mapstruct.Mapper;
 
 import java.util.stream.Collectors;
@@ -17,13 +16,11 @@ public interface BoardMapper {
     default Board boardPostDtoToboard(BoardPostDto boardPostDto){
 
         Board board = new Board();
-        Member member= new Member();
         board.setTitle(boardPostDto.getTitle());
         board.setContent(boardPostDto.getContent());
-        board.setMember(member);
         board.setBoardImageAddress(boardPostDto.getBoardImageAddress());
-        board.setAttendanceExerciseCheckBox(boardPostDto.getAttendanceExerciseCheckBox());
-        board.setShowOffCheckBox(boardPostDto.getShowOffCheckBox());
+        board.setWorkoutRecordShare(boardPostDto.getWorkoutRecordShare());
+        board.setCalendarShare(boardPostDto.getCalendarShare());
         return board;
     }
 
@@ -34,8 +31,8 @@ public interface BoardMapper {
         board.setTitle(boardPatchDto.getTitle());
         board.setContent(boardPatchDto.getContent());
         board.setBoardImageAddress(boardPatchDto.getBoardImageAddress());
-        board.setAttendanceExerciseCheckBox(boardPatchDto.getAttendanceExerciseCheckBox());
-        board.setShowOffCheckBox(boardPatchDto.getShowOffCheckBox());
+        board.setWorkoutRecordShare(boardPatchDto.getWorkoutRecordShare());
+        board.setCalendarShare(boardPatchDto.getCalendarShare());
         return board;
     }
 
@@ -48,11 +45,11 @@ public interface BoardMapper {
         boardResponseDto.setBoardImageAddress(board.getBoardImageAddress());
         boardResponseDto.setCreatedAt(board.getCreatedAt());
         boardResponseDto.setModifiedAt(board.getModifiedAt());
-        boardResponseDto.setBoardLikesId(board.getBoardLikes().stream().map(BoardLikes::getBoardLikesId).collect(Collectors.toList()));
-        boardResponseDto.setBoardLikesCount(board.getBoardLikes().size());
+        boardResponseDto.setBoardLikeId(board.getBoardLike().stream().map(BoardLike::getBoardLikeId).collect(Collectors.toList()));
+        boardResponseDto.setBoardLikeCount(board.getBoardLike().size());
         boardResponseDto.setViewCount(board.getViewCount());
-        boardResponseDto.setShowOffCheckBox(board.getShowOffCheckBox());
-        boardResponseDto.setAttendanceExerciseCheckBox(board.getAttendanceExerciseCheckBox());
+        boardResponseDto.setCalendarShare(board.getCalendarShare());
+        boardResponseDto.setWorkoutRecordShare(board.getWorkoutRecordShare());
         return boardResponseDto;
     }
 
@@ -62,7 +59,7 @@ public interface BoardMapper {
         boardPagingResponseDto.setTitle(board.getTitle());
         boardPagingResponseDto.setWriter(board.getMember().getNickname());
         boardPagingResponseDto.setBoardImageAddress(board.getBoardImageAddress());
-        boardPagingResponseDto.setBoardLikesCount(board.getBoardLikes().size());
+        boardPagingResponseDto.setBoardLikeCount(board.getBoardLike().size());
         boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
         return boardPagingResponseDto;
     }

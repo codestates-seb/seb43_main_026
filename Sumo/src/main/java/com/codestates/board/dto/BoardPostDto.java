@@ -17,9 +17,9 @@ public class BoardPostDto {
 
     private String boardImageAddress;
 
-    private Boolean showOffCheckBox;
+    private Boolean calendarShare;
 
-    private Boolean attendanceExerciseCheckBox;
+    private Boolean workoutRecordShare;
 
 
 }

@@ -22,18 +22,17 @@ public class BoardResponseDto {
 
     private LocalDateTime modifiedAt;
 
-    private int boardLikesCount;
+    private int boardLikeCount;
 
-    private List<Long> boardLikesId;
+    private List<Long> boardLikeId;
 
     private String boardImageAddress;
 
     private int viewCount;
 
+    private Boolean calendarShare;
 
-    private Boolean showOffCheckBox;
-
-    private Boolean attendanceExerciseCheckBox;
+    private Boolean workoutRecordShare;
 
 
 }

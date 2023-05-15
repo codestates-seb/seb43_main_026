@@ -3,8 +3,8 @@ package com.codestates.board.service;
 
 import com.codestates.auth.LoginUtils;
 import com.codestates.board.entity.Board;
-import com.codestates.board.entity.BoardLikes;
-import com.codestates.board.repository.BoardLikesRepository;
+import com.codestates.board.entity.BoardLike;
+import com.codestates.board.repository.BoardLikeRepository;
 import com.codestates.board.repository.BoardRepository;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
@@ -26,7 +26,7 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     @Autowired
-    private BoardLikesRepository boardLikesRepository;
+    private BoardLikeRepository boardLikeRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -38,12 +38,9 @@ public class BoardService {
         Member currentMember = getCurrentMember();
         board.setMember(currentMember);
         currentMember.addBoard(board);
-        if(board.getShowOffCheckBox() == null){
-            board.setShowOffCheckBox(false);
-        }
-        if(board.getAttendanceExerciseCheckBox() == null){
-            board.setAttendanceExerciseCheckBox(false);
-        }
+
+        Optional.ofNullable(board.getCalendarShare()).ifPresent(board::setCalendarShare);
+        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(board::setWorkoutRecordShare);
 
         return boardRepository.save(board);
     }
@@ -63,8 +60,8 @@ public class BoardService {
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
         Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> findBoard.setBoardImageAddress(boardImageAddress));
-        Optional.ofNullable(board.getShowOffCheckBox()).ifPresent(showOffCheckBox -> findBoard.setShowOffCheckBox(showOffCheckBox));
-        Optional.ofNullable(board.getAttendanceExerciseCheckBox()).ifPresent(attendanceExerciseCheckBox -> findBoard.setAttendanceExerciseCheckBox(attendanceExerciseCheckBox));
+        Optional.ofNullable(board.getCalendarShare()).ifPresent(showOffCheckBox -> findBoard.setCalendarShare(showOffCheckBox));
+        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(attendanceExerciseCheckBox -> findBoard.setWorkoutRecordShare(attendanceExerciseCheckBox));
 
         findBoard.setModifiedAt(LocalDateTime.now());
         return boardRepository.save(findBoard);
@@ -111,27 +108,27 @@ public class BoardService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        Optional<BoardLikes> boardLike = boardLikesRepository.findByBoardAndMember(board, member);
+        Optional<BoardLike> boardLike = boardLikeRepository.findByBoardAndMember(board, member);
 
         if(boardLike.isPresent()) {
-            if (boardLike.get().getLikeStatus() == 1){
-                boardLike.get().setLikeStatus(0);
+            if (boardLike.get().getBoardLikeStatus() == BoardLike.BoardLikeStatus.LIKE){
+                boardLike.get().setBoardLikeStatus(BoardLike.BoardLikeStatus.DISLIKE);
             } else {
-                boardLike.get().setLikeStatus(1);
+                boardLike.get().setBoardLikeStatus(BoardLike.BoardLikeStatus.LIKE);
             }
-            boardLikesRepository.save(boardLike.get());
+            boardLikeRepository.save(boardLike.get());
         } else{
-            BoardLikes newBoardLike = new BoardLikes(board, member);
-            newBoardLike.setLikeStatus(1);
-            boardLikesRepository.save(newBoardLike);
+            BoardLike newBoardLike = new BoardLike(board, member);
+            newBoardLike.setBoardLikeStatus(BoardLike.BoardLikeStatus.LIKE);
+            boardLikeRepository.save(newBoardLike);
         }
 
-        board.setBoardLikes(boardLikesRepository.findByBoard(board));
+        board.setBoardLike(boardLikeRepository.findByBoard(board));
     }
 
 
-    public List<Board> findBoardsSortedByLikes(){
-        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "boardLikes"));
+    public List<Board> findBoardsSortedByLike(){
+        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "boardLike"));
 
     }
 
@@ -154,8 +151,8 @@ public class BoardService {
             return findBoardsSortedByLatest();
         } else if (orderBy.equalsIgnoreCase("oldest")){
             return findBoardsSortedByOldest();
-        } else if (orderBy.equalsIgnoreCase("boardLikes")){
-            return findBoardsSortedByLikes();
+        } else if (orderBy.equalsIgnoreCase("boardLike")){
+            return findBoardsSortedByLike();
         } else if (orderBy.equalsIgnoreCase("comments")){
             return findBoardsSortedByComments();
         } else {
@@ -170,20 +167,20 @@ public class BoardService {
 
     private List<Board> getCheckboxSortedBoards(boolean checkBoxValue, String orderBy) {
         if (orderBy == null || orderBy.equalsIgnoreCase("latest")){
-            return checkBoxValue ? boardRepository.findAllByShowOffCheckBoxTrue(Sort.by(Sort.Direction.DESC, "createdAt"))
-                                 : boardRepository.findAllByShowOffCheckBoxFalse(Sort.by(Sort.Direction.DESC, "createdAt"));
+            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "createdAt"))
+                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC, "createdAt"));
         }
         else if (orderBy.equalsIgnoreCase("oldest")){
-            return checkBoxValue ? boardRepository.findAllByShowOffCheckBoxTrue(Sort.by(Sort.Direction.DESC, "createdAt"))
-                                 : boardRepository.findAllByShowOffCheckBoxFalse(Sort.by(Sort.Direction.DESC,"createdAt"));
+            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "createdAt"))
+                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC,"createdAt"));
         }
-        else if (orderBy.equalsIgnoreCase("boardLikes")){
-            return checkBoxValue ? boardRepository.findAllByShowOffCheckBoxTrue(Sort.by(Sort.Direction.DESC, "boardLikes"))
-                                 : boardRepository.findAllByShowOffCheckBoxFalse(Sort.by(Sort.Direction.DESC, "boardLikes"));
+        else if (orderBy.equalsIgnoreCase("boardLike")){
+            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "boardLike"))
+                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC, "boardLike"));
         }
         else if (orderBy.equalsIgnoreCase("comments")){
-            return checkBoxValue ? boardRepository.findAllByShowOffCheckBoxTrue(Sort.by(Sort.Direction.DESC, "commentCount"))
-                                 : boardRepository.findAllByShowOffCheckBoxFalse(Sort.by(Sort.Direction.DESC, "commentCount"));
+            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "commentCount"))
+                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC, "commentCount"));
         }
         else {
             throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
@@ -200,11 +197,6 @@ public class BoardService {
 
 
 
-
-
-
-
-
     /*
     게시글 당 좋아요 수 반환
 
@@ -214,35 +206,5 @@ public class BoardService {
         return boardLikes.size();
     }
     */
-
-    /*
-    게시글 좋아요 토글방식
-
-    public void toggleLike(long boardId, long memberId) {
-        Board board = findVerifiedBoard(boardId);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-
-        Optional<BoardLikes> existingBoardLikeOpt = boardLikesRepository.findByBoardAndMember(board, member);
-        if (existingBoardLikeOpt.isPresent()) {
-            BoardLikes existingBoardLike = existingBoardLikeOpt.get();
-            boardLikesRepository.delete(existingBoardLike);
-            board.setLikeCount(board.getLikeCount() -1);
-        }
-        else {
-            board.setLikeCount(board.getLikeCount() +1);
-
-            BoardLikes newBoardLike = new BoardLikes();
-            newBoardLike.setBoard(board);
-            newBoardLike.setMember(member);
-            newBoardLike.setLikeStatus(1);
-            boardLikesRepository.save(newBoardLike);
-        }
-
-        boardRepository.save(board);
-    }
-
- */
-
 
 }

@@ -13,14 +13,13 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BoardLikes {
+public class BoardLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long boardLikesId;
+    private long boardLikeId;
 
-    //TODO: boolean, enum 도 좋을것 같다.
-    @Column
-    private int likeStatus;
+    @Enumerated(EnumType.STRING)
+    private BoardLikeStatus boardLikeStatus;
 
     @ManyToOne
     @JoinColumn(name = "Board_id")
@@ -30,8 +29,13 @@ public class BoardLikes {
     @JoinColumn(name = "Member_id")
     private Member member;
 
-    public BoardLikes(Board board, Member member) {
+    public BoardLike(Board board, Member member) {
         this.board = board;
         this.member = member;
+    }
+
+    public enum BoardLikeStatus{
+        DISLIKE,
+        LIKE
     }
 }

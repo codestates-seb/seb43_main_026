@@ -13,14 +13,14 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CommentLikes {
+public class CommentLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long commentLikesId;
+    private long commentLikeId;
 
-    @Column
-    private int commentLikesStatus;
+    @Enumerated(EnumType.STRING)
+    private CommentLikeStatus commentLikeStatus;
 
     @ManyToOne
     @JoinColumn(name = "Comment_id")
@@ -30,8 +30,15 @@ public class CommentLikes {
     @JoinColumn(name = "Member_id")
     private Member member;
 
-    public CommentLikes(Comment comment, Member member) {
+
+    public CommentLike(Comment comment, Member member) {
         this.comment = comment;
         this.member = member;
     }
+
+    public enum CommentLikeStatus{
+        DISLIKE,
+        LIKE
+    }
+
 }

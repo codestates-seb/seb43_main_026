@@ -47,35 +47,49 @@ const Goback = styled.button`
 `;
 
 //제목과 작성자
-const TitleAndWriter = styled.section`
+const BoardInfo = styled.section`
   width: 100%;
   display: flex;
   height: 70px;
   flex-direction: column;
   justify-content: center;
   padding: 0 15px;
+  margin-top: 2px;
   border-bottom: 1px solid ${COLOR.main_blue};
 `;
+
+const BoardCommentInfo = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 7px;
+`;
+
+const Title = styled.span`
+  font-size: 18px;
+  font-weight: 600;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
 const Writer = styled.span`
   font-size: 14px;
   font-weight: 700;
   color: ${COLOR.main_dark_blue};
-  margin-top: 5px;
   display: inline-block;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
-const Title = styled.span`
-  font-size: 18px;
+const BoardCreateAt = styled.span`
+  font-size: 14px;
   font-weight: 600;
-  margin-top: 3px;
-  display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: ${COLOR.font_comment};
 `;
 
 //이미지
@@ -179,14 +193,16 @@ const Rate = styled.span`
 // 내용
 const Content = styled.section`
   width: 100%;
-  height: 200px;
+  min-height: 200px;
+  max-height: auto;
   max-height: fit-content;
   padding: 15px 15px;
+  white-space: pre-line;
   border-bottom: 1px solid ${COLOR.main_blue};
 `;
 
 //댓글
-const CommentBox = styled.section`
+const CommentContainer = styled.section`
   width: 100%;
   height: fit-content;
 `;
@@ -199,7 +215,52 @@ const CommentHeader = styled.div`
   align-items: center;
   background-color: ${COLOR.bg_comment};
 `;
-const CommentCount = styled.span``;
+
+const CommentCount = styled.span`
+  margin-left: 2px;
+`;
+
+const CommentList = styled.ul`
+  width: 100%;
+  height: fit-content;
+`;
+
+const Comment = styled.li`
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid ${COLOR.bg_comment};
+`;
+
+const CommentInfo = styled.div`
+  width: 100%;
+  height: 30px;
+  display: flex;
+  padding: 3px 10px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const CommentWriter = styled.span`
+  font-size: 14px;
+  font-weight: 600;
+  color: ${COLOR.main_dark_blue};
+`;
+const CreateAt = styled.span`
+  font-size: 14px;
+`;
+
+const Text = styled.div`
+  width: 100%;
+  min-height: 28px;
+  max-height: auto;
+  padding: 0 10px 7px 10px;
+  line-height: 1.3;
+  white-space: pre-line;
+  font-size: 14px;
+`;
 
 const BoardDetail = () => {
   const currentDate = new Date();
@@ -213,10 +274,13 @@ const BoardDetail = () => {
           <BackButton />
         </Goback>
       </GobackAndModify>
-      <TitleAndWriter>
+      <BoardInfo>
         <Title>제목</Title>
-        <Writer>작성자</Writer>
-      </TitleAndWriter>
+        <BoardCommentInfo>
+          <Writer>작성자</Writer>
+          <BoardCreateAt>2023.05.16</BoardCreateAt>
+        </BoardCommentInfo>
+      </BoardInfo>
       <ImageAndLike>
         <Image>
           <img src="https://picsum.photos/id/1/500/500" alt="사진" />
@@ -242,11 +306,24 @@ const BoardDetail = () => {
         </TotalTime>
       </Record>
       <Content>내용</Content>
-      <CommentBox>
+      <CommentContainer>
         <CommentHeader>
-          댓글<CommentCount>{}</CommentCount>
+          댓글<CommentCount>{`(2)`}</CommentCount>
         </CommentHeader>
-      </CommentBox>
+        <CommentList>
+          <Comment>
+            <CommentInfo>
+              <CommentWriter>작성자</CommentWriter>
+              <CreateAt>2023.05.16</CreateAt>
+            </CommentInfo>
+            <Text>댓글 내용</Text>
+          </Comment>
+          <Comment>
+            <CommentInfo></CommentInfo>
+            <Text></Text>
+          </Comment>
+        </CommentList>
+      </CommentContainer>
     </Container>
   );
 };

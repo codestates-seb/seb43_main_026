@@ -172,6 +172,9 @@ const Rate = styled.span`
 
 // 내용
 const Content = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: fit-content;
 `;
@@ -179,7 +182,8 @@ const Content = styled.section`
 const Memo = styled.textarea`
   width: 100%;
   resize: none;
-  height: 250px;
+  min-height: 250px;
+  max-height: auto;
   padding: 10px;
   line-height: 1.3;
   &:focus {

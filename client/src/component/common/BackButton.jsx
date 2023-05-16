@@ -10,14 +10,19 @@ const Container = styled.button`
   color: ${COLOR.main_blue};
 `;
 
-const BackButton = () => {
+const BackButton = ({ clickEvent = () => {} }) => {
   // 이전 페이지로 이동하기
   const navigate = useNavigate();
   const handleBackButton = () => {
     navigate(-1);
   };
   return (
-    <Container onClick={handleBackButton}>
+    <Container
+      onClick={() => {
+        handleBackButton();
+        clickEvent() || null;
+      }}
+    >
       <IoArrowBack size={30} />
     </Container>
   );

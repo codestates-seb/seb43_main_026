@@ -227,6 +227,7 @@ const SearchMap = ({ place, setPlace }) => {
                   </MapMarker>
                 ))
               : null}
+            {/* 로딩페이지 구현 후 넣을 예정 */}
           </Map>
         </>
       ) : null}

@@ -10,12 +10,14 @@ import Nav from './layout/Nav';
 // 페이지
 import MyCalendar from './pages/calendarPage/Calendar';
 import CalendarAdd from './pages/calendarPage/CalendarAdd';
+import CalendarDetail from './pages/calendarPage/CalendarDetail';
 import Board from './pages/Board/Board';
 import BoardAdd from './pages/Board/BoardAdd';
 import BoardDetail from './pages/Board/BoardDetail';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import UserInfo from './pages/UserInfo';
+import ScrollToTop from './component/common/ScrollToTop';
 
 function App() {
   const [nav, setNav] = useState(false);
@@ -28,9 +30,11 @@ function App() {
       <BrowserRouter>
         <Header handleNav={handleNav} />
         <Nav nav={nav} setNav={setNav} handleNav={handleNav} />
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<MyCalendar />} />
           <Route path="/calendar/add" element={<CalendarAdd />} />
+          <Route path="/calendar/:calendarid" element={<CalendarDetail />} />
           <Route path="/board" element={<Board />} />
           <Route path="/board/add" element={<BoardAdd />} />
           <Route path="/board/detail" element={<BoardDetail />} />

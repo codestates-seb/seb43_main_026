@@ -1,6 +1,6 @@
 // 라이브러리
 import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import axios from 'axios';
 
 import LogoImg from '../../assets/image/logo2.png';
@@ -52,11 +52,7 @@ const OAuthContainer = styled.div`
 `;
 
 const Login = () => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
+  const { handleSubmit, control } = useForm();
 
   const emailOptions = {
     required: '이메일을 입력해주세요.',
@@ -83,23 +79,41 @@ const Login = () => {
       <Logo src={LogoImg} alt="logo" />
       <Title>로그인</Title>
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
-        <Input
-          id="email"
-          label="이메일"
-          type="text"
-          options={emailOptions}
-          errors={errors.email}
-          register={register}
+        <Controller
+          name={'email'}
+          control={control}
+          rules={emailOptions}
+          render={({ field, fieldState: { error } }) => (
+            <Input
+              id="email"
+              label="이메일"
+              type="text"
+              errorMessage={error?.message}
+              onChange={field.onChange}
+              value={field.value}
+            />
+          )}
         />
-        <Input
-          id="password"
-          label="비밀번호"
-          type="password"
-          options={passwordOptions}
-          errors={errors.password}
-          register={register}
+        <Controller
+          name={'password'}
+          control={control}
+          rules={passwordOptions}
+          render={({ field, fieldState: { error } }) => (
+            <Input
+              label="비밀번호"
+              type="text"
+              errorMessage={error?.message}
+              onChange={field.onChange}
+              value={field.value}
+            />
+          )}
         />
-        <Button text={'로그인'} width={'100%'} height={'5vh'} />
+        <Button
+          text={'로그인'}
+          width={'100%'}
+          height={'5vh'}
+          style={{ marginTop: '20px' }}
+        />
         <OAuthContainer>
           <GoogleLogin />
         </OAuthContainer>

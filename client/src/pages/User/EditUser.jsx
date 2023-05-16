@@ -1,10 +1,13 @@
 import styled from 'styled-components';
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { COLOR } from '../../style/theme';
 import LogoImage from '../../assets/image/logo2.png';
 import Button from '../../component/common/Button';
+
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const Container = styled.div`
   width: 100vw;
@@ -86,7 +89,6 @@ const EditUser = () => {
   const { handleSubmit } = useForm();
 
   const [isModal, setIsModal] = useState(false);
-  console.log(isModal);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -97,6 +99,10 @@ const EditUser = () => {
   };
 
   const deleteUser = () => {};
+
+  useEffect(() => {
+    axios.get(`${SERVER_URL}/members/`);
+  }, []);
   return (
     <>
       <Container>

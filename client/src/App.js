@@ -14,10 +14,16 @@ import CalendarDetail from './pages/calendarPage/CalendarDetail';
 import Board from './pages/Board/Board';
 import BoardAdd from './pages/Board/BoardAdd';
 import BoardDetail from './pages/Board/BoardDetail';
+
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import UserInfo from './pages/UserInfo';
 import ScrollToTop from './component/common/ScrollToTop';
+import Login from './pages/User/Login';
+import SignUp from './pages/User/SignUp';
+import User from './pages/User/User';
+import EditUser from './pages/User/EditUser';
+
 
 function App() {
   const [nav, setNav] = useState(false);
@@ -40,7 +46,8 @@ function App() {
           <Route path="/board/detail" element={<BoardDetail />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/users/:id" element={<UserInfo />} />
+          <Route path="/users/:id" element={<User />} />
+          <Route path="/edit/profile" element={<EditUser />} />
         </Routes>
         <Footer />
       </BrowserRouter>

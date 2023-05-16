@@ -1,6 +1,8 @@
 package com.codestates.schedule.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
@@ -10,6 +12,7 @@ public class ScheduleDto {
 
     @Getter
     @Setter
+    @NoArgsConstructor
     public static class Post {
         @NotBlank(message = "날짜는 필수 항목입니다.")
         @Pattern(regexp = "^[\\d]{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$",
@@ -32,10 +35,18 @@ public class ScheduleDto {
         @Pattern(regexp = "^([01][0-9]|2[0-3]):([0-5][0-9])$",
                 message = "HH:mm 형식으로 작성해야 합니다.")
         private String endTime;
+
+        public Post(String date, String imageAddress, String startTime, String endTime) {
+            this.date = date;
+            this.imageAddress = imageAddress;
+            this.startTime = startTime;
+            this.endTime = endTime;
+        }
     }
 
     @Getter
     @Setter
+    @NoArgsConstructor
     public static class Patch {
         private long scheduleId;
 
@@ -52,10 +63,17 @@ public class ScheduleDto {
         @Pattern(regexp = "^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$",
                 message = "HH:mm 형식으로 작성해야 합니다.")
         private String endTime;
+
+        public Patch(String imageAddress, String memo) {
+            this.imageAddress = imageAddress;
+            this.memo = memo;
+        }
     }
 
     @Setter
     @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Response {
         private long scheduleId;
 

@@ -3,8 +3,6 @@ import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import { TiCameraOutline } from 'react-icons/ti';
 import { COLOR, SIZE } from '../../style/theme';
-import { useSelector, useDispatch } from 'react-redux';
-import { setImageUrl } from '../../redux/slice/imageSlice';
 
 // styled-component
 const DropZoneContainer = styled.div`
@@ -61,18 +59,14 @@ const DropZone = () => {
   );
 };
 
-const ImageUpload = () => {
-  const imageUrl = useSelector((state) => state.image.imageUrl);
-  const dispatch = useDispatch();
-
+const ImageUpload = ({ imageUrl, setImageUrl }) => {
   const onDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
       const imageUrl = URL.createObjectURL(file);
-      dispatch(setImageUrl(imageUrl));
-      console.log(imageUrl);
+      setImageUrl(imageUrl);
     },
-    [dispatch]
+    [imageUrl]
   );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 

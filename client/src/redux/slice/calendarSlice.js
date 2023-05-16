@@ -30,6 +30,15 @@ const calendarSlice = createSlice({
     setMemo: (state, action) => {
       state.memo = action.payload;
     },
+    reset: (state) => {
+      // 초기 상태로 되돌리기
+      state.date = format(new Date(), 'yyyy-MM-dd');
+      state.place = '';
+      state.startTime = '';
+      state.endTime = '';
+      state.durationTime = 0;
+      state.memo = '';
+    },
   },
 });
 
@@ -40,6 +49,7 @@ export const {
   setEndTime,
   setDurationTime,
   setMemo,
+  reset,
 } = calendarSlice.actions;
 
 export default calendarSlice.reducer;

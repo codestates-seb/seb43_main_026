@@ -5,8 +5,6 @@ import { COLOR } from '../../../style/theme';
 
 // 아이콘
 import { AiOutlineSearch } from 'react-icons/ai';
-import { useDispatch, useSelector } from 'react-redux';
-import { setPlace } from '../../../redux/slice/calendarSlice';
 
 // styled-component
 // 검색창
@@ -136,7 +134,7 @@ const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
 };
 
 // 지도
-const SearchMap = () => {
+const SearchMap = ({ place, setPlace }) => {
   // 지도에 현재 위치 표시
   const [location, setLocation] = useState(null);
 
@@ -154,7 +152,6 @@ const SearchMap = () => {
   };
 
   // 키워드 검색
-  const place = useSelector((state) => state.calendar.place);
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
@@ -188,9 +185,9 @@ const SearchMap = () => {
     handleSearch();
     console.log('클릭!');
   };
-  const dispatch = useDispatch();
+
   const handlePlace = (e) => {
-    dispatch(setPlace(e.target.value));
+    setPlace(e.target.value);
   };
   console.log(place);
   return (
@@ -221,7 +218,7 @@ const SearchMap = () => {
                     {info && info.content === marker.content && (
                       <button
                         style={{ color: '#000' }}
-                        onClick={() => dispatch(setPlace(marker.place_name))}
+                        onClick={() => setPlace(marker.place_name)}
                         value={marker.place_name}
                       >
                         {marker.place_name}
@@ -238,10 +235,9 @@ const SearchMap = () => {
 };
 
 // 저장&닫기 버튼
-const SearchButtons = ({ handleSearchModal }) => {
-  const dispatch = useDispatch();
+const SearchButtons = ({ handleSearchModal, setPlace }) => {
   const handleResetPlace = () => {
-    dispatch(setPlace(''));
+    setPlace('');
     handleSearchModal();
   };
   return (
@@ -252,11 +248,14 @@ const SearchButtons = ({ handleSearchModal }) => {
   );
 };
 
-const SearchPlace = ({ handleSearchModal }) => {
+const SearchPlace = ({ handleSearchModal, place, setPlace }) => {
   return (
     <SearchPlaceContainer>
-      <SearchMap />
-      <SearchButtons handleSearchModal={handleSearchModal} />
+      <SearchMap place={place} setPlace={setPlace} />
+      <SearchButtons
+        handleSearchModal={handleSearchModal}
+        setPlace={setPlace}
+      />
     </SearchPlaceContainer>
   );
 };

@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
-import LogoImg from '../assets/image/logo2.png';
-import { COLOR } from '../style/theme';
+import LogoImg from '../../assets/image/logo2.png';
+import { COLOR } from '../../style/theme';
 
 // 컴포넌트
-import GoogleLogin from '../component/oAuth/GoogleLogin';
-import Input from '../component/common/Input';
-import Button from '../component/common/Button';
+import GoogleLogin from '../../component/oAuth/GoogleLogin';
+import Input from '../../component/common/Input';
+import Button from '../../component/common/Button';
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 

@@ -10,6 +10,7 @@ import SearchPlace from './SearchPlace';
 import TimeDropDown from '../TimeDropDown';
 import BackButton from '../../common/BackButton';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router';
 // import axios from 'axios';
 
 // styled-component
@@ -163,8 +164,13 @@ const CalendarAddContainer = styled.form`
 //component
 // 버튼
 const CalendarSaveButton = ({ onSubmit }) => {
+  const navigate = useNavigate();
+  const handleSubmit = () => {
+    onSubmit();
+    navigate('/');
+  };
   return (
-    <CalendarSaveButtonContainer type="submit" onClick={onSubmit}>
+    <CalendarSaveButtonContainer type="submit" onClick={handleSubmit}>
       저 장
     </CalendarSaveButtonContainer>
   );

@@ -10,7 +10,8 @@ import SearchPlace from './SearchPlace';
 import TimeDropDown from '../TimeDropDown';
 import BackButton from '../../common/BackButton';
 import { format } from 'date-fns';
-// import axios from 'axios';
+import { useNavigate } from 'react-router';
+import axios from 'axios';
 
 // styled-component
 // 버튼
@@ -163,8 +164,13 @@ const CalendarAddContainer = styled.form`
 //component
 // 버튼
 const CalendarSaveButton = ({ onSubmit }) => {
+  const navigate = useNavigate();
+  const handleSubmit = () => {
+    onSubmit();
+    navigate('/');
+  };
   return (
-    <CalendarSaveButtonContainer type="submit" onClick={onSubmit}>
+    <CalendarSaveButtonContainer type="submit" onClick={handleSubmit}>
       저 장
     </CalendarSaveButtonContainer>
   );
@@ -291,15 +297,14 @@ const CalendarAdd = () => {
       durationTime: durationTime,
     };
     console.log(dataSet);
-    // axios
-    //   // eslint-disable-next-line no-undef
-    //   .post(`${process.evn.REACT_APP_API_URL}/schedules`)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .post(`${process.evn.REACT_APP_API_URL}/schedules`, dataSet)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   console.log(imageUrl);

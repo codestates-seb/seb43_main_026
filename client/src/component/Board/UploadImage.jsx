@@ -61,11 +61,10 @@ const UploadImage = ({ register }) => {
       const file = acceptedFiles[0];
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
-      register('image', { value: image, type: 'url' });
+      register('image', image);
     },
     [register]
   );
-  console.log(image);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (

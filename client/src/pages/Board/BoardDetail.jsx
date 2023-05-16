@@ -9,6 +9,7 @@ import BackButton from '../../component/common/BackButton';
 
 //아이콘
 import { FaRegHeart } from 'react-icons/fa';
+import CommentForm from '../../component/Board/CommentForm';
 
 const Container = styled.main`
   margin: 0 auto;
@@ -25,7 +26,7 @@ const Container = styled.main`
   height: fit-content;
 `;
 
-//상단바
+//뒤로가기 상단바
 const GobackAndModify = styled.section`
   width: 100%;
   height: 40px;
@@ -52,28 +53,30 @@ const BoardInfo = styled.section`
   display: flex;
   height: 70px;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   padding: 0 15px;
   margin-top: 2px;
   border-bottom: 1px solid ${COLOR.main_blue};
 `;
 
-const BoardCommentInfo = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 7px;
-`;
-
 const Title = styled.span`
   font-size: 18px;
   font-weight: 600;
+  margin-top: 19px;
   display: inline-block;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`;
+
+const BoardCommentInfo = styled.div`
+  width: 100%;
+  height: 30%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
 `;
 
 const Writer = styled.span`
@@ -106,7 +109,7 @@ const Image = styled.article`
   min-height: 300px;
   max-height: 500px;
   overflow: hidden;
-  padding: 20px 20px;
+  padding: 0px 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -117,6 +120,7 @@ const Image = styled.article`
     width: auto;
     height: auto;
     object-fit: contain;
+    padding: 20px 0;
   }
 `;
 
@@ -213,7 +217,7 @@ const CommentHeader = styled.div`
   padding: 0 10px;
   display: flex;
   align-items: center;
-  background-color: ${COLOR.bg_comment};
+  background-color: ${COLOR.bg_light_blue};
 `;
 
 const CommentCount = styled.span`
@@ -235,7 +239,7 @@ const Comment = styled.li`
 
 const CommentInfo = styled.div`
   width: 100%;
-  height: 32px;
+  height: 35px;
   display: flex;
   padding: 3px 10px 0px;
   display: flex;
@@ -255,7 +259,7 @@ const CreateAt = styled.span`
 
 const Text = styled.div`
   width: 100%;
-  min-height: 37px;
+  min-height: 35px;
   max-height: auto;
   padding: 0px 10px 5px 10px;
   line-height: 1.3;
@@ -320,6 +324,7 @@ const BoardDetail = () => {
             <Text>댓글 내용</Text>
           </Comment>
         </CommentList>
+        <CommentForm />
       </CommentContainer>
     </Container>
   );

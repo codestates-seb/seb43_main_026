@@ -65,6 +65,7 @@ const UploadImage = ({ register }) => {
     },
     [register]
   );
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (

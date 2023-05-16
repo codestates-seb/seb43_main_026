@@ -186,6 +186,7 @@ const Memo = styled.textarea`
   max-height: auto;
   padding: 10px;
   line-height: 1.3;
+  white-space: pre-line;
   &:focus {
     outline: none;
   }

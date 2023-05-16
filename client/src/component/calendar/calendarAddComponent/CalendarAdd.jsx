@@ -10,7 +10,7 @@ import SearchPlace from './SearchPlace';
 import TimeDropDown from '../TimeDropDown';
 import BackButton from '../../common/BackButton';
 import { format } from 'date-fns';
-import { useNavigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 import axios from 'axios';
 
 // styled-component
@@ -164,10 +164,10 @@ const CalendarAddContainer = styled.form`
 //component
 // 버튼
 const CalendarSaveButton = ({ onSubmit }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const handleSubmit = () => {
     onSubmit();
-    navigate('/');
+    // navigate('/');
   };
   return (
     <CalendarSaveButtonContainer type="submit" onClick={handleSubmit}>
@@ -298,7 +298,7 @@ const CalendarAdd = () => {
     };
     console.log(dataSet);
     axios
-      .post(`${process.evn.REACT_APP_API_URL}/schedules`, dataSet)
+      .post(`${process.env.REACT_APP_API_URL}/schedules`, dataSet)
       .then((res) => {
         console.log(res);
       })

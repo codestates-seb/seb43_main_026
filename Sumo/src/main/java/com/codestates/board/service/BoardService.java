@@ -86,7 +86,6 @@ public class BoardService {
 
     // 게시글 조회
     public Board findBoard(long boardId){
-
         Board findBoard = findVerifiedBoard(boardId);
 
         findBoard.setViewCount(findBoard.getViewCount() +1);
@@ -94,7 +93,6 @@ public class BoardService {
 
         return findBoard;
     }
-
 
     // 게시글 확인
     private Board findVerifiedBoard(long boardId){
@@ -106,6 +104,7 @@ public class BoardService {
     }
 
 
+  
     //TOGGLELIKE
     public void toggleLike(Long memberId, Long boardId){
         Board board = findVerifiedBoard(boardId);
@@ -130,6 +129,7 @@ public class BoardService {
 
         board.setBoardLike(boardLikeRepository.findByBoard(board));
     }
+  
 
 
     public List<Board> findBoardsSortedByLike(){
@@ -207,5 +207,6 @@ public class BoardService {
         int boardLike = board.getBoardLikeCount();
         return boardLike ;
     }
+
 
 }

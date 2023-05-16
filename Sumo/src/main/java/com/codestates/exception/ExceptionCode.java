@@ -25,8 +25,9 @@ public enum ExceptionCode {
     ANSWER_MEMBER_NOT_MATCH(404,"Answer's member not match"),
     ANSWER_NOT_FOUND(404,"Answer not found"),
     OPTION_NOT_FOUND(404,"Option not found"),
-    CALENDARCONTENT_NOT_FOUND(404, "CalendarContent not found"),
-    CALENDAR_NOT_FOUND(404, "Calendar not found"),
+    SCHEDULE_NOT_FOUND(404, "Schedule not found"),
+    CANNOT_ACCESS_SCHEDULE(403, "Can not access to schedule"),
+    SCHEDULE_EXISTS(409, "Schedule already exists this date"),
     EMAIL_CONFLICT(409,"Email already exists"),
     NICKNAME_CONFLICT(409,"Nickname already exists"),
     BOARD_NOT_FOUND(404,"Board not found"),
@@ -36,6 +37,7 @@ public enum ExceptionCode {
     INVALID_ORDER_BY_PARAMETER(404, "Invalid order by parameter"),
     COMMENT_NOT_FOUND(404,"Comment not found"),
     COMMENT_ACCESS_DENIED(404, "Comment Access Denied");
+
 
 
     @Getter

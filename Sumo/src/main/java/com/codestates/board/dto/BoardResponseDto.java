@@ -32,9 +32,9 @@ public class BoardResponseDto {
 
     private int viewCount;
 
+
     private Boolean calendarShare;
 
     private Boolean workoutRecordShare;
-
 
 }

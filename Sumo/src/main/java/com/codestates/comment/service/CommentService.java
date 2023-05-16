@@ -1,6 +1,5 @@
 package com.codestates.comment.service;
 
-
 import com.codestates.auth.LoginUtils;
 import com.codestates.board.entity.Board;
 import com.codestates.board.repository.BoardRepository;
@@ -15,7 +14,6 @@ import com.codestates.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +27,7 @@ public class CommentService {
 
     @Autowired
     private MemberRepository memberRepository;
+
 
     @Autowired
     private BoardRepository boardRepository;

@@ -66,6 +66,4 @@ public class Board extends Auditable {
         return comments.size();
     }
 
-
-
 }

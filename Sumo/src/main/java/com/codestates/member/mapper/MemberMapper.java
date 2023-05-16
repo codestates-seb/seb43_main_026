@@ -38,29 +38,12 @@ public class MemberMapper {
             long memberId = 0L;
             String email = null;
             String nickname = null;
-            memberId = member.getMemberId();
-            email = member.getEmail();
-            nickname = member.getNickname();
-            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname);
-            return response;
-        }
-    }
-
-    public MemberDto.Response memberToMemberResponseDtoPlus(Member member){
-        if(member == null){
-            return null;
-        } else {
-            long memberId = 0L;
-            String email = null;
-            String nickname = null;
-            long calendarId = 0L;
             int boardCount = 0;
             memberId = member.getMemberId();
             email = member.getEmail();
             nickname = member.getNickname();
-            calendarId = member.getCalendar().getCalendarId();
             boardCount = member.getBoards().size();
-            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname,calendarId,boardCount);
+            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname, boardCount);
             return response;
         }
     }

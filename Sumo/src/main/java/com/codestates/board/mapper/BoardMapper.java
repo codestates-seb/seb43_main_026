@@ -52,6 +52,7 @@ public interface BoardMapper {
         boardResponseDto.setCalendarShare(board.getCalendarShare());
         boardResponseDto.setWorkoutRecordShare(board.getWorkoutRecordShare());
         boardResponseDto.setCommentCount(board.getCommentCount());
+
         return boardResponseDto;
     }
 

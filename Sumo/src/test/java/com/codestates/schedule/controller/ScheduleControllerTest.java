@@ -5,6 +5,8 @@ import com.codestates.schedule.entity.Schedule;
 import com.codestates.schedule.mapper.ScheduleMapper;
 import com.codestates.schedule.service.ScheduleService;
 import com.google.gson.Gson;
+import com.jayway.jsonpath.JsonPath;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -15,14 +17,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -39,6 +44,14 @@ class ScheduleControllerTest {
     @MockBean
     private ScheduleMapper mapper;
 
+    /**
+     * given에 들어가는 요소들: 응답 데이터, given메서드, uri 및 쿼리파라미터,
+     * request body에 해당하는 dto(POST, PATCH만 해당)
+     *
+     * when에 들어가는 요소들: mockMvc.perform 메서드(http 메서드, params, accept, contentType, content)
+     *
+     * then에 들어가는 요소들: status, header, jsonPath, JsonPath.parse(배열 사이즈 비교할 때)
+     */
 
     @Test
     void postScheduleTest() throws Exception {
@@ -71,7 +84,7 @@ class ScheduleControllerTest {
     }
 
     @Test
-    void patchSchedule() throws Exception {
+    void patchScheduleTest() throws Exception {
         // given
         long scheduleId = 1L;
         ScheduleDto.Patch patch = new ScheduleDto.Patch("image", "memo");
@@ -99,18 +112,118 @@ class ScheduleControllerTest {
     }
 
     @Test
-    void getSchedule() {
+    void getScheduleTest() throws Exception {
+        // given
+        long scheduleId = 1L;
+        Schedule schedule = new Schedule("2023-05-15", "image", "memo");
+
+        ScheduleDto.Response response = new ScheduleDto.Response(scheduleId, "2023-05-15", "image", "memo", "location", "13:00", "15:00", 1L);
+
+        BDDMockito.given(scheduleService.findSchedule(Mockito.anyLong()))
+                .willReturn(new Schedule());
+
+        BDDMockito.given(mapper.scheduleToScheduleResponseDto(Mockito.any(Schedule.class)))
+                .willReturn(response);
+
+        URI uri = UriComponentsBuilder.newInstance().path("/schedules/{schedule-id}").buildAndExpand(scheduleId).toUri();
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                MockMvcRequestBuilders.get(uri)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        actions.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.date").value(schedule.getDate()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.imageAddress").value(schedule.getImageAddress()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.memo").value(schedule.getMemo()));
     }
 
     @Test
-    void getOneUserSchedules() {
+    void getOneUserSchedulesTest() throws Exception {
+        // given
+        List<ScheduleDto.Response> responses = List.of(
+                new ScheduleDto.Response(1L, "2023-05-15", "image1", "memo1", "location", "13:00", "15:00", 1L),
+                new ScheduleDto.Response(2L, "2023-05-16", "image2", "memo2", "location", "13:00", "15:00", 1L));
+
+        BDDMockito.given(scheduleService.findOneUserSchedules(Mockito.anyInt(), Mockito.anyInt())).willReturn(new ArrayList<>());
+
+        BDDMockito.given(mapper.schedulesToScheduleResponseDtos(Mockito.anyList())).willReturn(responses);
+
+        String year = "2023";
+        String month = "5";
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("year", year);
+        queryParams.add("month", month);
+
+        URI uri = UriComponentsBuilder.newInstance().path("/schedules").build().toUri();
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                MockMvcRequestBuilders.get(uri)
+                        .params(queryParams)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        MvcResult result = actions.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andReturn();
+
+        List list = JsonPath.parse(result.getResponse().getContentAsString()).read("$");
+
+        MatcherAssert.assertThat(list.size(), Matchers.is(2));
     }
 
     @Test
-    void getAllUsersSchedules() {
+    void getAllUsersSchedulesTest() throws Exception {
+        // given
+        List<ScheduleDto.Response> responses = List.of(
+                new ScheduleDto.Response(1L, "2023-05-15", "image1", "memo1", "location", "13:00", "15:00", 1L),
+                new ScheduleDto.Response(2L, "2023-05-16", "image2", "memo2", "location", "13:00", "15:00", 1L));
+
+        BDDMockito.given(scheduleService.findAllUsersSchedules(Mockito.anyInt(), Mockito.anyInt())).willReturn(List.of(List.of(), List.of()));
+
+        BDDMockito.given(mapper.schedulesToScheduleResponseDtos(Mockito.anyList())).willReturn(responses);
+
+        String year = "2023";
+        String month = "5";
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("year", year);
+        queryParams.add("month", month);
+
+        URI uri = UriComponentsBuilder.newInstance().path("/schedules/admin").build().toUri();
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                MockMvcRequestBuilders.get(uri)
+                        .params(queryParams)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        MvcResult result = actions.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0]").isArray())
+                .andReturn();
+
+        List list1 = JsonPath.parse(result.getResponse().getContentAsString()).read("$[0]");
+        List list2 = JsonPath.parse(result.getResponse().getContentAsString()).read("$[1]");
+
+        MatcherAssert.assertThat(list1.size(), Matchers.is(2));
+        MatcherAssert.assertThat(list2.size(), Matchers.is(2));
     }
 
     @Test
-    void deleteSchedule() {
+    void deleteScheduleTest() throws Exception {
+        // given
+        long scheduleId = 1L;
+
+        BDDMockito.doNothing().when(scheduleService).deleteSchedule(scheduleId);
+        URI uri = UriComponentsBuilder.newInstance().path("/schedules/{schedule-id}").buildAndExpand(scheduleId).toUri();
+
+        // when
+        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.delete(uri));
+
+        // then
+        actions.andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 }

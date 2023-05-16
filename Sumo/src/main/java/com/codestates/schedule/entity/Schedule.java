@@ -2,6 +2,7 @@ package com.codestates.schedule.entity;
 
 import com.codestates.member.entity.Member;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +37,10 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public Schedule(String date, String imageAddress, String memo) {
+        this.date = date;
+        this.imageAddress = imageAddress;
+        this.memo = memo;
+    }
 }

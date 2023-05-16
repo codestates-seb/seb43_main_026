@@ -15,15 +15,12 @@ import Board from './pages/Board/Board';
 import BoardAdd from './pages/Board/BoardAdd';
 import BoardDetail from './pages/Board/BoardDetail';
 
-import Login from './pages/Login';
-import SignUp from './pages/SignUp';
-import UserInfo from './pages/UserInfo';
-import ScrollToTop from './component/common/ScrollToTop';
 import Login from './pages/User/Login';
 import SignUp from './pages/User/SignUp';
 import User from './pages/User/User';
 import EditUser from './pages/User/EditUser';
 
+import ScrollToTop from './component/common/ScrollToTop';
 
 function App() {
   const [nav, setNav] = useState(false);
@@ -34,9 +31,9 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <ScrollToTop />
         <Header handleNav={handleNav} />
         <Nav nav={nav} setNav={setNav} handleNav={handleNav} />
-        <ScrollToTop />
         <Routes>
           <Route path="/" element={<MyCalendar />} />
           <Route path="/calendar/add" element={<CalendarAdd />} />

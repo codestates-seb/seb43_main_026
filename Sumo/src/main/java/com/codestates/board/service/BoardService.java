@@ -45,8 +45,6 @@ public class BoardService {
         if(board.getWorkoutRecordShare() != null){
             board.setWorkoutRecordShare(board.getWorkoutRecordShare());
         }
-//        Optional.ofNullable(board.getCalendarShare()).ifPresent(board::setCalendarShare);
-//        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(board::setWorkoutRecordShare);
 
         return boardRepository.save(board);
     }
@@ -178,8 +176,8 @@ public class BoardService {
                                  : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC, "createdAt"));
         }
         else if (orderBy.equalsIgnoreCase("oldest")){
-            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "createdAt"))
-                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC,"createdAt"));
+            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.ASC, "createdAt"))
+                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.ASC,"createdAt"));
         }
         else if (orderBy.equalsIgnoreCase("boardLike")){
             return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "boardLike"))

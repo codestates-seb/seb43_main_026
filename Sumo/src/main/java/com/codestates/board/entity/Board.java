@@ -48,7 +48,6 @@ public class Board extends Auditable {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<BoardLike> boardLike;
 
-    //ARRAYLIST 사용한이유.
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 

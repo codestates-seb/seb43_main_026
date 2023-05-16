@@ -82,18 +82,12 @@ public class CommentController {
 
     //댓글 좋아요 추가
     @PostMapping("/{comment-id}/likes")
-    public ResponseEntity addLikeToComment(@PathVariable("comment-id") @Positive long commentId,
+    public ResponseEntity toggleLikeToComment(@PathVariable("comment-id") @Positive long commentId,
                                            @RequestParam("member-id") @Positive long memberId){
-        commentService.toggleLike(commentId, memberId);
+        commentService.toggleLike(memberId, commentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{comment-id}/likes")
-    public ResponseEntity deleteLikeToComment(@PathVariable("comment-id") @Positive long commentId,
-                                           @RequestParam("member-id") @Positive long memberId){
-        commentService.toggleLike(commentId, memberId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
     //댓글 좋아요수 가져오기
     @GetMapping("/{comment-id}/likes")

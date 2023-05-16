@@ -107,22 +107,13 @@ public class BoardController {
     //TODO : jwt토큰으로 인증하는것이 안전할것임
 
     @PostMapping("/{board-id}/likes")
-    public ResponseEntity addLikeToBoard(@PathVariable("board-id") @Positive long boardId,
+    public ResponseEntity toggleLikeToBoard(@PathVariable("board-id") @Positive long boardId,
                                         @RequestParam("member-id") @Positive long memberId){
 
         boardService.toggleLike(memberId, boardId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-//    @DeleteMapping("/{board-id}/likes")
-//    public ResponseEntity deleteLikeToBoard(@PathVariable("board-id") @Positive long boardId,
-//                                         @RequestParam("member-id") @Positive long memberId){
-//
-//        boardService.toggleLike(boardId, memberId);
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 
 
     //좋아요수 가져오기

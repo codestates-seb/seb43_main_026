@@ -147,8 +147,8 @@ public class CommentService {
 
     public int getCommentLikeCount(long commentId){
         Comment comment = findVerifiedComment(commentId);
-        List<CommentLike> commentLike = comment.getCommentLike();
-        return commentLike.size();
+        int commentLike = comment.getCommentLikeCount();
+        return commentLike;
     }
 
 }

@@ -43,13 +43,4 @@ public class Comment extends Auditable {
     }
 
 
-    // 좋아요만 카운팅 하도록 로직을 바꿔야하나?
-    /*
-    public int getCommentLikeCount() {
-    return (int) commentLike.stream()
-            .filter(commentLike -> commentLike.getCommentLikeStatus() == CommentLike.CommentLikeStatus.LIKE)
-            .count();
-}
-     */
-
 }

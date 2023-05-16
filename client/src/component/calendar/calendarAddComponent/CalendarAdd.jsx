@@ -11,7 +11,7 @@ import TimeDropDown from '../TimeDropDown';
 import BackButton from '../../common/BackButton';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router';
-// import axios from 'axios';
+import axios from 'axios';
 
 // styled-component
 // 버튼
@@ -297,15 +297,14 @@ const CalendarAdd = () => {
       durationTime: durationTime,
     };
     console.log(dataSet);
-    // axios
-    //   // eslint-disable-next-line no-undef
-    //   .post(`${process.evn.REACT_APP_API_URL}/schedules`)
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .post(`${process.evn.REACT_APP_API_URL}/schedules`, dataSet)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   console.log(imageUrl);

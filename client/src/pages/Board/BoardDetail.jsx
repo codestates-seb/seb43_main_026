@@ -88,7 +88,7 @@ const Writer = styled.span`
 `;
 const BoardCreateAt = styled.span`
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: ${COLOR.font_comment};
 `;
 
@@ -235,28 +235,29 @@ const Comment = styled.li`
 
 const CommentInfo = styled.div`
   width: 100%;
-  height: 30px;
+  height: 32px;
   display: flex;
   padding: 3px 10px 0px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 `;
 
 const CommentWriter = styled.span`
   font-size: 14px;
   font-weight: 600;
+  margin-right: 4px;
   color: ${COLOR.main_dark_blue};
 `;
 const CreateAt = styled.span`
-  font-size: 14px;
+  font-size: 13px;
+  color: ${COLOR.font_comment};
 `;
 
 const Text = styled.div`
   width: 100%;
-  min-height: 28px;
+  min-height: 37px;
   max-height: auto;
-  padding: 0 10px 7px 10px;
+  padding: 0px 10px 5px 10px;
   line-height: 1.3;
   white-space: pre-line;
   font-size: 14px;
@@ -317,10 +318,6 @@ const BoardDetail = () => {
               <CreateAt>2023.05.16</CreateAt>
             </CommentInfo>
             <Text>댓글 내용</Text>
-          </Comment>
-          <Comment>
-            <CommentInfo></CommentInfo>
-            <Text></Text>
           </Comment>
         </CommentList>
       </CommentContainer>

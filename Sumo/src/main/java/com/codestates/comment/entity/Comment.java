@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -21,15 +22,25 @@ public class Comment extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long commentId;
 
-    @Column
+    @Column(columnDefinition = "text")
     private String commentContent;
 
     @ManyToOne
-    @JoinColumn(name = "Board_id")
+    @JoinColumn(name = "board_id")
     private Board board;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<CommentLike> commentLike;
+
+    public int getCommentLikeCount() {
+        return (int) commentLike.stream()
+                .filter(commentLike -> commentLike.getCommentLikeStatus() == CommentLike.CommentLikeStatus.LIKE)
+                .count();
+    }
+
 
 }

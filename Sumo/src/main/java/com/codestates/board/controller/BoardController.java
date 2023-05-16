@@ -68,6 +68,7 @@ public class BoardController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     // 하나의 게시글 GET 요청
     @GetMapping("/{board-id}")
     public ResponseEntity getBoard(@PathVariable("board-id") @Positive long boardId) {
@@ -76,12 +77,25 @@ public class BoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 게시글 리스트 정렬
+
+
+    // 페이지 정렬 요청
     @GetMapping
     public ResponseEntity getBoards(@Positive @RequestParam int page,
                                     @Positive @RequestParam int size,
-                                    @RequestParam(required = false) String orderBy) {
-        List<Board> boards = boardService.findBoards(orderBy);
+                                    @RequestParam(required = false) String orderBy,
+                                    @RequestParam(required = false) Boolean calendarShare) {
+        List<Board> boards;
+
+
+        if(calendarShare == null) {
+            boards = boardService.getGeneralSortedBoards(orderBy);
+        } else if (calendarShare) {
+            boards = boardService.getBoardsWithCheckbox(true, orderBy);
+        } else {
+            boards = boardService.getBoardsWithCheckbox(false, orderBy);
+        }
+
 
         List<BoardResponseDto> responses = boards.stream()
                 .map(boardMapper::boardToBoardPagingResponseDto)
@@ -91,12 +105,24 @@ public class BoardController {
 
 
     //TODO : jwt토큰으로 인증하는것이 안전할것임
+
     @PostMapping("/{board-id}/likes")
-    public ResponseEntity addLikeToBoard(@PathVariable("board-id") @Positive long boardId,
+    public ResponseEntity toggleLikeToBoard(@PathVariable("board-id") @Positive long boardId,
                                         @RequestParam("member-id") @Positive long memberId){
 
-        boardService.toggleLike(boardId, memberId);
+        boardService.toggleLike(memberId, boardId);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+    //좋아요수 가져오기
+    @GetMapping("/{board-id}/likes")
+    public ResponseEntity<Integer> checkLikesCountFromBoard(@PathVariable("board-id") @Positive long boardId) {
+
+        int likesCount = boardService.getBoardLikesCount(boardId);
+        return new ResponseEntity<>(likesCount, HttpStatus.OK);
+    }
+
 
 }

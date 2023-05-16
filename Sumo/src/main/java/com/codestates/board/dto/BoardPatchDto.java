@@ -20,4 +20,7 @@ public class BoardPatchDto {
 
     private String boardImageAddress;
 
+    private Boolean calendarShare;
+
+    private Boolean workoutRecordShare;
 }

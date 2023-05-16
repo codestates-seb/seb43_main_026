@@ -1,15 +1,12 @@
 package com.codestates.comment.controller;
 
 
-import com.codestates.board.mapper.BoardMapper;
-import com.codestates.board.service.BoardService;
 import com.codestates.comment.dto.CommentPatchDto;
 import com.codestates.comment.dto.CommentPostDto;
 import com.codestates.comment.dto.CommentResponseDto;
 import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
 import com.codestates.comment.service.CommentService;
-import com.codestates.member.dto.MemberDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -39,13 +36,15 @@ public class CommentController {
 
 
     @PostMapping
-    public ResponseEntity postComment(@Valid @RequestBody CommentPostDto commentPostDto){
-        Comment comment = commentService.createComment(commentMapper.commentPostDtoToComment(commentPostDto));
+    public ResponseEntity postComment(@Valid @RequestBody CommentPostDto commentPostDto,
+                                      @PathVariable("board-id") @Positive Long boardId){
+        Comment comment = commentService.createComment(commentMapper.commentPostDtoToComment(commentPostDto), boardId);
+
 
         URI location = UriComponentsBuilder
                 .newInstance()
-                .path(COMMENT_DEFAULT_URL + "{comment-id}")
-                .buildAndExpand(comment.getCommentId())
+                .path(COMMENT_DEFAULT_URL + "/{comment-id}")
+                .buildAndExpand(boardId,comment.getCommentId())
                 .toUri();
         return ResponseEntity.created(location).build();
     }
@@ -81,8 +80,20 @@ public class CommentController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    //댓글 좋아요 추가
+    @PostMapping("/{comment-id}/likes")
+    public ResponseEntity toggleLikeToComment(@PathVariable("comment-id") @Positive long commentId,
+                                           @RequestParam("member-id") @Positive long memberId){
+        commentService.toggleLike(memberId, commentId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
+    //댓글 좋아요수 가져오기
+    @GetMapping("/{comment-id}/likes")
+    public ResponseEntity<Integer> checkLikesCountFromComment(@PathVariable("comment-id") @Positive long commentId) {
 
-
+        int likesCount = commentService.getCommentLikeCount(commentId);
+        return new ResponseEntity<>(likesCount, HttpStatus.OK);
+    }
 }

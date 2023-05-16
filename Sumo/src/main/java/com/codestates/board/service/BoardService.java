@@ -1,9 +1,10 @@
 package com.codestates.board.service;
 
 
+import com.codestates.auth.LoginUtils;
 import com.codestates.board.entity.Board;
-import com.codestates.board.entity.BoardLikes;
-import com.codestates.board.repository.BoardLikesRepository;
+import com.codestates.board.entity.BoardLike;
+import com.codestates.board.repository.BoardLikeRepository;
 import com.codestates.board.repository.BoardRepository;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
@@ -11,7 +12,6 @@ import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,53 +26,59 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     @Autowired
-    private BoardLikesRepository boardLikesRepository;
+    private BoardLikeRepository boardLikeRepository;
 
     @Autowired
     private MemberRepository memberRepository;
 
     // 게시글 생성
-    // TODO: SECURITY 적용시 주석해제
     @Transactional
     public Board createBoard(Board board){
 
         Member currentMember = getCurrentMember();
-//        board.setMember(currentMember);
+        board.setMember(currentMember);
         currentMember.addBoard(board);
+
+        if(board.getCalendarShare() != null){
+            board.setCalendarShare(board.getCalendarShare());
+        }
+        if(board.getWorkoutRecordShare() != null){
+            board.setWorkoutRecordShare(board.getWorkoutRecordShare());
+        }
 
         return boardRepository.save(board);
     }
 
 
     // 게시글 수정
-    // TODO: SECURITY 적용시 주석해제
     @Transactional
     public Board updateBoard(Board board){
 
-//        Member currentMember = getCurrentMember();
+        Member currentMember = getCurrentMember();
         Board findBoard = findVerifiedBoard(board.getBoardId());
 
-//        if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
-//            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
-//        }
+        if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
+        }
 
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
         Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> findBoard.setBoardImageAddress(boardImageAddress));
+        Optional.ofNullable(board.getCalendarShare()).ifPresent(showOffCheckBox -> findBoard.setCalendarShare(showOffCheckBox));
+        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(attendanceExerciseCheckBox -> findBoard.setWorkoutRecordShare(attendanceExerciseCheckBox));
 
         findBoard.setModifiedAt(LocalDateTime.now());
         return boardRepository.save(findBoard);
     }
 
     // 게시글 삭제
-    // TODO: SECURITY 적용시 주석해제
     public void deleteBoard(long boardId){
-//        Member currentMember = getCurrentMember();
+        Member currentMember = getCurrentMember();
         Board board = findVerifiedBoard(boardId);
 
-//        if (!board.getMember().getMemberId().equals(currentMember.getMemberId())) {
-//            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
-//        }
+        if (!board.getMember().getMemberId().equals(currentMember.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
+        }
 
         boardRepository.deleteById(boardId);
     }
@@ -97,34 +103,43 @@ public class BoardService {
         return findBoard;
     }
 
-    //TODO: TOGGLELIKE 수정
+
+  
+    //TOGGLELIKE
     public void toggleLike(Long memberId, Long boardId){
         Board board = findVerifiedBoard(boardId);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
+        Optional<BoardLike> boardLike = boardLikeRepository.findByBoardAndMember(board, member);
 
-        Optional<BoardLikes> boardLike = boardLikesRepository.findByBoardAndMember(board, member);
 
         if(boardLike.isPresent()) {
-            if (boardLike.get().getLikeStatus() == 1){
-                boardLike.get().setLikeStatus(0);
+            if (boardLike.get().getBoardLikeStatus() == BoardLike.BoardLikeStatus.LIKE){
+                    boardLike.get().setBoardLikeStatus(BoardLike.BoardLikeStatus.DISLIKE);
             } else {
-                boardLike.get().setLikeStatus(1);
+                boardLike.get().setBoardLikeStatus(BoardLike.BoardLikeStatus.LIKE);
             }
-            boardLikesRepository.save(boardLike.get());
+            boardLikeRepository.save(boardLike.get());
         } else{
-            BoardLikes newBoardLike = new BoardLikes(board, member);
-            newBoardLike.setLikeStatus(1);
-            boardLikesRepository.save(newBoardLike);
+            BoardLike newBoardLike = new BoardLike(board, member);
+            newBoardLike.setBoardLikeStatus(BoardLike.BoardLikeStatus.LIKE);
+            boardLikeRepository.save(newBoardLike);
         }
 
-        board.setBoardLikes(boardLikesRepository.findByBoard(board));
+        board.setBoardLike(boardLikeRepository.findByBoard(board));
+    }
+  
+
+
+    public List<Board> findBoardsSortedByLike(){
+        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "boardLike"));
+
     }
 
-    public List<Board> findBoardsSortedByLikes(){
-        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "likes"));
+    public List<Board> findBoardsSortedByComments(){
 
+        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "commentCount"));
     }
 
     public List<Board> findBoardsSortedByLatest(){
@@ -135,36 +150,63 @@ public class BoardService {
         return boardRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
     }
 
-    public List<Board> findBoardsSortedByComments(){
-        return boardRepository.findAllByOrderByCommentsDesc();
-    }
 
-    // TODO: 현재 로그인한 회원 정보 가지고오기. // // TODO: SECURITY 적용시 주석해제
-
-
-    private Member getCurrentMember() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
-
-    public int getLikesCount(long boardId){
-        Board board = findVerifiedBoard(boardId);
-        List<BoardLikes> boardLikes = board.getBoardLikes();
-        return boardLikes.size();
-    }
-
-    public List<Board> findBoards(String orderBy){
+    public List<Board> getGeneralSortedBoards(String orderBy){
         if(orderBy == null || orderBy.equalsIgnoreCase("latest")){
             return findBoardsSortedByLatest();
         } else if (orderBy.equalsIgnoreCase("oldest")){
             return findBoardsSortedByOldest();
-        } else if (orderBy.equalsIgnoreCase("likes")){
-            return findBoardsSortedByLikes();
+        } else if (orderBy.equalsIgnoreCase("boardLike")){
+            return findBoardsSortedByLike();
         } else if (orderBy.equalsIgnoreCase("comments")){
             return findBoardsSortedByComments();
         } else {
             throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
         }
     }
+
+
+    public List<Board> getBoardsWithCheckbox(boolean calendarShare, String orderBy) {
+        return getCheckboxSortedBoards(calendarShare, orderBy);
+    }
+
+    private List<Board> getCheckboxSortedBoards(boolean checkBoxValue, String orderBy) {
+        if (orderBy == null || orderBy.equalsIgnoreCase("latest")){
+            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "createdAt"))
+                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC, "createdAt"));
+        }
+        else if (orderBy.equalsIgnoreCase("oldest")){
+            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.ASC, "createdAt"))
+                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.ASC,"createdAt"));
+        }
+        else if (orderBy.equalsIgnoreCase("boardLike")){
+            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "boardLike"))
+                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC, "boardLike"));
+        }
+        else if (orderBy.equalsIgnoreCase("comments")){
+            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "commentCount"))
+                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC, "commentCount"));
+        }
+        else {
+            throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
+        }
+
+    }
+
+    //현재 로그인한 회원 정보 가지고오기
+    private Member getCurrentMember() {
+        String email = LoginUtils.checkLogin();
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+
+    //보드 좋아요 개수 체크
+    public int getBoardLikesCount(long boardId){
+        Board board = findVerifiedBoard(boardId);
+        int boardLike = board.getBoardLikeCount();
+        return boardLike ;
+    }
+
+
 }

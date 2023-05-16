@@ -23,26 +23,31 @@ public class Board extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long boardId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 45)
     private String title;
 
-    @Column
+    @Column(columnDefinition = "text")
     private String content;
 
-    @Column
+    @Column(length = 255)
     private String boardImageAddress;
 
     @Column
     private int viewCount;
+
+    @Column
+    private Boolean calendarShare = false;
+
+    @Column
+    private Boolean workoutRecordShare = false;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
-    private List<BoardLikes> boardLikes;
+    private List<BoardLike> boardLike;
 
-    //ARRAYLIST 사용한이유.
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
@@ -50,4 +55,15 @@ public class Board extends Auditable {
         this.comments.add(comment);
         comment.setBoard(this);
     }
+
+    public int getBoardLikeCount() {
+        return (int) boardLike.stream()
+                .filter(boardLike -> boardLike.getBoardLikeStatus() == BoardLike.BoardLikeStatus.LIKE)
+                .count();
+    }
+
+    public int getCommentCount() {
+        return comments.size();
+    }
+
 }

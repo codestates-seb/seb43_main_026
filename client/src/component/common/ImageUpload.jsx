@@ -65,6 +65,14 @@ const ImageUpload = ({ imageUrl, setImageUrl }) => {
       const file = acceptedFiles[0];
       const imageUrl = URL.createObjectURL(file);
       setImageUrl(imageUrl);
+      // const reader = new FileReader();
+
+      // reader.onload = () => {
+      //   const imageAddress = reader.result;
+      //   setImageUrl(imageAddress);
+      // };
+
+      // reader.readAsDataURL(file);
     },
     [imageUrl]
   );

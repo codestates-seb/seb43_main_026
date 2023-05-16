@@ -9,6 +9,8 @@ import { COLOR, SIZE } from '../../../style/theme';
 import SearchPlace from './SearchPlace';
 import TimeDropDown from '../TimeDropDown';
 import BackButton from '../../common/BackButton';
+import { format } from 'date-fns';
+// import axios from 'axios';
 
 // styled-component
 // 버튼
@@ -170,23 +172,6 @@ const CalendarSaveButton = ({ onSubmit }) => {
 
 // 날짜 등록
 const InputDate = ({ selectedDate, setSelectedDate }) => {
-  // const [selectedDate, setSelectedDate] = useState(new Date());
-
-  // 날짜 데이터 형식 변환
-  const year = selectedDate.getFullYear();
-  const month =
-    // 10보다 작은 경우, 문자열을 이용하여 2자리 숫자로 만들기
-    //getMonth()는 0부터 11까지의 값을 반환 -> 실제 월 값에 1을 더해야함
-    selectedDate.getMonth() + 1 < 10
-      ? '0' + (selectedDate.getMonth() + 1)
-      : selectedDate.getMonth() + 1;
-  const day =
-    selectedDate.getDate() < 10
-      ? '0' + selectedDate.getDate()
-      : selectedDate.getDate();
-
-  const date = `${year}-${month}-${day}`;
-  console.log(date);
   return (
     <InputDateContainer>
       <span>날짜 </span>
@@ -293,11 +278,31 @@ const CalendarAdd = () => {
     setDurationTime(durationInMinutes);
     console.log(durationTime);
   }, [startTime, endTime]);
-
-  const onSubmit = (data) => {
-    console.log(data);
-    // 폼 데이터 처리 로직을 작성합니다.
+  const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+  console.log(formattedDate);
+  const onSubmit = () => {
+    const dataSet = {
+      date: formattedDate,
+      imageAddress: imageUrl,
+      memo: memo,
+      location: place,
+      startTime: startTime,
+      endTime: endTime,
+      durationTime: durationTime,
+    };
+    console.log(dataSet);
+    // axios
+    //   // eslint-disable-next-line no-undef
+    //   .post(`${process.evn.REACT_APP_API_URL}/schedules`)
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
+
+  console.log(imageUrl);
   return (
     <>
       <CalendarAddHeaderContainer>

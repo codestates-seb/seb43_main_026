@@ -17,9 +17,7 @@ import { BsArrowClockwise } from 'react-icons/bs';
 import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { TbCapture } from 'react-icons/tb';
-// redux
-// import { useSelector } from 'react-redux';
-// import { useEffect } from 'react';
+
 // import axios from 'axios';
 
 // styled-component

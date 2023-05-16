@@ -3,6 +3,8 @@ import BackButton from '../../component/common/BackButton';
 import { FaRegEdit } from 'react-icons/fa';
 import { BsTrash3 } from 'react-icons/bs';
 import { SIZE, COLOR } from '../../style/theme';
+import { useState } from 'react';
+import CalendarDeleteModal from '../../component/calendar/calendarDetailComponent.jsx/CalendarDeleteModal';
 
 const CalendarDetailContainer = styled.div`
   max-width: 1200px;
@@ -110,6 +112,12 @@ const CalendarInfoGroup = styled.div`
 `;
 
 const CalendarDetail = () => {
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  const handleDeleteModal = () => {
+    setOpenDeleteModal(!openDeleteModal);
+  };
+
   return (
     <CalendarDetailContainer>
       <CalendarDetailHeaderContainer>
@@ -117,7 +125,7 @@ const CalendarDetail = () => {
         <p>2023.05.16</p>
         <CalendarDetailButtons>
           <FaRegEdit size={20} />
-          <BsTrash3 size={20} color="red" />
+          <BsTrash3 size={20} color="red" onClick={handleDeleteModal} />
         </CalendarDetailButtons>
       </CalendarDetailHeaderContainer>
       <CalendarDetailBodyContainer>
@@ -129,11 +137,13 @@ const CalendarDetail = () => {
           <CalendarInfoGroup>
             <p>운동 시간</p> <span>2.5</span>
           </CalendarInfoGroup>
-
           <p>메모</p>
-          <textarea readOnly>새 수영복 개시!</textarea>
+          <textarea defaultValue={'새 수영복 개시!'} readOnly></textarea>
         </CalendarDetailInfoContainer>
       </CalendarDetailBodyContainer>
+      {openDeleteModal ? (
+        <CalendarDeleteModal handleDeleteModal={handleDeleteModal} />
+      ) : null}
     </CalendarDetailContainer>
   );
 };

@@ -204,12 +204,16 @@ const Board = () => {
 
   useEffect(
     () => {
-      fetchPosts();
+      if (calendarShare) {
+        fetchPostsCalendar();
+      } else if (!calendarShare) {
+        fetchPostsWithAll();
+      }
     }
     // [currentPage, pageSize, orderBy, calendarShare]
   );
 
-  const fetchPosts = async () => {
+  const fetchPostsCalendar = async () => {
     try {
       const params = {
         page: currentPage,
@@ -225,6 +229,28 @@ const Board = () => {
       setPosts(response.data);
     } catch (error) {
       console.log(error);
+      // console.log(calendarShare);
+      // console.log(`캘린더 포함`);
+    }
+  };
+
+  const fetchPostsWithAll = async () => {
+    try {
+      const params = {
+        page: currentPage,
+        size: pageSize,
+        orderBy: orderBy,
+      };
+
+      const response = await axios.get(`${API_URL}/boards`, {
+        params: params,
+      });
+
+      setPosts(response.data);
+    } catch (error) {
+      console.log(error);
+      // console.log(calendarShare);
+      // console.log(`캘린더 미포함`);
     }
   };
 

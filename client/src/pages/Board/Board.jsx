@@ -179,6 +179,11 @@ const PlusIcon = styled(HiPlus)`
 
 const ListBox = styled.section`
   width: 100%;
+  min-height: 580px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Board = () => {
@@ -199,7 +204,7 @@ const Board = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('/boards', {
+      const response = await axios.get('${SERVER_URL}/boards', {
         params: {
           page: currentPage,
           size: pageSize,
@@ -208,12 +213,13 @@ const Board = () => {
       });
       setPosts(response.data);
     } catch (error) {
-      console.log(handlePaginationClick, setPageSize);
+      console.log(error);
     }
   };
 
   const handlePaginationClick = (pageNumber) => {
     setCurrentPage(pageNumber);
+    setPageSize(10);
   };
 
   const handleSortClick = (orderByValue) => {
@@ -262,6 +268,7 @@ const Board = () => {
       <ListBox>
         {isDash && <Dash posts={posts} />}
         {!isDash && <List posts={posts} />}
+        {posts.length === 0 && <span>데이터가 없습니다</span>}
       </ListBox>
       {isDash ? (
         <UploadIconBtn onClick={handleUploadClick}>

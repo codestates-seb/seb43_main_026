@@ -1,6 +1,8 @@
 //모듈
 import styled from 'styled-components';
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
 import { useNavigate } from 'react-router';
 
 //공통 스타일
@@ -9,6 +11,7 @@ import { COLOR, SIZE } from '../../style/theme';
 //컴포넌트
 import Dash from '../../component/Board/Dash';
 import List from '../../component/Board/List';
+import Pagination from '../../component/Board/Pagination';
 
 //아이콘
 import { BsCalendar2Heart } from 'react-icons/bs';
@@ -17,7 +20,10 @@ import { RiListUnordered } from 'react-icons/ri';
 import { HiPlus } from 'react-icons/hi';
 
 //더미데이터
-import boardData from '../../component/Board/boardData';
+// import boardData from '../../component/Board/boardData';
+
+//서버 url
+const API_URL = process.env.REACT_APP_API_URL;
 
 //전체 컨테이너
 const Container = styled.main`
@@ -78,14 +84,17 @@ const CalendarShow = styled.button`
   font-weight: 600;
   border: none;
   border-radius: 5px;
-  color: ${COLOR.main_dark_blue};
-  background-color: ${COLOR.bg_light_blue};
+  color: ${(props) => (!props.calendarShare ? COLOR.main_dark_blue : COLOR.bg)};
+  background-color: ${(props) =>
+    !props.calendarShare ? COLOR.bg_light_blue : COLOR.main_dark_blue};
 `;
 
 const CalIcon = styled(BsCalendar2Heart)`
   margin-right: 6px;
   color: ${COLOR.main_blue};
 `;
+
+const MoveCategory = styled.div``;
 
 //리스트 조회 방식 및 정렬
 const SortBox = styled.section`
@@ -176,31 +185,94 @@ const PlusIcon = styled(HiPlus)`
 
 const ListBox = styled.section`
   width: 100%;
+  min-height: 580px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Board = () => {
-  const [posts, setPosts] = useState(boardData);
+  const [posts, setPosts] = useState([]);
   const [isDash, setIsDash] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [orderBy, setOrderBy] = useState('latest');
+  const [calendarShare, setCalendarShare] = useState(false);
 
   const navigate = useNavigate();
 
-  // const Url = process.env.REACT_APP_API_URL;
-  // console.log(Url);
+  useEffect(
+    () => {
+      if (calendarShare) {
+        fetchPostsCalendar();
+      } else if (!calendarShare) {
+        fetchPostsWithAll();
+      }
+    }
+    // [currentPage, pageSize, orderBy, calendarShare]
+  );
+
+  const fetchPostsCalendar = async () => {
+    try {
+      const params = {
+        page: currentPage,
+        size: pageSize,
+        orderBy: orderBy,
+        calendarShare,
+      };
+
+      const response = await axios.get(`${API_URL}/boards`, {
+        params: params,
+      });
+
+      setPosts(response.data);
+    } catch (error) {
+      console.log(error);
+      // console.log(calendarShare);
+      // console.log(`캘린더 포함`);
+    }
+  };
+
+  const fetchPostsWithAll = async () => {
+    try {
+      const params = {
+        page: currentPage,
+        size: pageSize,
+        orderBy: orderBy,
+      };
+
+      const response = await axios.get(`${API_URL}/boards`, {
+        params: params,
+      });
+
+      setPosts(response.data);
+    } catch (error) {
+      console.log(error);
+      // console.log(calendarShare);
+      // console.log(`캘린더 미포함`);
+    }
+  };
+
+  const handlePaginationClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setPageSize(10);
+  };
+
+  const handleSortClick = (orderByValue) => {
+    setOrderBy(orderByValue);
+  };
 
   const handleUploadClick = () => {
     navigate('/board/add');
   };
 
-  //첫 번째 게시글의 제목을 "New Title"로 업데이트
-  //setPost안쓰면 eslint오류나서 그냥 쓰는 코드 서버 통신 코드 작성 후 지워야 함
-  const updatePost = () => {
-    const newPosts = [...posts];
-    newPosts[0].title = 'New Title';
-    setPosts(newPosts);
-  };
-
   const handleViewChange = (value) => {
     setIsDash(value);
+  };
+
+  const handleViewCalendar = () => {
+    setCalendarShare(!calendarShare);
   };
 
   return (
@@ -212,7 +284,14 @@ const Board = () => {
           </TitleIcon>
           <Community>커뮤니티</Community>
         </Title>
-        <CalendarShow>캘린더 결산</CalendarShow>
+        <MoveCategory>
+          <CalendarShow
+            onClick={handleViewCalendar}
+            calendarShare={calendarShare}
+          >
+            캘린더 결산
+          </CalendarShow>
+        </MoveCategory>
       </TitleAndIcon>
       <SortBox>
         <View>
@@ -224,9 +303,9 @@ const Board = () => {
           </SortBtn>
         </View>
         <Sort>
-          <SortBtn>최신순</SortBtn>
-          <SortBtn>추천순</SortBtn>
-          <SortBtn>댓글순</SortBtn>
+          <SortBtn onClick={() => handleSortClick('latest')}>최신순</SortBtn>
+          <SortBtn onClick={() => handleSortClick('likes')}>추천순</SortBtn>
+          <SortBtn onClick={() => handleSortClick('comments')}> 댓글순</SortBtn>
         </Sort>
       </SortBox>
       {!isDash && (
@@ -237,16 +316,20 @@ const Board = () => {
       <ListBox>
         {isDash && <Dash posts={posts} />}
         {!isDash && <List posts={posts} />}
+        {posts.length === 0 && <span>데이터가 없습니다</span>}
       </ListBox>
-      {isDash && (
+      {isDash ? (
         <UploadIconBtn onClick={handleUploadClick}>
           <PlusIcon size={32} color="#ffffff" />
         </UploadIconBtn>
+      ) : (
+        <Pagination
+          currentPage={currentPage}
+          pageSize={pageSize}
+          totalPosts={posts.length}
+          onPaginationClick={handlePaginationClick}
+        />
       )}
-      {/* 여기도 지워야함 */}
-      <button className="del" onClick={updatePost}>
-        Update Post
-      </button>
     </Container>
   );
 };

@@ -280,6 +280,18 @@ const CalendarComponent = () => {
           toolbar: Toolbar,
           event: CustomEvent,
         }}
+        tileContent={({ activeStartDate, date, view }) => {
+          return view === 'month' && date.getDay() === 0 ? (
+            <p
+              onMouseEnter={
+                //do whatever you want
+                console.log('activeStartDate')
+              }
+            >
+              {activeStartDate}
+            </p>
+          ) : null;
+        }}
       />
       <CalendarBottom></CalendarBottom>
     </CalendarContainer>

@@ -1,4 +1,9 @@
 spring:
+  profiles:
+    active: local
+    group:
+      local: profiles-local
+      dev: profiles-dev
   h2:
     console:
       enabled: true
@@ -16,12 +21,20 @@ spring:
       hibernate:
         format_sql: true  # (3) SQL pretty print
         dialect: org.hibernate.dialect.MySQL5Dialect
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 logging:
   level:
     org:
       springframework:
         orm:
           jpa: DEBUG
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error # 해당 클래스에서 예외가 발생하면 로그를 출력하지 않음
 server:
   servlet:
     encoding:
@@ -33,4 +46,25 @@ jwt:
 mail:
   address:
     admin: SoomoAdmin@gmail.com
-
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+## LOCAL 설정
+#spring.config.activate.on-profile: "profiles-local"
+#spring:
+#  s3:
+#    bucket:
+#    access-key:
+#    secret-key:
+#
+#---
+## DEV 설정
+#spring.config.activate.on-profile: "profiles-dev"
+#spring:
+#  s3:
+#    bucket:
+#    access-key:
+#    secret-key:

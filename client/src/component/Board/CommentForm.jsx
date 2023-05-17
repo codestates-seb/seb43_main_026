@@ -11,7 +11,7 @@ import Button from '../common/Button';
 const Form = styled.form`
   margin: 13px 0px 40px;
   width: 100%;
-  padding: 0 10px;
+  padding: 0 15px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,10 +44,6 @@ const InputComment = styled.textarea`
   }
 `;
 
-const CommentButton = styled(Button)`
-  background-color: ${COLOR.main_blue};
-`;
-
 function CommentForm() {
   const { register, handleSubmit, reset } = useForm();
 
@@ -68,7 +64,7 @@ function CommentForm() {
           {...register('comment')}
         />
       </Comment>
-      <CommentButton text="댓글 작성" width="98%" height="40px" type="submit" />
+      <Button text="댓글 작성" height="40px" type="submit" />
     </Form>
   );
 }

@@ -41,6 +41,7 @@ const Input = ({
         type={type}
         value={value}
         onChange={onChange}
+        autocomplete="new-password"
       />
       {errorMessage ? <AlertMessage>{errorMessage}</AlertMessage> : null}
     </Container>

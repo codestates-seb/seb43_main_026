@@ -1,7 +1,6 @@
 // 라이브러리
 import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import { useForm, Controller } from 'react-hook-form';
 
 import LogoImg from '../../assets/image/logo2.png';
 import { COLOR } from '../../style/theme';
@@ -11,7 +10,7 @@ import GoogleLogin from '../../component/oAuth/GoogleLogin';
 import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+import { userAPI } from '../../assets/api';
 
 const Container = styled.div`
   width: 100vw;
@@ -52,18 +51,16 @@ const OAuthContainer = styled.div`
 `;
 
 const SignUp = () => {
-  const {
-    handleSubmit,
-    register,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { handleSubmit, control, getValues } = useForm();
 
   const nicknameOptions = {
     required: '닉네임을 입력해주세요.',
     minLength: {
       value: 2,
       message: '닉네임은 두글자 이상이어야 합니다.',
+    },
+    validate: {
+      check: () => {}, // 닉네임 중복 체크 API 필요
     },
   };
   const emailOptions = {
@@ -83,65 +80,102 @@ const SignUp = () => {
   };
   const passwordCheckOptions = {
     required: '비밀번호를 재입력해주세요.',
-    validate: (value) =>
-      value === watch('password') || '입력된 비밀번호와 일치하지 않습니다.',
+    validate: {
+      check: (val) => {
+        if (getValues('password') !== val) {
+          return '비밀번호가 일치하지 않습니다.';
+        }
+      },
+    },
   };
 
   // 회원가입 완료 시
   const onSubmit = (data) => {
     console.log(data);
-    axios
-      .post(`${SERVER_URL}/members/signup`, { data })
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));
+    userAPI.signup(data);
+    // axios
+    //   .post(`${SERVER_URL}/members/signup`, { data })
+    //   .then((res) => console.log(res))
+    //   .catch((error) => console.log(error));
   };
 
   // 에러 발생 시
   const onError = (error) => console.log(error);
+
   return (
     <Container>
       <Logo src={LogoImg} alt="logo" />
       <Title>회원가입</Title>
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
-        <Input
-          id="nickname"
-          label="닉네임"
-          type="text"
-          options={nicknameOptions}
-          register={register}
-          errors={errors.nickname}
+        <Controller
+          name={'email'}
+          control={control}
+          rules={emailOptions}
+          render={({ field, fieldState: { error } }) => (
+            <Input
+              id="email"
+              label="이메일"
+              type="text"
+              errorMessage={error?.message}
+              onChange={field.onChange}
+              value={field.value || ''}
+            />
+          )}
+        />
+        <Controller
+          name={'nickname'}
+          control={control}
+          rules={nicknameOptions}
+          render={({ field, fieldState: { error } }) => (
+            <Input
+              id="nickname"
+              label="닉네임"
+              type="text"
+              errorMessage={error?.message}
+              onChange={field.onChange}
+              value={field.value || ''}
+            />
+          )}
+        />
+        <Controller
+          name={'password'}
+          control={control}
+          rules={passwordOptions}
+          render={({ field, fieldState: { error } }) => (
+            <Input
+              id="password"
+              label="비밀번호"
+              type="password"
+              errorMessage={error?.message}
+              onChange={field.onChange}
+              value={field.value || ''}
+              autocomplete="off"
+            />
+          )}
+        />
+        <Controller
+          name={'passwordCheck'}
+          control={control}
+          rules={passwordCheckOptions}
+          render={({ field, fieldState: { error } }) => (
+            <Input
+              id="passwordCheck"
+              label="비밀번호 확인"
+              type="password"
+              errorMessage={error?.message}
+              onChange={field.onChange}
+              value={field.value || ''}
+              autocomplete="off"
+            />
+          )}
         />
 
-        <Input
-          id="email"
-          label="이메일"
-          type="text"
-          options={emailOptions}
-          register={register}
-          errors={errors.email}
+        <Button
+          text={'회원가입'}
+          width={'100%'}
+          height={'5vh'}
+          style={{ marginTop: '20px' }}
         />
-
-        <Input
-          id="password"
-          label="비밀번호"
-          type="password"
-          options={passwordOptions}
-          register={register}
-          errors={errors.password}
-          autocomplete="new-password"
-        />
-
-        <Input
-          id="passwordCheck"
-          label="비밀번호 확인"
-          type="password"
-          options={passwordCheckOptions}
-          register={register}
-          errors={errors.passwordCheck}
-          autocomplete="new-password"
-        />
-
-        <Button text={'회원가입'} width={'100%'} height={'5vh'} />
         <OAuthContainer>
           <GoogleLogin />
         </OAuthContainer>

@@ -7,7 +7,7 @@ import { COLOR } from '../../style/theme';
 import LogoImage from '../../assets/image/logo2.png';
 import Button from '../../component/common/Button';
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+const SERVER_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.div`
   width: 100vw;

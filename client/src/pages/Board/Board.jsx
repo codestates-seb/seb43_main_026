@@ -23,7 +23,7 @@ import { HiPlus } from 'react-icons/hi';
 // import boardData from '../../component/Board/boardData';
 
 //서버 url
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+const API_URL = process.env.REACT_APP_API_URL;
 
 //전체 컨테이너
 const Container = styled.main`
@@ -93,6 +93,8 @@ const CalIcon = styled(BsCalendar2Heart)`
   margin-right: 6px;
   color: ${COLOR.main_blue};
 `;
+
+const MoveCategory = styled.div``;
 
 //리스트 조회 방식 및 정렬
 const SortBox = styled.section`
@@ -200,20 +202,26 @@ const Board = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchPosts();
-  }, [currentPage, pageSize, orderBy, calendarShare]);
+  useEffect(
+    () => {
+      fetchPosts();
+    }
+    // [currentPage, pageSize, orderBy, calendarShare]
+  );
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get(`${SERVER_URL}/boards`, {
-        params: {
-          page: currentPage,
-          size: pageSize,
-          orderBy: orderBy,
-          calendarShare,
-        },
+      const params = {
+        page: currentPage,
+        size: pageSize,
+        orderBy: orderBy,
+        calendarShare,
+      };
+
+      const response = await axios.get(`${API_URL}/boards`, {
+        params: params,
       });
+
       setPosts(response.data);
     } catch (error) {
       console.log(error);
@@ -250,12 +258,14 @@ const Board = () => {
           </TitleIcon>
           <Community>커뮤니티</Community>
         </Title>
-        <CalendarShow
-          onClick={handleViewCalendar}
-          calendarShare={calendarShare}
-        >
-          캘린더 결산
-        </CalendarShow>
+        <MoveCategory>
+          <CalendarShow
+            onClick={handleViewCalendar}
+            calendarShare={calendarShare}
+          >
+            캘린더 결산
+          </CalendarShow>
+        </MoveCategory>
       </TitleAndIcon>
       <SortBox>
         <View>

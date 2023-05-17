@@ -69,7 +69,7 @@ const Pagination = ({
             onClick={handlePrevClick}
             className={currentPage === 1 ? 'disabled' : ''}
           >
-            Prev
+            {`<`}
           </button>
         </li>
         {renderPageNumbers()}
@@ -78,7 +78,7 @@ const Pagination = ({
             onClick={handleNextClick}
             className={currentPage === totalPages ? 'disabled' : ''}
           >
-            Next
+            {`>`}
           </button>
         </li>
       </ul>

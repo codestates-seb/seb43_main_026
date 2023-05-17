@@ -27,7 +27,7 @@ import java.util.Arrays;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-public class SecurityConfiguration {
+public class SecurityConfiguration{
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
 
@@ -43,7 +43,8 @@ public class SecurityConfiguration {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .csrf().disable()
-                .cors(withDefaults())
+                .cors()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
@@ -67,6 +68,7 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.PATCH,"/calendars/**").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/calendars/**").hasRole("USER")
                         .antMatchers(HttpMethod.GET,"/calendars/**").hasAnyRole("USER","ADMIN")
+                        .antMatchers(HttpMethod.OPTIONS,"/members/signup").permitAll()
                         .anyRequest().permitAll());
 
         return http.build();
@@ -81,8 +83,8 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE"));
-
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

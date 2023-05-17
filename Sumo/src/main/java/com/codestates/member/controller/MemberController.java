@@ -17,7 +17,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @Slf4j
 @Validated
-@RequestMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
@@ -27,7 +27,7 @@ public class MemberController {
         this.mapper = mapper;
     }
 
-    @PostMapping("/members/signup")
+    @PostMapping("/signup")
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post postDto){
         Member member = mapper.memberPostDtoToMember(postDto);
         Member response = memberService.createMember(member);
@@ -37,7 +37,7 @@ public class MemberController {
                 HttpStatus.CREATED);
     }
 
-    @PatchMapping("/members/{member-id}")
+    @PatchMapping("/{member-id}")
     public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
                                       @Valid @RequestBody MemberDto.Patch patchDto){
         patchDto.setMemberId(memberId);
@@ -49,7 +49,7 @@ public class MemberController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/members/{member-id}")
+    @GetMapping("/{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId){
         Member member = memberService.findMember(memberId);
 
@@ -58,7 +58,7 @@ public class MemberController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("/members/{member-id}")
+    @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId){
         memberService.deleteMember(memberId);
 

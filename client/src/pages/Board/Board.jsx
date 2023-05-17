@@ -22,6 +22,9 @@ import { HiPlus } from 'react-icons/hi';
 //더미데이터
 // import boardData from '../../component/Board/boardData';
 
+//서버 url
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
 //전체 컨테이너
 const Container = styled.main`
   margin: 0 auto;
@@ -81,8 +84,9 @@ const CalendarShow = styled.button`
   font-weight: 600;
   border: none;
   border-radius: 5px;
-  color: ${COLOR.main_dark_blue};
-  background-color: ${COLOR.bg_light_blue};
+  color: ${(props) => (!props.calendarShare ? COLOR.main_dark_blue : COLOR.bg)};
+  background-color: ${(props) =>
+    !props.calendarShare ? COLOR.bg_light_blue : COLOR.main_dark_blue};
 `;
 
 const CalIcon = styled(BsCalendar2Heart)`
@@ -192,23 +196,22 @@ const Board = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [orderBy, setOrderBy] = useState('latest');
+  const [calendarShare, setCalendarShare] = useState(false);
 
   const navigate = useNavigate();
 
-  // const Url = process.env.REACT_APP_API_URL;
-  // console.log(Url);
-
   useEffect(() => {
     fetchPosts();
-  }, [currentPage, pageSize, orderBy]);
+  }, [currentPage, pageSize, orderBy, calendarShare]);
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('${SERVER_URL}/boards', {
+      const response = await axios.get(`${SERVER_URL}/boards`, {
         params: {
           page: currentPage,
           size: pageSize,
           orderBy: orderBy,
+          calendarShare,
         },
       });
       setPosts(response.data);
@@ -234,6 +237,10 @@ const Board = () => {
     setIsDash(value);
   };
 
+  const handleViewCalendar = () => {
+    setCalendarShare(!calendarShare);
+  };
+
   return (
     <Container isDash={isDash}>
       <TitleAndIcon>
@@ -243,7 +250,12 @@ const Board = () => {
           </TitleIcon>
           <Community>커뮤니티</Community>
         </Title>
-        <CalendarShow>캘린더 결산</CalendarShow>
+        <CalendarShow
+          onClick={handleViewCalendar}
+          calendarShare={calendarShare}
+        >
+          캘린더 결산
+        </CalendarShow>
       </TitleAndIcon>
       <SortBox>
         <View>

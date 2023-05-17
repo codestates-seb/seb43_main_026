@@ -19,6 +19,9 @@ import { HiPlus } from 'react-icons/hi';
 //더미데이터
 import boardData from '../../component/Board/boardData';
 
+//서버 주소
+// const API_URL = process.env.REACT_APP_API_URL;
+
 //전체 컨테이너
 const Container = styled.main`
   margin: 0 auto;
@@ -189,9 +192,6 @@ const Board = () => {
   const [isDash, setIsDash] = useState(true);
 
   const navigate = useNavigate();
-
-  // const Url = process.env.REACT_APP_API_URL;
-  // console.log(Url);
 
   const handleUploadClick = () => {
     navigate('/board/add');

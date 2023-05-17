@@ -5,6 +5,7 @@ import { COLOR } from '../../../style/theme';
 
 // 아이콘
 import { AiOutlineSearch } from 'react-icons/ai';
+import Loading from '../../common/Loading';
 
 // styled-component
 // 검색창
@@ -110,6 +111,7 @@ const SearchPlaceContainer = styled.div`
 const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       handleSearch();
     }
   };
@@ -157,7 +159,7 @@ const SearchMap = ({ place, setPlace }) => {
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
   const { kakao } = window;
-
+  console.log(map);
   const handleSearch = useCallback(() => {
     const ps = new kakao.maps.services.Places();
 
@@ -178,7 +180,8 @@ const SearchMap = ({ place, setPlace }) => {
       handleSearch();
     }
   }, [map, handleSearch]);
-  const handleClickSearch = () => {
+  const handleClickSearch = (e) => {
+    e.preventDefault();
     if (!map) {
       console.log('실패');
       return;
@@ -194,44 +197,45 @@ const SearchMap = ({ place, setPlace }) => {
   return (
     <MapContainer>
       <p>💡 지역 + 수영장으로 더 쉽게 검색할 수 있어요</p>
+      <SearchBar
+        place={place}
+        handlePlace={handlePlace}
+        handleSearch={handleSearch}
+        handleClickSearch={handleClickSearch}
+      />
       {location ? (
-        <>
-          <SearchBar
-            place={place}
-            handlePlace={handlePlace}
-            handleSearch={handleSearch}
-            handleClickSearch={handleClickSearch}
-          />
-          {/* 지도 로딩속도가 느려서 처음 렌더링 시 에러가 뜸 */}
-          <Map
-            center={{ lat: location.latitude, lng: location.longitude }}
-            style={{ width: '300px', height: '400px' }}
-            level={5}
-            onLoad={(map) => setMap(map)}
-          >
-            {markers
-              ? markers.map((marker) => (
-                  <MapMarker
-                    key={`marker-${marker.place_name}-${marker.x},${marker.y}`}
-                    position={{ lat: Number(marker.y), lng: Number(marker.x) }}
-                    onClick={() => setInfo(marker)}
-                  >
-                    {info && info.content === marker.content && (
-                      <button
-                        style={{ color: '#000' }}
-                        onClick={() => setPlace(marker.place_name)}
-                        value={marker.place_name}
-                      >
-                        {marker.place_name}
-                      </button>
-                    )}
-                  </MapMarker>
-                ))
-              : null}
-            {/* 로딩페이지 구현 후 넣을 예정 */}
-          </Map>
-        </>
-      ) : null}
+        <Map
+          center={{ lat: location.latitude, lng: location.longitude }}
+          style={{ width: '300px', height: '400px' }}
+          level={5}
+          onLoad={(map) => setMap(map)}
+        >
+          {markers
+            ? markers.map((marker) => (
+                <MapMarker
+                  key={`marker-${marker.place_name}-${marker.x},${marker.y}`}
+                  position={{ lat: Number(marker.y), lng: Number(marker.x) }}
+                  onClick={() => setInfo(marker)}
+                >
+                  {info && info.content === marker.content && (
+                    <button
+                      style={{ color: '#000' }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPlace(marker.place_name);
+                      }}
+                      value={marker.place_name}
+                    >
+                      {marker.place_name}
+                    </button>
+                  )}
+                </MapMarker>
+              ))
+            : null}
+        </Map>
+      ) : (
+        <Loading />
+      )}
     </MapContainer>
   );
 };

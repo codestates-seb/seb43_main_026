@@ -15,9 +15,14 @@ const Container = styled.button`
   }
 `;
 
-const Button = ({ text, width, height, handleClick }) => {
+const Button = ({ text, width, height, handleClick, style }) => {
   return (
-    <Container width={width} height={height} onClick={handleClick}>
+    <Container
+      style={style}
+      width={width}
+      height={height}
+      onClick={handleClick}
+    >
       {text}
     </Container>
   );

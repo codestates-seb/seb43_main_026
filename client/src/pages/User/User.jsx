@@ -5,7 +5,7 @@ import Button from '../../component/common/Button';
 import { useEffect } from 'react';
 import axios from 'axios';
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+const SERVER_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.div`
   width: 100vw;

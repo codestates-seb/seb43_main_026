@@ -14,8 +14,8 @@ export const userAPI = {
   //일반 로그인
   login: (username, password) =>
     api.post('/login', {
-      username: username,
-      password: password,
+      username,
+      password,
     }),
 
   //일반 회원가입

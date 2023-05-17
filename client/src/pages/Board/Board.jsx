@@ -176,6 +176,12 @@ const PlusIcon = styled(HiPlus)`
 
 const ListBox = styled.section`
   width: 100%;
+  width: 100%;
+  min-height: 580px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Board = () => {

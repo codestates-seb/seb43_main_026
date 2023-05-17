@@ -182,10 +182,11 @@ const SearchMap = ({ place, setPlace }) => {
   }, [map, handleSearch]);
   const handleClickSearch = (e) => {
     e.preventDefault();
-    if (!map) {
-      console.log('실패');
-      return;
-    }
+    // 처음 클릭 이벤트 발생 시 map이 undefined가 뜨기 때문에 검색이 되지 않음->일단 주석 처리
+    // if (!map) {
+    //   console.log('실패');
+    //   return;
+    // }
     handleSearch();
     console.log('클릭!');
   };
@@ -196,7 +197,7 @@ const SearchMap = ({ place, setPlace }) => {
   console.log(place);
   return (
     <MapContainer>
-      <p>💡 지역 + 수영장으로 더 쉽게 검색할 수 있어요</p>
+      <p>💡 지역 + 수영장으로 입력해 주세요</p>
       <SearchBar
         place={place}
         handlePlace={handlePlace}

@@ -5,6 +5,7 @@ import { BsTrash3 } from 'react-icons/bs';
 import { SIZE, COLOR } from '../../style/theme';
 import { useState } from 'react';
 import CalendarDeleteModal from '../../component/calendar/calendarDetailComponent.jsx/CalendarDeleteModal';
+import { useNavigate } from 'react-router';
 
 const CalendarDetailContainer = styled.div`
   max-width: 1200px;
@@ -118,13 +119,17 @@ const CalendarDetail = () => {
     setOpenDeleteModal(!openDeleteModal);
   };
 
+  const nav = useNavigate();
+  const navToEdit = () => {
+    nav(`/calendar/:calendarid/edit`);
+  };
   return (
     <CalendarDetailContainer>
       <CalendarDetailHeaderContainer>
         <BackButton />
         <p>2023.05.16</p>
         <CalendarDetailButtons>
-          <FaRegEdit size={20} />
+          <FaRegEdit size={20} onClick={navToEdit} />
           <BsTrash3 size={20} color="red" onClick={handleDeleteModal} />
         </CalendarDetailButtons>
       </CalendarDetailHeaderContainer>

@@ -11,6 +11,8 @@ import Nav from './layout/Nav';
 import MyCalendar from './pages/calendarPage/Calendar';
 import CalendarAdd from './pages/calendarPage/CalendarAdd';
 import CalendarDetail from './pages/calendarPage/CalendarDetail';
+import CalendarEdit from './pages/calendarPage/CalendarEdit';
+
 import Board from './pages/Board/Board';
 import BoardAdd from './pages/Board/BoardAdd';
 import BoardDetail from './pages/Board/BoardDetail';
@@ -38,6 +40,7 @@ function App() {
           <Route path="/" element={<MyCalendar />} />
           <Route path="/calendar/add" element={<CalendarAdd />} />
           <Route path="/calendar/:calendarid" element={<CalendarDetail />} />
+          <Route path="/calendar/:calendarid/edit" element={<CalendarEdit />} />
           <Route path="/board" element={<Board />} />
           <Route path="/board/add" element={<BoardAdd />} />
           <Route path="/board/detail" element={<BoardDetail />} />

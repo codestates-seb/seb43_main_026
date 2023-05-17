@@ -8,9 +8,9 @@ import Footer from './layout/Footer';
 import Nav from './layout/Nav';
 
 // 페이지
-import MyCalendar from './pages/calendarPage/Calendar';
-import CalendarAdd from './pages/calendarPage/CalendarAdd';
-import CalendarDetail from './pages/calendarPage/CalendarDetail';
+import MyCalendar from './pages/Calendar/Calendar';
+import CalendarAdd from './pages/Calendar/CalendarAdd';
+import CalendarDetail from './pages/Calendar/CalendarDetail';
 import Board from './pages/Board/Board';
 import BoardAdd from './pages/Board/BoardAdd';
 import BoardDetail from './pages/Board/BoardDetail';

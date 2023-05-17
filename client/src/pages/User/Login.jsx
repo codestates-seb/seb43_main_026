@@ -72,7 +72,11 @@ const Login = () => {
   };
 
   // 에러 발생 시
-  const onError = (error) => console.log(error);
+  // 401 에러 코드 -> 로그인 실패
+  // 500 에러 코드 -> 형식 잘못됨
+  const onError = (error) => {
+    console.log(error, '에러');
+  };
 
   return (
     <Container>

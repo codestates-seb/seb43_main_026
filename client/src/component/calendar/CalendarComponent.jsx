@@ -234,8 +234,8 @@ const CalendarInfo = () => {
 const Toolbar = (props) => {
   return (
     <ToolbarContainer>
-      <ToolbarButtons props={props}></ToolbarButtons>
-      <CalendarInfo></CalendarInfo>
+      <ToolbarButtons props={props} />
+      <CalendarInfo />
     </ToolbarContainer>
   );
 };

@@ -18,6 +18,8 @@ public class BoardPatchDto {
 
     private String content;
 
+    private long memberId;
+
     private String boardImageAddress;
 
     private Boolean calendarShare;

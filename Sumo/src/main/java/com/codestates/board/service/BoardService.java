@@ -38,7 +38,7 @@ public class BoardService {
         Member currentMember = getCurrentMember();
         board.setMember(currentMember);
         currentMember.addBoard(board);
-
+        
         if(board.getCalendarShare() != null){
             board.setCalendarShare(board.getCalendarShare());
         }
@@ -56,6 +56,7 @@ public class BoardService {
 
         Member currentMember = getCurrentMember();
         Board findBoard = findVerifiedBoard(board.getBoardId());
+
 
         if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
             throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);

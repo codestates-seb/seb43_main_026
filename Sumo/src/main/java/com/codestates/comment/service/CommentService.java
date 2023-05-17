@@ -60,6 +60,7 @@ public class CommentService {
         Member currentMember = getCurrentMember();
         Comment findComment = findVerifiedComment(comment.getCommentId());
 
+
         if(!findComment.getMember().getMemberId().equals(currentMember.getMemberId())) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_ACCESS_DENIED);
 

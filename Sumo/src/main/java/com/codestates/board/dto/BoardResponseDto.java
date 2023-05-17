@@ -12,6 +12,8 @@ public class BoardResponseDto {
 
     private long boardId;
 
+    private Long memberId;
+
     private String title;
 
     private String content;
@@ -32,9 +34,9 @@ public class BoardResponseDto {
 
     private int viewCount;
 
-
     private Boolean calendarShare;
 
     private Boolean workoutRecordShare;
+
 
 }

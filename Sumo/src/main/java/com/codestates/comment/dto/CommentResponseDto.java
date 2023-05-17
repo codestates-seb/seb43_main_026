@@ -20,5 +20,7 @@ public class CommentResponseDto {
 
     private LocalDateTime modifiedAt;
 
+    private Long memberId;
+
 
 }

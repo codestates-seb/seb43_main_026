@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -15,7 +17,7 @@ public class Schedule {
     private long scheduleId;
 
     @Column(nullable = false)
-    private String date;
+    private LocalDate date;
 
     @Column(nullable = false, name = "image_address")
     private String imageAddress;
@@ -27,10 +29,13 @@ public class Schedule {
     private String location;
 
     @Column(nullable = false, name = "start_time")
-    private String startTime;
+    private LocalTime startTime;
 
     @Column(nullable = false, name = "end_time")
-    private String endTime;
+    private LocalTime endTime;
+
+    @Column(nullable = false, name = "duration_time")
+    private float durationTime;
 
     @ManyToOne
     @JoinColumn(name = "member_id")

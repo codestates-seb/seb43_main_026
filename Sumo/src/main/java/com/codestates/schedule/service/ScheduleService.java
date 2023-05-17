@@ -9,6 +9,9 @@ import com.codestates.schedule.entity.Schedule;
 import com.codestates.schedule.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +36,12 @@ public class ScheduleService {
         // 중복 날짜 확인 로직
         verifyExistsDate(schedule.getDate(), member.getMemberId());
 
+        verifyValidTimeSetting(schedule.getStartTime(), schedule.getEndTime());
+
+        // durationTime 세팅 로직
+        float durationTime = calculateDurationTime(schedule.getStartTime(), schedule.getEndTime());
+        schedule.setDurationTime(durationTime);
+
         return scheduleRepository.save(schedule);
     }
 
@@ -50,6 +59,10 @@ public class ScheduleService {
         Optional.ofNullable(schedule.getLocation()).ifPresent(location -> findSchedule.setLocation(location));
         Optional.ofNullable(schedule.getStartTime()).ifPresent(startTime -> findSchedule.setStartTime(startTime));
         Optional.ofNullable(schedule.getEndTime()).ifPresent(endTime -> findSchedule.setEndTime(endTime));
+
+        // durationTime 세팅 로직
+        float durationTime = calculateDurationTime(findSchedule.getStartTime(), findSchedule.getEndTime());
+        findSchedule.setDurationTime(durationTime);
 
         return scheduleRepository.save(findSchedule);
     }
@@ -84,8 +97,8 @@ public class ScheduleService {
         checkAccessibleUser(emailFromToken, emailFromSchedule);
 
         return schedules.stream()
-                .filter(schedule -> convertDateToYear(schedule.getDate()) == year
-                        && convertDateToMonth(schedule.getDate()) == month)
+                .filter(schedule -> schedule.getDate().getYear() == year
+                        && schedule.getDate().getMonthValue() == month)
                 .collect(Collectors.toList());
     }
 
@@ -101,21 +114,13 @@ public class ScheduleService {
         for (Member member : members) {
             List<Schedule> schedules = scheduleRepository.findByMember_MemberId(member.getMemberId());
             List<Schedule> filteredSchedules = schedules.stream()
-                    .filter(schedule -> convertDateToYear(schedule.getDate()) == year
-                            && convertDateToMonth(schedule.getDate()) == month)
+                    .filter(schedule -> schedule.getDate().getYear() == year
+                            && schedule.getDate().getMonthValue() == month)
                     .collect(Collectors.toList());
             responses.add(filteredSchedules);
         }
 
         return responses;
-    }
-
-    private int convertDateToYear(String date) {
-        return Integer.parseInt(date.substring(0, 4));
-    }
-
-    private int convertDateToMonth(String date) {
-        return Integer.parseInt(date.substring(5, 7));
     }
 
     public void deleteSchedule(long scheduleId) {
@@ -129,10 +134,24 @@ public class ScheduleService {
         }
     }
 
-    private void verifyExistsDate(String date, long memberId) {
+    private void verifyExistsDate(LocalDate date, long memberId) {
         Optional<Schedule> optionalSchedule = scheduleRepository.findByDateAndMember_MemberId(date, memberId);
         if (optionalSchedule.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.SCHEDULE_EXISTS);
         }
+    }
+
+    private void verifyValidTimeSetting(LocalTime startTime, LocalTime endTime) {
+        int compareTo = endTime.compareTo(startTime);
+        if (compareTo <= 0) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_TIME_SETTING);
+        }
+    }
+
+    private float calculateDurationTime(LocalTime startTime, LocalTime endTime) {
+        Duration duration = Duration.between(startTime, endTime);
+        float minutes = duration.toMinutes();
+        float durationTime = minutes / 60;
+        return durationTime;
     }
 }

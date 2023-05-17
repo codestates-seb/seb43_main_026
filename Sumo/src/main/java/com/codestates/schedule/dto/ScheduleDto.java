@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class ScheduleDto {
 
@@ -24,13 +26,13 @@ public class ScheduleDto {
         private String location;
 
         @NotBlank(message = "운동 시작 시간은 필수 항목입니다.")
-        @Pattern(regexp = "^([01][0-9]|2[0-3]):([0-5][0-9])$",
-                message = "HH:mm 형식으로 작성해야 합니다.")
+        @Pattern(regexp = "^([01][0-9]|2[0-3]):([0-5][0-9]):00$",
+                message = "HH:mm:ss 형식으로 작성해야 합니다.")
         private String startTime;
 
         @NotBlank(message = "운동 종료 시간은 필수 항목입니다.")
-        @Pattern(regexp = "^([01][0-9]|2[0-3]):([0-5][0-9])$",
-                message = "HH:mm 형식으로 작성해야 합니다.")
+        @Pattern(regexp = "^([01][0-9]|2[0-3]):([0-5][0-9]):00$",
+                message = "HH:mm:ss 형식으로 작성해야 합니다.")
         private String endTime;
     }
 
@@ -45,12 +47,12 @@ public class ScheduleDto {
 
         private String location;
 
-        @Pattern(regexp = "^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$",
-                message = "HH:mm 형식으로 작성해야 합니다.")
+        @Pattern(regexp = "^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9]):00$",
+                message = "HH:mm:ss 형식으로 작성해야 합니다.")
         private String startTime;
 
-        @Pattern(regexp = "^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$",
-                message = "HH:mm 형식으로 작성해야 합니다.")
+        @Pattern(regexp = "^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9]):00$",
+                message = "HH:mm:ss 형식으로 작성해야 합니다.")
         private String endTime;
     }
 
@@ -59,7 +61,7 @@ public class ScheduleDto {
     public static class Response {
         private long scheduleId;
 
-        private String date;
+        private LocalDate date;
 
         private String imageAddress;
 
@@ -67,9 +69,11 @@ public class ScheduleDto {
 
         private String location;
 
-        private String startTime;
+        private LocalTime startTime;
 
-        private String endTime;
+        private LocalTime endTime;
+
+        private float durationTime;
 
         private long memberId;
     }

@@ -3,6 +3,7 @@ package com.codestates.comment.controller;
 
 import com.codestates.comment.dto.CommentPatchDto;
 import com.codestates.comment.dto.CommentPostDto;
+import com.codestates.comment.dto.CommentPostResponseDto;
 import com.codestates.comment.dto.CommentResponseDto;
 import com.codestates.comment.entity.Comment;
 import com.codestates.comment.mapper.CommentMapper;
@@ -39,6 +40,7 @@ public class CommentController {
     public ResponseEntity postComment(@Valid @RequestBody CommentPostDto commentPostDto,
                                       @PathVariable("board-id") @Positive Long boardId){
         Comment comment = commentService.createComment(commentMapper.commentPostDtoToComment(commentPostDto), boardId);
+        CommentPostResponseDto commentResponseDto = commentMapper.commentToCommentPostResponseDto(comment);
 
 
         URI location = UriComponentsBuilder
@@ -46,7 +48,7 @@ public class CommentController {
                 .path(COMMENT_DEFAULT_URL + "/{comment-id}")
                 .buildAndExpand(boardId,comment.getCommentId())
                 .toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(commentResponseDto);
     }
 
     @PatchMapping("/{comment-id}")

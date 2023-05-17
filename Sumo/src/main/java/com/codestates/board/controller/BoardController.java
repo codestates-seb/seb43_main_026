@@ -3,6 +3,7 @@ package com.codestates.board.controller;
 
 import com.codestates.board.dto.BoardPatchDto;
 import com.codestates.board.dto.BoardPostDto;
+import com.codestates.board.dto.BoardPostResponseDto;
 import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
 import com.codestates.board.mapper.BoardMapper;
@@ -38,6 +39,7 @@ public class BoardController {
     public ResponseEntity postBoard(@Valid @RequestBody BoardPostDto boardPostDto){
 
         Board board = boardService.createBoard(boardMapper.boardPostDtoToboard(boardPostDto));
+        BoardPostResponseDto boardResponseDto = boardMapper.boardToBoardPostResponseDto(board);
 
         URI location = UriComponentsBuilder
                 .newInstance()
@@ -45,7 +47,7 @@ public class BoardController {
                 .buildAndExpand(board.getBoardId())
                 .toUri();
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.created(location).body(boardResponseDto);
     }
 
     @PatchMapping("/{board-id}")
@@ -64,7 +66,6 @@ public class BoardController {
     @DeleteMapping("/{board-id}")
     public ResponseEntity deleteBoard(@PathVariable("board-id")@Positive long boardId) {
         boardService.deleteBoard(boardId);
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

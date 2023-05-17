@@ -3,6 +3,7 @@ package com.codestates.comment.mapper;
 
 import com.codestates.comment.dto.CommentPatchDto;
 import com.codestates.comment.dto.CommentPostDto;
+import com.codestates.comment.dto.CommentPostResponseDto;
 import com.codestates.comment.dto.CommentResponseDto;
 import com.codestates.comment.entity.Comment;
 import org.mapstruct.Mapper;
@@ -34,7 +35,17 @@ public interface CommentMapper {
         commentResponseDto.setCommentId(comment.getCommentId());
         commentResponseDto.setCommentContent(comment.getCommentContent());
         commentResponseDto.setCommentLikeCount(comment.getCommentLikeCount());
+        commentResponseDto.setMemberId(comment.getMember().getMemberId());
         return commentResponseDto;
+    }
+
+    default CommentPostResponseDto commentToCommentPostResponseDto(Comment comment){
+
+        CommentPostResponseDto commentPostResponseDto = new CommentPostResponseDto();
+        commentPostResponseDto.setCommentId(comment.getCommentId());
+        commentPostResponseDto.setMemberId(comment.getMember().getMemberId());
+
+        return commentPostResponseDto;
     }
 
 }

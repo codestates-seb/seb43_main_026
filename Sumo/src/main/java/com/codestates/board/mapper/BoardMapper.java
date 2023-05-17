@@ -3,6 +3,7 @@ package com.codestates.board.mapper;
 
 import com.codestates.board.dto.BoardPatchDto;
 import com.codestates.board.dto.BoardPostDto;
+import com.codestates.board.dto.BoardPostResponseDto;
 import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
 import com.codestates.board.entity.BoardLike;
@@ -52,6 +53,7 @@ public interface BoardMapper {
         boardResponseDto.setCalendarShare(board.getCalendarShare());
         boardResponseDto.setWorkoutRecordShare(board.getWorkoutRecordShare());
         boardResponseDto.setCommentCount(board.getCommentCount());
+        boardResponseDto.setMemberId(board.getMember().getMemberId());
 
         return boardResponseDto;
     }
@@ -64,9 +66,16 @@ public interface BoardMapper {
         boardPagingResponseDto.setBoardImageAddress(board.getBoardImageAddress());
         boardPagingResponseDto.setBoardLikeCount(board.getBoardLikeCount());
         boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
+        boardPagingResponseDto.setMemberId(board.getMember().getMemberId());
         return boardPagingResponseDto;
     }
 
+    default BoardPostResponseDto boardToBoardPostResponseDto(Board board){
+        BoardPostResponseDto boardPostResponseDto = new BoardPostResponseDto();
+        boardPostResponseDto.setBoardId(board.getBoardId());
+        boardPostResponseDto.setMemberId(board.getMember().getMemberId());
+        return boardPostResponseDto;
+    }
 
 
 }

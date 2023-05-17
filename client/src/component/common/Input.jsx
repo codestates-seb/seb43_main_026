@@ -25,12 +25,25 @@ const AlertMessage = styled.span`
   color: red;
 `;
 
-const Input = ({ id, label, type, options, errors, register }) => {
+const Input = ({
+  label,
+  type,
+  errorMessage,
+  value,
+  onChange,
+  ...restProps
+}) => {
   return (
     <Container>
-      <Label htmlFor={id}>{label}</Label>
-      <InputComponent id={id} type={type} {...register(id, options)} />
-      {errors !== undefined && <AlertMessage>{errors.message}</AlertMessage>}
+      {label ? <Label>{label}</Label> : null}
+      <InputComponent
+        {...restProps}
+        type={type}
+        value={value}
+        onChange={onChange}
+        autocomplete="new-password"
+      />
+      {errorMessage ? <AlertMessage>{errorMessage}</AlertMessage> : null}
     </Container>
   );
 };

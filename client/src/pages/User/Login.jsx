@@ -1,7 +1,8 @@
 // 라이브러리
 import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
+// import axios from 'axios';
+import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 
 import LogoImg from '../../assets/image/logo2.png';
 import { COLOR } from '../../style/theme';
@@ -11,7 +12,9 @@ import GoogleLogin from '../../component/oAuth/GoogleLogin';
 import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+import { userAPI } from '../../assets/api';
+
+// const SERVER_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.div`
   width: 100vw;
@@ -52,11 +55,8 @@ const OAuthContainer = styled.div`
 `;
 
 const Login = () => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
+  const { handleSubmit, control } = useForm();
+  const navigate = useNavigate();
 
   const emailOptions = {
     required: '이메일을 입력해주세요.',
@@ -67,12 +67,8 @@ const Login = () => {
   };
 
   // 로그인 완료 시
-  const onSubmit = (data) => {
-    console.log(data);
-    axios
-      .post(`${SERVER_URL}/login`, { data })
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));
+  const onSubmit = ({ username, password }) => {
+    userAPI.login(username, password);
   };
 
   // 에러 발생 시
@@ -83,23 +79,50 @@ const Login = () => {
       <Logo src={LogoImg} alt="logo" />
       <Title>로그인</Title>
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
-        <Input
-          id="email"
-          label="이메일"
-          type="text"
-          options={emailOptions}
-          errors={errors.email}
-          register={register}
+        <Controller
+          name={'username'}
+          control={control}
+          rules={emailOptions}
+          render={({ field, fieldState: { error } }) => (
+            <Input
+              id="username"
+              label="이메일"
+              type="text"
+              errorMessage={error?.message}
+              onChange={field.onChange}
+              value={field.value || ''}
+            />
+          )}
         />
-        <Input
-          id="password"
-          label="비밀번호"
-          type="password"
-          options={passwordOptions}
-          errors={errors.password}
-          register={register}
+        <Controller
+          name={'password'}
+          control={control}
+          rules={passwordOptions}
+          render={({ field, fieldState: { error } }) => (
+            <Input
+              label="비밀번호"
+              type="password"
+              errorMessage={error?.message}
+              onChange={field.onChange}
+              value={field.value || ''}
+            />
+          )}
         />
-        <Button text={'로그인'} width={'100%'} height={'5vh'} />
+        <Button
+          text={'로그인'}
+          width={'100%'}
+          height={'5vh'}
+          style={{ marginTop: '20px' }}
+        />
+        <Button
+          text={'회원가입'}
+          width={'100%'}
+          height={'5vh'}
+          style={{ marginTop: '20px' }}
+          handleClick={() => {
+            navigate('/signup');
+          }}
+        />
         <OAuthContainer>
           <GoogleLogin />
         </OAuthContainer>

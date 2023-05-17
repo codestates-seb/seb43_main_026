@@ -4,6 +4,9 @@ import com.codestates.schedule.dto.ScheduleDto;
 import com.codestates.schedule.entity.Schedule;
 import org.mapstruct.Mapper;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,12 +15,12 @@ public interface ScheduleMapper {
     default Schedule schedulePostDtoToSchedule(ScheduleDto.Post schedulePostDto) {
         Schedule schedule = new Schedule();
 
-        schedule.setDate(schedulePostDto.getDate());
+        schedule.setDate(stringToLocalDate(schedulePostDto.getDate()));
         schedule.setImageAddress(schedulePostDto.getImageAddress());
         schedule.setMemo(schedulePostDto.getMemo());
         schedule.setLocation(schedulePostDto.getLocation());
-        schedule.setStartTime(schedulePostDto.getStartTime());
-        schedule.setEndTime(schedulePostDto.getEndTime());
+        schedule.setStartTime(stringToLocalTime(schedulePostDto.getStartTime()));
+        schedule.setEndTime(stringToLocalTime(schedulePostDto.getEndTime()));
 
         return schedule;
     }
@@ -29,8 +32,8 @@ public interface ScheduleMapper {
         schedule.setImageAddress(schedulePatchDto.getImageAddress());
         schedule.setMemo(schedulePatchDto.getMemo());
         schedule.setLocation(schedulePatchDto.getLocation());
-        schedule.setStartTime(schedulePatchDto.getStartTime());
-        schedule.setEndTime(schedulePatchDto.getEndTime());
+        schedule.setStartTime(stringToLocalTime(schedulePatchDto.getStartTime()));
+        schedule.setEndTime(stringToLocalTime(schedulePatchDto.getEndTime()));
 
         return schedule;
     }
@@ -45,6 +48,7 @@ public interface ScheduleMapper {
         scheduleResponseDto.setLocation(schedule.getLocation());
         scheduleResponseDto.setStartTime(schedule.getStartTime());
         scheduleResponseDto.setEndTime(schedule.getEndTime());
+        scheduleResponseDto.setDurationTime(schedule.getDurationTime());
         scheduleResponseDto.setMemberId(schedule.getMember().getMemberId());
 
         return scheduleResponseDto;
@@ -54,5 +58,35 @@ public interface ScheduleMapper {
         return schedules.stream()
                 .map(schedule -> scheduleToScheduleResponseDto(schedule))
                 .collect(Collectors.toList());
+    }
+
+    default LocalDate stringToLocalDate(String date) {
+        // dto에서 pattern 애너테이션으로 이미 검증하고 있음
+//        try {
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//            LocalDate localDate = LocalDate.parse(date, formatter);
+//            return localDate;
+//        } catch (DateTimeParseException e) {
+//            throw new BusinessLogicException(ExceptionCode.INVALID_DATETIME);
+//        }
+
+        // 2월 29, 30, 31일에 대한 예외처리는 안되고 있음
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        return localDate;
+    }
+
+    default LocalTime stringToLocalTime(String time) {
+//        try {
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+//            LocalTime localTime = LocalTime.parse(time, formatter);
+//            return localTime;
+//        } catch (DateTimeParseException e) {
+//            throw new BusinessLogicException(ExceptionCode.INVALID_DATETIME);
+//        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalTime localTime = LocalTime.parse(time, formatter);
+        return localTime;
     }
 }

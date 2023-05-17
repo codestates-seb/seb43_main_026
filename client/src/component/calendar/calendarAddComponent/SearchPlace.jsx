@@ -5,6 +5,7 @@ import { COLOR } from '../../../style/theme';
 
 // 아이콘
 import { AiOutlineSearch } from 'react-icons/ai';
+import Loading from '../../common/Loading';
 
 // styled-component
 // 검색창
@@ -47,7 +48,7 @@ const MapContainer = styled.div`
     border-bottom: 2px dashed ${COLOR.main_dark_blue};
     padding-bottom: 5px;
   }
-  .place-name {
+  button {
     border: none;
     background-color: inherit;
     text-align: center;
@@ -92,6 +93,7 @@ const SearchPlaceContainer = styled.div`
   width: 100%;
   height: 100%;
   z-index: 100;
+  margin-top: 30px;
   position: absolute;
   top: 10px;
   left: 10px;
@@ -104,10 +106,12 @@ const SearchPlaceContainer = styled.div`
 `;
 
 // component
+
 // 검색창
 const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       handleSearch();
     }
   };
@@ -133,7 +137,7 @@ const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
 };
 
 // 지도
-const SearchMap = ({ place, setPlace, handlePlace }) => {
+const SearchMap = ({ place, setPlace }) => {
   // 지도에 현재 위치 표시
   const [location, setLocation] = useState(null);
 
@@ -155,7 +159,7 @@ const SearchMap = ({ place, setPlace, handlePlace }) => {
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
   const { kakao } = window;
-
+  console.log(map);
   const handleSearch = useCallback(() => {
     const ps = new kakao.maps.services.Places();
 
@@ -176,7 +180,8 @@ const SearchMap = ({ place, setPlace, handlePlace }) => {
       handleSearch();
     }
   }, [map, handleSearch]);
-  const handleClickSearch = () => {
+  const handleClickSearch = (e) => {
+    e.preventDefault();
     if (!map) {
       console.log('실패');
       return;
@@ -185,82 +190,77 @@ const SearchMap = ({ place, setPlace, handlePlace }) => {
     console.log('클릭!');
   };
 
+  const handlePlace = (e) => {
+    setPlace(e.target.value);
+  };
+  console.log(place);
   return (
     <MapContainer>
       <p>💡 지역 + 수영장으로 더 쉽게 검색할 수 있어요</p>
+      <SearchBar
+        place={place}
+        handlePlace={handlePlace}
+        handleSearch={handleSearch}
+        handleClickSearch={handleClickSearch}
+      />
       {location ? (
-        <>
-          <SearchBar
-            place={place}
-            handlePlace={handlePlace}
-            handleSearch={handleSearch}
-            handleClickSearch={handleClickSearch}
-          />
-          {/* 지도 로딩속도가 느려서 처음 렌더링 시 에러가 뜸 */}
-          <Map
-            center={{ lat: location.latitude, lng: location.longitude }}
-            style={{ width: '300px', height: '400px' }}
-            level={5}
-            onLoad={(map) => setMap(map)}
-          >
-            {markers
-              ? markers.map((marker) => (
-                  <MapMarker
-                    key={`marker-${marker.place_name}-${marker.x},${marker.y}`}
-                    position={{ lat: Number(marker.y), lng: Number(marker.x) }}
-                    onClick={() => setInfo(marker)}
-                  >
-                    {info && info.content === marker.content && (
-                      <button
-                        className="place-name"
-                        style={{ color: '#000' }}
-                        onClick={() => setPlace(marker.place_name)}
-                        value={marker.place_name}
-                      >
-                        {marker.place_name}
-                      </button>
-                    )}
-                  </MapMarker>
-                ))
-              : null}
-          </Map>
-        </>
-      ) : null}
+        <Map
+          center={{ lat: location.latitude, lng: location.longitude }}
+          style={{ width: '300px', height: '400px' }}
+          level={5}
+          onLoad={(map) => setMap(map)}
+        >
+          {markers
+            ? markers.map((marker) => (
+                <MapMarker
+                  key={`marker-${marker.place_name}-${marker.x},${marker.y}`}
+                  position={{ lat: Number(marker.y), lng: Number(marker.x) }}
+                  onClick={() => setInfo(marker)}
+                >
+                  {info && info.content === marker.content && (
+                    <button
+                      style={{ color: '#000' }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPlace(marker.place_name);
+                      }}
+                      value={marker.place_name}
+                    >
+                      {marker.place_name}
+                    </button>
+                  )}
+                </MapMarker>
+              ))
+            : null}
+        </Map>
+      ) : (
+        <Loading />
+      )}
     </MapContainer>
   );
 };
 
 // 저장&닫기 버튼
-const SearchButtons = ({ handleSearchModal, handleResetPlace }) => {
+const SearchButtons = ({ handleSearchModal, setPlace }) => {
+  const handleResetPlace = () => {
+    setPlace('');
+    handleSearchModal();
+  };
   return (
     <SearchButtonContainer>
-      <button
-        onClick={() => {
-          handleResetPlace();
-          handleSearchModal();
-        }}
-      >
-        취소
-      </button>
+      <button onClick={handleResetPlace}>취소</button>
       <button onClick={handleSearchModal}>저장</button>
     </SearchButtonContainer>
   );
 };
 
-const SearchPlace = ({
-  handleSearchModal,
-  place,
-  setPlace,
-  handlePlace,
-  handleResetPlace,
-}) => {
+const SearchPlace = ({ handleSearchModal, place, setPlace }) => {
   return (
     <SearchPlaceContainer>
-      <SearchMap place={place} setPlace={setPlace} handlePlace={handlePlace} />
+      <SearchMap place={place} setPlace={setPlace} />
       <SearchButtons
         handleSearchModal={handleSearchModal}
-        handlePlace={handlePlace}
-        handleResetPlace={handleResetPlace}
+        setPlace={setPlace}
       />
     </SearchPlaceContainer>
   );

@@ -190,7 +190,7 @@ const Board = () => {
 
   const navigate = useNavigate();
 
-  // const Url = process.env.REACT_APP_Url;
+  // const Url = process.env.REACT_APP_API_URL;
   // console.log(Url);
 
   useEffect(() => {

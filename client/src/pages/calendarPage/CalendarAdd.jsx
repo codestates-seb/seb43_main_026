@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import CalendarAddHeader from '../../component/calendar/calendarAddCompo/CalendarAddHeader';
-import CalendarAddBody from '../../component/calendar/calendarAddCompo/CalendarAddBody';
+import CalendarAddBody from '../../component/calendar/calendarAddComponent/CalendarAdd';
 
 const CalendarAddContainer = styled.div`
   max-width: 1200px;
@@ -14,7 +13,6 @@ const CalendarAddContainer = styled.div`
 const CalendarAdd = () => {
   return (
     <CalendarAddContainer>
-      <CalendarAddHeader />
       <CalendarAddBody />
     </CalendarAddContainer>
   );

@@ -4,7 +4,6 @@ import { COLOR } from '../../style/theme';
 const Container = styled.button`
   width: ${(props) => (props.width ? `${props.width}` : '100%')};
   height: ${(props) => (props.height ? `${props.height}` : '5vh')};
-  margin-top: 3rem;
   border: none;
   background-color: ${COLOR.main_blue};
   color: white;

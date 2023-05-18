@@ -1,6 +1,7 @@
 package com.codestates.board.service;
 
 
+import com.codestates.amazonaws.service.AmazonS3ClientService;
 import com.codestates.auth.LoginUtils;
 import com.codestates.board.entity.Board;
 import com.codestates.board.entity.BoardLike;
@@ -33,8 +34,8 @@ public class BoardService {
     @Autowired
     private MemberRepository memberRepository;
 
-//    @Autowired
-//    private AmazonS3ClientService amazonS3ClientService;
+    @Autowired
+    private AmazonS3ClientService amazonS3ClientService;
 
     // 게시글 생성
     @Transactional
@@ -75,9 +76,9 @@ public class BoardService {
             board.setWorkoutRecordShare(board.getWorkoutRecordShare());
         }
 
-//        String fileName = board.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage";
-//        String imageUrl = uploadImageAndGetUrl(image, fileName);
-//        board.setBoardImageAddress(imageUrl);
+        String fileName = board.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage";
+        String imageUrl = uploadImageAndGetUrl(image, fileName);
+        board.setBoardImageAddress(imageUrl);
 
         return boardRepository.save(board);
 
@@ -123,16 +124,16 @@ public class BoardService {
         Optional.ofNullable(board.getCalendarShare()).ifPresent(calendarShare -> findBoard.setCalendarShare(calendarShare));
         Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(workoutRecordShare -> findBoard.setWorkoutRecordShare(workoutRecordShare));
 
-//        Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> {
-//            String oldImageUrl = findBoard.getBoardImageAddress();
-//            if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
-//                amazonS3ClientService.deleteFileFromS3Bucket(oldImageUrl);
-//            }
-//
-//            String fileName = findBoard.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage";
-//            String newImageUrl = uploadImageAndGetUrl(image, fileName);
-//            findBoard.setBoardImageAddress(newImageUrl);
-//        });
+        Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> {
+            String oldImageUrl = findBoard.getBoardImageAddress();
+            if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
+                amazonS3ClientService.deleteFileFromS3Bucket(oldImageUrl);
+            }
+
+            String fileName = findBoard.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage";
+            String newImageUrl = uploadImageAndGetUrl(image, fileName);
+            findBoard.setBoardImageAddress(newImageUrl);
+        });
 
 
 
@@ -148,10 +149,10 @@ public class BoardService {
         if (!board.getMember().getMemberId().equals(currentMember.getMemberId())) {
             throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
         }
-//        if(board.getBoardImageAddress() != null && !board.getBoardImageAddress().isEmpty()){
-//            String fileName = board.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage1";
-//            amazonS3ClientService.deleteFileFromS3Bucket(fileName);
-//        }
+        if(board.getBoardImageAddress() != null && !board.getBoardImageAddress().isEmpty()){
+            String fileName = board.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage1";
+            amazonS3ClientService.deleteFileFromS3Bucket(fileName);
+        }
 
         boardRepository.deleteById(boardId);
     }
@@ -292,14 +293,14 @@ public class BoardService {
         return canPost;
     }
 
-//
-//    //이미지 저장
-//    private String uploadImageAndGetUrl(MultipartFile image, String fileName){
-//        if(image != null && !image.isEmpty()){
-//            return amazonS3ClientService.uploadFileToS3Bucket(image, fileName);
-//        }
-//        return null;
-//    }
+
+    //이미지 저장
+    private String uploadImageAndGetUrl(MultipartFile image, String fileName){
+        if(image != null && !image.isEmpty()){
+            return amazonS3ClientService.uploadFileToS3Bucket(image, fileName);
+        }
+        return null;
+    }
 
 
 }

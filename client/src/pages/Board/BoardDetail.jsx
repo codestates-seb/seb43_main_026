@@ -8,9 +8,11 @@ import { COLOR, SIZE } from '../../style/theme';
 //공통 컴포넌트
 import BackButton from '../../component/common/BackButton';
 
+//컴포넌트
+import CommentForm from '../../component/Board/BoardDetail/CommentForm';
+
 //아이콘
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
-import CommentForm from '../../component/Board/BoardDetail/CommentForm';
 
 const Container = styled.main`
   margin: 0 auto;

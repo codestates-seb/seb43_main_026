@@ -11,7 +11,6 @@ import { COLOR, SIZE } from '../../style/theme';
 import Dash from '../../component/Board/Dash';
 import List from '../../component/Board/List';
 import Pagination from '../../component/Board/Pagination';
-import Modal from '../../component/Board/Modal';
 
 //아이콘
 import { BsCalendar2Heart } from 'react-icons/bs';
@@ -219,7 +218,6 @@ const Board = () => {
         page: currentPage,
         size: pageSize,
         orderBy: value,
-
         calendarShare,
       };
 
@@ -324,7 +322,7 @@ const Board = () => {
       <ListBox>
         {isDash && <Dash posts={posts} />}
         {!isDash && <List posts={posts} />}
-        {posts.length === 0 && <Modal />}
+        {posts.length === 0 && <span>데이터가 없습니다</span>}
       </ListBox>
       {isDash ? (
         <UploadIconBtn onClick={handleUploadClick}>

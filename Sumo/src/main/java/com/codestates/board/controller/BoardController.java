@@ -125,5 +125,11 @@ public class BoardController {
         return new ResponseEntity<>(likesCount, HttpStatus.OK);
     }
 
+    //calendarShare post 가능 여부 확인 요청
+    @GetMapping("/canPost/{memberId}")
+    public ResponseEntity<Boolean> canCreatePost(@PathVariable Long memberId) {
+        boolean canPost = boardService.canCalendarShare(memberId);
+        return new ResponseEntity<>(canPost, HttpStatus.OK);
+    }
 
 }

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,8 @@ public class BoardService {
         Member currentMember = getCurrentMember();
         board.setMember(currentMember);
         currentMember.addBoard(board);
+
+//        if(board.getCalendarShare() != )
 
         if(board.getCalendarShare() != null){
             board.setCalendarShare(board.getCalendarShare());
@@ -271,6 +274,18 @@ public class BoardService {
         int boardLike = board.getBoardLikeCount();
         return boardLike ;
     }
+
+    public boolean canCalendarShare(Long memberId){
+        YearMonth currentYearMonth = YearMonth.now();
+        LocalDateTime startOfMonth = currentYearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endOfMonth = currentYearMonth.atEndOfMonth().atTime(23, 59, 59);
+
+        boolean canPost = boardRepository.existsByMemberIdAndCalendarShareAndCreatedAtBetween(memberId, true, startOfMonth, endOfMonth);
+        // 이번 달에 체크박스가 true로 설정된 게시글을 작성했다면, false반환.
+        // 작성가능하면 true반환.
+        return canPost;
+    }
+
 //
 //    //이미지 저장
 //    private String uploadImageAndGetUrl(MultipartFile image, String fileName){

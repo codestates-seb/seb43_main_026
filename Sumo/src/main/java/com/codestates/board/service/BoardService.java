@@ -44,7 +44,9 @@ public class BoardService {
         board.setMember(currentMember);
         currentMember.addBoard(board);
 
-//        if(board.getCalendarShare() != )
+        if(Boolean.TRUE.equals(board.getCalendarShare()) && canCalendarShare(currentMember.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_POSTED_THIS_MONTH);
+        }
 
         if(board.getCalendarShare() != null){
             board.setCalendarShare(board.getCalendarShare());
@@ -61,6 +63,10 @@ public class BoardService {
         Member currentMember = getCurrentMember();
         board.setMember(currentMember);
         currentMember.addBoard(board);
+
+        if(Boolean.TRUE.equals(board.getCalendarShare()) && canCalendarShare(currentMember.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_POSTED_THIS_MONTH);
+        }
 
         if(board.getCalendarShare() != null){
             board.setCalendarShare(board.getCalendarShare());

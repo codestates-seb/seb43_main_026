@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import { TiCameraOutline } from 'react-icons/ti';
-import { COLOR, SIZE } from '../../style/theme';
+import { COLOR, SIZE } from '../../../style/theme';
 
 // styled-component
 

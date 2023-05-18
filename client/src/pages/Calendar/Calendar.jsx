@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import CalendarComponent from '../../component/calendar/CalendarComponent';
+import CalendarComponent from '../../component/Calendar/CalendarComponent';
 import { SIZE, COLOR } from '../../style/theme';
+
 const MyCalendarContainer = styled.div`
   /* 모바일 기준 */
   background-color: #fff;

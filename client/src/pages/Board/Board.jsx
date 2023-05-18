@@ -212,12 +212,14 @@ const Board = () => {
 
   const navigate = useNavigate();
 
-  const fetchPostsCalendar = async () => {
+
+  const fetchPostsCalendar = async (value) => {
     try {
       const params = {
         page: currentPage,
         size: pageSize,
-        orderBy: orderBy,
+        orderBy: value,
+
         calendarShare,
       };
 
@@ -231,12 +233,12 @@ const Board = () => {
     }
   };
 
-  const fetchPostsWithAll = async () => {
+  const fetchPostsWithAll = async (value) => {
     try {
       const params = {
         page: currentPage,
         size: pageSize,
-        orderBy: orderBy,
+        orderBy: value,
       };
 
       const response = await axios.get(`${API_URL}/boards`, {
@@ -268,11 +270,14 @@ const Board = () => {
 
   useEffect(() => {
     if (calendarShare) {
-      fetchPostsCalendar();
+
+      console.log('----1----');
+      fetchPostsCalendar(orderBy);
     } else if (!calendarShare) {
-      fetchPostsWithAll();
+      console.log('----2----');
+      fetchPostsWithAll(orderBy);
     }
-  }, [currentPage, orderBy, calendarShare]);
+  }, [calendarShare, orderBy]);
 
   return (
     <Container isDash={isDash}>

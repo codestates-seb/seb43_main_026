@@ -7,9 +7,9 @@ import { useState, useEffect } from 'react';
 import SearchPlace from '../../component/Calendar/SearchPlace';
 import TimeDropDown from '../../component/Calendar/TimeDropDown';
 import BackButton from '../../component/common/BackButton';
-// import WarningModal from '../../component/Calendar/CalendarAddComponent/WarningModal';
 import { format } from 'date-fns';
 import axios from 'axios';
+import { WarningModal } from '../../component/Calendar/CalendarAddComponent/WarningModal';
 
 const CalendarAddContainer = styled.main`
   max-width: 1200px;
@@ -29,7 +29,6 @@ const CalendarAddHeaderContainer = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 0 30px 0 10px;
-  margin-bottom: 30px;
 `;
 
 const CalendarSaveButtonContainer = styled.button`
@@ -155,6 +154,7 @@ const CalendarAddBodyContainer = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 30px;
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 90%;
   }
@@ -168,7 +168,11 @@ const CalendarAdd = () => {
   const [endTime, setEndTime] = useState('');
   const [durationTime, setDurationTime] = useState('');
   const [memo, setMemo] = useState('');
-  // const [standards, setStandars] = useState(true);
+
+  // 경고창
+  const [imageAvailable, setImageAvailavble] = useState(true);
+  const [timeAvailable, setTimeAvailable] = useState(true);
+
   const swimTimeProps = {
     startTime,
     setStartTime,
@@ -208,14 +212,14 @@ const CalendarAdd = () => {
       durationTime: durationTime,
     };
     console.log(dataSet);
-    if (
-      !dataSet.imageAddress ||
-      !dataSet.durationTime ||
-      dataSet.durationTime === 0
-    ) {
-      alert('경고');
+    if (!dataSet.imageAddress) {
+      setImageAvailavble(false);
+      return;
+    } else if (!dataSet.durationTime || dataSet.durationTime === 0) {
+      setTimeAvailable(false);
       return;
     }
+
     axios
       .post(`${process.env.REACT_APP_API_URL}/schedules`, dataSet)
       .then((res) => {
@@ -244,6 +248,7 @@ const CalendarAdd = () => {
     onSubmit();
     // navigate('/');
   };
+
   return (
     <CalendarAddContainer>
       <CalendarAddHeaderContainer>
@@ -252,7 +257,18 @@ const CalendarAdd = () => {
           저 장
         </CalendarSaveButtonContainer>
       </CalendarAddHeaderContainer>
-      {/* {!standards ? <WarningModal /> : null} */}
+      {!imageAvailable ? (
+        <WarningModal
+          setWarning={setImageAvailavble}
+          text={'사진을 등록해 주세요.'}
+        />
+      ) : null}
+      {!timeAvailable ? (
+        <WarningModal
+          setWarning={setTimeAvailable}
+          text={'운동 시간을 입력해 주세요.'}
+        />
+      ) : null}
       <CalendarAddBodyContainer>
         <ImageUpload imageUrl={imageUrl} setImageUrl={setImageUrl} />
         <InputDateContainer>

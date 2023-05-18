@@ -26,4 +26,5 @@ export const COLOR = {
   font_forget_pw: `#2592FF`,
   pc_bg: `#FAFAFA`,
   input_border: `#CADAE5`,
+  warning_border: `#82AAE3`,
 };

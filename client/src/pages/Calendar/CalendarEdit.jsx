@@ -110,7 +110,7 @@ const EditSwimTimeContainer = styled.div`
   justify-content: space-between;
   border-bottom: 1px solid ${COLOR.main_blue};
   margin-top: 40px;
-  padding: 0 20 10px 10px;
+  padding: 0 20px 10px 10px;
   > span {
     font-size: 18px;
     font-weight: 600;

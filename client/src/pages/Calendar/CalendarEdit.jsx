@@ -9,6 +9,8 @@ import SearchPlace from '../../component/Calendar/SearchPlace';
 import TimeDropDown from '../../component/Calendar/TimeDropDown';
 import BackButton from '../../component/common/BackButton';
 import { format } from 'date-fns';
+import { useParams } from 'react-router';
+import axios from 'axios';
 
 // styled-component
 const CalendarEditContainer = styled.main`
@@ -18,10 +20,9 @@ const CalendarEditContainer = styled.main`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0px auto;
+  margin: 0px auto 30px;
 `;
 
-// 헤더
 const CalendarEditHeader = styled.header`
   width: 100%;
   height: 48px;
@@ -109,7 +110,7 @@ const EditSwimTimeContainer = styled.div`
   justify-content: space-between;
   border-bottom: 1px solid ${COLOR.main_blue};
   margin-top: 40px;
-  padding: 0 0 10px 10px;
+  padding: 0 20 10px 10px;
   > span {
     font-size: 18px;
     font-weight: 600;
@@ -155,13 +156,13 @@ const CalendarEditBody = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 30px;
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 90%;
   }
 `;
-const CalendarEditImage = styled.div``;
+
 const CalendarEdit = () => {
+  const [editImageUrl, setEditImageUrl] = useState(null);
   const [editSelectedDate, setEditSelectedDate] = useState(new Date());
   const [editPlace, setEditPlace] = useState('');
   const [editStartTime, setEditStartTime] = useState('');
@@ -171,6 +172,24 @@ const CalendarEdit = () => {
   const formattedDate = format(editSelectedDate, 'yyyy-MM-dd');
   console.log(formattedDate);
 
+  // const navigate = useNavigate();
+  const { calendarid } = useParams();
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/schedules/${calendarid}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  // 장소 검색
+  const [openSearchModal, setOpenSearchModal] = useState(false);
+  const handleSearchModal = () => {
+    setOpenSearchModal(!openSearchModal);
+  };
   const swimTimeProps = {
     sterTime: editStartTime,
     setStartTime: setEditStartTime,
@@ -178,6 +197,7 @@ const CalendarEdit = () => {
     setEndTime: setEditEndTime,
   };
 
+  // 지속시간 계산
   const calculateDuration = () => {
     if (!editStartTime || !editEndTime) return 0;
 
@@ -198,11 +218,6 @@ const CalendarEdit = () => {
     console.log(editDurationTime);
   }, [editStartTime, editEndTime]);
 
-  const [openSearchModal, setOpenSearchModal] = useState(false);
-  const handleSearchModal = () => {
-    setOpenSearchModal(!openSearchModal);
-  };
-
   return (
     <CalendarEditContainer>
       <CalendarEditHeader>
@@ -210,9 +225,8 @@ const CalendarEdit = () => {
         <CalendarSaveEditContainer>저장</CalendarSaveEditContainer>
       </CalendarEditHeader>
       <CalendarEditBody>
-        <CalendarEditImage>
-          <ImageUpload />
-        </CalendarEditImage>
+        <ImageUpload imageUrl={editImageUrl} setImageUrl={setEditImageUrl} />
+
         <EditDateContainer>
           <span>날짜 </span>
           <div>

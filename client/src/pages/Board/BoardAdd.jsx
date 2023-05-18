@@ -34,7 +34,7 @@ const GobackAndUpload = styled.section`
   width: 100%;
   height: 40px;
   background-color: ${COLOR.main_gray};
-  padding: 0px 15px 0px 6px;
+  padding: 0px 15px 0px 0px;
   display: flex;
   justify-content: space-between;
   align-items: center;

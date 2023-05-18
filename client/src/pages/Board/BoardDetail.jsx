@@ -1,14 +1,15 @@
 //모듈
 import styled from 'styled-components';
+import { useState } from 'react';
 
 //공통 스타일
-import { COLOR } from '../../style/theme';
+import { COLOR, SIZE } from '../../style/theme';
 
 //공통 컴포넌트
 import BackButton from '../../component/common/BackButton';
 
 //아이콘
-import { FaRegHeart } from 'react-icons/fa';
+import { FaRegHeart, FaHeart } from 'react-icons/fa';
 import CommentForm from '../../component/Board/BoardDetail/CommentForm';
 
 const Container = styled.main`
@@ -31,7 +32,7 @@ const GobackAndModify = styled.section`
   width: 100%;
   height: 40px;
   background-color: ${COLOR.main_gray};
-  padding: 0px 15px 0px 6px;
+  padding: 0px 15px 0px 0px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -40,6 +41,10 @@ const GobackAndModify = styled.section`
     border: none;
     background-color: transparent;
     cursor: pointer;
+  }
+
+  @media screen and (min-width: ${SIZE.mobileMax}) {
+    height: 50px;
   }
 `;
 
@@ -136,10 +141,6 @@ const LikeButton = styled.button`
   position: absolute;
   top: -40px;
   right: 15px;
-`;
-
-const LikeIcon = styled(FaRegHeart)`
-  color: ${COLOR.main_blue};
 `;
 
 //운동기록 공유
@@ -268,9 +269,15 @@ const Text = styled.div`
 `;
 
 const BoardDetail = () => {
+  const [liked, setLiked] = useState(false);
+
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear(); // 현재 년도
   const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
+
+  const handleButtonClick = () => {
+    setLiked((prevLiked) => !prevLiked);
+  };
 
   return (
     <Container>
@@ -291,8 +298,12 @@ const BoardDetail = () => {
           <img src="https://picsum.photos/id/1/500/500" alt="사진" />
         </Image>
         <Like>
-          <LikeButton>
-            <LikeIcon size={25} />
+          <LikeButton onClick={handleButtonClick}>
+            {liked ? (
+              <FaHeart size={25} color={COLOR.main_blue} />
+            ) : (
+              <FaRegHeart size={25} color={COLOR.main_blue} />
+            )}
           </LikeButton>
         </Like>
       </ImageAndLike>

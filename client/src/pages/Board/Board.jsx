@@ -11,6 +11,7 @@ import { COLOR, SIZE } from '../../style/theme';
 import Dash from '../../component/Board/Dash';
 import List from '../../component/Board/List';
 import Pagination from '../../component/Board/Pagination';
+import Modal from '../../component/Board/Modal';
 
 //아이콘
 import { BsCalendar2Heart } from 'react-icons/bs';
@@ -212,7 +213,6 @@ const Board = () => {
 
   const navigate = useNavigate();
 
-
   const fetchPostsCalendar = async (value) => {
     try {
       const params = {
@@ -270,7 +270,6 @@ const Board = () => {
 
   useEffect(() => {
     if (calendarShare) {
-
       console.log('----1----');
       fetchPostsCalendar(orderBy);
     } else if (!calendarShare) {
@@ -325,7 +324,7 @@ const Board = () => {
       <ListBox>
         {isDash && <Dash posts={posts} />}
         {!isDash && <List posts={posts} />}
-        {posts.length === 0 && <span>데이터가 없습니다</span>}
+        {posts.length === 0 && <Modal />}
       </ListBox>
       {isDash ? (
         <UploadIconBtn onClick={handleUploadClick}>

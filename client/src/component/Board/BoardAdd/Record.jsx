@@ -4,7 +4,6 @@ import styled from 'styled-components';
 //공통 스타일
 import { COLOR } from '../../../style/theme';
 
-//css
 const Container = styled.section`
   width: 100%;
   height: 70px;
@@ -12,6 +11,7 @@ const Container = styled.section`
   align-items: center;
   font-weight: 600;
   border-bottom: 1px solid ${COLOR.main_blue};
+
   section {
     width: 100%;
     flex-grow: 1;
@@ -35,6 +35,7 @@ const Year = styled.span`
   margin-bottom: 4px;
   font-size: 14px;
 `;
+
 const Month = styled.span`
   font-size: 17px;
 `;
@@ -43,6 +44,7 @@ const Attendance = styled.section`
   height: 100%;
   background-color: ${COLOR.bg};
 `;
+
 const TotalTime = styled.section`
   height: 100%;
   border-left: 1px solid ${COLOR.main_blue};

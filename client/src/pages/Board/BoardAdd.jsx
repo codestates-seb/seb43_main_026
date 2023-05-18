@@ -77,37 +77,10 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
-//제목
-const LabelHidden = styled.label`
-  display: none;
-`;
-
-const InputTitle = styled.input`
-  width: 100%;
-  padding: 0 10px;
-  height: 40px;
-  border-bottom: 1px solid ${COLOR.main_blue};
-  &:focus {
-    outline: none;
-  }
-`;
-
 // 이미지 업로드
 const Image = styled.section`
   padding: 0 0 20px 0;
   border-bottom: 1px solid ${COLOR.main_blue};
-`;
-
-// 캘린더 공유
-const Calendar = styled.div`
-  width: 100%;
-  height: 40px;
-  padding: 0 15px;
-  display: none;
-  justify-content: space-between;
-  align-items: center;
-  background-color: ${COLOR.main_dark_blue};
-  color: white;
 `;
 
 // 운동기록 공유
@@ -135,6 +108,25 @@ const Sharecheckbox = styled.input`
   margin-right: 5px;
   cursor: pointer;
 `;
+//제목
+const TitleContainer = styled.section`
+  width: 100%;
+  height: fit-content;
+`;
+
+const LabelHidden = styled.label`
+  display: none;
+`;
+
+const InputTitle = styled.input`
+  width: 100%;
+  padding: 0 10px;
+  height: 40px;
+  border-bottom: 1px solid ${COLOR.main_blue};
+  &:focus {
+    outline: none;
+  }
+`;
 
 // 내용
 const Content = styled.section`
@@ -156,6 +148,18 @@ const Memo = styled.textarea`
   &:focus {
     outline: none;
   }
+`;
+
+// 캘린더 공유
+const Calendar = styled.div`
+  width: 100%;
+  height: 40px;
+  padding: 0 15px;
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  background-color: ${COLOR.main_dark_blue};
+  color: white;
 `;
 
 const BoardAdd = () => {
@@ -202,7 +206,7 @@ const BoardAdd = () => {
           </WorkOut>
         </WorkOutContainer>
         {workoutRecordShare && <Record />}
-        <div>
+        <TitleContainer>
           <LabelHidden htmlFor="title">제목</LabelHidden>
           <InputTitle
             id="title"
@@ -210,7 +214,7 @@ const BoardAdd = () => {
             placeholder="제목"
             {...register('title')}
           />
-        </div>
+        </TitleContainer>
         <Content>
           <LabelHidden htmlFor="content">내용</LabelHidden>
           <Memo id="content" placeholder="내용" {...register('content')} />

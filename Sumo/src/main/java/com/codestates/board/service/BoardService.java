@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +32,9 @@ public class BoardService {
     @Autowired
     private MemberRepository memberRepository;
 
+//    @Autowired
+//    private AmazonS3ClientService amazonS3ClientService;
+
     // 게시글 생성
     @Transactional
     public Board createBoard(Board board){
@@ -38,7 +42,23 @@ public class BoardService {
         Member currentMember = getCurrentMember();
         board.setMember(currentMember);
         currentMember.addBoard(board);
-        
+
+        if(board.getCalendarShare() != null){
+            board.setCalendarShare(board.getCalendarShare());
+        }
+        if(board.getWorkoutRecordShare() != null){
+            board.setWorkoutRecordShare(board.getWorkoutRecordShare());
+        }
+        return boardRepository.save(board);
+
+    }
+
+    @Transactional
+    public Board createBoard(Board board, MultipartFile image){
+        Member currentMember = getCurrentMember();
+        board.setMember(currentMember);
+        currentMember.addBoard(board);
+
         if(board.getCalendarShare() != null){
             board.setCalendarShare(board.getCalendarShare());
         }
@@ -46,7 +66,12 @@ public class BoardService {
             board.setWorkoutRecordShare(board.getWorkoutRecordShare());
         }
 
+//        String fileName = board.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage";
+//        String imageUrl = uploadImageAndGetUrl(image, fileName);
+//        board.setBoardImageAddress(imageUrl);
+
         return boardRepository.save(board);
+
     }
 
 
@@ -64,9 +89,43 @@ public class BoardService {
 
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
+        Optional.ofNullable(board.getCalendarShare()).ifPresent(calendarShare -> findBoard.setCalendarShare(calendarShare));
+        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(workoutRecordShare -> findBoard.setWorkoutRecordShare(workoutRecordShare));
+
+        findBoard.setModifiedAt(LocalDateTime.now());
+        return boardRepository.save(findBoard);
+    }
+
+
+    @Transactional
+    public Board updateBoard(Board board, MultipartFile image){
+
+        Member currentMember = getCurrentMember();
+        Board findBoard = findVerifiedBoard(board.getBoardId());
+
+
+        if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
+        }
+
+        Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
+        Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
         Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> findBoard.setBoardImageAddress(boardImageAddress));
-        Optional.ofNullable(board.getCalendarShare()).ifPresent(showOffCheckBox -> findBoard.setCalendarShare(showOffCheckBox));
-        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(attendanceExerciseCheckBox -> findBoard.setWorkoutRecordShare(attendanceExerciseCheckBox));
+        Optional.ofNullable(board.getCalendarShare()).ifPresent(calendarShare -> findBoard.setCalendarShare(calendarShare));
+        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(workoutRecordShare -> findBoard.setWorkoutRecordShare(workoutRecordShare));
+
+//        Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> {
+//            String oldImageUrl = findBoard.getBoardImageAddress();
+//            if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
+//                amazonS3ClientService.deleteFileFromS3Bucket(oldImageUrl);
+//            }
+//
+//            String fileName = findBoard.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage";
+//            String newImageUrl = uploadImageAndGetUrl(image, fileName);
+//            findBoard.setBoardImageAddress(newImageUrl);
+//        });
+
+
 
         findBoard.setModifiedAt(LocalDateTime.now());
         return boardRepository.save(findBoard);
@@ -80,6 +139,10 @@ public class BoardService {
         if (!board.getMember().getMemberId().equals(currentMember.getMemberId())) {
             throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
         }
+//        if(board.getBoardImageAddress() != null && !board.getBoardImageAddress().isEmpty()){
+//            String fileName = board.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage1";
+//            amazonS3ClientService.deleteFileFromS3Bucket(fileName);
+//        }
 
         boardRepository.deleteById(boardId);
     }
@@ -106,7 +169,7 @@ public class BoardService {
 
 
   
-    //TOGGLELIKE
+    //TOGGLE LIKE
     public void toggleLike(Long memberId, Long boardId){
         Board board = findVerifiedBoard(boardId);
         Member member = memberRepository.findById(memberId)
@@ -208,6 +271,14 @@ public class BoardService {
         int boardLike = board.getBoardLikeCount();
         return boardLike ;
     }
+//
+//    //이미지 저장
+//    private String uploadImageAndGetUrl(MultipartFile image, String fileName){
+//        if(image != null && !image.isEmpty()){
+//            return amazonS3ClientService.uploadFileToS3Bucket(image, fileName);
+//        }
+//        return null;
+//    }
 
 
 }

@@ -8,31 +8,31 @@ import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
 import com.codestates.board.entity.BoardLike;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface BoardMapper {
 
+    @Mapping(target = "image", ignore = true)
     default Board boardPostDtoToboard(BoardPostDto boardPostDto){
 
         Board board = new Board();
         board.setTitle(boardPostDto.getTitle());
         board.setContent(boardPostDto.getContent());
-        board.setBoardImageAddress(boardPostDto.getBoardImageAddress());
         board.setWorkoutRecordShare(boardPostDto.getWorkoutRecordShare());
         board.setCalendarShare(boardPostDto.getCalendarShare());
         return board;
     }
 
-
+    @Mapping(target = "image", ignore = true)
     default Board boardPatchDtoToBoard(BoardPatchDto boardPatchDto){
 
         Board board = new Board();
         board.setBoardId(boardPatchDto.getBoardId());
         board.setTitle(boardPatchDto.getTitle());
         board.setContent(boardPatchDto.getContent());
-        board.setBoardImageAddress(boardPatchDto.getBoardImageAddress());
         board.setWorkoutRecordShare(boardPatchDto.getWorkoutRecordShare());
         board.setCalendarShare(boardPatchDto.getCalendarShare());
         return board;

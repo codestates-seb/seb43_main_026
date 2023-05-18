@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useState, useEffect } from 'react';
 import { ko } from 'date-fns/esm/locale';
 import { COLOR, SIZE } from '../../../style/theme';
-import SearchPlace from './SearchPlace';
+import SearchPlace from '../SearchPlace';
 import TimeDropDown from '../TimeDropDown';
 import BackButton from '../../common/BackButton';
 import { format } from 'date-fns';

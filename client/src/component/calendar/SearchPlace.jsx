@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { useState, useEffect, useCallback } from 'react';
-import { COLOR, SIZE } from '../../../style/theme';
+import { COLOR, SIZE } from '../../style/theme';
 
 // 아이콘
 import { AiOutlineSearch } from 'react-icons/ai';
-import Loading from '../../common/Loading';
+import Loading from '../common/Loading';
 
 // styled-component
 const SearchBarContainer = styled.div`
@@ -59,7 +59,7 @@ const SearchButtonContainer = styled.header`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 30px;
   > button {
     width: 100px;
     height: 40px;
@@ -87,9 +87,13 @@ const SearchButtonContainer = styled.header`
 `;
 
 const SearchPlaceModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   @media screen and (min-width: ${SIZE.tablet}) {
-    padding: 40px 30px 20px;
-    /* border: 1px solid gainsboro; */
+    padding: 40px 70px 20px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0px 3px 5px 3px ${COLOR.bg_place};
@@ -100,10 +104,10 @@ const SearchPlaceContainer = styled.div`
   width: 100%;
   height: 100%;
   z-index: 100;
-  margin-top: 30px;
+  margin-top: 20px;
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 0px;
+  left: 0px;
   display: flex;
   flex-direction: column;
   justify-content: center;

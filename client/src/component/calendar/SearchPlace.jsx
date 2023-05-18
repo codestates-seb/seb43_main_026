@@ -1,14 +1,13 @@
 import styled from 'styled-components';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { useState, useEffect, useCallback } from 'react';
-import { COLOR } from '../../../style/theme';
+import { COLOR, SIZE } from '../../style/theme';
 
 // 아이콘
 import { AiOutlineSearch } from 'react-icons/ai';
-import Loading from '../../common/Loading';
+import Loading from '../common/Loading';
 
 // styled-component
-// 검색창
 const SearchBarContainer = styled.div`
   position: relative;
   width: 300px;
@@ -34,7 +33,6 @@ const SearchBarContainer = styled.div`
   }
 `;
 
-// 지도 컨테이너
 const MapContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -55,14 +53,13 @@ const MapContainer = styled.div`
   }
 `;
 
-// 저장&닫기 버튼
 const SearchButtonContainer = styled.header`
   width: 280px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 30px;
   > button {
     width: 100px;
     height: 40px;
@@ -89,14 +86,28 @@ const SearchButtonContainer = styled.header`
   }
 `;
 
+const SearchPlaceModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  @media screen and (min-width: ${SIZE.tablet}) {
+    padding: 40px 70px 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 3px 5px 3px ${COLOR.bg_place};
+  }
+`;
+
 const SearchPlaceContainer = styled.div`
   width: 100%;
   height: 100%;
   z-index: 100;
-  margin-top: 30px;
+  margin-top: 20px;
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 0px;
+  left: 0px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -106,8 +117,6 @@ const SearchPlaceContainer = styled.div`
 `;
 
 // component
-
-// 검색창
 const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -136,7 +145,6 @@ const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
   );
 };
 
-// 지도
 const SearchMap = ({ place, setPlace }) => {
   // 지도에 현재 위치 표시
   const [location, setLocation] = useState(null);
@@ -159,7 +167,7 @@ const SearchMap = ({ place, setPlace }) => {
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
   const { kakao } = window;
-  console.log(map);
+
   const handleSearch = useCallback(() => {
     const ps = new kakao.maps.services.Places();
 
@@ -182,10 +190,11 @@ const SearchMap = ({ place, setPlace }) => {
   }, [map, handleSearch]);
   const handleClickSearch = (e) => {
     e.preventDefault();
-    if (!map) {
-      console.log('실패');
-      return;
-    }
+    // 처음 클릭 이벤트 발생 시 map이 undefined가 뜨기 때문에 검색이 되지 않음->일단 주석 처리
+    // if (!map) {
+    //   console.log('실패');
+    //   return;
+    // }
     handleSearch();
     console.log('클릭!');
   };
@@ -196,7 +205,7 @@ const SearchMap = ({ place, setPlace }) => {
   console.log(place);
   return (
     <MapContainer>
-      <p>💡 지역 + 수영장으로 더 쉽게 검색할 수 있어요</p>
+      <p>💡 지역 + 수영장으로 입력해 주세요</p>
       <SearchBar
         place={place}
         handlePlace={handlePlace}
@@ -257,11 +266,13 @@ const SearchButtons = ({ handleSearchModal, setPlace }) => {
 const SearchPlace = ({ handleSearchModal, place, setPlace }) => {
   return (
     <SearchPlaceContainer>
-      <SearchMap place={place} setPlace={setPlace} />
-      <SearchButtons
-        handleSearchModal={handleSearchModal}
-        setPlace={setPlace}
-      />
+      <SearchPlaceModal>
+        <SearchMap place={place} setPlace={setPlace} />
+        <SearchButtons
+          handleSearchModal={handleSearchModal}
+          setPlace={setPlace}
+        />
+      </SearchPlaceModal>
     </SearchPlaceContainer>
   );
 };

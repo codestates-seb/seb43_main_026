@@ -2,7 +2,6 @@
 // 모듈
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
 // 스타일링
 import styled from 'styled-components';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -17,6 +16,7 @@ import { BsArrowClockwise } from 'react-icons/bs';
 import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { TbCapture } from 'react-icons/tb';
+import { useNavigate } from 'react-router';
 
 // import axios from 'axios';
 
@@ -240,30 +240,16 @@ const Toolbar = (props) => {
   );
 };
 
-// 캘린더 하단
-const CalendarBottom = () => {
-  return (
-    <CalendarBottomContainer>
-      {' '}
-      <button className="cal-cap">
-        <TbCapture size={33} />
-      </button>
-      <Link to={'/calendar/add'}>
-        <IoMdAddCircle className="cal-add-btn" size={50} />
-      </Link>
-    </CalendarBottomContainer>
-  );
-};
-
-// 이벤트 커스텀
-// const CustomEvent = ({ event }) => {
-//   const imageUrl = useSelector((state) => state.image.imageUrl);
-
-//   return <div style={{ backgroundImage: `url(${imageUrl})` }}></div>;
-// };
-
 // 캘린더
 const CalendarComponent = () => {
+  const nav = useNavigate();
+  const navToDetail = () => {
+    console.log('click');
+    nav(`/calendar/:calendarid`);
+  };
+  const navToAdd = () => {
+    nav('/calendar/add');
+  };
   moment.locale('ko-KR');
   const localizer = momentLocalizer(moment);
   // useEffect(()=>{
@@ -280,20 +266,14 @@ const CalendarComponent = () => {
           toolbar: Toolbar,
           event: CustomEvent,
         }}
-        tileContent={({ activeStartDate, date, view }) => {
-          return view === 'month' && date.getDay() === 0 ? (
-            <p
-              onMouseEnter={
-                //do whatever you want
-                console.log('activeStartDate')
-              }
-            >
-              {activeStartDate}
-            </p>
-          ) : null;
-        }}
+        onSelectSlot={navToDetail}
       />
-      <CalendarBottom></CalendarBottom>
+      <CalendarBottomContainer>
+        <button className="cal-cap">
+          <TbCapture size={33} />
+        </button>
+        <IoMdAddCircle className="cal-add-btn" size={50} onClick={navToAdd} />
+      </CalendarBottomContainer>
     </CalendarContainer>
   );
 };

@@ -3,6 +3,8 @@ package com.codestates.aws;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.codestates.exception.BusinessLogicException;
+import com.codestates.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,16 +20,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class S3Uploader {
-
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
-    public String upload(MultipartFile multipartFile, String dirName) throws IOException {
-        File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+    public String upload(MultipartFile multipartFile, String newFileName, String dirName) throws IOException {
+        File uploadFile = convert(multipartFile, newFileName)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.FILE_CONVERT_FAILED));
         return upload(uploadFile, dirName);
     }
 
@@ -57,9 +58,11 @@ public class S3Uploader {
         }
     }
 
-    private Optional<File> convert(MultipartFile file) throws  IOException {
-        File convertFile = new File(file.getOriginalFilename());
+    private Optional<File> convert(MultipartFile file, String newFileName) throws  IOException {
+        File convertFile = new File(newFileName);
+
         if(convertFile.createNewFile()) {
+            // try 블록이 종료되면, 자동으로 fos.close()가 호출되어 리소스가 해제된다.
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
             }

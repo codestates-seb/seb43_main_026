@@ -33,8 +33,8 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity postSchedule(@Valid @RequestBody ScheduleDto.Post schedulePostDto,
-                                       @RequestParam("image")MultipartFile image) throws IOException {
+    public ResponseEntity postSchedule(@Valid @RequestPart("schedule") ScheduleDto.Post schedulePostDto,
+                                       @RequestPart("image")MultipartFile image) throws IOException {
 
         Schedule schedule = scheduleService.createSchedule(scheduleMapper.schedulePostDtoToSchedule(schedulePostDto), image);
 
@@ -48,11 +48,12 @@ public class ScheduleController {
     }
 
     @PatchMapping("/{schedule-id}")
-    public ResponseEntity patchSchedule(@Valid @RequestBody ScheduleDto.Patch schedulePatchDto,
-                                        @PathVariable("schedule-id") @Positive long scheduleId) {
+    public ResponseEntity patchSchedule(@Valid @RequestPart("schedule") ScheduleDto.Patch schedulePatchDto,
+                                        @RequestPart("image")MultipartFile image,
+                                        @PathVariable("schedule-id") @Positive long scheduleId) throws IOException {
         schedulePatchDto.setScheduleId(scheduleId);
 
-        Schedule schedule = scheduleService.updateSchedule(scheduleMapper.schedulePatchDtoToSchedule(schedulePatchDto));
+        Schedule schedule = scheduleService.updateSchedule(scheduleMapper.schedulePatchDtoToSchedule(schedulePatchDto), image);
 
         ScheduleDto.Response response = scheduleMapper.scheduleToScheduleResponseDto(schedule);
 

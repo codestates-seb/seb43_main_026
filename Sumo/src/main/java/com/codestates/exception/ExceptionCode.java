@@ -29,6 +29,7 @@ public enum ExceptionCode {
     CANNOT_ACCESS_SCHEDULE(403, "Can not access to schedule"),
     SCHEDULE_EXISTS(409, "Schedule already exists this date"),
     INVALID_TIME_SETTING(400, "EndTime must be later"),
+    FILE_CONVERT_FAILED(500, "MultipartFile cannot convert to file"),
     EMAIL_CONFLICT(409,"Email already exists"),
     NICKNAME_CONFLICT(409,"Nickname already exists"),
     BOARD_NOT_FOUND(404,"Board not found"),

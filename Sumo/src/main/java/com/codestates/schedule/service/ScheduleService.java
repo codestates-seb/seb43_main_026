@@ -47,13 +47,12 @@ public class ScheduleService {
         float durationTime = calculateDurationTime(schedule.getStartTime(), schedule.getEndTime());
         schedule.setDurationTime(durationTime);
 
-        String imageAddress = s3Uploader.upload(image, member.getNickname());
-        schedule.setImageAddress(imageAddress);
+        uploadImageToS3(schedule, image, member);
 
         return scheduleRepository.save(schedule);
     }
-
-    public Schedule updateSchedule(Schedule schedule) {
+    // TODO 수정할 때 확장자가 다른 경우에 파일이 대체되지 않음(다른 이름은 같은데 확장자가 달라서 이름 자체가 다른 것으로 인식)
+    public Schedule updateSchedule(Schedule schedule, MultipartFile image) throws IOException {
 
         Schedule findSchedule = findVerifiedSchedule(schedule.getScheduleId());
 
@@ -71,6 +70,12 @@ public class ScheduleService {
         // durationTime 세팅 로직
         float durationTime = calculateDurationTime(findSchedule.getStartTime(), findSchedule.getEndTime());
         findSchedule.setDurationTime(durationTime);
+
+        if (!image.isEmpty()) {
+            Member member = memberRepository.findByEmail(emailFromToken).get();
+
+            uploadImageToS3(findSchedule, image, member);
+        }
 
         return scheduleRepository.save(findSchedule);
     }
@@ -161,5 +166,24 @@ public class ScheduleService {
         float minutes = duration.toMinutes();
         float durationTime = minutes / 60;
         return durationTime;
+    }
+
+    // 파일 이름에서 확장자 추출 메서드
+    private String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex);
+        }
+        return "";
+    }
+
+    private void uploadImageToS3(Schedule schedule, MultipartFile image, Member member) throws IOException {
+        // s3에 업로드 할 파일명 변경
+        String fileExtension = getFileExtension(image.getOriginalFilename());
+        String newFileName = "memberId-" + String.valueOf(member.getMemberId()) + "(" + schedule.getDate().toString() + ")" + fileExtension;
+
+        // s3에 업로드 한 후 schedule에 imageAddress 세팅
+        String imageAddress = s3Uploader.upload(image, newFileName, member.getNickname() + "/schedules");
+        schedule.setImageAddress(imageAddress);
     }
 }

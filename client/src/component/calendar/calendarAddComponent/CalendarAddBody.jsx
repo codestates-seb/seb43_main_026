@@ -38,7 +38,6 @@ const CalendarAddHeaderContainer = styled.header`
 `;
 
 const InputDateContainer = styled.div`
-  /* 모바일 기준 */
   width: 90%;
   margin-top: 50px;
   padding: 0 0 10px 10px;

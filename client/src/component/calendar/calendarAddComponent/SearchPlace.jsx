@@ -1,14 +1,13 @@
 import styled from 'styled-components';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { useState, useEffect, useCallback } from 'react';
-import { COLOR } from '../../../style/theme';
+import { COLOR, SIZE } from '../../../style/theme';
 
 // 아이콘
 import { AiOutlineSearch } from 'react-icons/ai';
 import Loading from '../../common/Loading';
 
 // styled-component
-// 검색창
 const SearchBarContainer = styled.div`
   position: relative;
   width: 300px;
@@ -34,7 +33,6 @@ const SearchBarContainer = styled.div`
   }
 `;
 
-// 지도 컨테이너
 const MapContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -55,7 +53,6 @@ const MapContainer = styled.div`
   }
 `;
 
-// 저장&닫기 버튼
 const SearchButtonContainer = styled.header`
   width: 280px;
   display: flex;
@@ -89,6 +86,16 @@ const SearchButtonContainer = styled.header`
   }
 `;
 
+const SearchPlaceModal = styled.div`
+  @media screen and (min-width: ${SIZE.tablet}) {
+    padding: 40px 30px 20px;
+    /* border: 1px solid gainsboro; */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 3px 5px 3px ${COLOR.bg_place};
+  }
+`;
+
 const SearchPlaceContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -106,8 +113,6 @@ const SearchPlaceContainer = styled.div`
 `;
 
 // component
-
-// 검색창
 const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -136,7 +141,6 @@ const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
   );
 };
 
-// 지도
 const SearchMap = ({ place, setPlace }) => {
   // 지도에 현재 위치 표시
   const [location, setLocation] = useState(null);
@@ -258,11 +262,13 @@ const SearchButtons = ({ handleSearchModal, setPlace }) => {
 const SearchPlace = ({ handleSearchModal, place, setPlace }) => {
   return (
     <SearchPlaceContainer>
-      <SearchMap place={place} setPlace={setPlace} />
-      <SearchButtons
-        handleSearchModal={handleSearchModal}
-        setPlace={setPlace}
-      />
+      <SearchPlaceModal>
+        <SearchMap place={place} setPlace={setPlace} />
+        <SearchButtons
+          handleSearchModal={handleSearchModal}
+          setPlace={setPlace}
+        />
+      </SearchPlaceModal>
     </SearchPlaceContainer>
   );
 };

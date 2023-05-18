@@ -2,7 +2,6 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
 import { useNavigate } from 'react-router';
 
 //공통 스타일
@@ -18,12 +17,14 @@ import { BsCalendar2Heart } from 'react-icons/bs';
 import { RxDashboard } from 'react-icons/rx';
 import { RiListUnordered } from 'react-icons/ri';
 import { HiPlus } from 'react-icons/hi';
+import { BiCheckbox, BiCheckboxChecked } from 'react-icons/bi';
 
 //더미데이터
 // import boardData from '../../component/Board/boardData';
 
 //서버 url
-const API_URL = process.env.REACT_APP_API_URL;
+// const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = `a`;
 
 //전체 컨테이너
 const Container = styled.main`
@@ -60,7 +61,7 @@ const TitleAndIcon = styled.section`
   align-items: center;
   justify-content: space-between;
   background-color: ${COLOR.bg};
-  padding: 0 15px 0 10px;
+  padding: 0 12px 0 10px;
 `;
 
 const TitleIcon = styled.div`
@@ -78,15 +79,22 @@ const Community = styled.span`
 `;
 
 const CalendarShow = styled.button`
-  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 3px;
   height: 35px;
   font-size: 15px;
   font-weight: 600;
   border: none;
   border-radius: 5px;
-  color: ${(props) => (!props.calendarShare ? COLOR.main_dark_blue : COLOR.bg)};
   background-color: ${(props) =>
-    !props.calendarShare ? COLOR.bg_light_blue : COLOR.main_dark_blue};
+    !props.calendarShare ? 'transparent' : COLOR.bg_light_blue};
+  color: ${COLOR.main_dark_blue};
+  > p {
+    color: ${COLOR.main_dark_blue};
+    padding: 0 5px 0 2px;
+  }
 `;
 
 const CalIcon = styled(BsCalendar2Heart)`
@@ -94,7 +102,9 @@ const CalIcon = styled(BsCalendar2Heart)`
   color: ${COLOR.main_blue};
 `;
 
-const MoveCategory = styled.div``;
+const MoveCategory = styled.div`
+  width: fit-content;
+`;
 
 //리스트 조회 방식 및 정렬
 const SortBox = styled.section`
@@ -185,7 +195,7 @@ const PlusIcon = styled(HiPlus)`
 
 const ListBox = styled.section`
   width: 100%;
-  min-height: 580px;
+  min-height: 650px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -201,6 +211,7 @@ const Board = () => {
   const [calendarShare, setCalendarShare] = useState(false);
 
   const navigate = useNavigate();
+
 
   const fetchPostsCalendar = async (value) => {
     try {
@@ -219,8 +230,6 @@ const Board = () => {
       setPosts(response.data);
     } catch (error) {
       console.log(error);
-      // console.log(calendarShare);
-      // console.log(`캘린더 포함`);
     }
   };
 
@@ -239,8 +248,6 @@ const Board = () => {
       setPosts(response.data);
     } catch (error) {
       console.log(error);
-      // console.log(calendarShare);
-      // console.log(`캘린더 미포함`);
     }
   };
 
@@ -263,6 +270,7 @@ const Board = () => {
 
   useEffect(() => {
     if (calendarShare) {
+
       console.log('----1----');
       fetchPostsCalendar(orderBy);
     } else if (!calendarShare) {
@@ -285,7 +293,12 @@ const Board = () => {
             onClick={handleViewCalendar}
             calendarShare={calendarShare}
           >
-            캘린더 결산
+            {!calendarShare ? (
+              <BiCheckbox size={25} />
+            ) : (
+              <BiCheckboxChecked size={25} />
+            )}
+            <p>캘린더 모아보기</p>
           </CalendarShow>
         </MoveCategory>
       </TitleAndIcon>

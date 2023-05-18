@@ -1,6 +1,7 @@
 package com.codestates.schedule.service;
 
 import com.codestates.auth.LoginUtils;
+import com.codestates.aws.S3Uploader;
 import com.codestates.exception.BusinessLogicException;
 import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
@@ -8,7 +9,9 @@ import com.codestates.member.repository.MemberRepository;
 import com.codestates.schedule.entity.Schedule;
 import com.codestates.schedule.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,13 +24,15 @@ import java.util.stream.Collectors;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final MemberRepository memberRepository;
+    private final S3Uploader s3Uploader;
 
-    public ScheduleService(ScheduleRepository scheduleRepository, MemberRepository memberRepository) {
+    public ScheduleService(ScheduleRepository scheduleRepository, MemberRepository memberRepository, S3Uploader s3Uploader) {
         this.scheduleRepository = scheduleRepository;
         this.memberRepository = memberRepository;
+        this.s3Uploader = s3Uploader;
     }
 
-    public Schedule createSchedule(Schedule schedule) {
+    public Schedule createSchedule(Schedule schedule, MultipartFile image) throws IOException {
 
         String email = LoginUtils.checkLogin();
         Member member = memberRepository.findByEmail(email).get();
@@ -41,6 +46,9 @@ public class ScheduleService {
         // durationTime 세팅 로직
         float durationTime = calculateDurationTime(schedule.getStartTime(), schedule.getEndTime());
         schedule.setDurationTime(durationTime);
+
+        String imageAddress = s3Uploader.upload(image, member.getNickname());
+        schedule.setImageAddress(imageAddress);
 
         return scheduleRepository.save(schedule);
     }

@@ -8,11 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,9 +33,10 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity postSchedule(@Valid @RequestBody ScheduleDto.Post schedulePostDto) {
+    public ResponseEntity postSchedule(@Valid @RequestBody ScheduleDto.Post schedulePostDto,
+                                       @RequestParam("image")MultipartFile image) throws IOException {
 
-        Schedule schedule = scheduleService.createSchedule(scheduleMapper.schedulePostDtoToSchedule(schedulePostDto));
+        Schedule schedule = scheduleService.createSchedule(scheduleMapper.schedulePostDtoToSchedule(schedulePostDto), image);
 
         URI location = UriComponentsBuilder
                 .newInstance()

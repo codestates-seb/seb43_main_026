@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
@@ -36,6 +37,7 @@ public class BoardService {
 
     @Autowired
     private AmazonS3ClientService amazonS3ClientService;
+
 
     // 게시글 생성
     @Transactional
@@ -60,7 +62,7 @@ public class BoardService {
     }
 
     @Transactional
-    public Board createBoard(Board board, MultipartFile image){
+    public Board createBoard(Board board, MultipartFile image) throws IOException{
         Member currentMember = getCurrentMember();
         board.setMember(currentMember);
         currentMember.addBoard(board);
@@ -76,9 +78,7 @@ public class BoardService {
             board.setWorkoutRecordShare(board.getWorkoutRecordShare());
         }
 
-        String fileName = board.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage";
-        String imageUrl = uploadImageAndGetUrl(image, fileName);
-        board.setBoardImageAddress(imageUrl);
+        uploadImageToS3(board, image, currentMember);
 
         return boardRepository.save(board);
 
@@ -106,9 +106,9 @@ public class BoardService {
         return boardRepository.save(findBoard);
     }
 
-
+    // TODO 수정할 때 확장자가 다른 경우에 파일이 대체되지 않음(다른 이름은 같은데 확장자가 달라서 이름 자체가 다른 것으로 인식)
     @Transactional
-    public Board updateBoard(Board board, MultipartFile image){
+    public Board updateBoard(Board board, MultipartFile image) throws IOException {
 
         Member currentMember = getCurrentMember();
         Board findBoard = findVerifiedBoard(board.getBoardId());
@@ -124,17 +124,10 @@ public class BoardService {
         Optional.ofNullable(board.getCalendarShare()).ifPresent(calendarShare -> findBoard.setCalendarShare(calendarShare));
         Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(workoutRecordShare -> findBoard.setWorkoutRecordShare(workoutRecordShare));
 
-        Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> {
-            String oldImageUrl = findBoard.getBoardImageAddress();
-            if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
-                amazonS3ClientService.deleteFileFromS3Bucket(oldImageUrl);
-            }
-
-            String fileName = findBoard.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage";
-            String newImageUrl = uploadImageAndGetUrl(image, fileName);
-            findBoard.setBoardImageAddress(newImageUrl);
-        });
-
+        if (!image.isEmpty()) {
+            Member member = memberRepository.findByEmail(emailFromToken).get();
+            uploadImageToS3(findBoard, image, member);
+        }
 
 
         findBoard.setModifiedAt(LocalDateTime.now());
@@ -149,10 +142,8 @@ public class BoardService {
         if (!board.getMember().getMemberId().equals(currentMember.getMemberId())) {
             throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
         }
-        if(board.getBoardImageAddress() != null && !board.getBoardImageAddress().isEmpty()){
-            String fileName = board.getBoardId() + "_" + currentMember.getMemberId() + "_boardImage1";
-            amazonS3ClientService.deleteFileFromS3Bucket(fileName);
-        }
+
+
 
         boardRepository.deleteById(boardId);
     }
@@ -294,12 +285,23 @@ public class BoardService {
     }
 
 
-    //이미지 저장
-    private String uploadImageAndGetUrl(MultipartFile image, String fileName){
-        if(image != null && !image.isEmpty()){
-            return amazonS3ClientService.uploadFileToS3Bucket(image, fileName);
+    // 파일 이름에서 확장자 추출 메서드
+    private String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex);
         }
-        return null;
+        return "";
+    }
+
+    private void uploadImageToS3(Board board, MultipartFile image, Member member) throws IOException {
+        // s3에 업로드 할 파일명 변경
+        String fileExtension = getFileExtension(image.getOriginalFilename());
+        String newFileName = "memberId-" + String.valueOf(member.getMemberId()) + "(" + board.getCreatedAt().toString() + ")" + fileExtension;
+
+        // s3에 업로드 한 후 schedule에 imageAddress 세팅
+        String imageAddress = AmazonS3ClientService.upload(image, newFileName, member.getNickname() + "/board");
+        board.setBoardImageAddress(imageAddress);
     }
 
 

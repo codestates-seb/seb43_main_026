@@ -43,11 +43,13 @@ html {
 	font-family: -apple-system, "system-ui", Segoe UI, BlinkMacSystemFont
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
+	height: 100%;
 	
 }
 body {
 	line-height: 1;
 	font-family: Pretendard;
+	height: 100%;
 }
 ol, ul {
 	list-style: none;

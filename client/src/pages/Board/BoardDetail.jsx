@@ -9,7 +9,7 @@ import BackButton from '../../component/common/BackButton';
 
 //아이콘
 import { FaRegHeart } from 'react-icons/fa';
-import CommentForm from '../../component/Board/CommentForm';
+import CommentForm from '../../component/Board/BoardDetail/CommentForm';
 
 const Container = styled.main`
   margin: 0 auto;
@@ -315,6 +315,7 @@ const BoardDetail = () => {
         <CommentHeader>
           댓글<CommentCount>{`(2)`}</CommentCount>
         </CommentHeader>
+        <CommentForm />
         <CommentList>
           <Comment>
             <CommentInfo>
@@ -324,7 +325,6 @@ const BoardDetail = () => {
             <Text>댓글 내용</Text>
           </Comment>
         </CommentList>
-        <CommentForm />
       </CommentContainer>
     </Container>
   );

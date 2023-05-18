@@ -149,12 +149,13 @@ const InputMemoContainer = styled.div`
 const CalendarAddBodyContainer = styled.form`
   width: 100%;
   height: 100%;
-  padding: 0px 30px;
+  /* padding: 0px 30px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 30px;
+  margin-bottom: 30px;
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 90%;
   }

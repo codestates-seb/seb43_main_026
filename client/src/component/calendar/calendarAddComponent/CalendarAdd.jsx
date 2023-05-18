@@ -22,6 +22,9 @@ const CalendarSaveButtonContainer = styled.button`
   font-weight: 600;
   color: ${COLOR.main_dark_blue};
   cursor: pointer;
+  @media screen and (min-width: ${SIZE.tablet}) {
+    font-size: 20px;
+  }
 `;
 
 // 상단 컨테이너

@@ -96,12 +96,12 @@ const TimeDropDown = ({ ...swimTimeProps }) => {
   // 25개의 빈 배열을 만들어 안에 요소를 넣음
   const hours = [...Array(25).keys()].map((h) => {
     const hour = h < 10 ? `0${h}` : h;
-    return `${hour}:00`;
+    return `${hour}:00:00`;
   });
 
   const halfHours = [...Array(24).keys()].map((h) => {
     const hour = h < 10 ? `0${h}` : h;
-    return `${hour}:30`;
+    return `${hour}:30:00`;
   });
 
   const times = [...hours, ...halfHours].sort();

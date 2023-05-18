@@ -159,7 +159,7 @@ const SearchMap = ({ place, setPlace }) => {
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
   const { kakao } = window;
-  console.log(map);
+
   const handleSearch = useCallback(() => {
     const ps = new kakao.maps.services.Places();
 

@@ -5,9 +5,9 @@ spring:
       path: /h2
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://3.35.231.215:3306/soomo
-    username: user
-    password: soomo1234
+    url: jdbc:mysql://13.125.169.226:3306/soomo
+    username: soomoUser
+    password: soomo159753
   jpa:
     hibernate:
       ddl-auto: update  # (1) ??? ?? ??

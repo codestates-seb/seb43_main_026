@@ -50,44 +50,44 @@ const OAuthContainer = styled.div`
   }
 `;
 
+const nicknameOptions = {
+  required: '닉네임을 입력해주세요.',
+  minLength: {
+    value: 2,
+    message: '닉네임은 두글자 이상이어야 합니다.',
+  },
+  validate: {
+    check: () => {}, // 닉네임 중복 체크 API 필요
+  },
+};
+const emailOptions = {
+  required: '이메일을 입력해주세요.',
+  pattern: {
+    value: /@/,
+    message: '@를 포함한 주소를 적어주세요.',
+  },
+};
+const passwordOptions = {
+  required: '비밀번호를 입력해주세요.',
+  pattern: {
+    value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+    message:
+      '비밀번호는 8자 이상으로 하나 이상의 숫자와 문자,특수문자를 포함해주세요.',
+  },
+};
+const passwordCheckOptions = (password) => ({
+  required: '비밀번호를 재입력해주세요.',
+  validate: {
+    check: (val) => {
+      if (password !== val) {
+        return '비밀번호가 일치하지 않습니다.';
+      }
+    },
+  },
+});
+
 const SignUp = () => {
   const { handleSubmit, control, getValues } = useForm();
-
-  const nicknameOptions = {
-    required: '닉네임을 입력해주세요.',
-    minLength: {
-      value: 2,
-      message: '닉네임은 두글자 이상이어야 합니다.',
-    },
-    validate: {
-      check: () => {}, // 닉네임 중복 체크 API 필요
-    },
-  };
-  const emailOptions = {
-    required: '이메일을 입력해주세요.',
-    pattern: {
-      value: /@/,
-      message: '@를 포함한 주소를 적어주세요.',
-    },
-  };
-  const passwordOptions = {
-    required: '비밀번호를 입력해주세요.',
-    pattern: {
-      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      message:
-        '비밀번호는 8자 이상으로 하나 이상의 숫자와 문자,특수문자를 포함해주세요.',
-    },
-  };
-  const passwordCheckOptions = {
-    required: '비밀번호를 재입력해주세요.',
-    validate: {
-      check: (val) => {
-        if (getValues('password') !== val) {
-          return '비밀번호가 일치하지 않습니다.';
-        }
-      },
-    },
-  };
 
   // 회원가입 완료 시
   const onSubmit = (data) => {
@@ -156,7 +156,7 @@ const SignUp = () => {
         <Controller
           name={'passwordCheck'}
           control={control}
-          rules={passwordCheckOptions}
+          rules={passwordCheckOptions(getValues('password'))}
           render={({ field, fieldState: { error } }) => (
             <Input
               id="passwordCheck"

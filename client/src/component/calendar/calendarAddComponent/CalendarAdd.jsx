@@ -3,7 +3,6 @@ import ImageUpload from '../../common/ImageUpload';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useState, useEffect } from 'react';
-// datepicker 한국어로 변경
 import { ko } from 'date-fns/esm/locale';
 import { COLOR, SIZE } from '../../../style/theme';
 import SearchPlace from './SearchPlace';
@@ -14,7 +13,6 @@ import { format } from 'date-fns';
 import axios from 'axios';
 
 // styled-component
-// 버튼
 const CalendarSaveButtonContainer = styled.button`
   border: none;
   background-color: inherit;
@@ -27,9 +25,7 @@ const CalendarSaveButtonContainer = styled.button`
   }
 `;
 
-// 상단 컨테이너
 const CalendarAddHeaderContainer = styled.header`
-  /* 모바일 기준 */
   width: 100%;
   height: 48px;
   background-color: ${COLOR.main_gray};
@@ -41,7 +37,6 @@ const CalendarAddHeaderContainer = styled.header`
   margin-bottom: 30px;
 `;
 
-// 날짜 등록
 const InputDateContainer = styled.div`
   /* 모바일 기준 */
   width: 90%;
@@ -75,7 +70,6 @@ const InputDateContainer = styled.div`
   }
 `;
 
-// 장소 등록
 const InputPlaceContainer = styled.div`
   /* 모바일 기준 */
   width: 90%;
@@ -101,9 +95,7 @@ const InputPlaceContainer = styled.div`
   }
 `;
 
-// 수영 시간 등록
 const SwimTimeContainer = styled.div`
-  /* 모바일 기준 */
   width: 90%;
   display: flex;
   flex-direction: row;
@@ -123,7 +115,6 @@ const SwimTimeContainer = styled.div`
   }
 `;
 
-// 메모 등록
 const InputMemoContainer = styled.div`
   width: 90%;
   margin-top: 20px;
@@ -151,9 +142,7 @@ const InputMemoContainer = styled.div`
   }
 `;
 
-//캘린더 작성 바디
 const CalendarAddContainer = styled.form`
-  /* 모바일 기준 */
   width: 100%;
   height: 100%;
   padding: 0px 30px;
@@ -164,8 +153,6 @@ const CalendarAddContainer = styled.form`
 `;
 
 //component
-
-// 캘린더 작성 바디
 const CalendarAdd = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());

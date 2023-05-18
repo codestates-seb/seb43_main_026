@@ -4,9 +4,8 @@ import { FaRegEdit } from 'react-icons/fa';
 import { BsTrash3 } from 'react-icons/bs';
 import { SIZE, COLOR } from '../../style/theme';
 import { useState } from 'react';
-import CalendarDeleteModal from '../../component/calendar/calendarDetailComponent.jsx/CalendarDeleteModal';
+import CalendarDeleteModal from '../../component/Calendar/CalendarDetailComponent/CalendarDeleteModal';
 import { useNavigate } from 'react-router';
-
 const CalendarDetailContainer = styled.div`
   max-width: 1200px;
   display: flex;

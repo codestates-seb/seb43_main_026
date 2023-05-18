@@ -202,23 +202,13 @@ const Board = () => {
 
   const navigate = useNavigate();
 
-  useEffect(
-    () => {
-      if (calendarShare) {
-        fetchPostsCalendar();
-      } else if (!calendarShare) {
-        fetchPostsWithAll();
-      }
-    }
-    // [currentPage, pageSize, orderBy, calendarShare]
-  );
-
-  const fetchPostsCalendar = async () => {
+  const fetchPostsCalendar = async (value) => {
     try {
       const params = {
         page: currentPage,
         size: pageSize,
-        orderBy: orderBy,
+        orderBy: value,
+
         calendarShare,
       };
 
@@ -234,12 +224,12 @@ const Board = () => {
     }
   };
 
-  const fetchPostsWithAll = async () => {
+  const fetchPostsWithAll = async (value) => {
     try {
       const params = {
         page: currentPage,
         size: pageSize,
-        orderBy: orderBy,
+        orderBy: value,
       };
 
       const response = await axios.get(`${API_URL}/boards`, {
@@ -267,13 +257,19 @@ const Board = () => {
     navigate('/board/add');
   };
 
-  const handleViewChange = (value) => {
-    setIsDash(value);
+  const handleViewCalendar = () => {
+    setCalendarShare((prev) => !prev);
   };
 
-  const handleViewCalendar = () => {
-    setCalendarShare(!calendarShare);
-  };
+  useEffect(() => {
+    if (calendarShare) {
+      console.log('----1----');
+      fetchPostsCalendar(orderBy);
+    } else if (!calendarShare) {
+      console.log('----2----');
+      fetchPostsWithAll(orderBy);
+    }
+  }, [calendarShare, orderBy]);
 
   return (
     <Container isDash={isDash}>
@@ -295,10 +291,10 @@ const Board = () => {
       </TitleAndIcon>
       <SortBox>
         <View>
-          <SortBtn onClick={() => handleViewChange(true)}>
+          <SortBtn onClick={() => setIsDash(true)}>
             <ImgView size={19} isDash={isDash} />
           </SortBtn>
-          <SortBtn onClick={() => handleViewChange(false)}>
+          <SortBtn onClick={() => setIsDash(false)}>
             <TxtView size={21} isDash={isDash} />
           </SortBtn>
         </View>

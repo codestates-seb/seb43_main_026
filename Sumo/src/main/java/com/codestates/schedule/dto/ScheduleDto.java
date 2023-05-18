@@ -18,9 +18,6 @@ public class ScheduleDto {
                 message = "YYYY-MM-DD 형식으로 작성해야 합니다.")
         private String date;
 
-        @NotBlank(message = "이미지는 필수 항목입니다.")
-        private String imageAddress;
-
         private String memo;
 
         private String location;
@@ -40,8 +37,6 @@ public class ScheduleDto {
     @Setter
     public static class Patch {
         private long scheduleId;
-
-        private String imageAddress;
 
         private String memo;
 

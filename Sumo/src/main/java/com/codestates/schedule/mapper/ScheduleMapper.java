@@ -16,7 +16,6 @@ public interface ScheduleMapper {
         Schedule schedule = new Schedule();
 
         schedule.setDate(stringToLocalDate(schedulePostDto.getDate()));
-        schedule.setImageAddress(schedulePostDto.getImageAddress());
         schedule.setMemo(schedulePostDto.getMemo());
         schedule.setLocation(schedulePostDto.getLocation());
         schedule.setStartTime(stringToLocalTime(schedulePostDto.getStartTime()));
@@ -29,7 +28,6 @@ public interface ScheduleMapper {
         Schedule schedule = new Schedule();
 
         schedule.setScheduleId(schedulePatchDto.getScheduleId());
-        schedule.setImageAddress(schedulePatchDto.getImageAddress());
         schedule.setMemo(schedulePatchDto.getMemo());
         schedule.setLocation(schedulePatchDto.getLocation());
         schedule.setStartTime(stringToLocalTime(schedulePatchDto.getStartTime()));

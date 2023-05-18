@@ -33,4 +33,14 @@ jwt:
 mail:
   address:
     admin: SoomoAdmin@gmail.com
-
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAXEURD3OXIZ6ZT444
+      secretKey: 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
+    s3:
+      bucket: testbucketforsoomo
+    region:
+      static: ap-northeast-2
+    stack:
+      auto-: false

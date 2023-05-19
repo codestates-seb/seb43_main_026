@@ -2,7 +2,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -199,9 +198,7 @@ const BoardAdd = () => {
   } = useForm();
   const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
 
-  const location = useLocation();
-  const { isShareCalendar } = location.state;
-  console.log(isShareCalendar);
+  const { isShareCalendar } = false;
 
   const isCalendarShareChecked = isShareCalendar ? true : false;
 

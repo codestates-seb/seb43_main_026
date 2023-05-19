@@ -1,15 +1,18 @@
 //모듈
 import styled from 'styled-components';
+import { useState } from 'react';
 
 //공통 스타일
-import { COLOR } from '../../style/theme';
+import { COLOR, SIZE } from '../../style/theme';
 
 //공통 컴포넌트
 import BackButton from '../../component/common/BackButton';
 
-//아이콘
-import { FaRegHeart } from 'react-icons/fa';
+//컴포넌트
 import CommentForm from '../../component/Board/BoardDetail/CommentForm';
+
+//아이콘
+import { FaRegHeart, FaHeart } from 'react-icons/fa';
 
 const Container = styled.main`
   margin: 0 auto;
@@ -29,9 +32,9 @@ const Container = styled.main`
 //뒤로가기 상단바
 const GobackAndModify = styled.section`
   width: 100%;
-  height: 40px;
+  height: 45px;
   background-color: ${COLOR.main_gray};
-  padding: 0px 15px 0px 6px;
+  padding: 0px 15px 0px 0px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -41,11 +44,41 @@ const GobackAndModify = styled.section`
     background-color: transparent;
     cursor: pointer;
   }
+
+  @media screen and (min-width: ${SIZE.mobileMax}) {
+    height: 50px;
+  }
 `;
 
 const Goback = styled.button`
   margin-top: 5px;
 `;
+
+const ModifyAndDelete = styled.div`
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  button {
+    font-size: 17px;
+    font-weight: 600;
+    color: ${COLOR.main_dark_blue};
+    &:hover {
+      color: ${COLOR.main_dark_blue_hover};
+    }
+    &:active {
+      color: ${COLOR.main_dark_blue_active};
+    }
+
+    @media screen and (min-width: ${SIZE.mobileMax}) {
+      font-size: 20px;
+    }
+  }
+`;
+
+const Modify = styled.button``;
+const Delete = styled.button``;
 
 //제목과 작성자
 const BoardInfo = styled.section`
@@ -136,10 +169,6 @@ const LikeButton = styled.button`
   position: absolute;
   top: -40px;
   right: 15px;
-`;
-
-const LikeIcon = styled(FaRegHeart)`
-  color: ${COLOR.main_blue};
 `;
 
 //운동기록 공유
@@ -237,6 +266,13 @@ const Comment = styled.li`
   border-bottom: 1px solid ${COLOR.bg_comment};
 `;
 
+const CommentTitle = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const CommentInfo = styled.div`
   width: 100%;
   height: 35px;
@@ -244,6 +280,21 @@ const CommentInfo = styled.div`
   padding: 3px 10px 0px;
   display: flex;
   align-items: center;
+`;
+
+const CommentModify = styled.div`
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+
+  button {
+    border: none;
+    background-color: transparent;
+    width: 40px;
+  }
 `;
 
 const CommentWriter = styled.span`
@@ -268,9 +319,15 @@ const Text = styled.div`
 `;
 
 const BoardDetail = () => {
+  const [liked, setLiked] = useState(false);
+
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear(); // 현재 년도
   const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
+
+  const handleButtonClick = () => {
+    setLiked((prevLiked) => !prevLiked);
+  };
 
   return (
     <Container>
@@ -278,6 +335,10 @@ const BoardDetail = () => {
         <Goback>
           <BackButton />
         </Goback>
+        <ModifyAndDelete>
+          <Modify>수정</Modify>
+          <Delete>삭제</Delete>
+        </ModifyAndDelete>
       </GobackAndModify>
       <BoardInfo>
         <Title>제목</Title>
@@ -291,8 +352,12 @@ const BoardDetail = () => {
           <img src="https://picsum.photos/id/1/500/500" alt="사진" />
         </Image>
         <Like>
-          <LikeButton>
-            <LikeIcon size={25} />
+          <LikeButton onClick={handleButtonClick}>
+            {liked ? (
+              <FaHeart size={25} color={COLOR.main_blue} />
+            ) : (
+              <FaRegHeart size={25} color={COLOR.main_blue} />
+            )}
           </LikeButton>
         </Like>
       </ImageAndLike>
@@ -318,10 +383,16 @@ const BoardDetail = () => {
         <CommentForm />
         <CommentList>
           <Comment>
-            <CommentInfo>
-              <CommentWriter>작성자</CommentWriter>
-              <CreateAt>2023.05.16</CreateAt>
-            </CommentInfo>
+            <CommentTitle>
+              <CommentInfo>
+                <CommentWriter>작성자</CommentWriter>
+                <CreateAt>2023.05.16</CreateAt>
+              </CommentInfo>
+              <CommentModify>
+                <button>수정</button>
+                <button>삭제</button>
+              </CommentModify>
+            </CommentTitle>
             <Text>댓글 내용</Text>
           </Comment>
         </CommentList>

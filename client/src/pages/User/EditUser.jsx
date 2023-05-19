@@ -1,13 +1,17 @@
 import styled from 'styled-components';
-import axios from 'axios';
-import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 import { COLOR } from '../../style/theme';
 import LogoImage from '../../assets/image/logo2.png';
+// import ProfileImage from '../../assets/image/headalee.png';
 import Button from '../../component/common/Button';
+import { useEffect, useState } from 'react';
+import Input from '../../component/common/Input';
+import { useNavigate } from 'react-router';
 
-const SERVER_URL = process.env.REACT_APP_API_URL;
+import { userAPI } from '../../assets/api';
+
+// const SERVER_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.div`
   width: 100vw;
@@ -20,9 +24,13 @@ const Container = styled.div`
 
 const Form = styled.form`
   width: 90%;
-  height: 70vh;
+  height: 70%;
   border: 1px solid ${COLOR.main_blue};
   border-radius: 10px;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const DeleteProfileLink = styled.span`
@@ -46,8 +54,8 @@ const Overlay = styled.div`
 `;
 
 const Modal = styled.div`
-  width: 60%;
-  height: 30vh;
+  width: 20rem;
+  height: 20rem;
   background-color: white;
   position: absolute;
   top: 50%;
@@ -57,6 +65,7 @@ const Modal = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   border-radius: 10px;
 `;
 
@@ -85,10 +94,38 @@ const Buttons = styled.div`
   }
 `;
 
-const EditUser = () => {
-  const { handleSubmit } = useForm();
+const EditUser = ({ loginUser, setLoginUser }) => {
+  const { handleSubmit, control, getValues } = useForm();
+  const navigate = useNavigate();
 
   const [isModal, setIsModal] = useState(false);
+
+  const nicknameOptions = {
+    required: '닉네임을 입력해주세요.',
+    minLength: {
+      value: 2,
+      message: '닉네임은 두글자 이상이어야 합니다.',
+    },
+  };
+
+  const passwordOptions = {
+    required: '비밀번호를 입력해주세요.',
+    pattern: {
+      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      message:
+        '비밀번호는 8자 이상으로 하나 이상의 숫자와 문자,특수문자를 포함해주세요.',
+    },
+  };
+  const passwordCheckOptions = {
+    required: '비밀번호를 재입력해주세요.',
+    validate: {
+      check: (val) => {
+        if (getValues('newPassword') !== val) {
+          return '새 비밀번호와 일치하지 않습니다.';
+        }
+      },
+    },
+  };
 
   const onSubmit = (data) => {
     console.log(data);
@@ -98,15 +135,89 @@ const EditUser = () => {
     console.log(error);
   };
 
-  const deleteUser = () => {};
+  const handleDeleteUser = () => {
+    const memberId = localStorage.getItem('memberId');
+    userAPI.deleteUser(memberId);
+    setLoginUser(null);
+    navigate('/');
+  };
 
   useEffect(() => {
-    axios.get(`${SERVER_URL}/members/`);
+    if (!loginUser) {
+      navigate('/login');
+    }
   }, []);
+
   return (
     <>
       <Container>
-        <Form onSubmit={handleSubmit(onSubmit, onError)}></Form>
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
+          <Controller
+            name={'nickname'}
+            control={control}
+            rules={nicknameOptions}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                id="nickname"
+                label="닉네임"
+                type="text"
+                errorMessage={error?.message}
+                onChange={field.onChange}
+                value={field.value || ''}
+                style={{ marginTop: '10px' }}
+              />
+            )}
+          />
+          <Controller
+            name={'password'}
+            control={control}
+            rules={passwordOptions}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                id="password"
+                label="비밀번호"
+                type="password"
+                errorMessage={error?.message}
+                onChange={field.onChange}
+                value={field.value || ''}
+                style={{ marginTop: '10px' }}
+              />
+            )}
+          />
+          <Controller
+            name={'newPassword'}
+            control={control}
+            rules={passwordOptions}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                id="newPassword"
+                label="새 비밀번호"
+                type="password"
+                errorMessage={error?.message}
+                onChange={field.onChange}
+                value={field.value || ''}
+                style={{ marginTop: '10px' }}
+              />
+            )}
+          />
+          <Controller
+            name={'newPasswordCheck'}
+            control={control}
+            rules={passwordCheckOptions}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                id="newPasswordCheck"
+                label="새 비밀번호 확인"
+                type="password"
+                errorMessage={error?.message}
+                onChange={field.onChange}
+                value={field.value || ''}
+                style={{ marginTop: '10px' }}
+              />
+            )}
+          />
+          <Button text={'적용'} style={{ marginTop: '10px' }} />
+        </Form>
         <DeleteProfileLink
           onClick={() => {
             setIsModal(true);
@@ -133,7 +244,7 @@ const EditUser = () => {
                 width={'8rem'}
                 height={'3rem'}
                 text={'네'}
-                handleClick={deleteUser}
+                handleClick={handleDeleteUser}
               />
               <Button
                 width={'8rem'}

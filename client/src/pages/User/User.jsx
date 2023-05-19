@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import { COLOR } from '../../style/theme';
 import Button from '../../component/common/Button';
-import { useEffect } from 'react';
-import axios from 'axios';
+import ProfileImage from '../../assets/image/headalee.png';
 
-const SERVER_URL = process.env.REACT_APP_API_URL;
+// const SERVER_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.div`
   width: 100vw;
@@ -20,7 +19,7 @@ const UserProfile = styled.div`
   margin-top: 30px;
   margin-bottom: 30px;
   width: 90%;
-  height: 17vh;
+  height: 20%;
   background-color: white;
   border-radius: 15px;
   display: flex;
@@ -28,32 +27,35 @@ const UserProfile = styled.div`
 `;
 
 const UserImage = styled.img`
-  width: 6rem;
-  height: 6rem;
-  border-radius: 100%;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
   border: 1px solid ${COLOR.main_blue};
-  margin: 0 4rem;
+  margin: 0 1.5rem;
 `;
 
 const UserInfo = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 1rem 0;
 `;
 
 const Nickname = styled.span`
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
 `;
 
 const AttendanceRate = styled.span`
   margin: 0.5rem 0;
-  font-size: 1rem;
+  font-size: 0.8rem;
 `;
 
 const ExerciseTime = styled.span`
-  font-size: 1rem;
+  font-size: 0.8rem;
   margin-bottom: 0.5rem;
 `;
 
@@ -70,32 +72,26 @@ const Title = styled.h1`
   border-bottom: 1px solid ${COLOR.main_blue};
 `;
 
-const User = () => {
-  const { id: userId } = useParams();
+const User = ({ loginUser }) => {
   const navigate = useNavigate();
-  console.log(userId);
-  useEffect(() => {
-    axios.get(`${SERVER_URL}/members/${userId}`);
-  }, []);
+
   return (
     <Container>
       <UserProfile>
-        <UserImage />
+        <UserImage src={ProfileImage} alt="프로필 사진" />
         <UserInfo>
-          <Nickname>
-            수빈
-            <Button
-              text={'프로필 설정'}
-              width={'80px'}
-              height={'25px'}
-              style={{ paddingLeft: '10px' }}
-              handleClick={() => {
-                navigate('/edit/profile');
-              }}
-            />
-          </Nickname>
+          <Nickname>{loginUser.nickname}</Nickname>
           <AttendanceRate>이번달 출석률 80%</AttendanceRate>
           <ExerciseTime>이번달 운동시간 100시간</ExerciseTime>
+          <Button
+            text={'프로필 설정'}
+            width={'6rem'}
+            height={'25px'}
+            style={{ paddingLeft: '10px' }}
+            handleClick={() => {
+              navigate('/edit/profile');
+            }}
+          />
         </UserInfo>
       </UserProfile>
       <UserCalendarList>

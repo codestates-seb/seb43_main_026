@@ -311,7 +311,7 @@ const CalendarComponent = () => {
       console.log('캡쳐 실패');
       return;
     }
-
+    // 달력에 event가 없어서 캡쳐가 안되는 걸지도....
     const calendarElement = calendarRef.current;
     const captureAndSave = async () => {
       console.log(calendarElement);

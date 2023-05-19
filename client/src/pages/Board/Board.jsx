@@ -349,6 +349,11 @@ const Board = () => {
     };
   }, []);
 
+  // 리스트 뷰가 바뀌면 다시 페이지 1로 세팅
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [isDash]);
+
   return (
     <Container isDash={isDash}>
       <TitleAndIcon>

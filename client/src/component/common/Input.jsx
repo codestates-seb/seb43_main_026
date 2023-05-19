@@ -31,6 +31,7 @@ const Input = ({
   errorMessage,
   value,
   onChange,
+  autocomplete,
   ...restProps
 }) => {
   return (
@@ -41,7 +42,7 @@ const Input = ({
         type={type}
         value={value}
         onChange={onChange}
-        autocomplete="new-password"
+        autocomplete={autocomplete}
       />
       {errorMessage ? <AlertMessage>{errorMessage}</AlertMessage> : null}
     </Container>

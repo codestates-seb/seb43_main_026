@@ -57,7 +57,7 @@ const Container = styled.main`
 //상단 캘린더 타이틀
 const TitleAndIcon = styled.section`
   width: 100%;
-  height: 50px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -74,7 +74,7 @@ const Title = styled.div`
 `;
 
 const Community = styled.span`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 21px;
 `;
@@ -85,7 +85,7 @@ const CalendarShow = styled.button`
   align-items: center;
   padding: 0 3px;
   height: 35px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   border: none;
   border-radius: 5px;
@@ -110,7 +110,7 @@ const MoveCategory = styled.div`
 //리스트 조회 방식 및 정렬
 const SortBox = styled.section`
   width: 100%;
-  height: 42px;
+  height: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -132,7 +132,7 @@ const SortBtn = styled.button`
   border: none;
   padding: 0 5px;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   background-color: transparent;
 `;
@@ -201,6 +201,10 @@ const ListBox = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const NoData = styled.span`
+  font-size: 20px;
 `;
 
 const Board = () => {
@@ -353,9 +357,9 @@ const Board = () => {
             calendarShow={calendarShow}
           >
             {!calendarShow ? (
-              <BiCheckbox size={25} />
+              <BiCheckbox size={26} />
             ) : (
-              <BiCheckboxChecked size={25} />
+              <BiCheckboxChecked size={26} />
             )}
             <p>캘린더 모아보기</p>
           </CalendarShow>
@@ -364,10 +368,10 @@ const Board = () => {
       <SortBox>
         <View>
           <SortBtn onClick={() => setIsDash(true)}>
-            <ImgView size={19} isDash={isDash} />
+            <ImgView size={24} isDash={isDash} />
           </SortBtn>
           <SortBtn onClick={() => setIsDash(false)}>
-            <TxtView size={21} isDash={isDash} />
+            <TxtView size={26} isDash={isDash} />
           </SortBtn>
         </View>
         <Sort>
@@ -392,9 +396,7 @@ const Board = () => {
       <ListBox>
         {isDash && <Dash posts={posts} />}
         {!isDash && <List posts={posts} />}
-        {posts.length === 0 && (
-          <span>데이터가 없습니다{isAfter25th.toString()}</span>
-        )}
+        {posts.length === 0 && <NoData>데이터가 없습니다</NoData>}
       </ListBox>
       {isDash ? (
         <UploadIconBtn onClick={handleUploadClick}>

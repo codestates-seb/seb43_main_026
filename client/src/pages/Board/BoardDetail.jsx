@@ -32,7 +32,7 @@ const Container = styled.main`
 //뒤로가기 상단바
 const GobackAndModify = styled.section`
   width: 100%;
-  height: 40px;
+  height: 45px;
   background-color: ${COLOR.main_gray};
   padding: 0px 15px 0px 0px;
   display: flex;
@@ -53,6 +53,32 @@ const GobackAndModify = styled.section`
 const Goback = styled.button`
   margin-top: 5px;
 `;
+
+const ModifyAndDelete = styled.div`
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  button {
+    font-size: 17px;
+    font-weight: 600;
+    color: ${COLOR.main_dark_blue};
+    &:hover {
+      color: ${COLOR.main_dark_blue_hover};
+    }
+    &:active {
+      color: ${COLOR.main_dark_blue_active};
+    }
+
+    @media screen and (min-width: ${SIZE.mobileMax}) {
+      font-size: 20px;
+    }
+  }
+`;
+
+const Modify = styled.button``;
+const Delete = styled.button``;
 
 //제목과 작성자
 const BoardInfo = styled.section`
@@ -240,6 +266,13 @@ const Comment = styled.li`
   border-bottom: 1px solid ${COLOR.bg_comment};
 `;
 
+const CommentTitle = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const CommentInfo = styled.div`
   width: 100%;
   height: 35px;
@@ -247,6 +280,21 @@ const CommentInfo = styled.div`
   padding: 3px 10px 0px;
   display: flex;
   align-items: center;
+`;
+
+const CommentModify = styled.div`
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+
+  button {
+    border: none;
+    background-color: transparent;
+    width: 40px;
+  }
 `;
 
 const CommentWriter = styled.span`
@@ -287,6 +335,10 @@ const BoardDetail = () => {
         <Goback>
           <BackButton />
         </Goback>
+        <ModifyAndDelete>
+          <Modify>수정</Modify>
+          <Delete>삭제</Delete>
+        </ModifyAndDelete>
       </GobackAndModify>
       <BoardInfo>
         <Title>제목</Title>
@@ -331,10 +383,16 @@ const BoardDetail = () => {
         <CommentForm />
         <CommentList>
           <Comment>
-            <CommentInfo>
-              <CommentWriter>작성자</CommentWriter>
-              <CreateAt>2023.05.16</CreateAt>
-            </CommentInfo>
+            <CommentTitle>
+              <CommentInfo>
+                <CommentWriter>작성자</CommentWriter>
+                <CreateAt>2023.05.16</CreateAt>
+              </CommentInfo>
+              <CommentModify>
+                <button>수정</button>
+                <button>삭제</button>
+              </CommentModify>
+            </CommentTitle>
             <Text>댓글 내용</Text>
           </Comment>
         </CommentList>

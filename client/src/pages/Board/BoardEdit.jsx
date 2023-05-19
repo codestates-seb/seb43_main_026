@@ -2,7 +2,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -154,7 +153,7 @@ const Content = styled.section`
 const Memo = styled.textarea`
   width: 100%;
   resize: none;
-  min-height: 400px;
+  min-height: 250px;
   max-height: auto;
   padding: 10px;
   line-height: 1.3;
@@ -176,13 +175,11 @@ const Calendar = styled.div`
   color: white;
 `;
 
-const BoardAdd = () => {
+const BoardEdit = () => {
   const { register, handleSubmit } = useForm();
   const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
 
-  const location = useLocation();
-  const { isShareCalendar } = location.state;
-  console.log(isShareCalendar);
+  const { isShareCalendar } = false;
 
   const isCalendarShareChecked = isShareCalendar ? true : false;
 
@@ -254,4 +251,4 @@ const BoardAdd = () => {
   );
 };
 
-export default BoardAdd;
+export default BoardEdit;

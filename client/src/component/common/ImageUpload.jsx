@@ -20,14 +20,12 @@ const DropZoneContainer = styled.div`
     margin-top: 20px;
   }
 
-  /* 태블릿 버전 */
   @media screen and (min-width: ${SIZE.tablet}) {
     padding: 50px;
   }
 `;
 
 const UploadContainer = styled.div`
-  /* 모바일 기준 */
   max-width: 500px;
   width: 100%;
   display: flex;
@@ -41,7 +39,6 @@ const UploadContainer = styled.div`
     }
   }
 
-  /* pc버전 */
   @media screen and (min-width: ${SIZE.desktop}) {
     > img {
       width: 30%;
@@ -50,31 +47,19 @@ const UploadContainer = styled.div`
 `;
 
 // component
-const DropZone = () => {
-  return (
-    <DropZoneContainer>
-      <TiCameraOutline size={50} color="gray" />
-      <p>Drag files or click to upload</p>
-    </DropZoneContainer>
-  );
-};
 
-const ImageUpload = ({ imageUrl, setImageUrl }) => {
+const ImageUpload = ({ imageUrl, setImageUrl, imageData, setImageData }) => {
   const onDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
       const imageUrl = URL.createObjectURL(file);
       setImageUrl(imageUrl);
-      // const reader = new FileReader();
-
-      // reader.onload = () => {
-      //   const imageAddress = reader.result;
-      //   setImageUrl(imageAddress);
-      // };
-
-      // reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append('image', acceptedFiles[0]);
+      setImageData(formData);
+      // console.log(imageData.get('image'));
     },
-    [imageUrl]
+    [imageUrl, setImageData, imageData]
   );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -88,7 +73,10 @@ const ImageUpload = ({ imageUrl, setImageUrl }) => {
           {imageUrl ? (
             <img src={imageUrl} alt="Preview" />
           ) : (
-            <DropZone></DropZone>
+            <DropZoneContainer>
+              <TiCameraOutline size={50} color="gray" />
+              <p>Drag files or click to upload</p>
+            </DropZoneContainer>
           )}
         </div>
       )}

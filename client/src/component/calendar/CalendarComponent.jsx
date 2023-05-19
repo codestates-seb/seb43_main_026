@@ -224,8 +224,7 @@ const CalendarInfo = () => {
         출석률:<span>80%</span>
       </p>
       <p>
-        <AiOutlineClockCircle size={16} />총 운동 시간:
-        <span>20시간</span>
+        <AiOutlineClockCircle size={16} />총 운동 :<span>20.5시간</span>
       </p>
     </CalendarInfoContainer>
   );

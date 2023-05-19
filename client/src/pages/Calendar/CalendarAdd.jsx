@@ -1,15 +1,18 @@
 import styled from 'styled-components';
 import { SIZE, COLOR } from '../../style/theme';
-import ImageUpload from '../../component/common/ImageUpload';
-import ReactDatePicker from 'react-datepicker';
-import { ko } from 'date-fns/esm/locale';
 import { useState, useEffect } from 'react';
+import { calendarAPI } from '../../assets/api';
+// 컴포넌트
+import BackButton from '../../component/common/BackButton';
+import { WarningModal } from '../../component/Calendar/CalendarAddComponent/WarningModal';
+import ImageUpload from '../../component/common/ImageUpload';
 import SearchPlace from '../../component/Calendar/SearchPlace';
 import TimeDropDown from '../../component/Calendar/TimeDropDown';
-import BackButton from '../../component/common/BackButton';
+
+// 라이브러리
+import ReactDatePicker from 'react-datepicker';
+import { ko } from 'date-fns/esm/locale';
 import { format } from 'date-fns';
-import axios from 'axios';
-import { WarningModal } from '../../component/Calendar/CalendarAddComponent/WarningModal';
 
 const CalendarAddContainer = styled.main`
   max-width: 1200px;
@@ -163,6 +166,7 @@ const CalendarAddBodyContainer = styled.form`
 
 const CalendarAdd = () => {
   const [imageUrl, setImageUrl] = useState(null);
+  const [imageData, setImageData] = useState(new FormData());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [place, setPlace] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -173,6 +177,10 @@ const CalendarAdd = () => {
   // 경고창
   const [imageAvailable, setImageAvailavble] = useState(true);
   const [timeAvailable, setTimeAvailable] = useState(true);
+
+  useEffect(() => {
+    console.log(imageData.get('image'));
+  }, [imageData]);
 
   const swimTimeProps = {
     startTime,
@@ -201,7 +209,7 @@ const CalendarAdd = () => {
     console.log(durationTime);
   }, [startTime, endTime]);
   const formattedDate = format(selectedDate, 'yyyy-MM-dd');
-  console.log(formattedDate);
+
   const onSubmit = () => {
     const dataSet = {
       date: formattedDate,
@@ -221,14 +229,7 @@ const CalendarAdd = () => {
       return;
     }
 
-    axios
-      .post(`${process.env.REACT_APP_API_URL}/schedules`, dataSet)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    calendarAPI.calendarAdd({ dataSet, imageData });
   };
 
   // 장소 등록
@@ -271,7 +272,12 @@ const CalendarAdd = () => {
         />
       ) : null}
       <CalendarAddBodyContainer>
-        <ImageUpload imageUrl={imageUrl} setImageUrl={setImageUrl} />
+        <ImageUpload
+          imageUrl={imageUrl}
+          setImageUrl={setImageUrl}
+          imageData={imageData}
+          setImageData={setImageData}
+        />
         <InputDateContainer>
           <span>날짜 </span>
           <div>

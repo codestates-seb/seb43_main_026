@@ -100,7 +100,7 @@ const boardData = [
     likeCount: 8,
   },
   {
-    id: 1,
+    id: 11,
     title: '첫 번째 게시물',
     content: '첫 번째 게시물 내용입니다.',
     writer: '작성자123123123123',
@@ -110,7 +110,7 @@ const boardData = [
     likeCount: 10,
   },
   {
-    id: 2,
+    id: 12,
     title: '두 번째 게시물',
     content: '두 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -120,7 +120,7 @@ const boardData = [
     likeCount: 7,
   },
   {
-    id: 3,
+    id: 13,
     title: '세 번째 게시물',
     content: '세 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -130,7 +130,7 @@ const boardData = [
     likeCount: 12,
   },
   {
-    id: 4,
+    id: 14,
     title: '네 번째 게시물',
     content: '네 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -140,7 +140,7 @@ const boardData = [
     likeCount: 5,
   },
   {
-    id: 5,
+    id: 15,
     title: '다섯 번째 게시물',
     content: '다섯 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -150,7 +150,7 @@ const boardData = [
     likeCount: 9,
   },
   {
-    id: 6,
+    id: 16,
     title: '여섯 번째 게시물',
     content: '여섯 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -160,7 +160,7 @@ const boardData = [
     likeCount: 15,
   },
   {
-    id: 7,
+    id: 17,
     title: '일곱 번째 게시물',
     content: '일곱 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -170,7 +170,7 @@ const boardData = [
     likeCount: 20,
   },
   {
-    id: 8,
+    id: 18,
     title: '여덟 번째 게시물',
     content: '여덟 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -180,7 +180,7 @@ const boardData = [
     likeCount: 6,
   },
   {
-    id: 9,
+    id: 19,
     title: '아홉 번째 게시물',
     content: '아홉 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -190,7 +190,7 @@ const boardData = [
     likeCount: 8,
   },
   {
-    id: 10,
+    id: 20,
     title: '열 번째 게시물',
     content: '열 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -200,7 +200,7 @@ const boardData = [
     likeCount: 8,
   },
   {
-    id: 1,
+    id: 21,
     title: '첫 번째 게시물',
     content: '첫 번째 게시물 내용입니다.',
     writer: '작성자123123123123',
@@ -210,7 +210,7 @@ const boardData = [
     likeCount: 10,
   },
   {
-    id: 2,
+    id: 22,
     title: '두 번째 게시물',
     content: '두 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -220,7 +220,7 @@ const boardData = [
     likeCount: 7,
   },
   {
-    id: 3,
+    id: 23,
     title: '세 번째 게시물',
     content: '세 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -230,7 +230,7 @@ const boardData = [
     likeCount: 12,
   },
   {
-    id: 4,
+    id: 24,
     title: '네 번째 게시물',
     content: '네 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -240,7 +240,7 @@ const boardData = [
     likeCount: 5,
   },
   {
-    id: 5,
+    id: 25,
     title: '다섯 번째 게시물',
     content: '다섯 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -250,7 +250,7 @@ const boardData = [
     likeCount: 9,
   },
   {
-    id: 6,
+    id: 26,
     title: '여섯 번째 게시물',
     content: '여섯 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -260,7 +260,7 @@ const boardData = [
     likeCount: 15,
   },
   {
-    id: 7,
+    id: 27,
     title: '일곱 번째 게시물',
     content: '일곱 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -270,7 +270,7 @@ const boardData = [
     likeCount: 20,
   },
   {
-    id: 8,
+    id: 28,
     title: '여덟 번째 게시물',
     content: '여덟 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -280,7 +280,7 @@ const boardData = [
     likeCount: 6,
   },
   {
-    id: 9,
+    id: 29,
     title: '아홉 번째 게시물',
     content: '아홉 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -290,7 +290,7 @@ const boardData = [
     likeCount: 8,
   },
   {
-    id: 10,
+    id: 30,
     title: '열 번째 게시물',
     content: '열 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -300,7 +300,7 @@ const boardData = [
     likeCount: 8,
   },
   {
-    id: 1,
+    id: 31,
     title: '첫 번째 게시물',
     content: '첫 번째 게시물 내용입니다.',
     writer: '작성자123123123123',
@@ -310,7 +310,7 @@ const boardData = [
     likeCount: 10,
   },
   {
-    id: 2,
+    id: 32,
     title: '두 번째 게시물',
     content: '두 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -320,7 +320,7 @@ const boardData = [
     likeCount: 7,
   },
   {
-    id: 3,
+    id: 33,
     title: '세 번째 게시물',
     content: '세 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -330,7 +330,7 @@ const boardData = [
     likeCount: 12,
   },
   {
-    id: 4,
+    id: 34,
     title: '네 번째 게시물',
     content: '네 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -340,7 +340,7 @@ const boardData = [
     likeCount: 5,
   },
   {
-    id: 5,
+    id: 35,
     title: '다섯 번째 게시물',
     content: '다섯 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -350,7 +350,7 @@ const boardData = [
     likeCount: 9,
   },
   {
-    id: 6,
+    id: 36,
     title: '여섯 번째 게시물',
     content: '여섯 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -360,7 +360,7 @@ const boardData = [
     likeCount: 15,
   },
   {
-    id: 7,
+    id: 37,
     title: '일곱 번째 게시물',
     content: '일곱 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -370,7 +370,7 @@ const boardData = [
     likeCount: 20,
   },
   {
-    id: 8,
+    id: 38,
     title: '여덟 번째 게시물',
     content: '여덟 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -380,7 +380,7 @@ const boardData = [
     likeCount: 6,
   },
   {
-    id: 9,
+    id: 39,
     title: '아홉 번째 게시물',
     content: '아홉 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -390,7 +390,7 @@ const boardData = [
     likeCount: 8,
   },
   {
-    id: 10,
+    id: 40,
     title: '열 번째 게시물',
     content: '열 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -400,7 +400,7 @@ const boardData = [
     likeCount: 8,
   },
   {
-    id: 1,
+    id: 41,
     title: '첫 번째 게시물',
     content: '첫 번째 게시물 내용입니다.',
     writer: '작성자123123123123',
@@ -410,7 +410,7 @@ const boardData = [
     likeCount: 10,
   },
   {
-    id: 2,
+    id: 42,
     title: '두 번째 게시물',
     content: '두 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -420,7 +420,7 @@ const boardData = [
     likeCount: 7,
   },
   {
-    id: 3,
+    id: 43,
     title: '세 번째 게시물',
     content: '세 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -430,7 +430,7 @@ const boardData = [
     likeCount: 12,
   },
   {
-    id: 4,
+    id: 44,
     title: '네 번째 게시물',
     content: '네 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -440,7 +440,7 @@ const boardData = [
     likeCount: 5,
   },
   {
-    id: 5,
+    id: 45,
     title: '다섯 번째 게시물',
     content: '다섯 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -450,7 +450,7 @@ const boardData = [
     likeCount: 9,
   },
   {
-    id: 6,
+    id: 46,
     title: '여섯 번째 게시물',
     content: '여섯 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -460,7 +460,7 @@ const boardData = [
     likeCount: 15,
   },
   {
-    id: 7,
+    id: 47,
     title: '일곱 번째 게시물',
     content: '일곱 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -470,7 +470,7 @@ const boardData = [
     likeCount: 20,
   },
   {
-    id: 8,
+    id: 48,
     title: '여덟 번째 게시물',
     content: '여덟 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -480,7 +480,7 @@ const boardData = [
     likeCount: 6,
   },
   {
-    id: 9,
+    id: 49,
     title: '아홉 번째 게시물',
     content: '아홉 번째 게시물 내용입니다.',
     writer: '작성자',
@@ -490,7 +490,7 @@ const boardData = [
     likeCount: 8,
   },
   {
-    id: 10,
+    id: 50,
     title: '열 번째 게시물',
     content: '열 번째 게시물 내용입니다.',
     writer: '작성자',

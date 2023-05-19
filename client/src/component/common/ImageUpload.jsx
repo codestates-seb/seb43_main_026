@@ -5,8 +5,25 @@ import { TiCameraOutline } from 'react-icons/ti';
 import { COLOR, SIZE } from '../../style/theme';
 
 // styled-component
+const UploadContainer = styled.div`
+  width: 100%;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  > div {
+    width: 80%;
+    max-width: 800px;
+    display: flex;
+    justify-content: center;
+  }
+`;
+
+// component
 const DropZoneContainer = styled.div`
   width: 100%;
+  height: 200px;
   padding: 20px;
   border-top: 2px dashed ${COLOR.main_blue};
   border-bottom: 2px dashed ${COLOR.main_blue};
@@ -20,35 +37,21 @@ const DropZoneContainer = styled.div`
     margin-top: 20px;
   }
 
+  /* 태블릿 버전 */
   @media screen and (min-width: ${SIZE.tablet}) {
     padding: 50px;
   }
 `;
 
-const UploadContainer = styled.div`
-  max-width: 500px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-  > div {
-    display: flex;
-    justify-content: center;
-    > img {
-      max-width: 60%;
-    }
-  }
-
-  @media screen and (min-width: ${SIZE.desktop}) {
-    > img {
-      width: 30%;
-    }
-  }
-`;
-
 // component
 
-const ImageUpload = ({ imageUrl, setImageUrl, imageData, setImageData }) => {
+const ImageUpload = ({
+  imageUrl,
+  setImageUrl,
+  imageData,
+  setImageData,
+  register,
+}) => {
   const onDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
@@ -58,9 +61,9 @@ const ImageUpload = ({ imageUrl, setImageUrl, imageData, setImageData }) => {
       const formData = new FormData();
       formData.append('image', acceptedFiles[0]);
       setImageData(formData);
-      // console.log(imageData.get('image'));
+      register('image', { value: acceptedFiles[0] }); // register에 업로드된 파일 등록
     },
-    [imageUrl, setImageData, imageData]
+    [imageUrl, setImageData, imageData, register]
   );
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 

@@ -1,3 +1,40 @@
+//모듈
+import styled from 'styled-components';
+
+//공통 스타일
+import { COLOR } from '../../style/theme';
+
+const Container = styled.div`
+  width: 100%;
+  height: fit-content;
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const List = styled.li`
+  button {
+    font-weight: 500;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: transparent;
+    color: ${COLOR.main_dark_blue};
+    margin: 0 2px;
+    &.active {
+      background-color: ${COLOR.main_blue};
+      color: ${COLOR.bg};
+    }
+  }
+`;
+
 const Pagination = ({
   currentPage,
   pageSize,
@@ -5,17 +42,17 @@ const Pagination = ({
   onPaginationClick,
 }) => {
   const totalPages = Math.ceil(totalPosts / pageSize);
+  const maxVisiblePages = 10;
+  const halfVisiblePages = Math.floor(maxVisiblePages / 2);
 
-  const handlePageClick = (pageNumber) => {
-    if (pageNumber !== currentPage) {
-      onPaginationClick(pageNumber);
-    }
+  const handlePageClick = async (pageNumber) => {
+    const startIndex = (pageNumber - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    await onPaginationClick(pageNumber, startIndex, endIndex);
   };
 
   const renderPageNumbers = () => {
     const pageNumbers = [];
-    const maxVisiblePages = 10;
-    const halfVisiblePages = Math.floor(maxVisiblePages / 2);
     let startPage, endPage;
 
     if (totalPages <= maxVisiblePages) {
@@ -34,55 +71,58 @@ const Pagination = ({
 
     for (let pageNumber = startPage; pageNumber <= endPage; pageNumber++) {
       pageNumbers.push(
-        <li>
+        <List key={pageNumber}>
           <button
-            key={pageNumber}
             onClick={() => handlePageClick(pageNumber)}
             className={pageNumber === currentPage ? 'active' : ''}
           >
             {pageNumber}
           </button>
-        </li>
+        </List>
       );
     }
 
     return pageNumbers;
   };
 
-  const handleNextClick = () => {
+  const handleNextClick = async () => {
     if (currentPage < totalPages) {
-      onPaginationClick(currentPage + 1);
+      const startIndex = currentPage * pageSize;
+      const endIndex = startIndex + pageSize;
+      await onPaginationClick(currentPage + 1, startIndex, endIndex);
     }
   };
 
-  const handlePrevClick = () => {
+  const handlePrevClick = async () => {
     if (currentPage > 1) {
-      onPaginationClick(currentPage - 1);
+      const startIndex = (currentPage - 2) * pageSize;
+      const endIndex = startIndex + pageSize;
+      await onPaginationClick(currentPage - 1, startIndex, endIndex);
     }
   };
 
   return (
-    <div className="pagination">
+    <Container>
       <ul>
-        <li>
+        <List>
           <button
             onClick={handlePrevClick}
             className={currentPage === 1 ? 'disabled' : ''}
           >
             {`<`}
           </button>
-        </li>
+        </List>
         {renderPageNumbers()}
-        <li>
+        <List>
           <button
             onClick={handleNextClick}
             className={currentPage === totalPages ? 'disabled' : ''}
           >
             {`>`}
           </button>
-        </li>
+        </List>
       </ul>
-    </div>
+    </Container>
   );
 };
 

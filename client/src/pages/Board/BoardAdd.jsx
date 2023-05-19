@@ -126,6 +126,8 @@ const Sharecheckbox = styled.input`
 const TitleContainer = styled.section`
   width: 100%;
   height: fit-content;
+  display: flex;
+  flex-direction: column;
 `;
 
 const LabelHidden = styled.label`
@@ -149,6 +151,7 @@ const Content = styled.section`
   align-items: center;
   width: 100%;
   height: fit-content;
+  flex-direction: column;
 `;
 
 const Memo = styled.textarea`
@@ -176,8 +179,24 @@ const Calendar = styled.div`
   color: white;
 `;
 
+const ErrorContainer = styled.div`
+  width: 100%;
+  position: sticky;
+`;
+const ErrorMessage = styled.span`
+  position: absolute;
+  right: 8px;
+  top: 12px;
+  color: ${COLOR.main_dark_blue};
+  font-weight: 600;
+`;
+
 const BoardAdd = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
 
   const location = useLocation();
@@ -228,18 +247,33 @@ const BoardAdd = () => {
         </WorkOutContainer>
         {workoutRecordShare && <Record />}
         <TitleContainer>
+          {errors.title && (
+            <ErrorContainer>
+              <ErrorMessage>제목을 입력해주세요.</ErrorMessage>
+            </ErrorContainer>
+          )}
           <LabelHidden htmlFor="title">제목</LabelHidden>
           <InputTitle
             id="title"
             type="text"
             placeholder="제목"
-            {...register('title')}
+            {...register('title', { required: true })}
           />
         </TitleContainer>
         <Content>
+          {errors.content && (
+            <ErrorContainer>
+              <ErrorMessage>내용을 입력해주세요.</ErrorMessage>
+            </ErrorContainer>
+          )}
           <LabelHidden htmlFor="content">내용</LabelHidden>
-          <Memo id="content" placeholder="내용" {...register('content')} />
+          <Memo
+            id="content"
+            placeholder="내용"
+            {...register('content', { required: true })}
+          />
         </Content>
+
         <Calendar>
           <label htmlFor="calendarShare">캘린더 결산</label>
           <Sharecheckbox

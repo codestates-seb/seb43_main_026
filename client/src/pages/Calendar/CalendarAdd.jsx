@@ -1,32 +1,26 @@
 import styled from 'styled-components';
-import ImageUpload from '../../common/ImageUpload';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { useState, useEffect } from 'react';
-// datepicker 한국어로 변경
+import { SIZE, COLOR } from '../../style/theme';
+import ImageUpload from '../../component/common/ImageUpload';
+import ReactDatePicker from 'react-datepicker';
 import { ko } from 'date-fns/esm/locale';
-import { COLOR, SIZE } from '../../../style/theme';
-import SearchPlace from './SearchPlace';
-import TimeDropDown from '../TimeDropDown';
-import BackButton from '../../common/BackButton';
+import { useState, useEffect } from 'react';
+import SearchPlace from '../../component/Calendar/SearchPlace';
+import TimeDropDown from '../../component/Calendar/TimeDropDown';
+import BackButton from '../../component/common/BackButton';
 import { format } from 'date-fns';
-// import { useNavigate } from 'react-router';
 import axios from 'axios';
+import { WarningModal } from '../../component/Calendar/CalendarAddComponent/WarningModal';
 
-// styled-component
-// 버튼
-const CalendarSaveButtonContainer = styled.button`
-  border: none;
-  background-color: inherit;
-  font-size: 18px;
-  font-weight: 600;
-  color: ${COLOR.main_dark_blue};
-  cursor: pointer;
+const CalendarAddContainer = styled.main`
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 30px;
 `;
 
-// 상단 컨테이너
 const CalendarAddHeaderContainer = styled.header`
-  /* 모바일 기준 */
   width: 100%;
   height: 48px;
   background-color: ${COLOR.main_gray};
@@ -35,13 +29,22 @@ const CalendarAddHeaderContainer = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 0 30px 0 10px;
-  margin-bottom: 30px;
 `;
 
-// 날짜 등록
+const CalendarSaveButtonContainer = styled.button`
+  border: none;
+  background-color: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  color: ${COLOR.main_dark_blue};
+  cursor: pointer;
+  @media screen and (min-width: ${SIZE.tablet}) {
+    font-size: 20px;
+  }
+`;
+
 const InputDateContainer = styled.div`
-  /* 모바일 기준 */
-  width: 90%;
+  width: 100%;
   margin-top: 50px;
   padding: 0 0 10px 10px;
   display: flex;
@@ -53,7 +56,6 @@ const InputDateContainer = styled.div`
     font-size: 18px;
     font-weight: 600;
   }
-
   .date-picker {
     width: 130px;
     border: none;
@@ -73,10 +75,8 @@ const InputDateContainer = styled.div`
   }
 `;
 
-// 장소 등록
 const InputPlaceContainer = styled.div`
-  /* 모바일 기준 */
-  width: 90%;
+  width: 100%;
   margin-top: 50px;
   padding: 0 0 10px 10px;
   display: flex;
@@ -99,16 +99,14 @@ const InputPlaceContainer = styled.div`
   }
 `;
 
-// 수영 시간 등록
 const SwimTimeContainer = styled.div`
-  /* 모바일 기준 */
-  width: 90%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   border-bottom: 1px solid ${COLOR.main_blue};
   margin-top: 40px;
-  padding: 0 0 10px 10px;
+  padding: 0 20px 10px 10px;
   > span {
     font-size: 18px;
     font-weight: 600;
@@ -121,9 +119,8 @@ const SwimTimeContainer = styled.div`
   }
 `;
 
-// 메모 등록
 const InputMemoContainer = styled.div`
-  width: 90%;
+  width: 100%;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
@@ -149,9 +146,7 @@ const InputMemoContainer = styled.div`
   }
 `;
 
-//캘린더 작성 바디
-const CalendarAddContainer = styled.form`
-  /* 모바일 기준 */
+const CalendarAddBodyContainer = styled.form`
   width: 100%;
   height: 100%;
   padding: 0px 30px;
@@ -159,96 +154,12 @@ const CalendarAddContainer = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 30px;
+  @media screen and (min-width: ${SIZE.tablet}) {
+    width: 90%;
+  }
 `;
 
-//component
-// 버튼
-const CalendarSaveButton = ({ onSubmit }) => {
-  // const navigate = useNavigate();
-  const handleSubmit = () => {
-    onSubmit();
-    // navigate('/');
-  };
-  return (
-    <CalendarSaveButtonContainer type="submit" onClick={handleSubmit}>
-      저 장
-    </CalendarSaveButtonContainer>
-  );
-};
-
-// 날짜 등록
-const InputDate = ({ selectedDate, setSelectedDate }) => {
-  return (
-    <InputDateContainer>
-      <span>날짜 </span>
-      <div>
-        <DatePicker
-          className="date-picker"
-          locale={ko}
-          selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          dateFormat="yyyy-MM-dd"
-        />
-      </div>
-    </InputDateContainer>
-  );
-};
-
-// 장소 등록
-const InputPlace = ({ place, setPlace }) => {
-  // 지도 모달창
-  const [openSearchModal, setOpenSearchModal] = useState(false);
-  const handleSearchModal = () => {
-    setOpenSearchModal(!openSearchModal);
-  };
-
-  return (
-    <InputPlaceContainer>
-      <span>장소 </span>
-      <input
-        type="read-only"
-        onClick={handleSearchModal}
-        placeholder="장소를 넣어주세요"
-        defaultValue={place}
-      />
-      {openSearchModal ? (
-        <SearchPlace
-          handleSearchModal={handleSearchModal}
-          place={place}
-          setPlace={setPlace}
-        />
-      ) : null}
-    </InputPlaceContainer>
-  );
-};
-
-// 운동 시간 등록
-const SwimTime = ({ ...swimTimeProps }) => {
-  console.log(swimTimeProps);
-  return (
-    <SwimTimeContainer>
-      <span>수영 시간</span>
-      <TimeDropDown {...swimTimeProps} />
-    </SwimTimeContainer>
-  );
-};
-
-// 메모 등록
-const InputMemo = ({ memo, setMemo }) => {
-  const handleChangeMemo = (e) => {
-    setMemo(e.target.value);
-    console.log(memo);
-  };
-
-  return (
-    <InputMemoContainer>
-      <span>메모</span>
-      <textarea value={memo} onChange={handleChangeMemo} />
-    </InputMemoContainer>
-  );
-};
-
-// 캘린더 작성 바디
 const CalendarAdd = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -257,6 +168,10 @@ const CalendarAdd = () => {
   const [endTime, setEndTime] = useState('');
   const [durationTime, setDurationTime] = useState('');
   const [memo, setMemo] = useState('');
+
+  // 경고창
+  const [imageAvailable, setImageAvailavble] = useState(true);
+  const [timeAvailable, setTimeAvailable] = useState(true);
 
   const swimTimeProps = {
     startTime,
@@ -297,6 +212,14 @@ const CalendarAdd = () => {
       durationTime: durationTime,
     };
     console.log(dataSet);
+    if (!dataSet.imageAddress) {
+      setImageAvailavble(false);
+      return;
+    } else if (!dataSet.durationTime || dataSet.durationTime === 0) {
+      setTimeAvailable(false);
+      return;
+    }
+
     axios
       .post(`${process.env.REACT_APP_API_URL}/schedules`, dataSet)
       .then((res) => {
@@ -307,24 +230,85 @@ const CalendarAdd = () => {
       });
   };
 
-  console.log(imageUrl);
+  // 장소 등록
+  const [openSearchModal, setOpenSearchModal] = useState(false);
+  const handleSearchModal = () => {
+    setOpenSearchModal(!openSearchModal);
+  };
+
+  // 메모 등록
+  const handleChangeMemo = (e) => {
+    setMemo(e.target.value);
+    console.log(memo);
+  };
+
+  // 저장
+  // const navigate = useNavigate();
+  const handleSubmit = () => {
+    onSubmit();
+    // navigate('/');
+  };
+
   return (
-    <>
+    <CalendarAddContainer>
       <CalendarAddHeaderContainer>
         <BackButton />
-        <CalendarSaveButton onSubmit={onSubmit} />
+        <CalendarSaveButtonContainer type="submit" onClick={handleSubmit}>
+          저 장
+        </CalendarSaveButtonContainer>
       </CalendarAddHeaderContainer>
-      <CalendarAddContainer>
-        <ImageUpload imageUrl={imageUrl} setImageUrl={setImageUrl} />
-        <InputDate
-          selectedDate={selectedDate}
-          setSelectedDate={setSelectedDate}
+      {!imageAvailable ? (
+        <WarningModal
+          setWarning={setImageAvailavble}
+          text={'사진을 등록해 주세요.'}
         />
-        <InputPlace place={place} setPlace={setPlace} />
-        <SwimTime {...swimTimeProps} />
-        <InputMemo memo={memo} setMemo={setMemo} />
-      </CalendarAddContainer>
-    </>
+      ) : null}
+      {!timeAvailable ? (
+        <WarningModal
+          setWarning={setTimeAvailable}
+          text={'운동 시간을 입력해 주세요.'}
+        />
+      ) : null}
+      <CalendarAddBodyContainer>
+        <ImageUpload imageUrl={imageUrl} setImageUrl={setImageUrl} />
+        <InputDateContainer>
+          <span>날짜 </span>
+          <div>
+            <ReactDatePicker
+              className="date-picker"
+              locale={ko}
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              dateFormat="yyyy-MM-dd"
+            />
+          </div>
+        </InputDateContainer>
+        <InputPlaceContainer>
+          <span>장소 </span>
+          <input
+            type="read-only"
+            onClick={handleSearchModal}
+            placeholder="장소를 넣어주세요"
+            defaultValue={place}
+          />
+          {openSearchModal ? (
+            <SearchPlace
+              handleSearchModal={handleSearchModal}
+              place={place}
+              setPlace={setPlace}
+            />
+          ) : null}
+        </InputPlaceContainer>
+        <SwimTimeContainer>
+          <span>수영 시간</span>
+          <TimeDropDown {...swimTimeProps} />
+        </SwimTimeContainer>
+        <InputMemoContainer>
+          <span>메모</span>
+          <textarea value={memo} onChange={handleChangeMemo} />
+        </InputMemoContainer>
+      </CalendarAddBodyContainer>
+    </CalendarAddContainer>
   );
 };
 

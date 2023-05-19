@@ -1,6 +1,7 @@
 //모듈
 import styled from 'styled-components';
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
 
 //공통 스타일
@@ -9,18 +10,22 @@ import { COLOR, SIZE } from '../../style/theme';
 //컴포넌트
 import Dash from '../../component/Board/Dash';
 import List from '../../component/Board/List';
+import Pagination from '../../component/Board/Pagination';
+import Modal from '../../component/Board/Modal';
 
 //아이콘
 import { BsCalendar2Heart } from 'react-icons/bs';
 import { RxDashboard } from 'react-icons/rx';
 import { RiListUnordered } from 'react-icons/ri';
 import { HiPlus } from 'react-icons/hi';
+import { BiCheckbox, BiCheckboxChecked } from 'react-icons/bi';
 
 //더미데이터
-import boardData from '../../component/Board/boardData';
+// import boardData from '../../component/Board/boardData';
 
-//서버 주소
+//서버 url
 // const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = `a`;
 
 //전체 컨테이너
 const Container = styled.main`
@@ -30,13 +35,13 @@ const Container = styled.main`
   display: flex;
   max-width: 1200px;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   margin-top: 0px;
   width: 100%;
-  height: fit-content;
+  max-height: fit-content;
   width: 100%;
-  height: fit-content;
+  min-height: 100vh;
 
   button {
     cursor: pointer;
@@ -52,12 +57,12 @@ const Container = styled.main`
 //상단 캘린더 타이틀
 const TitleAndIcon = styled.section`
   width: 100%;
-  height: 50px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: ${COLOR.bg};
-  padding: 0 15px 0 10px;
+  padding: 0 12px 0 10px;
 `;
 
 const TitleIcon = styled.div`
@@ -69,20 +74,28 @@ const Title = styled.div`
 `;
 
 const Community = styled.span`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 21px;
 `;
 
 const CalendarShow = styled.button`
-  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 3px;
   height: 35px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   border: none;
   border-radius: 5px;
+  background-color: ${(props) =>
+    !props.calendarShow ? 'transparent' : COLOR.bg_light_blue};
   color: ${COLOR.main_dark_blue};
-  background-color: ${COLOR.bg_light_blue};
+  > p {
+    color: ${COLOR.main_dark_blue};
+    padding: 0 5px 0 2px;
+  }
 `;
 
 const CalIcon = styled(BsCalendar2Heart)`
@@ -90,10 +103,14 @@ const CalIcon = styled(BsCalendar2Heart)`
   color: ${COLOR.main_blue};
 `;
 
+const MoveCategory = styled.div`
+  width: fit-content;
+`;
+
 //리스트 조회 방식 및 정렬
 const SortBox = styled.section`
   width: 100%;
-  height: 42px;
+  height: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -115,7 +132,7 @@ const SortBtn = styled.button`
   border: none;
   padding: 0 5px;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   background-color: transparent;
 `;
@@ -179,7 +196,6 @@ const PlusIcon = styled(HiPlus)`
 
 const ListBox = styled.section`
   width: 100%;
-  width: 100%;
   min-height: 580px;
   display: flex;
   flex-direction: column;
@@ -187,27 +203,144 @@ const ListBox = styled.section`
   align-items: center;
 `;
 
+const NoData = styled.span`
+  font-size: 20px;
+`;
+
 const Board = () => {
-  const [posts, setPosts] = useState(boardData);
+  const [posts, setPosts] = useState([]);
   const [isDash, setIsDash] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [orderBy, setOrderBy] = useState('latest');
+  const [calendarShow, setCalendarShow] = useState(false);
+  const [isModal, setIsModal] = useState(false);
+  const [isAfter25th, setIsAfter25th] = useState(false);
+  const [isShareCalendar, setIsShareCalendar] = useState(false);
 
   const navigate = useNavigate();
 
+  const modalRef = useRef(null);
+
+  const fetchPostsCalendar = async (value) => {
+    try {
+      const params = {
+        page: currentPage,
+        size: pageSize,
+        orderBy: value,
+        calendarShow,
+      };
+
+      const response = await axios.get(`${API_URL}/boards`, {
+        params: params,
+      });
+
+      setPosts(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchPostsWithAll = async (value) => {
+    try {
+      const params = {
+        page: currentPage,
+        size: pageSize,
+        orderBy: value,
+      };
+
+      const response = await axios.get(`${API_URL}/boards`, {
+        params: params,
+      });
+
+      setPosts(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handlePaginationClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setPageSize(10);
+  };
+
+  const handleSortClick = (orderByValue) => {
+    setOrderBy(orderByValue);
+  };
+
+  //수정! 나중에 get요청으로 캘린더 공유 이력 확인
   const handleUploadClick = () => {
-    navigate('/board/add');
+    if (isAfter25th) {
+      setIsModal(true);
+    } else {
+      navigate('/board/add', { state: { isShareCalendar: false } });
+    }
   };
 
-  //첫 번째 게시글의 제목을 "New Title"로 업데이트
-  //setPost안쓰면 eslint오류나서 그냥 쓰는 코드 서버 통신 코드 작성 후 지워야 함
-  const updatePost = () => {
-    const newPosts = [...posts];
-    newPosts[0].title = 'New Title';
-    setPosts(newPosts);
+  const handleViewCalendar = () => {
+    setCalendarShow((prev) => !prev);
   };
 
-  const handleViewChange = (value) => {
-    setIsDash(value);
+  const handleOutsideClick = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      setIsModal(false);
+    }
   };
+
+  //캘린더 모아보기 필터
+  useEffect(() => {
+    if (calendarShow) {
+      console.log('----1----');
+      fetchPostsCalendar(orderBy);
+    } else if (!calendarShow) {
+      console.log('----2----');
+      fetchPostsWithAll(orderBy);
+    }
+  }, [calendarShow, orderBy]);
+
+  //날짜 25일 이후인지 감지
+  useEffect(() => {
+    const checkDateChange = () => {
+      const currentDate = new Date();
+      const currentDay = currentDate.getDate();
+
+      // 25일부터 말일까지 true
+      if (currentDay >= 25) {
+        setIsAfter25th(true);
+      } else {
+        setIsAfter25th(false);
+      }
+    };
+
+    // 다음 날 자정 계산
+    const nextMidnight = new Date();
+    nextMidnight.setDate(nextMidnight.getDate() + 1);
+    nextMidnight.setHours(0, 0, 0, 0);
+    const timeToNextMidnight = nextMidnight.getTime() - Date.now();
+
+    const timeout = setTimeout(() => {
+      checkDateChange();
+
+      // 매일 자정에 체크되도록 timeout 재설정
+      const followingMidnight = new Date();
+      followingMidnight.setDate(followingMidnight.getDate() + 2);
+      followingMidnight.setHours(0, 0, 0, 0);
+      const timeToFollowingMidnight = followingMidnight.getTime() - Date.now();
+      setTimeout(checkDateChange, timeToFollowingMidnight);
+    }, timeToNextMidnight);
+
+    // 컴포넌트가 언마운트될 때 timeout 클리어
+    return () => clearTimeout(timeout);
+  }, []);
+
+  //모달 밖 클릭 시 닫힘
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
 
   return (
     <Container isDash={isDash}>
@@ -218,21 +351,33 @@ const Board = () => {
           </TitleIcon>
           <Community>커뮤니티</Community>
         </Title>
-        <CalendarShow>캘린더 결산</CalendarShow>
+        <MoveCategory>
+          <CalendarShow
+            onClick={handleViewCalendar}
+            calendarShow={calendarShow}
+          >
+            {!calendarShow ? (
+              <BiCheckbox size={26} />
+            ) : (
+              <BiCheckboxChecked size={26} />
+            )}
+            <p>캘린더 모아보기</p>
+          </CalendarShow>
+        </MoveCategory>
       </TitleAndIcon>
       <SortBox>
         <View>
-          <SortBtn onClick={() => handleViewChange(true)}>
-            <ImgView size={19} isDash={isDash} />
+          <SortBtn onClick={() => setIsDash(true)}>
+            <ImgView size={24} isDash={isDash} />
           </SortBtn>
-          <SortBtn onClick={() => handleViewChange(false)}>
-            <TxtView size={21} isDash={isDash} />
+          <SortBtn onClick={() => setIsDash(false)}>
+            <TxtView size={26} isDash={isDash} />
           </SortBtn>
         </View>
         <Sort>
-          <SortBtn>최신순</SortBtn>
-          <SortBtn>추천순</SortBtn>
-          <SortBtn>댓글순</SortBtn>
+          <SortBtn onClick={() => handleSortClick('latest')}>최신순</SortBtn>
+          <SortBtn onClick={() => handleSortClick('likes')}>추천순</SortBtn>
+          <SortBtn onClick={() => handleSortClick('comments')}> 댓글순</SortBtn>
         </Sort>
       </SortBox>
       {!isDash && (
@@ -240,19 +385,31 @@ const Board = () => {
           <UploadBtn onClick={handleUploadClick}>등록하기</UploadBtn>
         </Upload>
       )}
+      {isModal && isAfter25th && (
+        <Modal
+          ref={modalRef}
+          setIsModal={setIsModal}
+          setIsShareCalendar={setIsShareCalendar}
+          isShareCalendar={isShareCalendar}
+        />
+      )}
       <ListBox>
         {isDash && <Dash posts={posts} />}
         {!isDash && <List posts={posts} />}
+        {posts.length === 0 && <NoData>데이터가 없습니다</NoData>}
       </ListBox>
-      {isDash && (
+      {isDash ? (
         <UploadIconBtn onClick={handleUploadClick}>
           <PlusIcon size={32} color="#ffffff" />
         </UploadIconBtn>
+      ) : (
+        <Pagination
+          currentPage={currentPage}
+          pageSize={pageSize}
+          totalPosts={posts.length}
+          onPaginationClick={handlePaginationClick}
+        />
       )}
-      {/* 여기도 지워야함 */}
-      <button className="del" onClick={updatePost}>
-        Update Post
-      </button>
     </Container>
   );
 };

@@ -7,7 +7,7 @@ const Container = styled.button`
   border: none;
   background-color: ${COLOR.main_blue};
   color: white;
-  font-weight: 300;
+  font-weight: 500;
   border-radius: 5px;
   cursor: pointer;
   &:hover {

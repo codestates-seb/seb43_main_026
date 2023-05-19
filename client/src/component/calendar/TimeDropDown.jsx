@@ -89,19 +89,17 @@ const Dropdown = ({ times, timeValue, setTimeValue }) => {
 };
 
 const TimeDropDown = ({ ...swimTimeProps }) => {
-  // const [startTime, setStartTime] = useState('');
-  // const [endTime, setEndTime] = useState('');
   const { startTime, setStartTime, endTime, setEndTime } = swimTimeProps;
   // 00시 부터 24시까지의 시간
   // 25개의 빈 배열을 만들어 안에 요소를 넣음
   const hours = [...Array(25).keys()].map((h) => {
     const hour = h < 10 ? `0${h}` : h;
-    return `${hour}:00`;
+    return `${hour}:00:00`;
   });
 
   const halfHours = [...Array(24).keys()].map((h) => {
     const hour = h < 10 ? `0${h}` : h;
-    return `${hour}:30`;
+    return `${hour}:30:00`;
   });
 
   const times = [...hours, ...halfHours].sort();
@@ -123,26 +121,6 @@ const TimeDropDown = ({ ...swimTimeProps }) => {
 
     return '종료는 시작보다 빠를 수 없습니다.';
   };
-
-  // // 지속 시간 계산
-  // const calculateDuration = () => {
-  //   if (!startTime || !endTime) return 0;
-
-  //   const startHour = parseInt(startTime.substring(0, 2));
-  //   const startMinute = parseInt(startTime.substring(3));
-  //   const endHour = parseInt(endTime.substring(0, 2));
-  //   const endMinute = parseInt(endTime.substring(3));
-
-  //   const startInMinutes = startHour * 60 + startMinute;
-  //   const endInMinutes = endHour * 60 + endMinute;
-
-  //   return (endInMinutes - startInMinutes) / 60;
-  // };
-
-  // useEffect(() => {
-  //   const durationInMinutes = calculateDuration();
-  //   setDurationTime(durationInMinutes);
-  // }, [startTime, endTime]);
 
   return (
     <TimeDropDownContainer>

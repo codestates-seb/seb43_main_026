@@ -149,7 +149,6 @@ const SignUp = () => {
               errorMessage={error?.message}
               onChange={field.onChange}
               value={field.value || ''}
-              autocomplete="off"
             />
           )}
         />
@@ -165,7 +164,6 @@ const SignUp = () => {
               errorMessage={error?.message}
               onChange={field.onChange}
               value={field.value || ''}
-              autocomplete="off"
             />
           )}
         />

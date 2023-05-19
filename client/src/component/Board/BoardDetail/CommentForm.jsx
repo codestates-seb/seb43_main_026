@@ -3,19 +3,20 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
 //공통 스타일
-import { COLOR } from '../../style/theme';
+import { COLOR } from '../../../style/theme';
 
 //공통 컴포넌트
-import Button from '../common/Button';
+import Button from '../../common/Button';
 
 const Form = styled.form`
-  margin: 13px 0px 40px;
+  margin: 13px 0px 3px;
   width: 100%;
-  padding: 0 15px;
+  padding: 0 15px 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  border-bottom: 1px solid ${COLOR.bg_comment};
 `;
 
 const Comment = styled.section`

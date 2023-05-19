@@ -120,4 +120,17 @@ export const calendarAPI = {
         console.log(err);
       });
   },
+
+  // 캘린더 한 달 조회
+  calendarMonthly: (year, month) => {
+    api
+      .get(`/schedules?year=${year}&month=${month}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('token')}`,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };

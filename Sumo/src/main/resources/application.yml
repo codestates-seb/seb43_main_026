@@ -5,7 +5,7 @@ spring:
       path: /h2
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://13.125.169.226:3306/soomo
+    url: jdbc:mysql://15.164.84.167:3306/soomo
     username: soomoUser
     password: soomo159753
   jpa:

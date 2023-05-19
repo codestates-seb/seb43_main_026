@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { SIZE, COLOR } from '../../style/theme';
 import { useState, useEffect } from 'react';
-import { calendarAPI } from '../../assets/api';
+// import { calendarAPI } from '../../assets/api';
 // 컴포넌트
 import BackButton from '../../component/common/BackButton';
 import { WarningModal } from '../../component/Calendar/CalendarAddComponent/WarningModal';
@@ -13,6 +13,7 @@ import TimeDropDown from '../../component/Calendar/TimeDropDown';
 import ReactDatePicker from 'react-datepicker';
 import { ko } from 'date-fns/esm/locale';
 import { format } from 'date-fns';
+import axios from 'axios';
 
 const CalendarAddContainer = styled.main`
   max-width: 1200px;
@@ -213,15 +214,14 @@ const CalendarAdd = () => {
   const onSubmit = () => {
     const dataSet = {
       date: formattedDate,
-      imageAddress: imageUrl,
-      memo: memo,
-      location: place,
       startTime: startTime,
       endTime: endTime,
       durationTime: durationTime,
+      location: place,
+      memo: memo,
     };
-    console.log(dataSet);
-    if (!dataSet.imageAddress) {
+    console.log(dataSet, imageData);
+    if (!imageData) {
       setImageAvailavble(false);
       return;
     } else if (!dataSet.durationTime || dataSet.durationTime === 0) {
@@ -229,7 +229,23 @@ const CalendarAdd = () => {
       return;
     }
 
-    calendarAPI.calendarAdd({ dataSet, imageData });
+    // calendarAPI.calendarAdd({ dataSet, imageData });
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/ schedules`,
+        { data: dataSet, image: imageData },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   // 장소 등록
@@ -251,6 +267,8 @@ const CalendarAdd = () => {
     // navigate('/');
   };
 
+  const token = localStorage.getItem('accessToken');
+  console.log(token);
   return (
     <CalendarAddContainer>
       <CalendarAddHeaderContainer>

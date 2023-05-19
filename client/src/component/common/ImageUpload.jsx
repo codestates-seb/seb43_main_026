@@ -54,6 +54,7 @@ const ImageUpload = ({ imageUrl, setImageUrl, imageData, setImageData }) => {
       const file = acceptedFiles[0];
       const imageUrl = URL.createObjectURL(file);
       setImageUrl(imageUrl);
+      // 서버로 전송하기 위해 form data로 변환
       const formData = new FormData();
       formData.append('image', acceptedFiles[0]);
       setImageData(formData);

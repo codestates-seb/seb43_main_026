@@ -83,36 +83,3 @@ export const userAPI = {
       },
     }),
 };
-
-// 캘린더 관련 api
-export const calendarAPI = {
-  // 캘린더 항목 등록
-  calendarAdd: (dataSet, imageData) => {
-    api
-      .post(
-        `/schedules`,
-        { data: dataSet, image: imageData },
-        {
-          headers: {
-            Authorization: `${localStorage.getItem('token')}`,
-          },
-        }
-      )
-      .catch((err) => {
-        console.log(err);
-      });
-  },
-
-  // 캘린더 한 달 조회
-  calendarMonthly: (year, month) => {
-    api
-      .get(`/schedules?year=${year}&month=${month}`, {
-        headers: {
-          Authorization: `${localStorage.getItem('token')}`,
-        },
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
-};

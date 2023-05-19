@@ -34,11 +34,18 @@ export const userAPI = {
 
   //일반 회원가입
   signup: (formData) =>
-    api.post('/members/signup', {
-      email: formData.email,
-      nickname: formData.nickname,
-      password: formData.password,
-    }),
+    api
+      .post('/members/signup', {
+        email: formData.email,
+        nickname: formData.nickname,
+        password: formData.password,
+      })
+      .then((res) => console.log(res))
+      .catch((error) => {
+        if (error.response.status === 409) {
+          console.log(error.response.data.message);
+        }
+      }),
 
   // 로그인 유무 확인
   isLogin: (memberId) =>
@@ -77,9 +84,16 @@ export const userAPI = {
 
   //회원탈퇴
   deleteUser: (memberId) =>
-    api.delete(`/members/${memberId}`, {
-      headers: {
-        Authorization: `${localStorage.getItem('token')}`,
-      },
-    }),
+    api
+      .delete(`/members/${memberId}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then(() => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('memberId');
+      })
+      .catch((error) => console.log(error)),
 };

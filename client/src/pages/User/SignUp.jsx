@@ -11,6 +11,7 @@ import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
 
 import { userAPI } from '../../assets/api';
+import { useNavigate } from 'react-router';
 
 const Container = styled.div`
   width: 100vw;
@@ -52,15 +53,13 @@ const OAuthContainer = styled.div`
 
 const SignUp = () => {
   const { handleSubmit, control, getValues } = useForm();
+  const navigate = useNavigate();
 
   const nicknameOptions = {
     required: '닉네임을 입력해주세요.',
     minLength: {
       value: 2,
       message: '닉네임은 두글자 이상이어야 합니다.',
-    },
-    validate: {
-      check: () => {}, // 닉네임 중복 체크 API 필요
     },
   };
   const emailOptions = {
@@ -93,6 +92,8 @@ const SignUp = () => {
   const onSubmit = (data) => {
     console.log(data);
     userAPI.signup(data);
+    console.log('회원가입 성공');
+    navigate('/login');
     // axios
     //   .post(`${SERVER_URL}/members/signup`, { data })
     //   .then((res) => console.log(res))
@@ -174,6 +175,7 @@ const SignUp = () => {
           height={'5vh'}
           style={{ marginTop: '20px' }}
         />
+
         <OAuthContainer>
           <GoogleLogin />
         </OAuthContainer>

@@ -45,7 +45,7 @@ const ImgBox = styled.div`
   overflow: hidden;
   width: 90px;
   height: 90px;
-  border: 2px solid ${COLOR.main_dark_blue};
+  border: 1px solid ${COLOR.main_dark_blue};
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -85,9 +85,15 @@ const MenuList = styled(Link)`
   }
 `;
 
-const Nav = ({ nav, handleNav, loginUser }) => {
+const Nav = ({ nav, handleNav, loginUser, setLoginUser }) => {
   const navigate = useNavigate();
-  console.log(loginUser);
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('memberId');
+    setLoginUser(null);
+  };
   return (
     <Overlay style={{ display: nav ? 'block' : 'none' }} onClick={handleNav}>
       <Container onClick={(e) => e.stopPropagation()}>
@@ -102,9 +108,11 @@ const Nav = ({ nav, handleNav, loginUser }) => {
           )}
         </UserBox>
         <NavList>
-          <MenuList to="/users/1" onClick={handleNav}>
-            마이페이지
-          </MenuList>
+          {loginUser && (
+            <MenuList to={`/users/${loginUser.memberId}`} onClick={handleNav}>
+              마이페이지
+            </MenuList>
+          )}
           <MenuList to="/" onClick={handleNav}>
             내 캘린더
           </MenuList>
@@ -122,7 +130,8 @@ const Nav = ({ nav, handleNav, loginUser }) => {
               height={'40px'}
               style={{ marginTop: '35px' }}
               handleClick={() => {
-                navigate('/login');
+                handleLogout();
+                navigate('/');
                 handleNav();
               }}
             />

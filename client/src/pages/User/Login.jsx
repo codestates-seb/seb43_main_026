@@ -92,22 +92,28 @@ const Login = ({ loginUser, setLoginUser }) => {
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('memberId', memberId);
-
-        // axios
-        //   .get(`${SERVER_URL}/members/${memberId}`, {
-        //     headers: {
-        //       Authorization: `${localStorage.getItem('accessToken')}`,
-        //     },
-        //   })
-        //   .then((res) => {
-        //     console.log(res.data);
-        //     setLoginUser(res.data);
-        //   });
+        if (accessToken) {
+          axios
+            .get(`${SERVER_URL}/members/${memberId}`, {
+              headers: {
+                Authorization: `${localStorage.getItem('accessToken')}`,
+              },
+            })
+            .then((res) => {
+              setLoginUser(res.data);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
         navigate('/');
       })
       .catch((error) => {
         if (error.response.status === 401) {
-          console.log('로그인 에러');
+          console.log(error.response.data.message);
+        }
+        if (error.response.status === 500) {
+          console.log(error.response.data.message);
         }
       });
   };

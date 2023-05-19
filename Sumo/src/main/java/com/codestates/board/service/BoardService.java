@@ -1,8 +1,8 @@
 package com.codestates.board.service;
 
 
-import com.codestates.amazonaws.service.AmazonS3ClientService;
 import com.codestates.auth.LoginUtils;
+import com.codestates.aws.S3Uploader;
 import com.codestates.board.entity.Board;
 import com.codestates.board.entity.BoardLike;
 import com.codestates.board.repository.BoardLikeRepository;
@@ -36,7 +36,7 @@ public class BoardService {
     private MemberRepository memberRepository;
 
     @Autowired
-    private AmazonS3ClientService amazonS3ClientService;
+    private S3Uploader S3Uploader;
 
 
     // 게시글 생성
@@ -57,6 +57,8 @@ public class BoardService {
         if(board.getWorkoutRecordShare() != null){
             board.setWorkoutRecordShare(board.getWorkoutRecordShare());
         }
+
+
         return boardRepository.save(board);
 
     }
@@ -125,7 +127,7 @@ public class BoardService {
         Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(workoutRecordShare -> findBoard.setWorkoutRecordShare(workoutRecordShare));
 
         if (!image.isEmpty()) {
-            Member member = memberRepository.findByEmail(emailFromToken).get();
+            Member member = memberRepository.findByEmail(currentMember.getEmail()).get();
             uploadImageToS3(findBoard, image, member);
         }
 
@@ -142,8 +144,6 @@ public class BoardService {
         if (!board.getMember().getMemberId().equals(currentMember.getMemberId())) {
             throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
         }
-
-
 
         boardRepository.deleteById(boardId);
     }
@@ -300,9 +300,16 @@ public class BoardService {
         String newFileName = "memberId-" + String.valueOf(member.getMemberId()) + "(" + board.getCreatedAt().toString() + ")" + fileExtension;
 
         // s3에 업로드 한 후 schedule에 imageAddress 세팅
-        String imageAddress = AmazonS3ClientService.upload(image, newFileName, member.getNickname() + "/board");
+        String imageAddress = S3Uploader.upload(image, newFileName, member.getNickname() + "/board");
         board.setBoardImageAddress(imageAddress);
     }
+
+    public long getBoardCount() {
+        return boardRepository.count();
+    }
+
+
+
 
 
 }

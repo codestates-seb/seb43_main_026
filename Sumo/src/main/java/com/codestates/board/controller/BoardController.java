@@ -132,4 +132,11 @@ public class BoardController {
         return new ResponseEntity<>(canPost, HttpStatus.OK);
     }
 
+    //board의 총 개수 count
+    @GetMapping("/count")
+    public ResponseEntity<Long> getBoardCount(){
+        long boardCount = boardService.getBoardCount();
+        return new ResponseEntity<>(boardCount, HttpStatus.OK);
+    }
+
 }

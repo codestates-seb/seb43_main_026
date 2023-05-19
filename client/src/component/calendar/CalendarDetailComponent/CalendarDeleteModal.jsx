@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { COLOR } from '../../../style/theme';
 
@@ -68,9 +68,11 @@ const DeleteModalButtons = styled.div`
 
 const CalendarDeleteModal = ({ handleDeleteModal }) => {
   const navigate = useNavigate();
+  const { scheduleId } = useParams();
+  console.log(scheduleId);
   const handleSubmitDelete = () => {
     axios
-      .post(`${process.env.REACT_APP_API_URL}/schedules/1`)
+      .post(`${process.env.REACT_APP_API_URL}/schedules/${scheduleId}`)
       .then((res) => {
         console.log(res);
       })

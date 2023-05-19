@@ -7,6 +7,8 @@ import { COLOR, SIZE } from '../../style/theme';
 import { AiOutlineSearch } from 'react-icons/ai';
 import Loading from '../common/Loading';
 
+const { kakao } = window;
+
 // styled-component
 const SearchBarContainer = styled.div`
   position: relative;
@@ -148,7 +150,22 @@ const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
 const SearchMap = ({ place, setPlace }) => {
   // 지도에 현재 위치 표시
   const [location, setLocation] = useState(null);
+  // 클릭된 장소의 위치
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [mapCenter, setMapCenter] = useState({
+    lat: location?.latitude || 0,
+    lng: location?.longitude || 0,
+  });
+  console.log(location);
+  console.log(mapCenter);
+  // 키워드 검색
+  const [info, setInfo] = useState();
+  const [markers, setMarkers] = useState([]);
+  const [map, setMap] = useState();
 
+  markers.map((marker) => {
+    console.log(marker);
+  });
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
   }, []);
@@ -161,12 +178,6 @@ const SearchMap = ({ place, setPlace }) => {
   const errorHandler = (error) => {
     console.log(error);
   };
-
-  // 키워드 검색
-  const [info, setInfo] = useState();
-  const [markers, setMarkers] = useState([]);
-  const [map, setMap] = useState();
-  const { kakao } = window;
 
   const handleSearch = useCallback(() => {
     const ps = new kakao.maps.services.Places();
@@ -188,6 +199,14 @@ const SearchMap = ({ place, setPlace }) => {
       handleSearch();
     }
   }, [map, handleSearch]);
+
+  useEffect(() => {
+    if (map && markers.length > 0) {
+      const firstMarker = markers[0];
+      setMapCenter({ lat: Number(firstMarker.y), lng: Number(firstMarker.x) });
+    }
+  }, [map, markers]);
+
   const handleClickSearch = (e) => {
     e.preventDefault();
     // 처음 클릭 이벤트 발생 시 map이 undefined가 뜨기 때문에 검색이 되지 않음->일단 주석 처리
@@ -196,13 +215,12 @@ const SearchMap = ({ place, setPlace }) => {
     //   return;
     // }
     handleSearch();
-    console.log('클릭!');
   };
 
   const handlePlace = (e) => {
     setPlace(e.target.value);
   };
-  console.log(place);
+
   return (
     <MapContainer>
       <p>💡 지역 + 수영장으로 입력해 주세요</p>
@@ -216,9 +234,24 @@ const SearchMap = ({ place, setPlace }) => {
         <Map
           center={{ lat: location.latitude, lng: location.longitude }}
           style={{ width: '300px', height: '400px' }}
-          level={5}
+          level={7}
           onLoad={(map) => setMap(map)}
         >
+          {currentLocation ? (
+            <MapMarker
+              position={{
+                lat: currentLocation.latitude,
+                lng: currentLocation.longitude,
+              }}
+            />
+          ) : (
+            <MapMarker
+              position={{
+                lat: location.latitude,
+                lng: location.longitude,
+              }}
+            />
+          )}
           {markers
             ? markers.map((marker) => (
                 <MapMarker
@@ -232,6 +265,10 @@ const SearchMap = ({ place, setPlace }) => {
                       onClick={(e) => {
                         e.preventDefault();
                         setPlace(marker.place_name);
+                        setCurrentLocation({
+                          lat: Number(marker.y),
+                          lng: Number(marker.x),
+                        });
                       }}
                       value={marker.place_name}
                     >

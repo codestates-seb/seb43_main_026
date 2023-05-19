@@ -6,6 +6,7 @@ import { SIZE, COLOR } from '../../style/theme';
 import { useState } from 'react';
 import CalendarDeleteModal from '../../component/Calendar/CalendarDetailComponent/CalendarDeleteModal';
 import { useNavigate } from 'react-router';
+
 const CalendarDetailContainer = styled.div`
   max-width: 1200px;
   display: flex;
@@ -55,6 +56,7 @@ const CalendarDetailBodyContainer = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 30px;
   > img {
     width: 300px;
     height: 300px;
@@ -69,6 +71,9 @@ const CalendarDetailInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 30px;
+  @media screen and (min-width: ${SIZE.tablet}) {
+    padding: 0px 30px;
+  }
   > p {
     padding-left: 10px;
     font-size: 18px;
@@ -84,6 +89,9 @@ const CalendarDetailInfoContainer = styled.div`
     :focus {
       outline: none;
     }
+    @media screen and (min-width: ${SIZE.tablet}) {
+      margin-left: 30px;
+    }
   }
 `;
 
@@ -98,6 +106,9 @@ const CalendarInfoGroup = styled.div`
   padding: 0px 10px 10px 10px;
   border-bottom: 1px solid ${COLOR.main_blue};
   margin-bottom: 40px;
+  > p {
+    /* margin-right: 30px; */
+  }
   > span {
     font-size: 20px;
     font-weight: 400;
@@ -139,7 +150,7 @@ const CalendarDetail = () => {
             <p>장소</p> <span>00수영 센터</span>
           </CalendarInfoGroup>
           <CalendarInfoGroup>
-            <p>운동 시간</p> <span>2.5</span>
+            <p>운동 시간</p> <span>2.5 시간</span>
           </CalendarInfoGroup>
           <p>메모</p>
           <textarea defaultValue={'새 수영복 개시!'} readOnly></textarea>

@@ -16,6 +16,7 @@ import CalendarEdit from './pages/Calendar/CalendarEdit';
 import Board from './pages/Board/Board';
 import BoardAdd from './pages/Board/BoardAdd';
 import BoardDetail from './pages/Board/BoardDetail';
+import BoardEdit from './pages/Board/BoardEdit';
 
 import Login from './pages/User/Login';
 import SignUp from './pages/User/SignUp';
@@ -78,6 +79,7 @@ function App() {
           <Route path="/board" element={<Board />} />
           <Route path="/board/add" element={<BoardAdd />} />
           <Route path="/board/detail" element={<BoardDetail />} />
+          <Route path="/board/detail/edit" element={<BoardEdit />} />
           <Route path="/signup" element={<SignUp />} />
           <Route
             path="/login"

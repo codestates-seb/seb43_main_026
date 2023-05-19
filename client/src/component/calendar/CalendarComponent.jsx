@@ -1,8 +1,9 @@
-/* eslint-disable import/named */
-// 모듈
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-// 스타일링
+import { useNavigate } from 'react-router';
+import html2canvas from 'html2canvas';
+import { useRef, useState, useEffect } from 'react';
+
 import styled from 'styled-components';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { SIZE, COLOR } from '../../style/theme';
@@ -12,48 +13,73 @@ import {
   IoIosArrowForward,
   IoMdAddCircle,
 } from 'react-icons/io';
-import { BsArrowClockwise } from 'react-icons/bs';
 import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { TbCapture } from 'react-icons/tb';
-import { useNavigate } from 'react-router';
+// import axios from 'axios';
+// import { calendarAPI } from '../../assets/api';
 
 // import axios from 'axios';
 
 // styled-component
-// 툴바 버튼 그룹
 const ToolbarButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
+
   > button {
     border: none;
     background-color: inherit;
     cursor: pointer;
+    :first-of-type > p {
+      font-weight: 700;
+      /* color: ${COLOR.main_blue}; */
+    }
   }
   > p {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     font-size: 16px;
     font-weight: 600;
     padding-top: 5px;
-    > span:first-child {
-      margin-right: 12px;
-    }
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     padding-top: 20px;
+    margin: 0 auto;
+    > button:first-of-type {
+      > p {
+        font-size: 18px;
+        font-weight: 700;
+      }
+    }
     > p {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
       font-size: 26px;
-      margin: 0 50px 10px;
+      padding-top: 5px;
+      margin: 0 80px 10px;
+      > span:first-child {
+        margin-right: 12px;
+      }
+    }
+  }
+
+  @media screen and (min-width: ${SIZE.desktop}) {
+    > p {
+      margin: 0px 40px 10px;
     }
   }
 `;
 
-// 캘린더 정보
 const CalendarInfoContainer = styled.section`
   display: flex;
   flex-direction: column;
   padding-top: 25px;
   > p {
-    font-size: 14px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     :first-of-type {
@@ -63,7 +89,7 @@ const CalendarInfoContainer = styled.section`
       margin-left: 10px;
     }
   }
-  /* 태블릿 버전 */
+
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
     padding-top: 10px;
@@ -81,9 +107,7 @@ const CalendarInfoContainer = styled.section`
   }
 `;
 
-// 툴바
 const ToolbarContainer = styled.div`
-  /* 모바일 기준 */
   width: 100%;
   height: 80px;
   display: flex;
@@ -93,7 +117,6 @@ const ToolbarContainer = styled.div`
   padding: 0 20px;
   background-color: ${COLOR.main_gray};
 
-  /* 태블릿 버전 */
   @media screen and (min-width: ${SIZE.tablet}) {
     background-color: #ffff;
     height: 120px;
@@ -102,7 +125,6 @@ const ToolbarContainer = styled.div`
   }
 `;
 
-// 캘린더 하단
 const CalendarBottomContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -121,23 +143,21 @@ const CalendarBottomContainer = styled.div`
     color: #ffff;
     cursor: pointer;
   }
-  /* 캘린더 등록버튼 */
+
   .cal-add-btn {
     color: ${COLOR.main_blue};
     cursor: pointer;
   }
-  /* pc버전 */
+
   @media screen and (min-width: ${SIZE.desktop}) {
     margin: 10px 40px;
   }
 `;
 
-// 캘린더
 const CalendarContainer = styled.div`
-  /* 모바일 기준 */
   width: 100%;
   background-color: #fff;
-  /* 캘린더 본체 */
+
   .rbc-calendar {
     height: 650px;
     .rbc-month-view {
@@ -151,11 +171,10 @@ const CalendarContainer = styled.div`
       }
     }
 
-    /* 캘린더 오늘 날짜 표시 */
     .rbc-today {
       background-color: ${COLOR.main_blue};
     }
-    /* 캘린더 날짜 */
+
     .rbc-date-cell {
       text-align: center;
       padding-top: 5px;
@@ -165,7 +184,7 @@ const CalendarContainer = styled.div`
   /* 태블릿 버전 */
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
-    /* 캘린더 본체 */
+
     .rbc-calendar {
       padding: 0 40px;
       height: 900px;
@@ -176,66 +195,75 @@ const CalendarContainer = styled.div`
     }
   }
 
-  /* pc버전 */
   @media screen and (min-width: ${SIZE.desktop}) {
     width: 60%;
     margin: 0 auto 40px;
     box-shadow: 0px 0px 4px 3px rgba(0, 0, 0, 0.1);
-    /* 캘린더 본체 */
+
     .rbc-month-view {
       margin-top: 20px;
     }
   }
 `;
 
-// component
-// 툴바 버튼
-const ToolbarButtons = ({ props }) => {
+const Toolbar = (props) => {
   const { date } = props;
+  const [changeYear, setChangeYear] = useState(date.getFullYear());
+  const [changeMonth, setChangeMonth] = useState(date.getMonth() + 1);
+  useEffect(() => {
+    setChangeYear(date.getFullYear());
+    setChangeMonth(date.getMonth() + 1);
+    console.log(changeYear, changeMonth);
+  }, [date, changeMonth]);
 
   const navigate = (action) => {
     props.onNavigate(action);
   };
-  return (
-    <ToolbarButtonsContainer>
-      <button type="button" onClick={navigate.bind(null, 'TODAY')}>
-        <BsArrowClockwise size={20} />
-      </button>
-      <button type="button" onClick={navigate.bind(null, 'PREV')}>
-        <IoIosArrowBack size={30} />
-      </button>
-      <p>
-        <span>{`${date.getFullYear()}년`}</span>
-        <span>{`${date.getMonth() + 1}월`}</span>
-      </p>
-      <button type="button" onClick={navigate.bind(null, 'NEXT')}>
-        <IoIosArrowForward size={30} />
-      </button>
-    </ToolbarButtonsContainer>
-  );
-};
 
-// 캘린더 정보
-const CalendarInfo = () => {
-  return (
-    <CalendarInfoContainer>
-      <p>
-        <MdOutlineCalendarMonth size={16} />
-        출석률:<span>80%</span>
-      </p>
-      <p>
-        <AiOutlineClockCircle size={16} />총 운동 시간:
-        <span>20시간</span>
-      </p>
-    </CalendarInfoContainer>
-  );
-};
-// 캘린더 툴바
-const Toolbar = (props) => {
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `${process.env.REACT_APP_API_URL}/schedules?year=${changeYear}&month=${changeMonth}`,
+  //       {
+  //         headers: {
+  //           Authorization: `${localStorage.getItem('accessToken')}`,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [date, changeMonth]);
+
   return (
     <ToolbarContainer>
-      <ToolbarButtons props={props} />
-      <CalendarInfo />
+      <ToolbarButtonsContainer>
+        <button type="button" onClick={navigate.bind(null, 'TODAY')}>
+          <p>TODAY</p>
+        </button>
+        <button type="button" onClick={navigate.bind(null, 'PREV')}>
+          <IoIosArrowBack size={30} />
+        </button>
+        <p>
+          <span>{`${date.getFullYear()}년`}</span>
+          <span>{`${date.getMonth() + 1}월`}</span>
+        </p>
+        <button type="button" onClick={navigate.bind(null, 'NEXT')}>
+          <IoIosArrowForward size={30} />
+        </button>
+      </ToolbarButtonsContainer>
+      <CalendarInfoContainer>
+        <p>
+          <MdOutlineCalendarMonth size={16} />
+          출석률:<span>80%</span>
+        </p>
+        <p>
+          <AiOutlineClockCircle size={16} />총 운동 :<span>20.5시간</span>
+        </p>
+      </CalendarInfoContainer>
     </ToolbarContainer>
   );
 };
@@ -252,14 +280,61 @@ const CalendarComponent = () => {
   };
   moment.locale('ko-KR');
   const localizer = momentLocalizer(moment);
-  // useEffect(()=>{
-  //   axios
-  //   .get(`${process.env.REACT_APP_API_URL}`)
-  // })
+
+  //캡쳐
+  const calendarRef = useRef(null);
+
+  // const captureCalendar = () => {
+  //   console.log(calendarRef.current);
+  //   if (!calendarRef.current) {
+  //     console.log('캡쳐 실패');
+  //   }
+
+  //   const calendarElement = async (calendarRef) => {
+  //     const canvas = await html2canvas(calendarRef);
+  //     document.body.appendChild(canvas);
+  //     const dataURL = canvas.toDataURL();
+  //     const image = new Image();
+  //     image.src = dataURL;
+  //     document.body.appendChild(image);
+  //   };
+  //   console.log(calendarElement);
+  //   // html2canvas(calendarElement).then((canvas) => {
+  //   //   const dataURL = canvas.toDataURL();
+  //   //   const image = new Image();
+  //   //   image.src = dataURL;
+  //   //   document.body.appendChild(image);
+  //   // });
+  // };
+  const captureCalendar = () => {
+    if (!calendarRef.current) {
+      console.log('캡쳐 실패');
+      return;
+    }
+    // 달력에 event가 없어서 캡쳐가 안되는 걸지도....
+    const calendarElement = calendarRef.current;
+    const captureAndSave = async () => {
+      console.log(calendarElement);
+      if (
+        !(calendarElement instanceof Node) ||
+        !document.body.contains(calendarElement)
+      ) {
+        console.log('요소가 문서에 첨부되지 않았습니다.');
+        return;
+      }
+
+      const canvas = await html2canvas(calendarElement);
+      document.body.appendChild(canvas);
+    };
+
+    captureAndSave();
+  };
+
   return (
     <CalendarContainer>
       <Calendar
         id="calMain"
+        ref={calendarRef}
         localizer={localizer}
         views={['month']}
         components={{
@@ -269,7 +344,7 @@ const CalendarComponent = () => {
         onSelectSlot={navToDetail}
       />
       <CalendarBottomContainer>
-        <button className="cal-cap">
+        <button className="cal-cap" onClick={captureCalendar}>
           <TbCapture size={33} />
         </button>
         <IoMdAddCircle className="cal-add-btn" size={50} onClick={navToAdd} />

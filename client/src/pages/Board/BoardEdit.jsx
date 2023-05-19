@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -196,7 +195,7 @@ const ErrorMessage = styled.span`
   font-weight: 600;
 `;
 
-const BoardAdd = () => {
+const BoardEdit = () => {
   const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
   const [imageUrl, setImageUrl] = useState(null);
   const [imageData, setImageData] = useState(new FormData());
@@ -207,8 +206,7 @@ const BoardAdd = () => {
     formState: { errors },
   } = useForm();
 
-  const location = useLocation();
-  const { isShareCalendar } = location.state;
+  const { isShareCalendar } = false;
 
   const isCalendarShareChecked = isShareCalendar ? true : false;
 
@@ -318,4 +316,4 @@ const BoardAdd = () => {
   );
 };
 
-export default BoardAdd;
+export default BoardEdit;

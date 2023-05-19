@@ -12,9 +12,10 @@ import GoogleLogin from '../../component/oAuth/GoogleLogin';
 import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
 
-import { userAPI } from '../../assets/api';
+// import { userAPI } from '../../assets/api';
+import axios from 'axios';
 
-// const SERVER_URL = process.env.REACT_APP_API_URL;
+const SERVER_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.div`
   width: 100vw;
@@ -54,27 +55,65 @@ const OAuthContainer = styled.div`
   }
 `;
 
-const Login = () => {
+const Login = ({ loginUser, setLoginUser }) => {
+  setLoginUser;
   const { handleSubmit, control } = useForm();
   const navigate = useNavigate();
+  console.log(loginUser);
 
   const emailOptions = {
     required: '이메일을 입력해주세요.',
+    pattern: {
+      value: /@/,
+      message: '@를 포함한 주소를 적어주세요.',
+    },
   };
-
   const passwordOptions = {
     required: '비밀번호를 입력해주세요.',
+    pattern: {
+      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      message:
+        '비밀번호는 8자 이상으로 하나 이상의 숫자와 문자,특수문자를 포함해주세요.',
+    },
   };
 
   // 로그인 완료 시
-  const onSubmit = ({ username, password }) => {
-    userAPI.login(username, password);
+  const onFormSubmit = async ({ username, password }) => {
+    axios
+      .post(`${SERVER_URL}/login`, {
+        username,
+        password,
+      })
+      .then((res) => {
+        const accessToken = res.headers.get('Authorization');
+        const refreshToken = res.headers.get('refresh');
+        const memberId = res.headers.get('memberid');
+        axios.defaults.headers.common['Authorization'] = accessToken;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('memberId', memberId);
+
+        // axios
+        //   .get(`${SERVER_URL}/members/${memberId}`, {
+        //     headers: {
+        //       Authorization: `${localStorage.getItem('accessToken')}`,
+        //     },
+        //   })
+        //   .then((res) => {
+        //     console.log(res.data);
+        //     setLoginUser(res.data);
+        //   });
+        navigate('/');
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          console.log('로그인 에러');
+        }
+      });
   };
 
-  // 에러 발생 시
-  // 401 에러 코드 -> 로그인 실패
-  // 500 에러 코드 -> 형식 잘못됨
-  const onError = (error) => {
+  // 폼 작성시 에러
+  const onFormError = (error) => {
     console.log(error, '에러');
   };
 
@@ -82,7 +121,7 @@ const Login = () => {
     <Container>
       <Logo src={LogoImg} alt="logo" />
       <Title>로그인</Title>
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
+      <Form onSubmit={handleSubmit(onFormSubmit, onFormError)}>
         <Controller
           name={'username'}
           control={control}

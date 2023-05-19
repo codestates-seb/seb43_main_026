@@ -1,5 +1,7 @@
 //모듈
 import styled from 'styled-components';
+import { forwardRef } from 'react';
+import { useNavigate } from 'react-router';
 
 //공통 스타일
 import { COLOR } from '../../style/theme';
@@ -8,6 +10,8 @@ import { COLOR } from '../../style/theme';
 import { BiBell } from 'react-icons/bi';
 
 const Container = styled.section`
+  position: absolute;
+  top: 300px;
   display: flex;
   flex-direction: column;
   width: 320px;
@@ -75,6 +79,13 @@ const Share = styled.button`
   background-color: ${COLOR.main_blue};
   color: white;
   font-weight: 500;
+
+  &:hover {
+    background-color: ${COLOR.main_blue_hover};
+  }
+  &:active {
+    background-color: ${COLOR.main_blue_active};
+  }
 `;
 
 const NotShare = styled.button`
@@ -82,9 +93,29 @@ const NotShare = styled.button`
   background-color: white;
   color: ${COLOR.main_blue};
   font-weight: 500;
+
+  &:hover {
+    border: 2px solid ${COLOR.main_blue_hover};
+    color: ${COLOR.main_blue_hover};
+  }
+  &:active {
+    border: 2px solid ${COLOR.main_blue_active};
+    color: ${COLOR.main_blue_active};
+  }
 `;
 
-const Modal = () => {
+const Modal = forwardRef(({ setIsModal }, ref) => {
+  const navigate = useNavigate();
+
+  const handleShare = () => {
+    navigate('/board/add', { state: { isShareCalendar: true } });
+  };
+
+  const handleNotShare = () => {
+    setIsModal(false);
+    navigate('/board/add', { state: { isShareCalendar: false } });
+  };
+
   const getLastDayOfMonth = () => {
     const currentDate = new Date();
     const lastDayOfMonth = new Date(
@@ -98,7 +129,7 @@ const Modal = () => {
   const lastDayOfMonth = getLastDayOfMonth();
 
   return (
-    <Container>
+    <Container ref={ref}>
       <Alert>
         <BiBell size={22} color={COLOR.main_blue} />
         <Message>
@@ -108,11 +139,13 @@ const Modal = () => {
         <Period>{`[ 자랑 기간 : 25일 - ${lastDayOfMonth}일 ]`}</Period>
       </Alert>
       <Buttons>
-        <Share>자랑하기</Share>
-        <NotShare>나중에 할래요</NotShare>
+        <Share onClick={handleShare}>자랑하기</Share>
+        <NotShare onClick={handleNotShare}>나중에 할래요</NotShare>
       </Buttons>
     </Container>
   );
-};
+});
+
+Modal.displayName = 'Modal';
 
 export default Modal;

@@ -2,6 +2,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useLocation } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -51,7 +52,20 @@ const GobackAndUpload = styled.section`
 `;
 
 const Goback = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 5px;
+`;
+
+const Category = styled.span`
+  font-size: 19px;
+  font-weight: 600;
+  color: ${COLOR.main_dark_blue_active};
+
+  @media screen and (min-width: ${SIZE.mobileMax}) {
+    font-size: 20px;
+  }
 `;
 
 const UploadBtn = styled.button`
@@ -166,6 +180,12 @@ const BoardAdd = () => {
   const { register, handleSubmit } = useForm();
   const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
 
+  const location = useLocation();
+  const { isShareCalendar } = location.state;
+  console.log(isShareCalendar);
+
+  const isCalendarShareChecked = isShareCalendar ? true : false;
+
   const onSubmit = (data, e) => {
     e.preventDefault();
     console.log(data);
@@ -181,6 +201,7 @@ const BoardAdd = () => {
         <Goback>
           <BackButton />
         </Goback>
+        {isShareCalendar && <Category>{`< 캘린더 자랑 >`}</Category>}
         <UploadBtn type="submit" onClick={handleSubmit(onSubmit)}>
           등록
         </UploadBtn>
@@ -225,6 +246,7 @@ const BoardAdd = () => {
             id="calendarShare"
             type="checkbox"
             {...register('calendarShare')}
+            checked={isCalendarShareChecked}
           />
         </Calendar>
       </Form>

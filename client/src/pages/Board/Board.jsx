@@ -1,7 +1,7 @@
 //모듈
 import styled from 'styled-components';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
 
 //공통 스타일
@@ -11,6 +11,7 @@ import { COLOR, SIZE } from '../../style/theme';
 import Dash from '../../component/Board/Dash';
 import List from '../../component/Board/List';
 import Pagination from '../../component/Board/Pagination';
+import Modal from '../../component/Board/Modal';
 
 //아이콘
 import { BsCalendar2Heart } from 'react-icons/bs';
@@ -34,13 +35,13 @@ const Container = styled.main`
   display: flex;
   max-width: 1200px;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   margin-top: 0px;
   width: 100%;
-  height: fit-content;
+  max-height: fit-content;
   width: 100%;
-  height: fit-content;
+  min-height: 100vh;
 
   button {
     cursor: pointer;
@@ -89,7 +90,7 @@ const CalendarShow = styled.button`
   border: none;
   border-radius: 5px;
   background-color: ${(props) =>
-    !props.calendarShare ? 'transparent' : COLOR.bg_light_blue};
+    !props.calendarShow ? 'transparent' : COLOR.bg_light_blue};
   color: ${COLOR.main_dark_blue};
   > p {
     color: ${COLOR.main_dark_blue};
@@ -195,7 +196,7 @@ const PlusIcon = styled(HiPlus)`
 
 const ListBox = styled.section`
   width: 100%;
-  min-height: 650px;
+  min-height: 580px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -208,9 +209,14 @@ const Board = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [orderBy, setOrderBy] = useState('latest');
-  const [calendarShare, setCalendarShare] = useState(false);
+  const [calendarShow, setCalendarShow] = useState(false);
+  const [isModal, setIsModal] = useState(false);
+  const [isAfter25th, setIsAfter25th] = useState(false);
+  const [isShareCalendar, setIsShareCalendar] = useState(false);
 
   const navigate = useNavigate();
+
+  const modalRef = useRef(null);
 
   const fetchPostsCalendar = async (value) => {
     try {
@@ -218,7 +224,7 @@ const Board = () => {
         page: currentPage,
         size: pageSize,
         orderBy: value,
-        calendarShare,
+        calendarShow,
       };
 
       const response = await axios.get(`${API_URL}/boards`, {
@@ -258,23 +264,79 @@ const Board = () => {
     setOrderBy(orderByValue);
   };
 
+  //수정! 나중에 get요청으로 캘린더 공유 이력 확인
   const handleUploadClick = () => {
-    navigate('/board/add');
+    if (isAfter25th) {
+      setIsModal(true);
+    } else {
+      navigate('/board/add', { state: { isShareCalendar: false } });
+    }
   };
 
   const handleViewCalendar = () => {
-    setCalendarShare((prev) => !prev);
+    setCalendarShow((prev) => !prev);
   };
 
+  const handleOutsideClick = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      setIsModal(false);
+    }
+  };
+
+  //캘린더 모아보기 필터
   useEffect(() => {
-    if (calendarShare) {
+    if (calendarShow) {
       console.log('----1----');
       fetchPostsCalendar(orderBy);
-    } else if (!calendarShare) {
+    } else if (!calendarShow) {
       console.log('----2----');
       fetchPostsWithAll(orderBy);
     }
-  }, [calendarShare, orderBy]);
+  }, [calendarShow, orderBy]);
+
+  //날짜 25일 이후인지 감지
+  useEffect(() => {
+    const checkDateChange = () => {
+      const currentDate = new Date();
+      const currentDay = currentDate.getDate();
+
+      // 25일부터 말일까지 true
+      if (currentDay >= 25) {
+        setIsAfter25th(true);
+      } else {
+        setIsAfter25th(false);
+      }
+    };
+
+    // 다음 날 자정 계산
+    const nextMidnight = new Date();
+    nextMidnight.setDate(nextMidnight.getDate() + 1);
+    nextMidnight.setHours(0, 0, 0, 0);
+    const timeToNextMidnight = nextMidnight.getTime() - Date.now();
+
+    const timeout = setTimeout(() => {
+      checkDateChange();
+
+      // 매일 자정에 체크되도록 timeout 재설정
+      const followingMidnight = new Date();
+      followingMidnight.setDate(followingMidnight.getDate() + 2);
+      followingMidnight.setHours(0, 0, 0, 0);
+      const timeToFollowingMidnight = followingMidnight.getTime() - Date.now();
+      setTimeout(checkDateChange, timeToFollowingMidnight);
+    }, timeToNextMidnight);
+
+    // 컴포넌트가 언마운트될 때 timeout 클리어
+    return () => clearTimeout(timeout);
+  }, []);
+
+  //모달 밖 클릭 시 닫힘
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
 
   return (
     <Container isDash={isDash}>
@@ -288,9 +350,9 @@ const Board = () => {
         <MoveCategory>
           <CalendarShow
             onClick={handleViewCalendar}
-            calendarShare={calendarShare}
+            calendarShow={calendarShow}
           >
-            {!calendarShare ? (
+            {!calendarShow ? (
               <BiCheckbox size={25} />
             ) : (
               <BiCheckboxChecked size={25} />
@@ -319,10 +381,20 @@ const Board = () => {
           <UploadBtn onClick={handleUploadClick}>등록하기</UploadBtn>
         </Upload>
       )}
+      {isModal && isAfter25th && (
+        <Modal
+          ref={modalRef}
+          setIsModal={setIsModal}
+          setIsShareCalendar={setIsShareCalendar}
+          isShareCalendar={isShareCalendar}
+        />
+      )}
       <ListBox>
         {isDash && <Dash posts={posts} />}
         {!isDash && <List posts={posts} />}
-        {posts.length === 0 && <span>데이터가 없습니다</span>}
+        {posts.length === 0 && (
+          <span>데이터가 없습니다{isAfter25th.toString()}</span>
+        )}
       </ListBox>
       {isDash ? (
         <UploadIconBtn onClick={handleUploadClick}>

@@ -1,6 +1,7 @@
 //모듈
 import styled from 'styled-components';
-import { useState } from 'react';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 
@@ -11,8 +12,12 @@ import { COLOR, SIZE } from '../../style/theme';
 import BackButton from '../../component/common/BackButton';
 
 //컴포넌트
-import UploadImage from '../../component/Board/BoardAdd/UploadImage';
+import ImageUpload from '../../component/common/ImageUpload';
 import Record from '../../component/Board/BoardAdd/Record';
+
+//서버 url
+// const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = `a`;
 
 //전체 컨테이너
 const Container = styled.main`
@@ -192,27 +197,45 @@ const ErrorMessage = styled.span`
 `;
 
 const BoardAdd = () => {
+  const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [imageData, setImageData] = useState(new FormData());
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
 
   const location = useLocation();
   const { isShareCalendar } = location.state;
-  console.log(isShareCalendar);
 
   const isCalendarShareChecked = isShareCalendar ? true : false;
 
-  const onSubmit = (data, e) => {
+  const onSubmit = async (data, e) => {
     e.preventDefault();
-    console.log(data);
+
+    try {
+      const formData = new FormData();
+      formData.append('title', data.title);
+      formData.append('content', data.content);
+      formData.append('image', imageData.get('image'));
+
+      console.log(formData);
+      await axios.post(`${API_URL}/boards`, formData);
+    } catch (error) {
+      console.log(data);
+      console.log(error);
+    }
   };
 
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
+
+  useEffect(() => {
+    console.log(imageData.get('image'));
+  }, [imageData]);
 
   return (
     <Container>
@@ -229,7 +252,14 @@ const BoardAdd = () => {
       <Form>
         <Image>
           <LabelHidden htmlFor="image">사진</LabelHidden>
-          <UploadImage register={register} id="image" />
+          <ImageUpload
+            id="image"
+            register={register}
+            imageUrl={imageUrl}
+            setImageUrl={setImageUrl}
+            imageData={imageData}
+            setImageData={setImageData}
+          />
         </Image>
         <WorkOutContainer>
           <WorkOut>

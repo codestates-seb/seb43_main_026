@@ -16,6 +16,7 @@ import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { TbCapture } from 'react-icons/tb';
 import { useState, useEffect } from 'react';
+// import { calendarAPI } from '../../assets/api';
 
 // import axios from 'axios';
 
@@ -193,6 +194,11 @@ const Toolbar = (props) => {
   const navigate = (action) => {
     props.onNavigate(action);
   };
+
+  // useEffect(() => {
+  //   calendarAPI.calendarMonthly({ changeYear, changeMonth });
+  // }, [date, changeMonth]);
+
   return (
     <ToolbarContainer>
       <ToolbarButtonsContainer>

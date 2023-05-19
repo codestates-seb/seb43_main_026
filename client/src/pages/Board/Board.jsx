@@ -212,7 +212,6 @@ const Board = () => {
 
   const navigate = useNavigate();
 
-
   const fetchPostsCalendar = async (value) => {
     try {
       const params = {
@@ -270,7 +269,6 @@ const Board = () => {
 
   useEffect(() => {
     if (calendarShare) {
-
       console.log('----1----');
       fetchPostsCalendar(orderBy);
     } else if (!calendarShare) {

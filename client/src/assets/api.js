@@ -13,10 +13,24 @@ const api = axios.create(
 export const userAPI = {
   //일반 로그인
   login: (username, password) =>
-    api.post('/login', {
-      username,
-      password,
-    }),
+    api
+      .post('/login', {
+        username,
+        password,
+      })
+      .then((res) => {
+        const accessToken = res.headers.get('Authorization');
+        const refreshToken = res.headers.get('refresh');
+        const memberId = res.headers.get('memberid');
+        axios.defaults.headers.common['Authorization'] = accessToken;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('memberId', memberId);
+        return res.status.code;
+      })
+      .catch((error) => {
+        return error;
+      }),
 
   //일반 회원가입
   signup: (formData) =>
@@ -26,37 +40,32 @@ export const userAPI = {
       password: formData.password,
     }),
 
-  //이메일 인증
-  emailValidation: (token, email) =>
-    api.get(`/auth/check-email-token?token=${token}&email=${email}`),
+  // 로그인 유무 확인
+  isLogin: (memberId) =>
+    api
+      .get(`/members/${memberId}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error) => console.log(error)),
+
+  //전체 로그아웃
+  logout: () =>
+    api.get(`user/allLogOut`, {
+      headers: {
+        Authorization: `${localStorage.getItem('token')}`,
+      },
+    }),
 
   //카카오 로그인
   kakaoLogIn: (code) => api.get(`/auth/kakao/callback?code=${code}`),
 
   //google 로그인
   googleLogIn: (code) => api.get(`/auth/google/callback?code=${code}`),
-
-  //isLogin
-  isLogin: () =>
-    api.get(`/user/isLogIn`, {
-      headers: {
-        Authorization: `${localStorage.getItem('token')}`,
-      },
-    }),
-
-  //userEmail 중복확인
-  userEmailCheck: (username) => api.post(`/auth/emailCheck`, { username }),
-
-  //nickname 중복확인
-  nicknameCheck: (nickname) => api.post(`/auth/nicknameCheck`, { nickname }),
-
-  //전체 로그아웃
-  logOut: () =>
-    api.get(`user/allLogOut`, {
-      headers: {
-        Authorization: `${localStorage.getItem('token')}`,
-      },
-    }),
 
   //프로필 수정
   editProfile: (formData) =>
@@ -67,37 +76,10 @@ export const userAPI = {
     }),
 
   //회원탈퇴
-  deactivateUser: () =>
-    api.put(
-      `/user/update/accountStatus`,
-      {},
-      {
-        headers: {
-          Authorization: `${localStorage.getItem('token')}`,
-        },
-      }
-    ),
-
-  // 비밀번호 찾기
-  findPwd: (email) =>
-    api.post('/auth/password-reset-email', {
-      email,
-    }), //비밀번호 변경
-  changePwd: (password) =>
-    api.patch(
-      '/user/update/password',
-      { password: password },
-      {
-        headers: {
-          Authorization: `${localStorage.getItem('token')}`,
-        },
-      }
-    ),
-
-  //비밀번호 변경
-  changeNewPwd: (token, email, newPassword) =>
-    api.post(
-      `/auth/password-reset-email/callback?token=${token}&email=${email}&newPassword=${newPassword}`,
-      {}
-    ),
+  deleteUser: (memberId) =>
+    api.delete(`/members/${memberId}`, {
+      headers: {
+        Authorization: `${localStorage.getItem('token')}`,
+      },
+    }),
 };

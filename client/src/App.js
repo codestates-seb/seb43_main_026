@@ -1,5 +1,5 @@
 //리액트 모듈
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 //레이아웃
@@ -23,19 +23,47 @@ import User from './pages/User/User';
 import EditUser from './pages/User/EditUser';
 
 import ScrollToTop from './component/common/ScrollToTop';
+import axios from 'axios';
+
+const SERVER_URL = process.env.REACT_APP_API_URL;
 
 function App() {
+  const token = localStorage.getItem('accessToken');
+  const memberId = localStorage.getItem('memberId');
   const [nav, setNav] = useState(false);
+  const [loginUser, setLoginUser] = useState();
 
   const handleNav = () => {
     setNav(!nav);
   };
+
+  useEffect(() => {
+    if (token) {
+      axios
+        .get(`${SERVER_URL}/members/${memberId}`, {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          console.log('hello');
+          setLoginUser(res.data);
+        });
+    }
+  }, []);
+
   return (
     <div className="App">
       <BrowserRouter>
         <ScrollToTop />
         <Header handleNav={handleNav} />
-        <Nav nav={nav} setNav={setNav} handleNav={handleNav} />
+        <Nav
+          nav={nav}
+          setNav={setNav}
+          handleNav={handleNav}
+          loginUser={loginUser}
+        />
         <Routes>
           <Route path="/" element={<MyCalendar />} />
           <Route path="/calendar/add" element={<CalendarAdd />} />
@@ -45,7 +73,12 @@ function App() {
           <Route path="/board/add" element={<BoardAdd />} />
           <Route path="/board/detail" element={<BoardDetail />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={
+              <Login loginUser={loginUser} setLoginUser={setLoginUser} />
+            }
+          />
           <Route path="/users/:id" element={<User />} />
           <Route path="/edit/profile" element={<EditUser />} />
         </Routes>

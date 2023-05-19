@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { useNavigate, Link } from 'react-router-dom';
 import { COLOR } from '../style/theme';
 import Button from '../component/common/Button';
+import profileImage from '../assets/image/headalee.png';
 
 const Overlay = styled.section`
   position: fixed;
@@ -84,27 +85,21 @@ const MenuList = styled(Link)`
   }
 `;
 
-const Login = styled.div`
-  margin-top: 35px;
-`;
-
-/*
-현재 로그인 되어있는 유저의 id 값 불러와서 마이페이지 라우터에 넘겨줘야 함
-*/
-
-const Nav = ({ nav, handleNav }) => {
+const Nav = ({ nav, handleNav, loginUser }) => {
   const navigate = useNavigate();
+  console.log(loginUser);
   return (
     <Overlay style={{ display: nav ? 'block' : 'none' }} onClick={handleNav}>
       <Container onClick={(e) => e.stopPropagation()}>
         <UserBox>
           <ImgBox>
-            <img
-              src="https://images.unsplash.com/photo-1592769606534-fe78d27bf450?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fCVFQSVCMCU5NSVFQyU5NSU4NCVFQyVBNyU4MHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
-              alt="프로필 사진"
-            />
+            <img src={profileImage} alt="프로필 사진" />
           </ImgBox>
-          <span>로그인을 해주세요</span>
+          {loginUser ? (
+            <span>{loginUser.nickname}</span>
+          ) : (
+            <span>로그인을 해주세요</span>
+          )}
         </UserBox>
         <NavList>
           <MenuList to="/users/1" onClick={handleNav}>
@@ -119,17 +114,30 @@ const Nav = ({ nav, handleNav }) => {
           <MenuList to="/board" onClick={handleNav}>
             커뮤니티
           </MenuList>
-          <Login>
+
+          {loginUser ? (
             <Button
-              text={`로그인`}
+              text={`로그아웃`}
               width={'110px'}
               height={'40px'}
+              style={{ marginTop: '35px' }}
               handleClick={() => {
                 navigate('/login');
                 handleNav();
               }}
             />
-          </Login>
+          ) : (
+            <Button
+              text={`로그인`}
+              width={'110px'}
+              height={'40px'}
+              style={{ marginTop: '35px' }}
+              handleClick={() => {
+                navigate('/login');
+                handleNav();
+              }}
+            />
+          )}
         </NavList>
       </Container>
     </Overlay>

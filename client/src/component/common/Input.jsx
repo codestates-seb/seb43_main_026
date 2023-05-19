@@ -8,7 +8,6 @@ const Container = styled.div`
 `;
 
 const Label = styled.label`
-  margin-top: 2rem;
   margin-bottom: 0.7rem;
   font-weight: 300;
 `;
@@ -23,6 +22,7 @@ const InputComponent = styled.input`
 
 const AlertMessage = styled.span`
   color: red;
+  font-size: 0.9rem;
 `;
 
 const Input = ({
@@ -32,10 +32,11 @@ const Input = ({
   value,
   onChange,
   autocomplete,
+  style,
   ...restProps
 }) => {
   return (
-    <Container>
+    <Container style={style}>
       {label ? <Label>{label}</Label> : null}
       <InputComponent
         {...restProps}

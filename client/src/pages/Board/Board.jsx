@@ -21,7 +21,7 @@ import { HiPlus } from 'react-icons/hi';
 import { BiCheckbox, BiCheckboxChecked } from 'react-icons/bi';
 
 //더미데이터
-// import boardData from '../../component/Board/boardData';
+import boardData from '../../component/Board/boardData';
 
 //서버 url
 // const API_URL = process.env.REACT_APP_API_URL;
@@ -208,7 +208,7 @@ const NoData = styled.span`
 `;
 
 const Board = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(boardData);
   const [isDash, setIsDash] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -222,10 +222,10 @@ const Board = () => {
 
   const modalRef = useRef(null);
 
-  const fetchPostsCalendar = async (value) => {
+  const fetchPostsCalendar = async (value, page = 1) => {
     try {
       const params = {
-        page: currentPage,
+        page: page,
         size: pageSize,
         orderBy: value,
         calendarShow,
@@ -241,10 +241,10 @@ const Board = () => {
     }
   };
 
-  const fetchPostsWithAll = async (value) => {
+  const fetchPostsWithAll = async (value, page = 1) => {
     try {
       const params = {
-        page: currentPage,
+        page: page,
         size: pageSize,
         orderBy: value,
       };
@@ -262,9 +262,16 @@ const Board = () => {
   const handlePaginationClick = (pageNumber) => {
     setCurrentPage(pageNumber);
     setPageSize(10);
+
+    if (calendarShow) {
+      fetchPostsCalendar(orderBy, pageNumber);
+    } else {
+      fetchPostsWithAll(orderBy, pageNumber);
+    }
   };
 
   const handleSortClick = (orderByValue) => {
+    setCurrentPage(1);
     setOrderBy(orderByValue);
   };
 
@@ -296,7 +303,7 @@ const Board = () => {
       console.log('----2----');
       fetchPostsWithAll(orderBy);
     }
-  }, [calendarShow, orderBy]);
+  }, [calendarShow, orderBy, pageSize]);
 
   //날짜 25일 이후인지 감지
   useEffect(() => {
@@ -341,6 +348,11 @@ const Board = () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
   }, []);
+
+  // 리스트 뷰가 바뀌면 다시 페이지 1로 세팅
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [isDash]);
 
   return (
     <Container isDash={isDash}>

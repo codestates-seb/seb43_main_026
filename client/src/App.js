@@ -1,5 +1,5 @@
 //리액트 모듈
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 //레이아웃
@@ -24,35 +24,40 @@ import User from './pages/User/User';
 import EditUser from './pages/User/EditUser';
 
 import ScrollToTop from './component/common/ScrollToTop';
-import axios from 'axios';
+// import axios from 'axios';
 
-const SERVER_URL = process.env.REACT_APP_API_URL;
+// const SERVER_URL = process.env.REACT_APP_API_URL;
 
 function App() {
-  const token = localStorage.getItem('accessToken');
-  const memberId = localStorage.getItem('memberId');
+  // const token = localStorage.getItem('accessToken');
+  // const memberId = localStorage.getItem('memberId');
   const [nav, setNav] = useState(false);
   const [loginUser, setLoginUser] = useState();
-
+  console.log(loginUser);
   const handleNav = () => {
     setNav(!nav);
   };
 
-  useEffect(() => {
-    if (token) {
-      axios
-        .get(`${SERVER_URL}/members/${memberId}`, {
-          headers: {
-            Authorization: `${localStorage.getItem('accessToken')}`,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-          console.log('hello');
-          setLoginUser(res.data);
-        });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (token) {
+  //     axios
+  //       .get(`${SERVER_URL}/members/${memberId}`, {
+  //         headers: {
+  //           Authorization: `${localStorage.getItem('accessToken')}`,
+  //         },
+  //       })
+  //       .then((res) => {
+  //         console.log(res.data);
+  //         console.log('hello');
+  //         setLoginUser(res.data);
+
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         console.log('App.js 에러');
+  //       });
+  //   }
+  // }, []);
 
   return (
     <div className="App">
@@ -64,6 +69,7 @@ function App() {
           setNav={setNav}
           handleNav={handleNav}
           loginUser={loginUser}
+          setLoginUser={setLoginUser}
         />
         <Routes>
           <Route path="/" element={<MyCalendar />} />
@@ -81,8 +87,13 @@ function App() {
               <Login loginUser={loginUser} setLoginUser={setLoginUser} />
             }
           />
-          <Route path="/users/:id" element={<User />} />
-          <Route path="/edit/profile" element={<EditUser />} />
+          <Route path="/users/:id" element={<User loginUser={loginUser} />} />
+          <Route
+            path="/edit/profile"
+            element={
+              <EditUser loginUser={loginUser} setLoginUser={setLoginUser} />
+            }
+          />
         </Routes>
         <Footer />
       </BrowserRouter>

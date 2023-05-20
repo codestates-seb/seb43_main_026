@@ -16,10 +16,7 @@ import {
 import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { TbCapture } from 'react-icons/tb';
-// import axios from 'axios';
-// import { calendarAPI } from '../../assets/api';
-
-// import axios from 'axios';
+import axios from 'axios';
 
 // styled-component
 const ToolbarButtonsContainer = styled.div`
@@ -220,23 +217,23 @@ const Toolbar = (props) => {
     props.onNavigate(action);
   };
 
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       `${process.env.REACT_APP_API_URL}/schedules?year=${changeYear}&month=${changeMonth}`,
-  //       {
-  //         headers: {
-  //           Authorization: `${localStorage.getItem('accessToken')}`,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       console.log(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, [date, changeMonth]);
+  useEffect(() => {
+    axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/schedules?year=${changeYear}&month=${changeMonth}`,
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [date, changeMonth]);
 
   return (
     <ToolbarContainer>

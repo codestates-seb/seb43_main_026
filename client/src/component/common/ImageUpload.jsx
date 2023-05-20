@@ -17,10 +17,15 @@ const UploadContainer = styled.div`
     max-width: 800px;
     display: flex;
     justify-content: center;
+    > img {
+      max-width: 60%;
+      @media screen and (min-width: ${SIZE.desktop}) {
+        width: 30%;
+      }
+    }
   }
 `;
 
-// component
 const DropZoneContainer = styled.div`
   width: 100%;
   height: 200px;

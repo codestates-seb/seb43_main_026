@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import { SIZE } from '../../style/theme';
+import { useState } from 'react';
 
 // styled-component
 // dropdown
-const DropdownContainer = styled.select`
+const DropdownContainer = styled.ul`
+  position: relative;
   margin-left: 18px;
   width: 120px;
   height: 35px;
@@ -17,12 +19,39 @@ const DropdownContainer = styled.select`
   border-radius: 10px;
   box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.1);
   text-align: center;
-  font-size: 16px;
-  ::-ms-expand {
-    display: none;
+  > button {
+    width: inherit;
+    height: inherit;
+    background-color: inherit;
+    border: none;
+    font-size: 16px;
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 200px;
+  }
+`;
+
+const DropdownItem = styled.div`
+  z-index: 10;
+  top: 28px;
+  position: absolute;
+  width: inherit;
+  height: 100px;
+  overflow-y: scroll;
+  background-color: #fff;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 10px 10px;
+  > button {
+    width: inherit;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: inherit;
+    border: none;
+    padding-top: 10px;
+    font-size: 16px;
   }
 `;
 
@@ -50,7 +79,7 @@ const TimeDropDownContainer = styled.section`
     color: red;
     margin-top: 10px;
   }
-  /* 태블릿 버전 */
+
   @media screen and (min-width: ${SIZE.tablet}) {
     > div {
       width: 100%;
@@ -73,17 +102,35 @@ const TimeDropDownContainer = styled.section`
 // component
 // dropdown
 const Dropdown = ({ times, timeValue, setTimeValue }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleDropdown = (e) => {
+    setTimeValue(e.target.value);
+    console.log(timeValue);
+    setShowDropdown(!showDropdown);
+  };
   return (
     <DropdownContainer
       value={timeValue}
       onChange={(e) => setTimeValue(e.target.value)}
     >
-      <option value="">시간 선택 ⏰</option>
-      {times.map((time) => (
-        <option key={time} value={time}>
-          {time}
-        </option>
-      ))}
+      <button type="button" value="" onClick={handleDropdown}>
+        {timeValue ? timeValue : '시간 선택 ⏰'}
+      </button>
+      {showDropdown ? (
+        <DropdownItem>
+          {times.map((time) => (
+            <button
+              key={time}
+              value={time}
+              type="button"
+              onClick={handleDropdown}
+            >
+              {time}
+            </button>
+          ))}
+        </DropdownItem>
+      ) : null}
     </DropdownContainer>
   );
 };

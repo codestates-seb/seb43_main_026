@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { SIZE, COLOR } from '../../style/theme';
 import { useState, useEffect } from 'react';
-// import { calendarAPI } from '../../assets/api';
+
 // 컴포넌트
 import BackButton from '../../component/common/BackButton';
 import { WarningModal } from '../../component/Calendar/CalendarAddComponent/WarningModal';
@@ -212,31 +212,60 @@ const CalendarAdd = () => {
   const formattedDate = format(selectedDate, 'yyyy-MM-dd');
 
   const onSubmit = () => {
-    const dataSet = {
+    console.log(imageData);
+    if (!imageUrl) {
+      setImageAvailavble(false);
+      return;
+    } else if (!durationTime || durationTime === 0) {
+      setTimeAvailable(false);
+      return;
+    }
+    const scheduleData = {
       date: formattedDate,
       startTime: startTime,
       endTime: endTime,
       durationTime: durationTime,
-      location: place,
+      location: location,
       memo: memo,
     };
-    console.log(dataSet, imageData);
-    if (!imageData) {
-      setImageAvailavble(false);
-      return;
-    } else if (!dataSet.durationTime || dataSet.durationTime === 0) {
-      setTimeAvailable(false);
-      return;
-    }
 
-    // calendarAPI.calendarAdd({ dataSet, imageData });
+    const formData = new FormData();
+    // formData.append('schedule', JSON.stringify(scheduleData));
+    formData.append('image', imageData);
+
+    // const config = {
+    //   headers: {
+    //     Authorization: localStorage.getItem('accessToken'),
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    // };
+
+    // axios
+    //   .post(
+    //     `${process.env.REACT_APP_API_URL}/schedules`,
+    //     { schedule: JSON.stringify(scheduleData), image: formData },
+    //     config
+    //   )
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    console.log(scheduleData, formData);
     axios
       .post(
-        `${process.env.REACT_APP_API_URL}/ schedules`,
-        { data: dataSet, image: imageData },
+        `${process.env.REACT_APP_API_URL}/schedules`,
+        {
+          schedule: JSON.stringify(scheduleData),
+          image: formData,
+        },
         {
           headers: {
             Authorization: `${localStorage.getItem('accessToken')}`,
+
+            'Content-Type': 'multipart/form-data',
           },
         }
       )
@@ -266,7 +295,7 @@ const CalendarAdd = () => {
     onSubmit();
     // navigate('/');
   };
-
+  console.log(durationTime);
   const token = localStorage.getItem('accessToken');
   console.log(token);
   return (

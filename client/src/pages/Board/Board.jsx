@@ -211,7 +211,6 @@ const Board = () => {
   const [posts, setPosts] = useState(boardData);
   const [isDash, setIsDash] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
   const [orderBy, setOrderBy] = useState('latest');
   const [calendarShow, setCalendarShow] = useState(false);
   const [isModal, setIsModal] = useState(false);
@@ -227,7 +226,7 @@ const Board = () => {
     try {
       const params = {
         page: page,
-        size: pageSize,
+        size: 10,
         orderBy: value,
         calendarShow,
       };
@@ -246,7 +245,7 @@ const Board = () => {
     try {
       const params = {
         page: page,
-        size: pageSize,
+        size: 10,
         orderBy: value,
       };
 
@@ -261,13 +260,11 @@ const Board = () => {
   };
 
   const handlePaginationClick = (pageNumber) => {
-    // 같은 페이지 번호를 눌러도 계속 요청이 들어가는 오류 수정
     if (pageNumber === previousPage.current) {
       return;
     }
 
     setCurrentPage(pageNumber);
-    setPageSize(10);
 
     if (calendarShow) {
       fetchPostsCalendar(orderBy, pageNumber);
@@ -281,7 +278,6 @@ const Board = () => {
     setOrderBy(orderByValue);
   };
 
-  //수정! 나중에 get요청으로 캘린더 공유 이력 확인
   const handleUploadClick = () => {
     if (isAfter25th) {
       setIsModal(true);
@@ -303,13 +299,11 @@ const Board = () => {
   //캘린더 모아보기 필터
   useEffect(() => {
     if (calendarShow) {
-      console.log('----1----');
       fetchPostsCalendar(orderBy);
-    } else if (!calendarShow) {
-      console.log('----2----');
+    } else {
       fetchPostsWithAll(orderBy);
     }
-  }, [calendarShow, orderBy, pageSize]);
+  }, [calendarShow, orderBy]);
 
   //날짜 25일 이후인지 감지
   useEffect(() => {
@@ -359,10 +353,11 @@ const Board = () => {
     previousPage.current = currentPage;
   }, [currentPage]);
 
-  // 리스트 뷰가 바뀌면 다시 페이지 1로 세팅
   useEffect(() => {
-    setCurrentPage(1);
-    previousPage.current = 1;
+    if (isDash) {
+      setCurrentPage(1);
+      previousPage.current = 1;
+    }
   }, [isDash]);
 
   console.log(currentPage);
@@ -433,7 +428,6 @@ const Board = () => {
       {isDash || (
         <Pagination
           currentPage={currentPage}
-          pageSize={pageSize}
           totalPosts={posts.length}
           onPaginationClick={handlePaginationClick}
         />

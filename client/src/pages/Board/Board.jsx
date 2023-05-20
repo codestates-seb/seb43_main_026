@@ -299,11 +299,11 @@ const Board = () => {
   //캘린더 모아보기 필터
   useEffect(() => {
     if (calendarShow) {
-      fetchPostsCalendar(orderBy);
+      fetchPostsCalendar(orderBy, currentPage);
     } else {
-      fetchPostsWithAll(orderBy);
+      fetchPostsWithAll(orderBy, currentPage);
     }
-  }, [calendarShow, orderBy]);
+  }, [calendarShow, orderBy, currentPage]);
 
   //날짜 25일 이후인지 감지
   useEffect(() => {
@@ -354,13 +354,9 @@ const Board = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    if (isDash) {
-      setCurrentPage(1);
-      previousPage.current = 1;
-    }
+    setCurrentPage(1);
+    previousPage.current = 1;
   }, [isDash]);
-
-  console.log(currentPage);
 
   return (
     <Container isDash={isDash}>

@@ -36,8 +36,12 @@ const DropdownItem = styled.div`
   top: 28px;
   position: absolute;
   width: inherit;
-  height: 100px;
+  height: 120px;
   overflow-y: scroll;
+  overflow-x: hidden;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   background-color: #fff;
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.1);
   border-radius: 0 0 10px 10px;

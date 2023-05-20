@@ -22,15 +22,12 @@ const API_URL = `a`;
 //전체 컨테이너
 const Container = styled.main`
   margin: 0 auto;
-  margin-top: 30px;
   display: flex;
   max-width: 1200px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 0px;
-  width: 100%;
-  height: fit-content;
   width: 100%;
   height: fit-content;
 `;
@@ -74,7 +71,7 @@ const Category = styled.span`
 `;
 
 const UploadBtn = styled.button`
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
   color: ${COLOR.main_dark_blue};
   &:hover {
@@ -85,7 +82,7 @@ const UploadBtn = styled.button`
   }
 
   @media screen and (min-width: ${SIZE.mobileMax}) {
-    font-size: 20px;
+    font-size: 18px;
   }
 `;
 
@@ -209,7 +206,6 @@ const BoardAdd = () => {
 
   const location = useLocation();
   const { isShareCalendar } = location.state;
-
   const isCalendarShareChecked = isShareCalendar ? true : false;
 
   const onSubmit = async (data, e) => {
@@ -219,12 +215,18 @@ const BoardAdd = () => {
       const formData = new FormData();
       formData.append('title', data.title);
       formData.append('content', data.content);
+      formData.append('calendarShare', data.calendarShare);
+      formData.append('workoutRecordShare', data.workoutRecordShare);
       formData.append('image', imageData.get('image'));
 
-      console.log(formData);
-      await axios.post(`${API_URL}/boards`, formData);
-    } catch (error) {
       console.log(data);
+      console.log(formData);
+      await axios.post(`${API_URL}/boards`, formData, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      });
+    } catch (error) {
       console.log(error);
     }
   };

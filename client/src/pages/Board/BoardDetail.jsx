@@ -16,15 +16,12 @@ import { FaRegHeart, FaHeart } from 'react-icons/fa';
 
 const Container = styled.main`
   margin: 0 auto;
-  margin-top: 30px;
   display: flex;
   max-width: 1200px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 0px;
-  width: 100%;
-  height: fit-content;
   width: 100%;
   height: fit-content;
 `;
@@ -61,7 +58,7 @@ const ModifyAndDelete = styled.div`
   justify-content: center;
   align-items: center;
   button {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 600;
     color: ${COLOR.main_dark_blue};
     &:hover {
@@ -72,7 +69,7 @@ const ModifyAndDelete = styled.div`
     }
 
     @media screen and (min-width: ${SIZE.mobileMax}) {
-      font-size: 20px;
+      font-size: 18px;
     }
   }
 `;

@@ -30,7 +30,6 @@ const API_URL = `a`;
 //전체 컨테이너
 const Container = styled.main`
   margin: 0 auto;
-  margin-top: 30px;
   background-color: ${(props) => (!props.isDash ? COLOR.bg : COLOR.bg_blue)};
   display: flex;
   max-width: 1200px;
@@ -40,7 +39,6 @@ const Container = styled.main`
   margin-top: 0px;
   width: 100%;
   max-height: fit-content;
-  width: 100%;
   min-height: 100vh;
 
   button {
@@ -50,7 +48,7 @@ const Container = styled.main`
     display: none;
   }
   @media screen and (min-width: ${SIZE.mobileMax}) {
-    margin-top: 15px;
+    margin-top: 20px;
   }
 `;
 
@@ -74,9 +72,12 @@ const Title = styled.div`
 `;
 
 const Community = styled.span`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 21px;
+  @media screen and (min-width: ${SIZE.mobileMax}) {
+    font-size: 20px;
+  }
 `;
 
 const CalendarShow = styled.button`

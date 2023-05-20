@@ -2,7 +2,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
 import html2canvas from 'html2canvas';
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -279,69 +279,39 @@ const CalendarComponent = () => {
   const localizer = momentLocalizer(moment);
 
   //캡쳐
-  const calendarRef = useRef(null);
-
-  // const captureCalendar = () => {
-  //   console.log(calendarRef.current);
-  //   if (!calendarRef.current) {
-  //     console.log('캡쳐 실패');
-  //   }
-
-  //   const calendarElement = async (calendarRef) => {
-  //     const canvas = await html2canvas(calendarRef);
-  //     document.body.appendChild(canvas);
-  //     const dataURL = canvas.toDataURL();
-  //     const image = new Image();
-  //     image.src = dataURL;
-  //     document.body.appendChild(image);
-  //   };
-  //   console.log(calendarElement);
-  //   // html2canvas(calendarElement).then((canvas) => {
-  //   //   const dataURL = canvas.toDataURL();
-  //   //   const image = new Image();
-  //   //   image.src = dataURL;
-  //   //   document.body.appendChild(image);
-  //   // });
-  // };
-  const captureCalendar = () => {
-    if (!calendarRef.current) {
-      console.log('캡쳐 실패');
-      return;
-    }
-    // 달력에 event가 없어서 캡쳐가 안되는 걸지도....
-    const calendarElement = calendarRef.current;
-    const captureAndSave = async () => {
-      console.log(calendarElement);
-      if (
-        !(calendarElement instanceof Node) ||
-        !document.body.contains(calendarElement)
-      ) {
-        console.log('요소가 문서에 첨부되지 않았습니다.');
-        return;
-      }
-
-      const canvas = await html2canvas(calendarElement);
+  const onCapture = () => {
+    console.log('capture');
+    html2canvas(document.getElementById('calMain')).then((canvas) => {
       document.body.appendChild(canvas);
-    };
-
-    captureAndSave();
+      onSave(canvas.toDataURL(), 'captured_image.png');
+      document.body.removeChild(canvas);
+    });
+  };
+  const onSave = (uri, filename) => {
+    console.log('onSave');
+    const link = document.createElement('a');
+    document.body.appendChild(link);
+    link.href = uri;
+    link.download = filename;
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
     <CalendarContainer>
-      <Calendar
-        id="calMain"
-        ref={calendarRef}
-        localizer={localizer}
-        views={['month']}
-        components={{
-          toolbar: Toolbar,
-          event: CustomEvent,
-        }}
-        onSelectSlot={navToDetail}
-      />
+      <div id="calMain">
+        <Calendar
+          localizer={localizer}
+          views={['month']}
+          components={{
+            toolbar: Toolbar,
+            event: CustomEvent,
+          }}
+          onSelectSlot={navToDetail}
+        />
+      </div>
       <CalendarBottomContainer>
-        <button className="cal-cap" onClick={captureCalendar}>
+        <button className="cal-cap" onClick={onCapture}>
           <TbCapture size={33} />
         </button>
         <IoMdAddCircle className="cal-add-btn" size={50} onClick={navToAdd} />

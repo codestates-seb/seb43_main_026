@@ -211,7 +211,7 @@ const CalendarAdd = () => {
   }, [startTime, endTime]);
   const formattedDate = format(selectedDate, 'yyyy-MM-dd');
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     console.log(imageData);
     if (!imageUrl) {
       setImageAvailavble(false);
@@ -230,21 +230,44 @@ const CalendarAdd = () => {
     };
 
     const formData = new FormData();
-    // formData.append('schedule', JSON.stringify(scheduleData));
     formData.append('image', imageData);
+    // formData.append('schedule', JSON.stringify(scheduleData));
+    const blob = new Blob([JSON.stringify(scheduleData)], {
+      type: 'application/json',
+    });
+    formData.append('data', blob);
 
-    // const config = {
-    //   headers: {
-    //     Authorization: localStorage.getItem('accessToken'),
-    //     'Content-Type': 'multipart/form-data',
-    //   },
-    // };
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/schedules`,
+        formData,
+        {
+          headers: {
+            Authorization: localStorage.getItem('accessToken'),
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
 
     // axios
     //   .post(
     //     `${process.env.REACT_APP_API_URL}/schedules`,
-    //     { schedule: JSON.stringify(scheduleData), image: formData },
-    //     config
+    //     {
+    //       schedule: JSON.stringify(scheduleData),
+    //       image: imageData,
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: `${localStorage.getItem('accessToken')}`,
+
+    //         'Content-Type': 'application/json',
+    //       },
+    //     }
     //   )
     //   .then((res) => {
     //     console.log(res);
@@ -252,29 +275,6 @@ const CalendarAdd = () => {
     //   .catch((err) => {
     //     console.log(err);
     //   });
-
-    console.log(scheduleData, formData);
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/schedules`,
-        {
-          schedule: JSON.stringify(scheduleData),
-          image: formData,
-        },
-        {
-          headers: {
-            Authorization: `${localStorage.getItem('accessToken')}`,
-
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   // 장소 등록

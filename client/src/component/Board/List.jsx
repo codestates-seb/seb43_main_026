@@ -1,5 +1,6 @@
 //모듈
 import styled from 'styled-components';
+import { useRef, useEffect, useState } from 'react';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -100,10 +101,50 @@ const Writer = styled.span`
 const CreatDate = styled.span``;
 
 const List = ({ posts }) => {
+  const [data, setData] = useState([]);
+  const observer = useRef(null);
+  const sentinelRef = useRef(null);
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5, // 타겟의 50%가 보이는 시점에서 감지
+    };
+
+    const handleObserver = (entries) => {
+      const target = entries[0];
+      if (target.isIntersecting) {
+        handleLoadMore();
+      }
+    };
+
+    observer.current = new IntersectionObserver(handleObserver, options);
+
+    // 컴포넌트가 마운트될 때 신호 타겟을 관찰
+    if (observer.current) {
+      observer.current.observe(sentinelRef.current);
+    }
+
+    // 컴포넌트가 언마운트될 때 옵저버를 정리
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    // posts 상태가 업데이트될 때마다 `data`에 추가
+    setData((prevData) => [...prevData, ...posts]);
+  }, [posts]);
+
+  const handleLoadMore = () => {};
+
   return (
     <Containter>
-      {posts.length
-        ? posts.map((post) => (
+      {data.length
+        ? data.map((post) => (
             <Lists key={post.id}>
               <TitleAndReaction>
                 <Title>{post.title}</Title>
@@ -125,6 +166,7 @@ const List = ({ posts }) => {
             </Lists>
           ))
         : null}
+      <div ref={sentinelRef} />
     </Containter>
   );
 };

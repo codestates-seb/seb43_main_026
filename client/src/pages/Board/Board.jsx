@@ -221,6 +221,7 @@ const Board = () => {
   const navigate = useNavigate();
 
   const modalRef = useRef(null);
+  const previousPage = useRef(1);
 
   const fetchPostsCalendar = async (value, page = 1) => {
     try {
@@ -260,6 +261,11 @@ const Board = () => {
   };
 
   const handlePaginationClick = (pageNumber) => {
+    // 같은 페이지 번호를 눌러도 계속 요청이 들어가는 오류 수정
+    if (pageNumber === previousPage.current) {
+      return;
+    }
+
     setCurrentPage(pageNumber);
     setPageSize(10);
 
@@ -349,10 +355,17 @@ const Board = () => {
     };
   }, []);
 
+  useEffect(() => {
+    previousPage.current = currentPage;
+  }, [currentPage]);
+
   // 리스트 뷰가 바뀌면 다시 페이지 1로 세팅
   useEffect(() => {
     setCurrentPage(1);
+    previousPage.current = 1;
   }, [isDash]);
+
+  console.log(currentPage);
 
   return (
     <Container isDash={isDash}>
@@ -406,15 +419,18 @@ const Board = () => {
         />
       )}
       <ListBox>
+        {!isDash && (
+          <List posts={posts} setCurrentPage={setCurrentPage} isDash={isDash} />
+        )}
         {isDash && <Dash posts={posts} />}
-        {!isDash && <List posts={posts} />}
         {posts.length === 0 && <NoData>데이터가 없습니다</NoData>}
       </ListBox>
-      {isDash ? (
+      {isDash && (
         <UploadIconBtn onClick={handleUploadClick}>
           <PlusIcon size={32} color="#ffffff" />
         </UploadIconBtn>
-      ) : (
+      )}
+      {isDash || (
         <Pagination
           currentPage={currentPage}
           pageSize={pageSize}

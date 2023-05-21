@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 //공통 스타일
 import { COLOR } from '../../../style/theme';
+import { useEffect } from 'react';
 
 const Container = styled.section`
   width: 100%;
@@ -59,10 +60,12 @@ const Rate = styled.span`
   font-size: 17px;
 `;
 
-const Record = () => {
+const Record = ({ isShareCalendar }) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear(); // 현재 년도
   const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
+
+  useEffect(() => {}, [isShareCalendar]);
 
   return (
     <Container>

@@ -8,6 +8,7 @@ import Footer from './layout/Footer';
 import Nav from './layout/Nav';
 
 // 페이지
+import Home from './pages/Home';
 import MyCalendar from './pages/Calendar/Calendar';
 import CalendarAdd from './pages/Calendar/CalendarAdd';
 import CalendarDetail from './pages/Calendar/CalendarDetail';
@@ -24,6 +25,7 @@ import User from './pages/User/User';
 import EditUser from './pages/User/EditUser';
 
 import ScrollToTop from './component/common/ScrollToTop';
+
 // import axios from 'axios';
 
 // const SERVER_URL = process.env.REACT_APP_API_URL;
@@ -72,6 +74,7 @@ function App() {
           setLoginUser={setLoginUser}
         />
         <Routes>
+          <Route path="/Home" element={<Home />} />
           <Route path="/" element={<MyCalendar />} />
           <Route path="/calendar/add" element={<CalendarAdd />} />
           <Route path="/calendar/:calendarid" element={<CalendarDetail />} />

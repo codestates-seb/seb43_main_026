@@ -276,7 +276,7 @@ const BoardAdd = () => {
             </label>
           </WorkOut>
         </WorkOutContainer>
-        {workoutRecordShare && <Record />}
+        {workoutRecordShare && <Record isShareCalendar={isShareCalendar} />}
         <TitleContainer>
           {errors.title && (
             <ErrorContainer>

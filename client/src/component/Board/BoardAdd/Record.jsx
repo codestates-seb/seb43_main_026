@@ -1,5 +1,6 @@
 //모듈
 import styled from 'styled-components';
+import axios from 'axios';
 
 //공통 스타일
 import { COLOR } from '../../../style/theme';
@@ -66,7 +67,27 @@ const Record = ({ isShareCalendar }) => {
   const currentYear = currentDate.getFullYear(); // 현재 년도
   const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
 
-  useEffect(() => {}, [isShareCalendar]);
+  useEffect(() => {
+    if (isShareCalendar) {
+      axios
+        .get('URL_A')
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      axios
+        .get('URL_B')
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [isShareCalendar]);
 
   return (
     <Container>

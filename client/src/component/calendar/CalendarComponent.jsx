@@ -16,7 +16,10 @@ import {
 import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { TbCapture } from 'react-icons/tb';
-import axios from 'axios';
+// import axios from 'axios';
+
+moment.locale('ko-KR');
+const localizer = momentLocalizer(moment);
 
 // styled-component
 const ToolbarButtonsContainer = styled.div`
@@ -128,7 +131,7 @@ const CalendarBottomContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 20px;
-  /* 캡쳐 버튼 */
+
   .cal-cap {
     height: 44px;
     width: 44px;
@@ -178,7 +181,6 @@ const CalendarContainer = styled.div`
     }
   }
 
-  /* 태블릿 버전 */
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
 
@@ -211,29 +213,30 @@ const Toolbar = (props) => {
     setChangeYear(date.getFullYear());
     setChangeMonth(date.getMonth() + 1);
     console.log(changeYear, changeMonth);
-  }, [date, changeMonth]);
+  }, [date]);
 
   const navigate = (action) => {
     props.onNavigate(action);
   };
 
-  useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_API_URL}/schedules?year=${changeYear}&month=${changeMonth}`,
-        {
-          headers: {
-            Authorization: `${localStorage.getItem('accessToken')}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [date, changeMonth]);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `${process.env.REACT_APP_API_URL}/schedules?year=${changeYear}&month=${changeMonth}`,
+  //       {
+  //         headers: {
+  //           Authorization: `${localStorage.getItem('accessToken')}`,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       console.log(res);
+  //       setCalendarData(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, [date, changeMonth]);
 
   return (
     <ToolbarContainer>
@@ -267,6 +270,8 @@ const Toolbar = (props) => {
 
 // 캘린더
 const CalendarComponent = () => {
+  const [calendarData, setCalendarData] = useState('');
+  console.log(calendarData);
   const nav = useNavigate();
   const navToDetail = () => {
     console.log('click');
@@ -275,8 +280,6 @@ const CalendarComponent = () => {
   const navToAdd = () => {
     nav('/calendar/add');
   };
-  moment.locale('ko-KR');
-  const localizer = momentLocalizer(moment);
 
   //캡쳐
   const onCapture = () => {
@@ -304,9 +307,12 @@ const CalendarComponent = () => {
           localizer={localizer}
           views={['month']}
           components={{
-            toolbar: Toolbar,
+            toolbar: (props) => (
+              <Toolbar {...props} setCalendarData={setCalendarData} />
+            ),
             event: CustomEvent,
           }}
+          setCalendarData={setCalendarData}
           onSelectSlot={navToDetail}
         />
       </div>

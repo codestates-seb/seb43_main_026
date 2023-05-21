@@ -5,9 +5,9 @@ spring:
       path: /h2
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://15.164.84.167:3306/soomo
-    username: soomoUser
-    password: soomo159753
+    url: ${DB_URL}
+    username: ${DB_USER_ID}
+    password: ${DB_USER_PW}
   jpa:
     hibernate:
       ddl-auto: update  # (1) ??? ?? ??
@@ -27,7 +27,7 @@ server:
     encoding:
       force-response: true
 jwt:
-  key: ThisIsDefaultSecretKeyfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfjfj # 256비틍 이상의 키가 필요하다.
+  key: ${JWT_SECRET_KEY} # 256비틍 이상의 키가 필요하다.
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 420
 mail:
@@ -36,10 +36,10 @@ mail:
 cloud:
   aws:
     credentials:
-      accessKey: AKIAXEURD3OXIZ6ZT444
-      secretKey: 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
+      accessKey: ${CLOWD_ACCESS_KEY}
+      secretKey: ${CLOWD_SECRET_KEY}
     s3:
-      bucket: testbucketforsoomo
+      bucket: ${CLOWD_S3_BUCKET}
     region:
       static: ap-northeast-2
     stack:

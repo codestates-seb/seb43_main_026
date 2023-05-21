@@ -95,6 +95,7 @@ const Form = styled.form`
 // 이미지 업로드
 const Image = styled.section`
   padding: 0 0 20px 0;
+  height: fit-content;
   border-bottom: 1px solid ${COLOR.main_blue};
 `;
 

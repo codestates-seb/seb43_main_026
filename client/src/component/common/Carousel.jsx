@@ -2,18 +2,37 @@
 import styled, { keyframes } from 'styled-components';
 import { useState, useEffect } from 'react';
 
+//공통 스타일
+import { COLOR, SIZE } from '../../style/theme';
+
+//이미지
+import Slide1 from '../../assets/image/slide1.png';
+import Slide2 from '../../assets/image/slide2.png';
+import Slide3 from '../../assets/image/slide3.png';
+
 const Container = styled.section`
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
+  margin-top: 25px;
+
+  @media screen and (max-width: ${SIZE.mobileMax}) {
+    display: none;
+  }
 `;
 
 const SlideItem = styled.img`
   width: 100%;
-  height: 350px;
-  border-radius: 5px;
+  object-fit: cover;
+  height: auto;
+  max-height: 350px;
+  overflow: hidden;
   animation: ${(props) => (props.animate ? fadeIn : '')} 0.5s ease-in-out;
+
+  @media screen and (min-width: ${SIZE.mobileMax}) {
+    border-radius: 10px;
+  }
 `;
 
 const fadeIn = keyframes`
@@ -25,16 +44,36 @@ const fadeIn = keyframes`
   }
 `;
 
-const Move = styled.div``;
+const Move = styled.div`
+  position: sticky;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  div {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  button {
+    width: 45px;
+    border: none;
+    background-color: transparent;
+    font-size: 28px;
+    font-weight: 600;
+    color: ${COLOR.main_dark_blue};
+  }
+`;
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animate, setAnimate] = useState(false);
 
   const images = [
-    { src: 'image1.jpg', alt: 'Image 1' },
-    { src: 'image2.jpg', alt: 'Image 2' },
-    { src: 'image3.jpg', alt: 'Image 3' },
+    { src: Slide1, alt: 'Image 1' },
+    { src: Slide2, alt: 'Image 2' },
+    { src: Slide3, alt: 'Image 3' },
   ];
 
   const goToPreviousSlide = () => {
@@ -70,8 +109,10 @@ const Carousel = () => {
         onAnimationEnd={handleAnimationEnd}
       />
       <Move>
-        <button onClick={goToPreviousSlide}>Previous</button>
-        <button onClick={goToNextSlide}>Next</button>
+        <div>
+          <button onClick={goToPreviousSlide}>{`<`}</button>
+          <button onClick={goToNextSlide}>{`>`}</button>
+        </div>
       </Move>
     </Container>
   );

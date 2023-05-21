@@ -11,6 +11,7 @@ const Container = styled.section`
   display: flex;
   align-items: center;
   font-weight: 600;
+  background-color: ${COLOR.bg};
   border-bottom: 1px solid ${COLOR.main_blue};
 
   section {

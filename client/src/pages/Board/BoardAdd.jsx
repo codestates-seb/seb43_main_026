@@ -16,8 +16,7 @@ import ImageUpload from '../../component/common/ImageUpload';
 import Record from '../../component/Board/BoardAdd/Record';
 
 //서버 url
-// const API_URL = process.env.REACT_APP_API_URL;
-const API_URL = `a`;
+const API_URL = process.env.REACT_APP_API_URL;
 
 //전체 컨테이너
 const Container = styled.main`

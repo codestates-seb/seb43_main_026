@@ -24,8 +24,7 @@ import { BiCheckbox, BiCheckboxChecked } from 'react-icons/bi';
 import boardData from '../../component/Board/boardData';
 
 //서버 url
-// const API_URL = process.env.REACT_APP_API_URL;
-const API_URL = `a`;
+const API_URL = process.env.REACT_APP_API_URL;
 
 //전체 컨테이너
 const Container = styled.main`

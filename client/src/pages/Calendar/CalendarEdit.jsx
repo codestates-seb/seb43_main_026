@@ -173,10 +173,10 @@ const CalendarEdit = () => {
   console.log(formattedDate);
 
   // const navigate = useNavigate();
-  const { calendarid } = useParams();
+  const { scheduleId } = useParams();
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/schedules/${calendarid}`)
+      .get(`${process.env.REACT_APP_API_URL}/schedules/${scheduleId}`)
       .then((res) => {
         console.log(res);
       })

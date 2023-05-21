@@ -7,20 +7,28 @@ import { COLOR, SIZE } from '../../style/theme';
 // styled-component
 const UploadContainer = styled.div`
   width: 100%;
-  height: 300px;
+  height: 340px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 30px 0 20px;
   > div {
-    width: 80%;
+    width: 100%;
+    height: 100%;
     max-width: 800px;
     display: flex;
     justify-content: center;
+    > img {
+      /* max-width: 100%;
+      max-height: 100%; */
+      @media screen and (min-width: ${SIZE.desktop}) {
+        width: 70%;
+      }
+    }
   }
 `;
 
-// component
 const DropZoneContainer = styled.div`
   width: 100%;
   height: 200px;

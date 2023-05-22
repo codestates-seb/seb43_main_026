@@ -4,6 +4,8 @@ import Wave1 from '../assets/image/wave.png';
 import Wave2 from '../assets/image/wave2.png';
 import { COLOR, SIZE } from '../style/theme';
 import { useNavigate } from 'react-router';
+import Iphone from '../assets/image/calendarEX.png';
+// import CalendarExampleImage from '../assets/image/calendarImage.png';
 
 const LandingContainer = styled.main`
   width: 100%;
@@ -12,7 +14,7 @@ const LandingContainer = styled.main`
   flex-direction: column;
 `;
 
-const SoomoContainer = styled.section`
+const FirstContainer = styled.section`
   position: relative;
   width: 100%;
   height: 400px;
@@ -26,7 +28,7 @@ const SoomoContainer = styled.section`
     width: 200px;
     position: absolute;
     right: 20px;
-    bottom: 20px;
+    bottom: 5px;
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     background-image: url(${Wave2});
@@ -62,7 +64,7 @@ const IntroduceContainer = styled.div`
   }
   @keyframes slide-in {
     0% {
-      left: -100px;
+      left: 0px;
       opacity: 0;
     }
     60% {
@@ -134,12 +136,112 @@ const IntroduceContainer = styled.div`
   }
 `;
 
+const SecondContainer = styled.section`
+  position: relative;
+  width: 100%;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;
+  background-color: #fffff7e0;
+  > img {
+    width: 120px;
+  }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    height: 100vh;
+    padding: 0 30px;
+    flex-direction: row;
+
+    > img {
+      width: 420px;
+    }
+  }
+`;
+
+const SecondTextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @media screen and (min-width: ${SIZE.tablet}) {
+    margin-right: 100px;
+  }
+`;
+
+const CalendarExample = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  > h2 {
+    color: #1b4f13;
+    font-size: 38px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    white-space: nowrap;
+    letter-spacing: 3px;
+  }
+  > span {
+    color: #1b4f13;
+    font-size: 18px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  @media screen and (min-width: ${SIZE.tablet}) {
+    flex-direction: column;
+    margin-bottom: 80px;
+    margin-right: 120px;
+    > h2 {
+      font-size: 60px;
+      letter-spacing: 5px;
+    }
+    > span {
+      font-size: 28px;
+    }
+  }
+`;
+
+const SecondTitle = styled.div`
+  width: 100%;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 4px;
+  > p {
+    color: #0c3505;
+    text-align: center;
+    white-space: nowrap;
+    :first-of-type {
+      margin-bottom: 10px;
+    }
+  }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    width: 100%;
+    font-size: 32px;
+    /* margin-left: 120px; */
+    > p {
+      text-align: left;
+      :first-of-type {
+        margin-bottom: 30px;
+      }
+    }
+  }
+`;
+
+// const ExampleImage = styled.img``;
+
 const Landing = () => {
   const nav = useNavigate();
 
   return (
     <LandingContainer>
-      <SoomoContainer>
+      <FirstContainer>
         <IntroduceContainer>
           <div>
             <h1>SooMo</h1>
@@ -149,7 +251,21 @@ const Landing = () => {
           <button onClick={() => nav('/signup')}>SooMo 시작하기</button>
         </IntroduceContainer>
         <img src={SwimmingPool} alt="수영장" />
-      </SoomoContainer>
+      </FirstContainer>
+      <SecondContainer>
+        <SecondTextContainer>
+          <CalendarExample>
+            <h2>#오수완🔥</h2>
+            <span>오늘도 수영한 나, 칭찬해</span>
+          </CalendarExample>
+          <SecondTitle>
+            <p>오늘 수영 완료하셨나요?</p>
+            <p>매일 나의 캘린더에 기록해보세요</p>
+          </SecondTitle>
+        </SecondTextContainer>
+        {/* <ExampleImage src={CalendarExampleImage} alt="캘린더이미지예시" /> */}
+        <img src={Iphone} alt="캘린더예시" />
+      </SecondContainer>
     </LandingContainer>
   );
 };

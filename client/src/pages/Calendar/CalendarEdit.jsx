@@ -173,10 +173,10 @@ const CalendarEdit = () => {
   console.log(formattedDate);
 
   // const navigate = useNavigate();
-  const { calendarid } = useParams();
+  const { scheduleid } = useParams();
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/schedules/${calendarid}`, {
+      .get(`${process.env.REACT_APP_API_URL}/schedules/${scheduleid}`, {
         headers: {
           Authorization: localStorage.getItem('accessToken'),
         },
@@ -187,7 +187,7 @@ const CalendarEdit = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [calendarid]);
+  }, [scheduleid]);
 
   // 장소 검색
   const [openSearchModal, setOpenSearchModal] = useState(false);

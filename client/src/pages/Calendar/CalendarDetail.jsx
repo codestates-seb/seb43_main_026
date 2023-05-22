@@ -124,13 +124,13 @@ const CalendarInfoGroup = styled.div`
 
 const CalendarDetail = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const { calendarid } = useParams();
+  const { scheduleid } = useParams();
   const [calendarData, setCalendarData] = useState({});
-  console.log(calendarid);
+  console.log(scheduleid);
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/schedules/${calendarid}`, {
+      .get(`${process.env.REACT_APP_API_URL}/schedules/${scheduleid}`, {
         headers: {
           Authorization: localStorage.getItem('accessToken'),
         },
@@ -141,7 +141,7 @@ const CalendarDetail = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [calendarid]);
+  }, [scheduleid]);
 
   console.log(calendarData);
 
@@ -151,7 +151,7 @@ const CalendarDetail = () => {
 
   const nav = useNavigate();
   const navToEdit = () => {
-    nav(`/calendar/:calendarid/edit`);
+    nav(`/calendar/:scheduleid/edit`);
   };
   return (
     <CalendarDetailContainer>

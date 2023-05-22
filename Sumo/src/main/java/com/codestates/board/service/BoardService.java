@@ -64,7 +64,8 @@ public class BoardService {
     }
 
     @Transactional
-    public Board createBoard(Board board, MultipartFile image) throws IOException{
+    public Board createBoardWithImage(Board board, MultipartFile image) throws IOException{
+
         Member currentMember = getCurrentMember();
         board.setMember(currentMember);
         currentMember.addBoard(board);
@@ -110,7 +111,7 @@ public class BoardService {
 
     // TODO 수정할 때 확장자가 다른 경우에 파일이 대체되지 않음(다른 이름은 같은데 확장자가 달라서 이름 자체가 다른 것으로 인식)
     @Transactional
-    public Board updateBoard(Board board, MultipartFile image) throws IOException {
+    public Board updateBoardWithImage(Board board, MultipartFile image) throws IOException {
 
         Member currentMember = getCurrentMember();
         Board findBoard = findVerifiedBoard(board.getBoardId());

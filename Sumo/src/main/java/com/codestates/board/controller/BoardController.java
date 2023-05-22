@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,12 +38,12 @@ public class BoardController {
 
 
     @PostMapping
-    public ResponseEntity postBoard(@Valid @RequestPart BoardPostDto boardPostDto,
-                                    @RequestPart(value = "image", required = false) MultipartFile image){
+    public ResponseEntity postBoard(@Valid @RequestPart("board") BoardPostDto boardPostDto,
+                                    @RequestPart(value = "image", required = false) MultipartFile image) throws IOException {
 
         Board board;
         if(image != null && !image.isEmpty()) {
-            board = boardService.createBoard(boardMapper.boardPostDtoToboard(boardPostDto));
+            board = boardService.createBoardWithImage(boardMapper.boardPostDtoToboard(boardPostDto), image);
         } else {
             board = boardService.createBoard(boardMapper.boardPostDtoToboard(boardPostDto));
         }
@@ -57,11 +58,20 @@ public class BoardController {
     }
 
     @PatchMapping("/{board-id}")
-    public ResponseEntity patchBoard(@Valid @RequestBody BoardPatchDto boardPatchDto,
-                                     @PathVariable("board-id") @Positive long boardId) {
+    public ResponseEntity patchBoard(@Valid @RequestPart("board") BoardPatchDto boardPatchDto,
+                                     @RequestPart(value = "image", required = false) MultipartFile image,
+                                     @PathVariable("board-id") @Positive long boardId) throws IOException  {
+
         boardPatchDto.setBoardId(boardId);
 
-        Board board = boardService.updateBoard(boardMapper.boardPatchDtoToBoard(boardPatchDto));
+        Board board;
+        if(image != null && !image.isEmpty()) {
+            board = boardService.updateBoardWithImage(boardMapper.boardPatchDtoToBoard(boardPatchDto), image);
+
+        }else {
+            board = boardService.updateBoard(boardMapper.boardPatchDtoToBoard(boardPatchDto));
+
+        }
         BoardResponseDto boardResponseDto = boardMapper.boardToBoardResponseDto(board);
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);

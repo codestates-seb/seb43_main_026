@@ -84,7 +84,7 @@ function App() {
           <Route path="/board" element={<Board />} />
           <Route path="/board/add" element={<BoardAdd />} />
           <Route path="/board/:boardId" element={<BoardDetail />} />
-          <Route path="/board/detail/edit" element={<BoardEdit />} />
+          <Route path="/board/:boardId/edit" element={<BoardEdit />} />
 
           <Route path="/signup" element={<SignUp />} />
           <Route

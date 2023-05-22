@@ -1,6 +1,8 @@
 //모듈
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -10,9 +12,13 @@ import BackButton from '../../component/common/BackButton';
 
 //컴포넌트
 import CommentForm from '../../component/Board/BoardDetail/CommentForm';
+import Record from '../../component/Board/BoardAdd/Record';
 
 //아이콘
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
+
+//서버 url
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.main`
   margin: 0 auto;
@@ -168,58 +174,6 @@ const LikeButton = styled.button`
   right: 15px;
 `;
 
-//운동기록 공유
-const Record = styled.section`
-  width: 100%;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  border-bottom: 1px solid ${COLOR.main_blue};
-  section {
-    width: 100%;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-`;
-
-const Current = styled.section`
-  height: 100%;
-  border-right: 1px solid ${COLOR.main_blue};
-  background-color: ${COLOR.main_gray};
-  span {
-    color: ${COLOR.main_dark_blue};
-  }
-`;
-
-const Year = styled.span`
-  margin-bottom: 4px;
-  font-size: 14px;
-`;
-const Month = styled.span`
-  font-size: 17px;
-`;
-
-const Attendance = styled.section`
-  height: 100%;
-`;
-const TotalTime = styled.section`
-  height: 100%;
-  border-left: 1px solid ${COLOR.main_blue};
-  background-color: ${COLOR.bg_comment};
-`;
-
-const Name = styled.span`
-  margin-bottom: 4px;
-  font-size: 14px;
-`;
-const Rate = styled.span`
-  font-size: 17px;
-`;
-
 // 내용
 const Content = styled.section`
   width: 100%;
@@ -317,14 +271,52 @@ const Text = styled.div`
 
 const BoardDetail = () => {
   const [liked, setLiked] = useState(false);
+  const [posts, setPosts] = useState([]);
 
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear(); // 현재 년도
-  const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
+  const { boardId } = useParams();
+
+  const navigate = useNavigate();
+
+  const createDate = posts.length > 0 ? posts[0].createdAt.slice(0, 10) : '';
 
   const handleButtonClick = () => {
     setLiked((prevLiked) => !prevLiked);
   };
+
+  const handleButtonModify = () => {
+    navigate(`/board/${boardId}/edit`);
+  };
+
+  const handleButtonDelete = () => {
+    axios
+      .delete(`${API_URL}/boards/${boardId}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        setPosts(response.data);
+        navigate(`/board`);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/boards/${boardId}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        setPosts(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <Container>
@@ -332,21 +324,22 @@ const BoardDetail = () => {
         <Goback>
           <BackButton />
         </Goback>
+
         <ModifyAndDelete>
-          <Modify>수정</Modify>
-          <Delete>삭제</Delete>
+          <Modify onClick={handleButtonModify}>수정</Modify>
+          <Delete onClick={handleButtonDelete}>삭제</Delete>
         </ModifyAndDelete>
       </GobackAndModify>
       <BoardInfo>
-        <Title>제목</Title>
+        <Title>{posts.title}</Title>
         <BoardCommentInfo>
-          <Writer>작성자</Writer>
-          <BoardCreateAt>2023.05.16</BoardCreateAt>
+          <Writer>{posts.writer}</Writer>
+          <BoardCreateAt>{createDate}</BoardCreateAt>
         </BoardCommentInfo>
       </BoardInfo>
       <ImageAndLike>
         <Image>
-          <img src="https://picsum.photos/id/1/500/500" alt="사진" />
+          <img src={posts.boardImageAddress} alt="사진" />
         </Image>
         <Like>
           <LikeButton onClick={handleButtonClick}>
@@ -358,21 +351,8 @@ const BoardDetail = () => {
           </LikeButton>
         </Like>
       </ImageAndLike>
-      <Record>
-        <Current>
-          <Year>{`${currentYear}년`}</Year>
-          <Month>{`${currentMonth}월`}</Month>
-        </Current>
-        <Attendance>
-          <Name>출석률</Name>
-          <Rate>80%</Rate>
-        </Attendance>
-        <TotalTime>
-          <Name>총 운동 시간</Name>
-          <Rate>40 시간</Rate>
-        </TotalTime>
-      </Record>
-      <Content>내용</Content>
+      {posts.workoutRecordShare && <Record />}
+      <Content>{posts.content}</Content>
       <CommentContainer>
         <CommentHeader>
           댓글<CommentCount>{`(2)`}</CommentCount>

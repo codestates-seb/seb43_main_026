@@ -1,6 +1,6 @@
 //모듈
 import styled from 'styled-components';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -102,14 +102,12 @@ const Writer = styled.span`
 const CreatDate = styled.span``;
 
 const List = ({ posts }) => {
-  const { boardId } = useParams();
-
   return (
     <Containter>
       {posts.length
         ? posts.map((post) => (
             <Lists key={post.boardId}>
-              <Link to={`/board/boardId`}>
+              <Link to={`/board/${post.boardId}`}>
                 <TitleAndReaction>
                   <Title>{post.title}</Title>
                   <Reaction>

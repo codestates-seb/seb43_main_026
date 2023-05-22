@@ -1,7 +1,7 @@
 //모듈
 import styled from 'styled-components';
 import { useRef, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR } from '../../style/theme';
@@ -115,8 +115,6 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
   const observer = useRef(null);
   const sentinelRef = useRef(null);
 
-  const { boardId } = useParams();
-
   useEffect(() => {
     const options = {
       root: null,
@@ -157,7 +155,7 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
       {data.length
         ? data.map((post) => (
             <DashBorad key={post.boardId}>
-              <Link to={`/board/:boardId`}>
+              <Link to={`/board/${post.boardId}`}>
                 <Image>
                   <img src={post.boardImageAddress} alt="캘린더 이미지" />
                 </Image>

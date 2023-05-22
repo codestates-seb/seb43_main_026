@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -196,6 +197,7 @@ const BoardEdit = () => {
   const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
   const [imageUrl, setImageUrl] = useState(null);
   const [imageData, setImageData] = useState(new FormData());
+  const [posts, setPosts] = useState([]);
 
   const {
     register,
@@ -203,8 +205,7 @@ const BoardEdit = () => {
     formState: { errors },
   } = useForm();
 
-  const { isShareCalendar } = false;
-  const isCalendarShareChecked = isShareCalendar ? true : false;
+  const { boardId } = useParams();
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
@@ -246,13 +247,28 @@ const BoardEdit = () => {
     console.log(imageData.get('image'));
   }, [imageData]);
 
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/boards/${boardId}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        setPosts(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
     <Container>
       <GobackAndUpload>
         <Goback>
           <BackButton />
         </Goback>
-        {isShareCalendar && <Category>{`< 캘린더 자랑 >`}</Category>}
+        {posts.calendarShare && <Category>{`< 캘린더 자랑 >`}</Category>}
         <UploadBtn type="submit" onClick={handleSubmit(onSubmit)}>
           등록
         </UploadBtn>
@@ -284,7 +300,7 @@ const BoardEdit = () => {
             </label>
           </WorkOut>
         </WorkOutContainer>
-        {workoutRecordShare && <Record isShareCalendar={isShareCalendar} />}
+        {workoutRecordShare && <Record isShareCalendar={posts.calendarShare} />}
         <TitleContainer>
           {errors.title && (
             <ErrorContainer>
@@ -296,6 +312,7 @@ const BoardEdit = () => {
             id="title"
             type="text"
             placeholder="제목"
+            defaultValue={posts.title}
             {...register('title', { required: true })}
           />
         </TitleContainer>
@@ -309,6 +326,7 @@ const BoardEdit = () => {
           <Memo
             id="content"
             placeholder="내용"
+            defaultValue={posts.content}
             {...register('content', { required: true })}
           />
         </Content>
@@ -319,7 +337,7 @@ const BoardEdit = () => {
             id="calendarShare"
             type="checkbox"
             {...register('calendarShare')}
-            checked={isCalendarShareChecked}
+            checked={posts.calendarShare}
           />
         </Calendar>
       </Form>

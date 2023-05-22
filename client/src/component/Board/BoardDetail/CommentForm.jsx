@@ -1,12 +1,17 @@
 //모듈
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR } from '../../../style/theme';
 
 //공통 컴포넌트
 import Button from '../../common/Button';
+
+//서버 url
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Form = styled.form`
   margin: 13px 0px 3px;
@@ -47,11 +52,30 @@ const InputComment = styled.textarea`
 
 function CommentForm() {
   const { register, handleSubmit, reset } = useForm();
+  const { boardId } = useParams();
 
-  const onSubmit = (data, e) => {
+  const onSubmit = async (data, e) => {
     e.preventDefault();
     console.log(data);
-    reset();
+
+    try {
+      await axios.post(
+        `${API_URL}/boards/${boardId}`,
+        {
+          boardId: boardId,
+          commentContent: data.comment,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        }
+      );
+      reset();
+    } catch (error) {
+      console.log(error);
+      console.log(data);
+    }
   };
 
   return (

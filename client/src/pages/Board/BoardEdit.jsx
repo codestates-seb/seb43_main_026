@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -208,6 +208,8 @@ const BoardEdit = () => {
 
   const { boardId } = useParams();
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data, e) => {
     e.preventDefault();
 
@@ -228,12 +230,13 @@ const BoardEdit = () => {
       );
       formData.append('image', data.image);
 
-      await axios.post(`${API_URL}/boards`, formData, {
+      await axios.patch(`${API_URL}/boards`, formData, {
         headers: {
           Authorization: `${localStorage.getItem('accessToken')}`,
           'Content-Type': 'multipart/form-data',
         },
       });
+      navigate(`/board`);
     } catch (error) {
       console.log(error);
       console.log(data);
@@ -258,7 +261,6 @@ const BoardEdit = () => {
       .then((response) => {
         setPosts(response.data);
         console.log(response.data);
-        console.log(posts);
       })
       .catch((error) => {
         console.error(error);

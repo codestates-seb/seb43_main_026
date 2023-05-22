@@ -12,6 +12,7 @@ import BackButton from '../../component/common/BackButton';
 
 //컴포넌트
 import CommentForm from '../../component/Board/BoardDetail/CommentForm';
+import Comment from '../../component/Board/BoardDetail/Comment';
 import Record from '../../component/Board/BoardAdd/Record';
 
 //아이콘
@@ -209,69 +210,9 @@ const CommentList = styled.ul`
   height: fit-content;
 `;
 
-const Comment = styled.li`
-  width: 100%;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid ${COLOR.bg_comment};
-`;
-
-const CommentTitle = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const CommentInfo = styled.div`
-  width: 100%;
-  height: 35px;
-  display: flex;
-  padding: 3px 10px 0px;
-  display: flex;
-  align-items: center;
-`;
-
-const CommentModify = styled.div`
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 10px;
-
-  button {
-    border: none;
-    background-color: transparent;
-    width: 40px;
-  }
-`;
-
-const CommentWriter = styled.span`
-  font-size: 14px;
-  font-weight: 600;
-  margin-right: 4px;
-  color: ${COLOR.main_dark_blue};
-`;
-const CreateAt = styled.span`
-  font-size: 13px;
-  color: ${COLOR.font_comment};
-`;
-
-const Text = styled.div`
-  width: 100%;
-  min-height: 35px;
-  max-height: auto;
-  padding: 0px 10px 5px 10px;
-  line-height: 1.3;
-  white-space: pre-line;
-  font-size: 14px;
-`;
-
 const BoardDetail = () => {
-  const [liked, setLiked] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [liked, setLiked] = useState();
 
   const { boardId } = useParams();
 
@@ -280,7 +221,23 @@ const BoardDetail = () => {
   const createDate = posts.length > 0 ? posts[0].createdAt.slice(0, 10) : '';
 
   const handleButtonClick = () => {
-    setLiked((prevLiked) => !prevLiked);
+    const params = {
+      'member-id': posts.memberId,
+    };
+    axios
+      .post(`${API_URL}/boards/${boardId}/likes`, null, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+        params: params,
+      })
+      .then((response) => {
+        console.log(response.data);
+        navigate(`/board/${boardId}`);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleButtonModify = () => {
@@ -296,7 +253,6 @@ const BoardDetail = () => {
       })
       .then((response) => {
         setPosts(response.data);
-        navigate(`/board`);
       })
       .catch((error) => {
         console.error(error);
@@ -311,6 +267,7 @@ const BoardDetail = () => {
         },
       })
       .then((response) => {
+        console.log(response.data);
         setPosts(response.data);
       })
       .catch((error) => {
@@ -318,13 +275,21 @@ const BoardDetail = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (posts.length > 0) {
+      const localMemberId = localStorage.getItem('memberId');
+      const likedByCurrentUser =
+        posts.boardLikeId?.includes(localMemberId) || false;
+      setLiked(likedByCurrentUser);
+    }
+  }, [posts]);
+
   return (
     <Container>
       <GobackAndModify>
         <Goback>
           <BackButton />
         </Goback>
-
         <ModifyAndDelete>
           <Modify onClick={handleButtonModify}>수정</Modify>
           <Delete onClick={handleButtonDelete}>삭제</Delete>
@@ -355,23 +320,11 @@ const BoardDetail = () => {
       <Content>{posts.content}</Content>
       <CommentContainer>
         <CommentHeader>
-          댓글<CommentCount>{`(2)`}</CommentCount>
+          댓글<CommentCount>{posts.commentCount}</CommentCount>
         </CommentHeader>
-        <CommentForm />
+        <CommentForm boardId={boardId} />
         <CommentList>
-          <Comment>
-            <CommentTitle>
-              <CommentInfo>
-                <CommentWriter>작성자</CommentWriter>
-                <CreateAt>2023.05.16</CreateAt>
-              </CommentInfo>
-              <CommentModify>
-                <button>수정</button>
-                <button>삭제</button>
-              </CommentModify>
-            </CommentTitle>
-            <Text>댓글 내용</Text>
-          </Comment>
+          <Comment boardId={boardId} />
         </CommentList>
       </CommentContainer>
     </Container>

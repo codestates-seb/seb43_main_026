@@ -8,6 +8,8 @@ import com.codestates.jwt.auth.handler.MemberAuthenticationEntryPoint;
 import com.codestates.jwt.auth.handler.MemberAuthenticationFailureHandler;
 import com.codestates.jwt.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.jwt.auth.utils.CustomAuthorityUtils;
+import com.codestates.jwt.auth.utils.JwtDecoder;
+import com.codestates.member.repository.MemberRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,11 +32,15 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration{
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final JwtDecoder jwtDecoder;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer,
-                                 CustomAuthorityUtils authorityUtils) {
+    private final MemberRepository memberRepository;
+
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, JwtDecoder jwtDecoder, MemberRepository memberRepository) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.jwtDecoder = jwtDecoder;
+        this.memberRepository = memberRepository;
     }
 
     @Bean
@@ -104,7 +110,7 @@ public class SecurityConfiguration{
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, jwtDecoder,memberRepository);
 
             builder.addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);

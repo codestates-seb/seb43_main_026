@@ -2,6 +2,7 @@ package com.codestates.jwt.auth.filter;
 
 import com.codestates.jwt.JwtTokenizer;
 import com.codestates.jwt.auth.dto.LoginDto;
+import com.codestates.jwt.auth.utils.tokenWithExpiration;
 import com.codestates.member.entity.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -48,17 +49,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication authResult) throws ServletException, IOException {
         Member member = (Member) authResult.getPrincipal();
 
-        String accessToken = delegateAccessToken(member);
+        tokenWithExpiration access = delegateAccessToken(member);
+
+        String accessToken = access.getToken();
         String refreshToken = delegateRefreshToken(member);
 
         response.setHeader("Authorization", "Bearer " + accessToken);
+        response.setHeader("AuthExpiration",access.getDate().toString());
         response.setHeader("Refresh", refreshToken);
         response.setHeader("MemberId",member.getMemberId().toString());
 
         this.getSuccessHandler().onAuthenticationSuccess(request,response,authResult);
     }
 
-    private String delegateAccessToken(Member member) {
+    private tokenWithExpiration delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
@@ -70,7 +74,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
 
-        return accessToken;
+        return new tokenWithExpiration(accessToken,expiration);
     }
 
     // (6)

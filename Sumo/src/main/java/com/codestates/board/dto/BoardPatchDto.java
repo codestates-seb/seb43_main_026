@@ -2,6 +2,7 @@ package com.codestates.board.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Positive;
 
@@ -20,7 +21,7 @@ public class BoardPatchDto {
 
     private long memberId;
 
-    private String boardImageAddress;
+    private MultipartFile image;
 
     private Boolean calendarShare;
 

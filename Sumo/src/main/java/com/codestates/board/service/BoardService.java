@@ -2,6 +2,7 @@ package com.codestates.board.service;
 
 
 import com.codestates.auth.LoginUtils;
+import com.codestates.aws.S3Uploader;
 import com.codestates.board.entity.Board;
 import com.codestates.board.entity.BoardLike;
 import com.codestates.board.repository.BoardLikeRepository;
@@ -14,8 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +35,10 @@ public class BoardService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private S3Uploader S3Uploader;
+
+
     // 게시글 생성
     @Transactional
     public Board createBoard(Board board){
@@ -38,7 +46,11 @@ public class BoardService {
         Member currentMember = getCurrentMember();
         board.setMember(currentMember);
         currentMember.addBoard(board);
-        
+
+        if(Boolean.TRUE.equals(board.getCalendarShare()) && canCalendarShare(currentMember.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_POSTED_THIS_MONTH);
+        }
+
         if(board.getCalendarShare() != null){
             board.setCalendarShare(board.getCalendarShare());
         }
@@ -46,7 +58,32 @@ public class BoardService {
             board.setWorkoutRecordShare(board.getWorkoutRecordShare());
         }
 
+
         return boardRepository.save(board);
+
+    }
+
+    @Transactional
+    public Board createBoard(Board board, MultipartFile image) throws IOException{
+        Member currentMember = getCurrentMember();
+        board.setMember(currentMember);
+        currentMember.addBoard(board);
+
+        if(Boolean.TRUE.equals(board.getCalendarShare()) && canCalendarShare(currentMember.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.ALREADY_POSTED_THIS_MONTH);
+        }
+
+        if(board.getCalendarShare() != null){
+            board.setCalendarShare(board.getCalendarShare());
+        }
+        if(board.getWorkoutRecordShare() != null){
+            board.setWorkoutRecordShare(board.getWorkoutRecordShare());
+        }
+
+        uploadImageToS3(board, image, currentMember);
+
+        return boardRepository.save(board);
+
     }
 
 
@@ -64,9 +101,36 @@ public class BoardService {
 
         Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
         Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
+        Optional.ofNullable(board.getCalendarShare()).ifPresent(calendarShare -> findBoard.setCalendarShare(calendarShare));
+        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(workoutRecordShare -> findBoard.setWorkoutRecordShare(workoutRecordShare));
+
+        findBoard.setModifiedAt(LocalDateTime.now());
+        return boardRepository.save(findBoard);
+    }
+
+    // TODO 수정할 때 확장자가 다른 경우에 파일이 대체되지 않음(다른 이름은 같은데 확장자가 달라서 이름 자체가 다른 것으로 인식)
+    @Transactional
+    public Board updateBoard(Board board, MultipartFile image) throws IOException {
+
+        Member currentMember = getCurrentMember();
+        Board findBoard = findVerifiedBoard(board.getBoardId());
+
+
+        if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
+            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
+        }
+
+        Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
+        Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
         Optional.ofNullable(board.getBoardImageAddress()).ifPresent(boardImageAddress -> findBoard.setBoardImageAddress(boardImageAddress));
-        Optional.ofNullable(board.getCalendarShare()).ifPresent(showOffCheckBox -> findBoard.setCalendarShare(showOffCheckBox));
-        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(attendanceExerciseCheckBox -> findBoard.setWorkoutRecordShare(attendanceExerciseCheckBox));
+        Optional.ofNullable(board.getCalendarShare()).ifPresent(calendarShare -> findBoard.setCalendarShare(calendarShare));
+        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(workoutRecordShare -> findBoard.setWorkoutRecordShare(workoutRecordShare));
+
+        if (!image.isEmpty()) {
+            Member member = memberRepository.findByEmail(currentMember.getEmail()).get();
+            uploadImageToS3(findBoard, image, member);
+        }
+
 
         findBoard.setModifiedAt(LocalDateTime.now());
         return boardRepository.save(findBoard);
@@ -106,7 +170,7 @@ public class BoardService {
 
 
   
-    //TOGGLELIKE
+    //TOGGLE LIKE
     public void toggleLike(Long memberId, Long boardId){
         Board board = findVerifiedBoard(boardId);
         Member member = memberRepository.findById(memberId)
@@ -208,6 +272,44 @@ public class BoardService {
         int boardLike = board.getBoardLikeCount();
         return boardLike ;
     }
+
+    public boolean canCalendarShare(Long memberId){
+        YearMonth currentYearMonth = YearMonth.now();
+        LocalDateTime startOfMonth = currentYearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endOfMonth = currentYearMonth.atEndOfMonth().atTime(23, 59, 59);
+
+        boolean canPost = boardRepository.existsByMemberIdAndCalendarShareAndCreatedAtBetween(memberId, true, startOfMonth, endOfMonth);
+        // 이번 달에 체크박스가 true로 설정된 게시글을 작성했다면, false반환.
+        // 작성가능하면 true반환.
+        return canPost;
+    }
+
+
+    // 파일 이름에서 확장자 추출 메서드
+    private String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex);
+        }
+        return "";
+    }
+
+    private void uploadImageToS3(Board board, MultipartFile image, Member member) throws IOException {
+        // s3에 업로드 할 파일명 변경
+        String fileExtension = getFileExtension(image.getOriginalFilename());
+        String newFileName = "memberId-" + String.valueOf(member.getMemberId()) + "(" + board.getCreatedAt().toString() + ")" + fileExtension;
+
+        // s3에 업로드 한 후 schedule에 imageAddress 세팅
+        String imageAddress = S3Uploader.upload(image, newFileName, member.getNickname() + "/board");
+        board.setBoardImageAddress(imageAddress);
+    }
+
+    public long getBoardCount() {
+        return boardRepository.count();
+    }
+
+
+
 
 
 }

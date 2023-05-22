@@ -3,6 +3,7 @@ package com.codestates.schedule.mapper;
 import com.codestates.schedule.dto.ScheduleDto;
 import com.codestates.schedule.entity.Schedule;
 import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 @Mapper(componentModel = "spring")
 public interface ScheduleMapper {
     default Schedule schedulePostDtoToSchedule(ScheduleDto.Post schedulePostDto) {

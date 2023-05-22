@@ -9,9 +9,11 @@ import com.codestates.board.entity.Board;
 import com.codestates.board.entity.BoardLike;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
 @Mapper(componentModel = "spring")
 public interface BoardMapper {
 

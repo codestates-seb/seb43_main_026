@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -36,11 +37,16 @@ public class BoardController {
 
 
     @PostMapping
-    public ResponseEntity postBoard(@Valid @RequestBody BoardPostDto boardPostDto){
+    public ResponseEntity postBoard(@Valid @RequestPart BoardPostDto boardPostDto,
+                                    @RequestPart(value = "image", required = false) MultipartFile image){
 
-        Board board = boardService.createBoard(boardMapper.boardPostDtoToboard(boardPostDto));
+        Board board;
+        if(image != null && !image.isEmpty()) {
+            board = boardService.createBoard(boardMapper.boardPostDtoToboard(boardPostDto));
+        } else {
+            board = boardService.createBoard(boardMapper.boardPostDtoToboard(boardPostDto));
+        }
         BoardPostResponseDto boardResponseDto = boardMapper.boardToBoardPostResponseDto(board);
-
         URI location = UriComponentsBuilder
                 .newInstance()
                 .path(BOARD_DEFAULT_URL + "/{board-id}")

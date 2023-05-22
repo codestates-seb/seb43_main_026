@@ -1,5 +1,6 @@
 //모듈
 import styled from 'styled-components';
+import { Link, useParams } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -101,28 +102,32 @@ const Writer = styled.span`
 const CreatDate = styled.span``;
 
 const List = ({ posts }) => {
+  const { boardId } = useParams();
+
   return (
     <Containter>
       {posts.length
         ? posts.map((post) => (
-            <Lists key={post.id}>
-              <TitleAndReaction>
-                <Title>{post.title}</Title>
-                <Reaction>
-                  <Like>
-                    <HeartIcon size={13} />
-                    <span>{post.likeCount}</span>
-                  </Like>
-                  <Comment>
-                    <CommentIcon size={13} />
-                    <span>{post.commentCount}</span>
-                  </Comment>
-                </Reaction>
-              </TitleAndReaction>
-              <WriterAndCreateAt>
-                <Writer>{post.writer}</Writer>
-                <CreatDate>{post.date}</CreatDate>
-              </WriterAndCreateAt>
+            <Lists key={post.boardId}>
+              <Link to={`/board/boardId`}>
+                <TitleAndReaction>
+                  <Title>{post.title}</Title>
+                  <Reaction>
+                    <Like>
+                      <HeartIcon size={13} />
+                      <span>{post.boardLikeCount}</span>
+                    </Like>
+                    <Comment>
+                      <CommentIcon size={13} />
+                      <span>{post.commentCount}</span>
+                    </Comment>
+                  </Reaction>
+                </TitleAndReaction>
+                <WriterAndCreateAt>
+                  <Writer>{post.writer}</Writer>
+                  <CreatDate>{post.createdAt.slice(0, 10)}</CreatDate>
+                </WriterAndCreateAt>
+              </Link>
             </Lists>
           ))
         : null}

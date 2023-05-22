@@ -201,6 +201,11 @@ const ListBox = styled.section`
 `;
 
 const NoData = styled.span`
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 20px;
 `;
 
@@ -208,11 +213,14 @@ const Board = () => {
   const [posts, setPosts] = useState([]);
   const [isDash, setIsDash] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPosts, setTotalPosts] = useState(0);
   const [orderBy, setOrderBy] = useState('latest');
   const [calendarShow, setCalendarShow] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [isAfter25th, setIsAfter25th] = useState(false);
   const [isShareCalendar, setIsShareCalendar] = useState(false);
+  const [isCalendarPost, setIsCalendarPost] = useState(null);
+  const [canPost, setCanPost] = useState(null);
 
   const navigate = useNavigate();
 
@@ -239,8 +247,8 @@ const Board = () => {
           },
         }
       );
-
       setPosts(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -267,6 +275,7 @@ const Board = () => {
       );
 
       setPosts(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -318,6 +327,49 @@ const Board = () => {
     }
   }, [calendarShow, orderBy, currentPage]);
 
+  //캘린더 자랑 이력 조회
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/boards/canPost/${localStorage.getItem('memberId')}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        setIsCalendarPost(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  //캘린더 자랑 가능 조회
+  useEffect(() => {
+    if (isCalendarPost) {
+      setCanPost(false);
+    } else {
+      setCanPost(true);
+    }
+  }, [isCalendarPost]);
+
+  //총 게시글 수 조회
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/boards/count`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        setTotalPosts(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   //날짜 25일 이후인지 감지
   useEffect(() => {
     const checkDateChange = () => {
@@ -366,6 +418,7 @@ const Board = () => {
     previousPage.current = currentPage;
   }, [currentPage]);
 
+  //리스트 뷰 변경시 페이지 초기화
   useEffect(() => {
     setCurrentPage(1);
     previousPage.current = 1;
@@ -414,7 +467,7 @@ const Board = () => {
           <UploadBtn onClick={handleUploadClick}>등록하기</UploadBtn>
         </Upload>
       )}
-      {isModal && isAfter25th && (
+      {isModal && isAfter25th && canPost && (
         <Modal
           ref={modalRef}
           setIsModal={setIsModal}
@@ -423,11 +476,11 @@ const Board = () => {
         />
       )}
       <ListBox>
+        {posts.length === 0 && <NoData>데이터가 없습니다</NoData>}
         {isDash && (
           <Dash posts={posts} setCurrentPage={setCurrentPage} isDash={isDash} />
         )}
         {isDash || <List posts={posts} />}
-        {posts.length === 0 && <NoData>데이터가 없습니다</NoData>}
       </ListBox>
       {isDash && (
         <UploadIconBtn onClick={handleUploadClick}>
@@ -437,7 +490,7 @@ const Board = () => {
       {isDash || (
         <Pagination
           currentPage={currentPage}
-          totalPosts={posts.length}
+          totalPosts={totalPosts}
           onPaginationClick={handlePaginationClick}
         />
       )}

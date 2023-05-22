@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -198,6 +198,8 @@ const BoardAdd = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [imageData, setImageData] = useState(new FormData());
 
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -220,13 +222,8 @@ const BoardAdd = () => {
 
     try {
       const formData = new FormData();
-      // formData.append('title', data.title);
-      // formData.append('content', data.content);
-      // formData.append('calendarShare', data.calendarShare);
-      // formData.append('workoutRecordShare', data.workoutRecordShare);
-      // formData.append('boardPostDto', JSON.stringify(board));
       formData.append(
-        'boardPostDto',
+        'board',
         new Blob([JSON.stringify(boardPostDto)], {
           type: 'application/json',
         })
@@ -239,6 +236,8 @@ const BoardAdd = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
+
+      navigate('/board');
     } catch (error) {
       console.log(error);
       console.log(data);
@@ -270,7 +269,7 @@ const BoardAdd = () => {
           <LabelHidden htmlFor="image">사진</LabelHidden>
           <ImageUpload
             id="image"
-            register={register}
+            register={register('image', { required: true })}
             imageUrl={imageUrl}
             setImageUrl={setImageUrl}
             imageData={imageData}

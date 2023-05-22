@@ -1,6 +1,7 @@
 //모듈
 import styled from 'styled-components';
 import { useRef, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR } from '../../style/theme';
@@ -114,6 +115,8 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
   const observer = useRef(null);
   const sentinelRef = useRef(null);
 
+  const { boardId } = useParams();
+
   useEffect(() => {
     const options = {
       root: null,
@@ -153,23 +156,25 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
     <Container>
       {data.length
         ? data.map((post) => (
-            <DashBorad key={post.id}>
-              <Image>
-                <img src={post.image} alt="캘린더 이미지" />
-              </Image>
-              <Info>
-                <Title>{post.title}</Title>
-                <Reaction>
-                  <Like>
-                    <HeartIcon size={15} />
-                    <span>{post.likeCount}</span>
-                  </Like>
-                  <Comment>
-                    <CommentIcon size={15} />
-                    <span>{post.commentCount}</span>
-                  </Comment>
-                </Reaction>
-              </Info>
+            <DashBorad key={post.boardId}>
+              <Link to={`/board/:boardId`}>
+                <Image>
+                  <img src={post.boardImageAddress} alt="캘린더 이미지" />
+                </Image>
+                <Info>
+                  <Title>{post.title}</Title>
+                  <Reaction>
+                    <Like>
+                      <HeartIcon size={15} />
+                      <span>{post.boardLikeCount}</span>
+                    </Like>
+                    <Comment>
+                      <CommentIcon size={15} />
+                      <span>{post.commentCount}</span>
+                    </Comment>
+                  </Reaction>
+                </Info>
+              </Link>
             </DashBorad>
           ))
         : null}

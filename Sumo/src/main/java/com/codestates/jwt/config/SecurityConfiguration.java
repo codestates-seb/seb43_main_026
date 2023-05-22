@@ -94,6 +94,7 @@ public class SecurityConfiguration{
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("Refresh");
         configuration.addExposedHeader("MemberId");
+        configuration.addExposedHeader("AuthExpiration");
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

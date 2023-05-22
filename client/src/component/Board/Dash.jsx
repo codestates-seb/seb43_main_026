@@ -14,6 +14,7 @@ const Container = styled.ul`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  min-height: 700px;
   justify-content: center;
 `;
 
@@ -122,15 +123,16 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
 
     const handleObserver = (entries) => {
       const target = entries[0];
-      if (target.isIntersecting) {
-        handleLoadMore();
+      if (target.isIntersecting && isDash) {
+        // isDash가 true일 때만 처리
+        setCurrentPage((prev) => prev + 1);
       }
     };
 
     observer.current = new IntersectionObserver(handleObserver, options);
 
     // 컴포넌트가 마운트될 때 신호 타겟을 관찰
-    if (observer.current) {
+    if (observer.current && sentinelRef.current) {
       observer.current.observe(sentinelRef.current);
     }
 
@@ -140,18 +142,12 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
         observer.current.disconnect();
       }
     };
-  }, []);
+  }, [isDash, setCurrentPage]);
 
   useEffect(() => {
-    // posts 상태가 업데이트될 때마다 `data`에 추가
-    setData((prevData) => [...prevData, ...posts]);
+    // posts 상태가 업데이트될 때마다 `data`를 초기화하고 새로운 데이터로 설정
+    setData(posts);
   }, [posts]);
-
-  const handleLoadMore = () => {
-    if (isDash) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
 
   return (
     <Container>

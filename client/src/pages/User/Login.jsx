@@ -94,7 +94,7 @@ const Login = ({ loginUser, setLoginUser }) => {
         localStorage.setItem('memberId', memberId);
         if (accessToken) {
           axios
-            .get(`${SERVER_URL}members/${memberId}`, {
+            .get(`${SERVER_URL}/members/${memberId}`, {
               headers: {
                 Authorization: `${localStorage.getItem('accessToken')}`,
               },

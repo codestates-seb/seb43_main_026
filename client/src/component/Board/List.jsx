@@ -10,6 +10,7 @@ import { BiComment } from 'react-icons/bi';
 
 const Containter = styled.ul`
   width: 100%;
+  height: 650px;
 `;
 
 const Lists = styled.li`

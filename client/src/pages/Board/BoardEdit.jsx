@@ -209,7 +209,7 @@ const BoardEdit = () => {
   const onSubmit = async (data, e) => {
     e.preventDefault();
 
-    const board = {
+    const boardPostDto = {
       title: data.title,
       content: data.content,
       calendarShare: data.calendarShare,
@@ -218,12 +218,13 @@ const BoardEdit = () => {
 
     try {
       const formData = new FormData();
-      // formData.append('title', data.title);
-      // formData.append('content', data.content);
-      // formData.append('calendarShare', data.calendarShare);
-      // formData.append('workoutRecordShare', data.workoutRecordShare);
-      formData.append('board', JSON.stringify(board));
-      formData.append('image', imageData.get('image'));
+      formData.append(
+        'boardPostDto',
+        new Blob([JSON.stringify(boardPostDto)], {
+          type: 'application/json',
+        })
+      );
+      formData.append('image', data.image);
 
       await axios.post(`${API_URL}/boards`, formData, {
         headers: {
@@ -311,6 +312,7 @@ const BoardEdit = () => {
             {...register('content', { required: true })}
           />
         </Content>
+
         <Calendar>
           <label htmlFor="calendarShare">캘린더 결산</label>
           <Sharecheckbox

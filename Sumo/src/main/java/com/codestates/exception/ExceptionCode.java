@@ -38,7 +38,10 @@ public enum ExceptionCode {
     NOT_LIKED_YET(404, "Not liked yet"),
     INVALID_ORDER_BY_PARAMETER(404, "Invalid order by parameter"),
     COMMENT_NOT_FOUND(404,"Comment not found"),
-    COMMENT_ACCESS_DENIED(404, "Comment Access Denied");
+    COMMENT_ACCESS_DENIED(404, "Comment Access Denied"),
+    ERROR_WHILE_UPLOADING_FILE_TO_S3(404,"ERROR_WHILE_UPLOADING_FILE_TO_S3"),
+    ERROR_WHILE_CONVERTING_MULTIPART_FILE_TO_FILE(404,"ERROR_WHILE_CONVERTING_MULTIPART_FILE_TO_FILE"),
+    ALREADY_POSTED_THIS_MONTH(404,"Already Posted This Month");
 
 
 

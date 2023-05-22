@@ -41,12 +41,7 @@ public class BoardController {
     public ResponseEntity postBoard(@Valid @RequestPart("board") BoardPostDto boardPostDto,
                                     @RequestPart(value = "image", required = false) MultipartFile image) throws IOException {
 
-        Board board;
-        if(image != null && !image.isEmpty()) {
-            board = boardService.createBoardWithImage(boardMapper.boardPostDtoToboard(boardPostDto), image);
-        } else {
-            board = boardService.createBoard(boardMapper.boardPostDtoToboard(boardPostDto));
-        }
+        Board board = boardService.createBoard(boardMapper.boardPostDtoToboard(boardPostDto), image);
         BoardPostResponseDto boardResponseDto = boardMapper.boardToBoardPostResponseDto(board);
         URI location = UriComponentsBuilder
                 .newInstance()
@@ -64,14 +59,7 @@ public class BoardController {
 
         boardPatchDto.setBoardId(boardId);
 
-        Board board;
-        if(image != null && !image.isEmpty()) {
-            board = boardService.updateBoardWithImage(boardMapper.boardPatchDtoToBoard(boardPatchDto), image);
-
-        }else {
-            board = boardService.updateBoard(boardMapper.boardPatchDtoToBoard(boardPatchDto));
-
-        }
+        Board board = boardService.updateBoard(boardMapper.boardPatchDtoToBoard(boardPatchDto), image);
         BoardResponseDto boardResponseDto = boardMapper.boardToBoardResponseDto(board);
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);

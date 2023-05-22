@@ -41,30 +41,7 @@ public class BoardService {
 
     // 게시글 생성
     @Transactional
-    public Board createBoard(Board board){
-
-        Member currentMember = getCurrentMember();
-        board.setMember(currentMember);
-        currentMember.addBoard(board);
-
-        if(Boolean.TRUE.equals(board.getCalendarShare()) && canCalendarShare(currentMember.getMemberId())) {
-            throw new BusinessLogicException(ExceptionCode.ALREADY_POSTED_THIS_MONTH);
-        }
-
-        if(board.getCalendarShare() != null){
-            board.setCalendarShare(board.getCalendarShare());
-        }
-        if(board.getWorkoutRecordShare() != null){
-            board.setWorkoutRecordShare(board.getWorkoutRecordShare());
-        }
-
-
-        return boardRepository.save(board);
-
-    }
-
-    @Transactional
-    public Board createBoardWithImage(Board board, MultipartFile image) throws IOException{
+    public Board createBoard(Board board, MultipartFile image) throws IOException{
 
         Member currentMember = getCurrentMember();
         board.setMember(currentMember);
@@ -89,29 +66,9 @@ public class BoardService {
 
 
     // 게시글 수정
-    @Transactional
-    public Board updateBoard(Board board){
-
-        Member currentMember = getCurrentMember();
-        Board findBoard = findVerifiedBoard(board.getBoardId());
-
-
-        if (!findBoard.getMember().getMemberId().equals(currentMember.getMemberId())) {
-            throw new BusinessLogicException(ExceptionCode.BOARD_ACCESS_DENIED);
-        }
-
-        Optional.ofNullable(board.getTitle()).ifPresent(title -> findBoard.setTitle(title));
-        Optional.ofNullable(board.getContent()).ifPresent(content -> findBoard.setContent(content));
-        Optional.ofNullable(board.getCalendarShare()).ifPresent(calendarShare -> findBoard.setCalendarShare(calendarShare));
-        Optional.ofNullable(board.getWorkoutRecordShare()).ifPresent(workoutRecordShare -> findBoard.setWorkoutRecordShare(workoutRecordShare));
-
-        findBoard.setModifiedAt(LocalDateTime.now());
-        return boardRepository.save(findBoard);
-    }
-
     // TODO 수정할 때 확장자가 다른 경우에 파일이 대체되지 않음(다른 이름은 같은데 확장자가 달라서 이름 자체가 다른 것으로 인식)
     @Transactional
-    public Board updateBoardWithImage(Board board, MultipartFile image) throws IOException {
+    public Board updateBoard(Board board, MultipartFile image) throws IOException {
 
         Member currentMember = getCurrentMember();
         Board findBoard = findVerifiedBoard(board.getBoardId());

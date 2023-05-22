@@ -69,7 +69,7 @@ const ImageUpload = ({
       const formData = new FormData();
       formData.append('image', acceptedFiles[0]);
       setImageData(formData);
-      register('image', { value: acceptedFiles[0] }); // register에 업로드된 파일 등록
+      register('image', { required: true, value: acceptedFiles[0] }); // register에 업로드된 파일 등록
     },
     [imageUrl, setImageData, imageData, register]
   );

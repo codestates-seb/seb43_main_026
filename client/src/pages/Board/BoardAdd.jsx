@@ -212,16 +212,15 @@ const BoardAdd = () => {
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
-
     const boardPostDto = {
       title: data.title,
       content: data.content,
       calendarShare: data.calendarShare,
       workoutRecordShare: data.workoutRecordShare,
     };
-
     try {
       const formData = new FormData();
+
       formData.append(
         'board',
         new Blob([JSON.stringify(boardPostDto)], {
@@ -229,25 +228,21 @@ const BoardAdd = () => {
         })
       );
       formData.append('image', data.image);
-
       await axios.post(`${API_URL}/boards`, formData, {
         headers: {
           Authorization: `${localStorage.getItem('accessToken')}`,
           'Content-Type': 'multipart/form-data',
         },
       });
-
-      navigate('/board');
+      navigate(`/board`);
     } catch (error) {
       console.log(error);
       console.log(data);
     }
   };
-
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
-
   useEffect(() => {
     console.log(imageData.get('image'));
   }, [imageData]);
@@ -263,13 +258,12 @@ const BoardAdd = () => {
           등록
         </UploadBtn>
       </GobackAndUpload>
-
       <Form>
         <Image>
           <LabelHidden htmlFor="image">사진</LabelHidden>
           <ImageUpload
             id="image"
-            register={register('image', { required: true })}
+            register={register}
             imageUrl={imageUrl}
             setImageUrl={setImageUrl}
             imageData={imageData}
@@ -318,7 +312,6 @@ const BoardAdd = () => {
             {...register('content', { required: true })}
           />
         </Content>
-
         <Calendar>
           <label htmlFor="calendarShare">캘린더 결산</label>
           <Sharecheckbox
@@ -332,5 +325,4 @@ const BoardAdd = () => {
     </Container>
   );
 };
-
 export default BoardAdd;

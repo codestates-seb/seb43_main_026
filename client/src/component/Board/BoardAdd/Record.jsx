@@ -1,10 +1,10 @@
 //모듈
 import styled from 'styled-components';
+import { useEffect } from 'react';
 // import axios from 'axios';
 
 //공통 스타일
 import { COLOR } from '../../../style/theme';
-import { useEffect } from 'react';
 
 //서버 url
 // const API_URL = process.env.REACT_APP_API_URL;
@@ -69,9 +69,6 @@ const Record = ({ isShareCalendar }) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear(); // 현재 년도
   const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
-
-  const memberId = localStorage.getItem('memberId');
-  console.log(memberId);
 
   useEffect(() => {
     if (isShareCalendar) {

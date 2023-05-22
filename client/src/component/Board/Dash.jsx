@@ -30,6 +30,7 @@ const Image = styled.div`
   height: 288px;
   overflow: hidden;
   border-radius: 5px;
+  background-color: ${COLOR.bg};
   @media screen and (max-width: 385px) {
     width: 320px;
     height: 200px;

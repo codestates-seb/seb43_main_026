@@ -16,8 +16,7 @@ import ImageUpload from '../../component/common/ImageUpload';
 import Record from '../../component/Board/BoardAdd/Record';
 
 //서버 url
-// const API_URL = process.env.REACT_APP_API_URL;
-const API_URL = `a`;
+const API_URL = process.env.REACT_APP_API_URL;
 
 //전체 컨테이너
 const Container = styled.main`
@@ -194,10 +193,12 @@ const ErrorMessage = styled.span`
 `;
 
 const BoardEdit = () => {
-  const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
-  const [imageUrl, setImageUrl] = useState(null);
   const [imageData, setImageData] = useState(new FormData());
   const [posts, setPosts] = useState([]);
+  const [workoutRecordShare, setWorkoutRecordShare] = useState(
+    posts && posts.workoutRecordShare
+  );
+  const [imageUrl, setImageUrl] = useState(posts && posts.boardImageAddress);
 
   const {
     register,
@@ -256,11 +257,13 @@ const BoardEdit = () => {
       })
       .then((response) => {
         setPosts(response.data);
+        console.log(response.data);
+        console.log(posts);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [boardId]);
 
   return (
     <Container>
@@ -280,7 +283,7 @@ const BoardEdit = () => {
           <ImageUpload
             id="image"
             register={register}
-            imageUrl={imageUrl}
+            imageUrl={imageUrl || posts.imageAddress}
             setImageUrl={setImageUrl}
             imageData={imageData}
             setImageData={setImageData}

@@ -113,7 +113,7 @@ const Nav = ({ nav, handleNav, loginUser, setLoginUser }) => {
               마이페이지
             </MenuList>
           )}
-          <MenuList to="/" onClick={handleNav}>
+          <MenuList to="/calendar" onClick={handleNav}>
             내 캘린더
           </MenuList>
           <MenuList to="" onClick={handleNav}>

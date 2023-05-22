@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { SIZE, COLOR } from '../../style/theme';
 import { useState, useEffect } from 'react';
-// import { calendarAPI } from '../../assets/api';
+
 // 컴포넌트
 import BackButton from '../../component/common/BackButton';
 import { WarningModal } from '../../component/Calendar/CalendarAddComponent/WarningModal';
@@ -153,13 +153,13 @@ const InputMemoContainer = styled.div`
 const CalendarAddBodyContainer = styled.form`
   width: 100%;
   height: 100%;
-  /* padding: 0px 30px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 30px;
   margin-bottom: 30px;
+
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 90%;
   }
@@ -211,41 +211,43 @@ const CalendarAdd = () => {
   }, [startTime, endTime]);
   const formattedDate = format(selectedDate, 'yyyy-MM-dd');
 
-  const onSubmit = () => {
-    const dataSet = {
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!imageUrl) {
+      setImageAvailavble(false);
+      return;
+    } else if (!durationTime || durationTime === 0) {
+      setTimeAvailable(false);
+      return;
+    }
+    const scheduleData = {
       date: formattedDate,
       startTime: startTime,
       endTime: endTime,
       durationTime: durationTime,
-      location: place,
+      location: location,
       memo: memo,
     };
-    console.log(dataSet, imageData);
-    if (!imageData) {
-      setImageAvailavble(false);
-      return;
-    } else if (!dataSet.durationTime || dataSet.durationTime === 0) {
-      setTimeAvailable(false);
-      return;
-    }
 
-    // calendarAPI.calendarAdd({ dataSet, imageData });
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/ schedules`,
-        { data: dataSet, image: imageData },
-        {
-          headers: {
-            Authorization: `${localStorage.getItem('accessToken')}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const formData = new FormData();
+    formData.append('image', imageData.get('image'));
+    // formData.append('schedule', JSON.stringify(scheduleData));
+    const blob = new Blob([JSON.stringify(scheduleData)], {
+      type: 'application/json',
+    });
+    formData.append('data', blob);
+    console.log(scheduleData, imageData.get('image'));
+    const postCalendar = await axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_API_URL}/schedules`,
+      mode: 'cors',
+      headers: {
+        Authorization: localStorage.getItem('accessToken'),
+        'Content-Type': 'multipart/form-data',
+      },
+      data: formData,
+    });
+    console.log(postCalendar);
   };
 
   // 장소 등록
@@ -257,7 +259,6 @@ const CalendarAdd = () => {
   // 메모 등록
   const handleChangeMemo = (e) => {
     setMemo(e.target.value);
-    console.log(memo);
   };
 
   // 저장
@@ -266,9 +267,9 @@ const CalendarAdd = () => {
     onSubmit();
     // navigate('/');
   };
-
-  const token = localStorage.getItem('accessToken');
-  console.log(token);
+  console.log(durationTime);
+  // const token = localStorage.getItem('accessToken');
+  // console.log(token);
   return (
     <CalendarAddContainer>
       <CalendarAddHeaderContainer>

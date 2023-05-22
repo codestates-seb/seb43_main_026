@@ -8,7 +8,8 @@ import Footer from './layout/Footer';
 import Nav from './layout/Nav';
 
 // 페이지
-// import Home from './pages/Home';
+import Landing from './pages/Landing';
+
 import MyCalendar from './pages/Calendar/Calendar';
 import CalendarAdd from './pages/Calendar/CalendarAdd';
 import CalendarDetail from './pages/Calendar/CalendarDetail';
@@ -74,15 +75,18 @@ function App() {
           setLoginUser={setLoginUser}
         />
         <Routes>
-          {/* <Route path="/Home" element={<Home />} /> */}
-          <Route path="/" element={<MyCalendar />} />
+          <Route path="/" element={<Landing />} />
+
+          <Route path="/calendar" element={<MyCalendar />} />
           <Route path="/calendar/add" element={<CalendarAdd />} />
           <Route path="/calendar/:calendarid" element={<CalendarDetail />} />
           <Route path="/calendar/:calendarid/edit" element={<CalendarEdit />} />
+
           <Route path="/board" element={<Board />} />
           <Route path="/board/add" element={<BoardAdd />} />
           <Route path="/board/detail" element={<BoardDetail />} />
           <Route path="/board/detail/edit" element={<BoardEdit />} />
+
           <Route path="/signup" element={<SignUp />} />
           <Route
             path="/login"

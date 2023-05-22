@@ -126,9 +126,7 @@ const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
       handleSearch();
     }
   };
-  useEffect(() => {
-    console.log(place);
-  }, [place]);
+
   return (
     <SearchBarContainer>
       <input
@@ -156,16 +154,13 @@ const SearchMap = ({ place, setPlace }) => {
     lat: location?.latitude || 0,
     lng: location?.longitude || 0,
   });
-  console.log(location);
+
   console.log(mapCenter);
   // 키워드 검색
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
 
-  markers.map((marker) => {
-    console.log(marker);
-  });
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
   }, []);
@@ -184,9 +179,9 @@ const SearchMap = ({ place, setPlace }) => {
 
     const callback = function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
-        result.map((data) => {
-          console.log(data);
-        });
+        // result.map((data) => {
+        //   console.log(data);
+        // });
         setMarkers(result);
       }
     };

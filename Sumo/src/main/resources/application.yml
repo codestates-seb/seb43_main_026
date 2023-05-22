@@ -1,4 +1,9 @@
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 5MB
   h2:
     console:
       enabled: true
@@ -10,7 +15,7 @@ spring:
     password: ${DB_USER_PW}
   jpa:
     hibernate:
-      ddl-auto: update  # (1) ??? ?? ??
+      ddl-auto: create  # (1) ??? ?? ??
     show-sql: true      # (2) SQL ?? ??
     properties:
       hibernate:

@@ -11,7 +11,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
 @Mapper(componentModel = "spring")
 public interface ScheduleMapper {
     default Schedule schedulePostDtoToSchedule(ScheduleDto.Post schedulePostDto) {

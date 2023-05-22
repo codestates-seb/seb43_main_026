@@ -113,7 +113,7 @@ const ToolbarContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
   padding: 0 20px;
   background-color: ${COLOR.main_gray};
 

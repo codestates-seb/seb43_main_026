@@ -3,7 +3,8 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { COLOR } from '../../style/theme';
 import LogoImage from '../../assets/image/logo2.png';
-// import ProfileImage from '../../assets/image/headalee.png';
+import EditProfileTitle from '../../assets/image/edit_profile_title.png';
+import ProfileImage from '../../assets/image/headalee.png';
 import Button from '../../component/common/Button';
 import { useEffect, useState } from 'react';
 import Input from '../../component/common/Input';
@@ -19,22 +20,41 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
+`;
+
+const Title = styled.img`
+  width: 150px;
+  margin: 2rem 0;
 `;
 
 const Form = styled.form`
   width: 90%;
-  height: 70%;
+  height: 80%;
   border: 1px solid ${COLOR.main_blue};
   border-radius: 10px;
   padding: 0 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+`;
+
+const Image = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  border: 1px solid ${COLOR.main_blue};
+`;
+
+const Email = styled.span`
+  color: ${COLOR.main_blue};
+  font-weight: 300;
+  margin: 1rem 0;
 `;
 
 const DeleteProfileLink = styled.span`
-  margin-top: 1rem;
+  margin: 1rem 0;
   width: 90%;
   text-align: end;
   color: ${COLOR.main_blue};
@@ -127,10 +147,12 @@ const EditUser = ({ loginUser, setLoginUser }) => {
     },
   };
 
+  // 프로필 수정 적용
   const onSubmit = (data) => {
     console.log(data);
   };
 
+  // 폼 작성시 에러
   const onError = (error) => {
     console.log(error);
   };
@@ -151,7 +173,10 @@ const EditUser = ({ loginUser, setLoginUser }) => {
   return (
     <>
       <Container>
+        <Title src={EditProfileTitle} alt="타이틀" />
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
+          <Image src={ProfileImage} alt="프로필사진" />
+          <Email>{loginUser.email}</Email>
           <Controller
             name={'nickname'}
             control={control}

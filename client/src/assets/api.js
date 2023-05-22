@@ -19,17 +19,21 @@ export const userAPI = {
         password,
       })
       .then((res) => {
-        const accessToken = res.headers.get('Authorization');
-        const refreshToken = res.headers.get('refresh');
+        const accessToken = res.headers.get('Authorization'); // 액세스 토큰
+        const expires = res.headers.get('authexpiration'); // 액세스 토큰 만료기한
+        const refreshToken = res.headers.get('refresh'); // 리프래시 토큰
         const memberId = res.headers.get('memberid');
+
         axios.defaults.headers.common['Authorization'] = accessToken;
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('memberId', memberId);
-        return res.status.code;
+        localStorage.setItem('expires', expires);
+
+        return res;
       })
       .catch((error) => {
-        return error;
+        return error.response;
       }),
 
   //일반 회원가입
@@ -40,16 +44,16 @@ export const userAPI = {
         nickname: formData.nickname,
         password: formData.password,
       })
-      .then((res) => console.log(res))
+      .then((res) => {
+        return res;
+      })
       .catch((error) => {
-        if (error.response.status === 409) {
-          console.log(error.response.data.message);
-        }
+        return error.response;
       }),
 
   // 로그인 유무 확인
-  isLogin: (memberId) =>
-    api
+  isLogin: (memberId) => {
+    return api
       .get(`/members/${memberId}`, {
         headers: {
           Authorization: `${localStorage.getItem('accessToken')}`,
@@ -58,15 +62,10 @@ export const userAPI = {
       .then((res) => {
         return res.data;
       })
-      .catch((error) => console.log(error)),
-
-  //전체 로그아웃
-  logout: () =>
-    api.get(`user/allLogOut`, {
-      headers: {
-        Authorization: `${localStorage.getItem('token')}`,
-      },
-    }),
+      .catch((error) => {
+        console.log(error);
+      });
+  },
 
   //카카오 로그인
   kakaoLogIn: (code) => api.get(`/auth/kakao/callback?code=${code}`),

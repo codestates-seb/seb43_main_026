@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import CalendarComponent from '../../component/Calendar/CalendarComponent';
 import { SIZE, COLOR } from '../../style/theme';
+import { WarningToast } from '../../component/common/WarningToast';
 
 const MyCalendarContainer = styled.div`
   background-color: #fff;
@@ -23,11 +24,19 @@ const MyCalendarContainer = styled.div`
   }
 `;
 
-const MyCalendar = () => {
+const MyCalendar = ({ isLoginSuccess, setIsLoginSuccess }) => {
   return (
-    <MyCalendarContainer>
-      <CalendarComponent />
-    </MyCalendarContainer>
+    <>
+      {isLoginSuccess && (
+        <WarningToast
+          setWarning={setIsLoginSuccess}
+          text={'로그인에 성공하였습니다.'}
+        />
+      )}
+      <MyCalendarContainer>
+        <CalendarComponent />
+      </MyCalendarContainer>
+    </>
   );
 };
 

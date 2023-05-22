@@ -1,9 +1,6 @@
 //모듈
 import styled from 'styled-components';
 
-//컴포넌트
-import Carousel from '../component/common/Carousel';
-
 const Container = styled.div`
   margin: 0 auto;
   display: flex;
@@ -20,7 +17,7 @@ const Container = styled.div`
 const Home = () => {
   return (
     <Container>
-      <Carousel />
+      {/* <Carousel /> */}
       <div>안녕</div>
     </Container>
   );

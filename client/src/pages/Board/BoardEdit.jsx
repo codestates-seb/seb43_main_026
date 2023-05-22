@@ -209,23 +209,31 @@ const BoardEdit = () => {
   const onSubmit = async (data, e) => {
     e.preventDefault();
 
+    const board = {
+      title: data.title,
+      content: data.content,
+      calendarShare: data.calendarShare,
+      workoutRecordShare: data.workoutRecordShare,
+    };
+
     try {
       const formData = new FormData();
-      formData.append('title', data.title);
-      formData.append('content', data.content);
-      formData.append('calendarShare', data.calendarShare);
-      formData.append('workoutRecordShare', data.workoutRecordShare);
+      // formData.append('title', data.title);
+      // formData.append('content', data.content);
+      // formData.append('calendarShare', data.calendarShare);
+      // formData.append('workoutRecordShare', data.workoutRecordShare);
+      formData.append('board', JSON.stringify(board));
       formData.append('image', imageData.get('image'));
 
-      console.log(data);
-      console.log(formData);
       await axios.post(`${API_URL}/boards`, formData, {
         headers: {
           Authorization: `${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'multipart/form-data',
         },
       });
     } catch (error) {
       console.log(error);
+      console.log(data);
     }
   };
 
@@ -275,7 +283,7 @@ const BoardEdit = () => {
             </label>
           </WorkOut>
         </WorkOutContainer>
-        {workoutRecordShare && <Record />}
+        {workoutRecordShare && <Record isShareCalendar={isShareCalendar} />}
         <TitleContainer>
           {errors.title && (
             <ErrorContainer>
@@ -303,7 +311,6 @@ const BoardEdit = () => {
             {...register('content', { required: true })}
           />
         </Content>
-
         <Calendar>
           <label htmlFor="calendarShare">캘린더 결산</label>
           <Sharecheckbox

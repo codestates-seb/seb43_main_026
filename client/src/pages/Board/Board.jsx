@@ -20,9 +20,6 @@ import { RiListUnordered } from 'react-icons/ri';
 import { HiPlus } from 'react-icons/hi';
 import { BiCheckbox, BiCheckboxChecked } from 'react-icons/bi';
 
-//더미데이터
-import boardData from '../../component/Board/boardData';
-
 //서버 url
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -208,7 +205,7 @@ const NoData = styled.span`
 `;
 
 const Board = () => {
-  const [posts, setPosts] = useState(boardData);
+  const [posts, setPosts] = useState([]);
   const [isDash, setIsDash] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [orderBy, setOrderBy] = useState('latest');
@@ -231,9 +228,17 @@ const Board = () => {
         calendarShow,
       };
 
-      const response = await axios.get(`${API_URL}/boards`, {
-        params: params,
-      });
+      const response = await axios.get(
+        `${API_URL}/boards/`,
+        {
+          params: params,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        }
+      );
 
       setPosts(response.data);
     } catch (error) {
@@ -249,9 +254,17 @@ const Board = () => {
         orderBy: value,
       };
 
-      const response = await axios.get(`${API_URL}/boards`, {
-        params: params,
-      });
+      const response = await axios.get(
+        `${API_URL}/boards/`,
+        {
+          params: params,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        }
+      );
 
       setPosts(response.data);
     } catch (error) {

@@ -211,23 +211,31 @@ const BoardAdd = () => {
   const onSubmit = async (data, e) => {
     e.preventDefault();
 
+    // const board = {
+    //   title: data.title,
+    //   content: data.content,
+    //   calendarShare: data.calendarShare,
+    //   workoutRecordShare: data.workoutRecordShare,
+    // };
+
     try {
       const formData = new FormData();
       formData.append('title', data.title);
       formData.append('content', data.content);
       formData.append('calendarShare', data.calendarShare);
       formData.append('workoutRecordShare', data.workoutRecordShare);
+      // formData.append('boardPostDto', JSON.stringify(board));
       formData.append('image', imageData.get('image'));
 
-      console.log(data);
-      console.log(formData);
       await axios.post(`${API_URL}/boards`, formData, {
         headers: {
           Authorization: `${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'multipart/form-data',
         },
       });
     } catch (error) {
       console.log(error);
+      console.log(data);
     }
   };
 

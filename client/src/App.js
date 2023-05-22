@@ -76,7 +76,6 @@ function App() {
         />
         <Routes>
           <Route path="/" element={<Landing />} />
-
           <Route path="/calendar" element={<MyCalendar />} />
           <Route path="/calendar/add" element={<CalendarAdd />} />
           <Route path="/calendar/:calendarid" element={<CalendarDetail />} />

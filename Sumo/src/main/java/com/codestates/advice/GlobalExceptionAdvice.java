@@ -12,6 +12,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -32,6 +33,14 @@ public class GlobalExceptionAdvice {
     public ErrorResponse handleConstraintViolationException(
             ConstraintViolationException e) {
         final ErrorResponse response = ErrorResponse.of(e.getConstraintViolations());
+
+        return response;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMaxUploadSizeExceededExcecption(MaxUploadSizeExceededException e) {
+        final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST, "Max size is 5MB");
 
         return response;
     }

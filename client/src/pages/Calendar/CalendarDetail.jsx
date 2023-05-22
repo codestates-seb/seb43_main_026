@@ -3,9 +3,10 @@ import BackButton from '../../component/common/BackButton';
 import { FaRegEdit } from 'react-icons/fa';
 import { BsTrash3 } from 'react-icons/bs';
 import { SIZE, COLOR } from '../../style/theme';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CalendarDeleteModal from '../../component/Calendar/CalendarDetailComponent/CalendarDeleteModal';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import axios from 'axios';
 
 const CalendarDetailContainer = styled.div`
   max-width: 1200px;
@@ -60,7 +61,6 @@ const CalendarDetailBodyContainer = styled.section`
   > img {
     width: 300px;
     height: 300px;
-    border: 1px solid darkcyan;
     margin-bottom: 40px;
   }
 `;
@@ -70,7 +70,7 @@ const CalendarDetailInfoContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding-left: 30px;
+
   @media screen and (min-width: ${SIZE.tablet}) {
     padding: 0px 30px;
   }
@@ -78,7 +78,7 @@ const CalendarDetailInfoContainer = styled.div`
     padding-left: 10px;
     font-size: 18px;
     font-weight: 600;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
   > textarea {
     width: 90%;
@@ -86,6 +86,9 @@ const CalendarDetailInfoContainer = styled.div`
     background-color: ${COLOR.bg_light_blue};
     border-radius: 10px;
     padding: 20px 10px 10px 10px;
+    margin-left: 14px;
+    font-size: 18px;
+
     :focus {
       outline: none;
     }
@@ -96,7 +99,7 @@ const CalendarDetailInfoContainer = styled.div`
 `;
 
 const CalendarInfoGroup = styled.div`
-  width: 90%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -106,9 +109,6 @@ const CalendarInfoGroup = styled.div`
   padding: 0px 10px 10px 10px;
   border-bottom: 1px solid ${COLOR.main_blue};
   margin-bottom: 40px;
-  > p {
-    /* margin-right: 30px; */
-  }
   > span {
     font-size: 20px;
     font-weight: 400;
@@ -124,6 +124,26 @@ const CalendarInfoGroup = styled.div`
 
 const CalendarDetail = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const { calendarid } = useParams();
+  const [calendarData, setCalendarData] = useState({});
+  console.log(calendarid);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/schedules/${calendarid}`, {
+        headers: {
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+      .then((res) => {
+        setCalendarData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [calendarid]);
+
+  console.log(calendarData);
 
   const handleDeleteModal = () => {
     setOpenDeleteModal(!openDeleteModal);
@@ -144,20 +164,23 @@ const CalendarDetail = () => {
         </CalendarDetailButtons>
       </CalendarDetailHeaderContainer>
       <CalendarDetailBodyContainer>
-        <img src="/" alt="이미지 자리" />
+        <img src={calendarData.imageAddress} alt="이미지 자리" />
         <CalendarDetailInfoContainer>
           <CalendarInfoGroup>
-            <p>장소</p> <span>00수영 센터</span>
+            <p>장소</p> <span>{calendarData.location}</span>
           </CalendarInfoGroup>
           <CalendarInfoGroup>
-            <p>운동 시간</p> <span>2.5 시간</span>
+            <p>운동 시간</p> <span>{calendarData.durationTime} 시간</span>
           </CalendarInfoGroup>
           <p>메모</p>
-          <textarea defaultValue={'새 수영복 개시!'} readOnly></textarea>
+          <textarea value={calendarData.memo} readOnly></textarea>
         </CalendarDetailInfoContainer>
       </CalendarDetailBodyContainer>
       {openDeleteModal ? (
-        <CalendarDeleteModal handleDeleteModal={handleDeleteModal} />
+        <CalendarDeleteModal
+          handleDeleteModal={handleDeleteModal}
+          scheduleId={calendarData.scheduleId}
+        />
       ) : null}
     </CalendarDetailContainer>
   );

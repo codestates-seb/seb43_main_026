@@ -15,7 +15,7 @@ spring:
     password: ${DB_USER_PW}
   jpa:
     hibernate:
-      ddl-auto: create  # (1) ??? ?? ??
+      ddl-auto: validate  # (1) ??? ?? ??
     show-sql: true      # (2) SQL ?? ??
     properties:
       hibernate:

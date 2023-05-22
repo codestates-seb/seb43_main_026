@@ -45,7 +45,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             Map<String, Object> claims = verifyJws(request);
-            if((Integer)claims.get("exp") - Instant.now().getEpochSecond() <= 0){
+            if((Integer)claims.get("exp") - Instant.now().getEpochSecond() <= 30){
                 regenerateAuthenticationToken(claims, response);
             }
             setAuthenticationToContext(claims);

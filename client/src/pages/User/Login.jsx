@@ -12,12 +12,8 @@ import GoogleLogin from '../../component/oAuth/GoogleLogin';
 import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
 
-// import { userAPI } from '../../assets/api';
-import axios from 'axios';
 import { WarningToast } from '../../component/common/WarningToast';
 import { userAPI } from '../../assets/api';
-
-const SERVER_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.div`
   width: 100%;
@@ -73,11 +69,8 @@ const Login = ({
 }) => {
   const { handleSubmit, control } = useForm();
   const navigate = useNavigate();
-  console.log(loginUser);
-  setLoginUser;
-  setIsLoginSuccess;
-  SERVER_URL;
-  axios;
+
+  loginUser;
 
   const emailOptions = {
     required: '이메일을 입력해주세요.',
@@ -99,10 +92,10 @@ const Login = ({
 
   // 로그인 완료 시
   const onFormSubmit = async ({ username, password }) => {
-    const res = await userAPI.login(username, password);
-    if (res.status === 401) {
+    const response = await userAPI.login(username, password);
+    if (response.status === 401) {
       // 로그인 실패 에러메세지 출력
-    } else if (res.status === 500) {
+    } else if (response.status === 500) {
       // 서버 에러 메세지 출력
     } else {
       const memberId = localStorage.getItem('memberId');

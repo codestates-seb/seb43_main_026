@@ -99,16 +99,16 @@ const SignUp = ({ setIsSignupSuccess }) => {
   };
 
   // 회원가입 완료 시
-  const onSubmit = (data) => {
-    console.log(data);
-    userAPI.signup(data);
-    console.log('회원가입 성공');
-    setIsSignupSuccess(true);
-    navigate('/login');
-    // axios
-    //   .post(`${SERVER_URL}/members/signup`, { data })
-    //   .then((res) => console.log(res))
-    //   .catch((error) => console.log(error));
+  const onSubmit = async (data) => {
+    const response = await userAPI.signup(data);
+    if (response.status === 409) {
+      // 회원가입 실패 에러 메시지
+      console.log(response.data.message);
+    } else {
+      console.log('회원가입 성공');
+      setIsSignupSuccess(true);
+      navigate('/login');
+    }
   };
 
   // 에러 발생 시

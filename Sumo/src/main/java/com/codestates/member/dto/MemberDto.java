@@ -25,7 +25,7 @@ public class MemberDto {
         private String nickname;
 
         @NotBlank(message = "비밀번호를 입력하여 주십시오.")
-        @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$",
+        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$",
                 message = "비밀번호는 영대소문자, 숫자, 특수기호(!@#$%^&*)포함 8자 이상이어야 합니다.")
         private String password;
     }
@@ -39,6 +39,8 @@ public class MemberDto {
         private String email;
 
         private String nickname;
+        
+        private String password;
     }
 
     @Getter

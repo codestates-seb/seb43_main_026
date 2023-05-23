@@ -48,6 +48,8 @@ public class MemberService {
                 .ifPresent(nickname -> findMember.setNickname(nickname));
         Optional.ofNullable(member.getEmail())
                 .ifPresent(email -> findMember.setEmail(email));
+        Optional.ofNullable(member.getPassword())
+                .ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
 
         return memberRepository.save(findMember);
     }

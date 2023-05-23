@@ -64,4 +64,9 @@ public class MemberController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity refreshToken(){
+        return  new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }

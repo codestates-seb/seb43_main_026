@@ -118,7 +118,6 @@ const EditUser = ({ loginUser, setLoginUser }) => {
   const [isModal, setIsModal] = useState(false);
 
   const nicknameOptions = {
-    required: '닉네임을 입력해주세요.',
     minLength: {
       value: 2,
       message: '닉네임은 두글자 이상이어야 합니다.',
@@ -126,7 +125,6 @@ const EditUser = ({ loginUser, setLoginUser }) => {
   };
 
   const passwordOptions = {
-    required: '비밀번호를 입력해주세요.',
     pattern: {
       value:
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
@@ -135,7 +133,6 @@ const EditUser = ({ loginUser, setLoginUser }) => {
     },
   };
   const passwordCheckOptions = {
-    required: '비밀번호를 재입력해주세요.',
     validate: {
       check: (val) => {
         if (getValues('newPassword') !== val) {
@@ -147,13 +144,21 @@ const EditUser = ({ loginUser, setLoginUser }) => {
 
   // 프로필 수정 적용
   const onSubmit = async ({ nickname, newPassword }) => {
-    const response = await userAPI.editProfile(nickname, newPassword);
-    console.log(response);
-    if (response.status === 409) {
-      // 이미 존재하는 닉네임 에러 메세지 출력
+    console.log(nickname, newPassword);
+    // 바꾸려는 닉네임이 지금 닉네임과 일치할 때
+    if (loginUser.nickname === nickname) {
+      await userAPI.editProfile(null, newPassword);
+      console.log('비밀번호 변경 완료');
     } else {
-      console.log('프로필 변경 완료');
-      navigate('/edit/profile');
+      // 닉네임 변경이 있을 때
+      const response = await userAPI.editProfile(nickname, newPassword);
+      console.log(response);
+      if (response.status === 409) {
+        // 이미 존재하는 닉네임 에러 메세지 출력
+      } else {
+        console.log('닉네임, 비밀번호 변경 완료');
+        // navigate('/edit/profile');
+      }
     }
   };
 
@@ -193,12 +198,12 @@ const EditUser = ({ loginUser, setLoginUser }) => {
                   type="text"
                   errorMessage={error?.message}
                   onChange={field.onChange}
-                  value={field.value || loginUser.nickname}
+                  value={field.value || ''}
                   style={{ marginTop: '10px' }}
                 />
               )}
             />
-            <Controller
+            {/* <Controller
               name={'password'}
               control={control}
               rules={passwordOptions}
@@ -213,7 +218,7 @@ const EditUser = ({ loginUser, setLoginUser }) => {
                   style={{ marginTop: '10px' }}
                 />
               )}
-            />
+            /> */}
             <Controller
               name={'newPassword'}
               control={control}

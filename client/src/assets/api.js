@@ -23,7 +23,7 @@ const api = axios.create(
 //   return expires <= currentUTC;
 // };
 
-// // Request 인터셉터: 모든 요청 전에 실행됩니다.
+// Request 인터셉터: 모든 요청 전에 실행됩니다.
 // api.interceptors.request.use(async (config) => {
 //   if (isAccessTokenExpired()) {
 //     // accessToken이 만료되었을 경우, 적절한 처리를 수행합니다.
@@ -32,7 +32,7 @@ const api = axios.create(
 //     if (refreshToken) {
 //       try {
 //         // refreshToken을 사용하여 새로운 accessToken을 요청합니다.
-//         const response = await api.post('/refresh-token', { refreshToken });
+//         const response = await api.post('/members/refresh', { refreshToken });
 //         const newAccessToken = response.data.accessToken;
 
 //         // 발급받은 새로운 accessToken으로 헤더를 업데이트합니다.
@@ -55,7 +55,7 @@ const api = axios.create(
 //   return config;
 // });
 
-// // Response 인터셉터: 모든 응답 후에 실행됩니다.
+// Response 인터셉터: 모든 응답 후에 실행됩니다.
 // api.interceptors.response.use(
 //   (response) => {
 //     console.log('인터셉터', response);
@@ -95,6 +95,7 @@ export const userAPI = {
         return error.response;
       }),
 
+  // 로그아웃
   logout: () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
@@ -117,6 +118,22 @@ export const userAPI = {
         return error.response;
       }),
 
+  refresh: () => {
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+    console.log(accessToken, refreshToken);
+    return api
+      .get(`/members/refresh`, {
+        accessToken,
+        refreshToken,
+      })
+      .then((res) => {
+        console.log(res);
+        return res;
+      })
+      .catch((error) => console.log(error));
+  },
+
   // 로그인 유무 확인
   isLogin: () => {
     const memberId = localStorage.getItem('memberId');
@@ -130,12 +147,9 @@ export const userAPI = {
         return res.data;
       })
       .catch((error) => {
-        console.log(error);
+        return error;
       });
   },
-
-  //google 로그인
-  googleLogIn: (code) => api.get(`/auth/google/callback?code=${code}`),
 
   //프로필 수정
   editProfile: (nickname, newPassword) => {

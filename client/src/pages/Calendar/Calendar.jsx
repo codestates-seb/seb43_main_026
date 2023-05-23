@@ -183,6 +183,7 @@ const CalendarContainer = styled.div`
   }
   .rbc-row-segment {
     min-height: 80px;
+    padding: 0 2px 0 1px;
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
@@ -233,7 +234,7 @@ const MyCalendarContainer = styled.div`
 `;
 
 const Toolbar = (props) => {
-  const { date, setCalendarMonth, setCalendarYear } = props;
+  const { date, setCalendarMonth, setCalendarYear, totalDuration } = props;
 
   useEffect(() => {
     setCalendarMonth(date.getMonth() + 1);
@@ -267,7 +268,8 @@ const Toolbar = (props) => {
           출석률:<span>80%</span>
         </p>
         <p>
-          <AiOutlineClockCircle size={16} />총 운동 :<span>20.5시간</span>
+          <AiOutlineClockCircle size={16} />총 운동 :
+          <span>{totalDuration} 시간</span>
         </p>
       </CalendarInfoContainer>
     </ToolbarContainer>
@@ -294,7 +296,6 @@ const MyCalendar = ({ loginUser }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setCalendarData(res.data);
       })
       .catch((err) => {
@@ -305,6 +306,14 @@ const MyCalendar = ({ loginUser }) => {
   useEffect(() => {
     console.log(calendarData);
   }, [calendarData]);
+
+  // 총 운동 시간
+  const totalDuration = calendarData.reduce((total, el) => {
+    return total + el.durationTime;
+  }, 0);
+
+  const totalDurationString = totalDuration.toString();
+  console.log(totalDurationString);
 
   const nav = useNavigate();
   const navToDetail = () => {
@@ -343,7 +352,7 @@ const MyCalendar = ({ loginUser }) => {
       allowTaint: true, // 외부 도메인 이미지 포함을 위해 사용
     }).then((canvas) => {
       document.body.appendChild(canvas);
-      onSave(canvas.toDataURL(), 'calendar.png');
+      onSave(canvas.toDataURL(), 'calendar_capture.png');
       document.body.removeChild(canvas);
     });
   };
@@ -378,17 +387,20 @@ const MyCalendar = ({ loginUser }) => {
                   {...props}
                   setCalendarMonth={setCalendarMonth}
                   setCalendarYear={setCalendarYear}
+                  totalDuration={totalDuration}
                 />
               ),
             }}
             eventPropGetter={(event) => ({
               style: {
                 backgroundImage: `url(${event.url})`, // 배경 이미지로 설정
-                backgroundSize: 'cover',
+                backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
+                backgroundColor: '#fff',
                 width: '100%',
                 height: '100%',
+                padding: '0px',
               },
             })}
             onSelectEvent={(event) => handleSelectEvent(event)}

@@ -344,17 +344,36 @@ const MyCalendar = ({ loginUser }) => {
   }, [selectedEventId]);
 
   //캡쳐
-  const onCapture = () => {
+  const onCapture = async () => {
     console.log('capture');
     const calMainElement = document.getElementById('calMain');
-    html2canvas(calMainElement, {
-      useCORS: true, // CORS 이슈 해결을 위해 사용
-      allowTaint: true, // 외부 도메인 이미지 포함을 위해 사용
-    }).then((canvas) => {
+    const images = calMainElement.getElementsByTagName('img');
+
+    // 이미지 로드를 기다리기 위한 Promise 배열 생성
+    const imagePromises = Array.from(images).map((image) => {
+      return new Promise((resolve, reject) => {
+        image.onload = () => resolve();
+        image.onerror = () => reject();
+      });
+    });
+
+    try {
+      // 이미지 로딩이 완료될 때까지 기다림
+      await Promise.all(imagePromises);
+
+      // 이미지 로딩이 완료된 후에 캡처 수행
+      const canvas = await html2canvas(calMainElement, {
+        useCORS: true,
+        allowTaint: true,
+      });
+
+      // 캡처된 이미지 처리
       document.body.appendChild(canvas);
       onSave(canvas.toDataURL(), 'calendar_capture.png');
       document.body.removeChild(canvas);
-    });
+    } catch (error) {
+      console.error('Image loading error:', error);
+    }
   };
   const onSave = (uri, filename) => {
     console.log('onSave');

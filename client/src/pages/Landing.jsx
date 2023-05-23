@@ -155,7 +155,7 @@ const SecondContainer = styled.section`
   background-color: #fffff7e0;
   > img {
     width: 120px;
-    position: absolute;
+    /* position: absolute; */
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     height: 100vh;

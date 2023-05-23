@@ -50,7 +50,7 @@ const InputComment = styled.textarea`
   }
 `;
 
-function CommentForm({ setComment }) {
+function CommentForm({ setComment, setCommentCount }) {
   const { register, handleSubmit, reset } = useForm();
   const { boardId } = useParams();
 
@@ -81,6 +81,7 @@ function CommentForm({ setComment }) {
         .then((response) => {
           console.log(response.data);
           setComment(response.data);
+          setCommentCount(response.data.length);
         })
         .catch((error) => {
           console.error(error);

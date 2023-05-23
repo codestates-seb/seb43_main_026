@@ -70,7 +70,7 @@ const Text = styled.div`
   font-size: 14px;
 `;
 
-const Comment = ({ comment, setComment }) => {
+const Comment = ({ comment, setComment, setCommentCount }) => {
   const { boardId } = useParams();
 
   const handleButtonModify = () => {};
@@ -84,6 +84,7 @@ const Comment = ({ comment, setComment }) => {
       })
       .then((response) => {
         setComment(response.data);
+        setCommentCount(response.data.length);
       })
       .catch((error) => {
         console.error(error);

@@ -214,6 +214,7 @@ const BoardDetail = () => {
   const [posts, setPosts] = useState([]);
   const [liked, setLiked] = useState();
   const [comment, setComment] = useState([]);
+  const [commentCount, setCommentCount] = useState([]);
 
   const { boardId } = useParams();
 
@@ -338,14 +339,19 @@ const BoardDetail = () => {
       <Content>{posts.content}</Content>
       <CommentContainer>
         <CommentHeader>
-          댓글<CommentCount>{posts.commentCount}</CommentCount>
+          댓글<CommentCount>{commentCount}</CommentCount>
         </CommentHeader>
-        <CommentForm boardId={boardId} setComment={setComment} />
+        <CommentForm
+          boardId={boardId}
+          setComment={setComment}
+          setCommentCount={setCommentCount}
+        />
         <CommentList>
           <Comment
             boardId={boardId}
             comment={comment}
             setComment={setComment}
+            setCommentCount={setCommentCount}
           />
         </CommentList>
       </CommentContainer>

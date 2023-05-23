@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { COLOR } from '../style/theme';
 import Button from '../component/common/Button';
 import profileImage from '../assets/image/headalee.png';
+import { userAPI } from '../assets/api';
 
 const Overlay = styled.section`
   position: fixed;
@@ -89,9 +90,7 @@ const Nav = ({ nav, handleNav, loginUser, setLoginUser }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('memberId');
+    userAPI.logout();
     setLoginUser(null);
   };
   return (

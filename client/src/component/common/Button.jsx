@@ -13,6 +13,7 @@ const Container = styled.button`
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  font-size: 15px;
   &:hover {
     background-color: ${COLOR.main_blue_hover};
   }

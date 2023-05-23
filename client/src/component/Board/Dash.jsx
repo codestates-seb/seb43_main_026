@@ -111,19 +111,19 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
   const observer = useRef(null);
   const sentinelRef = useRef(null);
 
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.5, // 타겟의 50%가 보이는 시점에서 감지
-    };
+  const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.5,
+  };
 
+  useEffect(() => {
     const handleObserver = (entries) => {
       const target = entries[0];
-      if (target.isIntersecting && isDash) {
-        // isDash가 true일 때만 처리
-        setCurrentPage((prev) => prev + 1);
-      }
+      // if (target.isIntersecting && isDash) {
+      // isDash가 true일 때만 처리
+      setCurrentPage((prev) => prev + 1);
+      // }
     };
 
     observer.current = new IntersectionObserver(handleObserver, options);
@@ -142,8 +142,7 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
   }, [isDash, setCurrentPage]);
 
   useEffect(() => {
-    // posts 상태가 업데이트될 때마다 `data`를 초기화하고 새로운 데이터로 설정
-    setData(posts);
+    setData((prevData) => [...prevData, ...posts]);
   }, [posts]);
 
   return (

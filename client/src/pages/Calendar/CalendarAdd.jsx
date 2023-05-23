@@ -293,9 +293,13 @@ const CalendarAdd = () => {
           text={'해당 날짜에는 이미 등록을 하셨어요!'}
         />
       )}
+<<<<<<< HEAD
       {donePost ? (
         <DonePostModal setDonePost={setDonePost} text={'저장 완료!'} />
       ) : null}
+=======
+      {donePost ? <WarningToast setDonePost={setDonePost} /> : null}
+>>>>>>> b8815fdd8ab526064f4b5067d7cf3f4e24bbc58a
       <CalendarAddBodyContainer>
         <ImageUpload
           imageUrl={imageUrl}

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -16,21 +16,17 @@ import ImageUpload from '../../component/common/ImageUpload';
 import Record from '../../component/Board/BoardAdd/Record';
 
 //서버 url
-// const API_URL = process.env.REACT_APP_API_URL;
-const API_URL = `a`;
+const API_URL = process.env.REACT_APP_API_URL;
 
 //전체 컨테이너
 const Container = styled.main`
   margin: 0 auto;
-  margin-top: 30px;
   display: flex;
   max-width: 1200px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 0px;
-  width: 100%;
-  height: fit-content;
   width: 100%;
   height: fit-content;
 `;
@@ -74,7 +70,7 @@ const Category = styled.span`
 `;
 
 const UploadBtn = styled.button`
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
   color: ${COLOR.main_dark_blue};
   &:hover {
@@ -85,7 +81,7 @@ const UploadBtn = styled.button`
   }
 
   @media screen and (min-width: ${SIZE.mobileMax}) {
-    font-size: 20px;
+    font-size: 18px;
   }
 `;
 
@@ -99,6 +95,7 @@ const Form = styled.form`
 // 이미지 업로드
 const Image = styled.section`
   padding: 0 0 20px 0;
+  height: fit-content;
   border-bottom: 1px solid ${COLOR.main_blue};
 `;
 
@@ -201,6 +198,8 @@ const BoardAdd = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [imageData, setImageData] = useState(new FormData());
 
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -209,30 +208,41 @@ const BoardAdd = () => {
 
   const location = useLocation();
   const { isShareCalendar } = location.state;
-
   const isCalendarShareChecked = isShareCalendar ? true : false;
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
-
+    const boardPostDto = {
+      title: data.title,
+      content: data.content,
+      calendarShare: data.calendarShare,
+      workoutRecordShare: data.workoutRecordShare,
+    };
     try {
       const formData = new FormData();
-      formData.append('title', data.title);
-      formData.append('content', data.content);
-      formData.append('image', imageData.get('image'));
 
-      console.log(formData);
-      await axios.post(`${API_URL}/boards`, formData);
+      formData.append(
+        'board',
+        new Blob([JSON.stringify(boardPostDto)], {
+          type: 'application/json',
+        })
+      );
+      formData.append('image', data.image);
+      await axios.post(`${API_URL}/boards`, formData, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      navigate(`/board`);
     } catch (error) {
-      console.log(data);
       console.log(error);
+      console.log(data);
     }
   };
-
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
-
   useEffect(() => {
     console.log(imageData.get('image'));
   }, [imageData]);
@@ -248,7 +258,6 @@ const BoardAdd = () => {
           등록
         </UploadBtn>
       </GobackAndUpload>
-
       <Form>
         <Image>
           <LabelHidden htmlFor="image">사진</LabelHidden>
@@ -275,7 +284,7 @@ const BoardAdd = () => {
             </label>
           </WorkOut>
         </WorkOutContainer>
-        {workoutRecordShare && <Record />}
+        {workoutRecordShare && <Record isShareCalendar={isShareCalendar} />}
         <TitleContainer>
           {errors.title && (
             <ErrorContainer>
@@ -303,7 +312,6 @@ const BoardAdd = () => {
             {...register('content', { required: true })}
           />
         </Content>
-
         <Calendar>
           <label htmlFor="calendarShare">캘린더 결산</label>
           <Sharecheckbox
@@ -317,5 +325,4 @@ const BoardAdd = () => {
     </Container>
   );
 };
-
 export default BoardAdd;

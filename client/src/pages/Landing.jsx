@@ -6,7 +6,6 @@ import { COLOR, SIZE } from '../style/theme';
 import { useNavigate } from 'react-router';
 import Iphone from '../assets/image/calendarEX.png';
 import Alert from '../assets/image/alert.png';
-// import CalendarExampleImage from '../assets/image/calendarImage.png';
 
 const LandingContainer = styled.main`
   width: 100%;
@@ -37,14 +36,14 @@ const FirstContainer = styled.section`
     background-size: cover;
     height: 100vh;
     > img {
-      width: 500px;
+      width: 460px;
       margin: 240px 60px 0;
     }
   }
 
   @media screen and (min-width: ${SIZE.desktop}) {
     > img {
-      width: 680px;
+      width: 620px;
       margin: 180px 100px 0;
     }
   }
@@ -125,7 +124,7 @@ const IntroduceContainer = styled.div`
     font-size: 30px;
     font-weight: 600;
     position: absolute;
-    animation: slide-in 1.4s ease-out 0s 1;
+    animation: slide-in 1.8s ease-out 0s 1;
     > div {
       > h1 {
         font-size: 60px;
@@ -150,40 +149,49 @@ const SecondContainer = styled.section`
   height: 400px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   background-color: #fffff7e0;
   > img {
-    width: 120px;
-    /* position: absolute; */
+    position: absolute;
+    width: 200px;
+    right: 10px;
+    top: 50px;
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     height: 100vh;
     padding: 0 30px;
     flex-direction: row;
-
+    justify-content: space-between;
     > img {
-      width: 200px;
+      width: 340px;
+      right: 60px;
+      top: 140px;
     }
   }
 `;
 
 const SecondTextContainer = styled.div`
-  z-index: 1;
+  width: inherit;
+  height: inherit;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+
   @media screen and (min-width: ${SIZE.tablet}) {
-    margin-right: 100px;
+    margin-left: 60px;
+    justify-content: center;
   }
 `;
 
 const CalendarExample = styled.div`
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  margin: 100px auto 0 30px;
 
+  z-index: 10;
   > h2 {
     color: #1b4f13;
     font-size: 38px;
@@ -197,15 +205,14 @@ const CalendarExample = styled.div`
     font-size: 18px;
     font-weight: 600;
     white-space: nowrap;
-    text-align: center;
   }
 
   @media screen and (min-width: ${SIZE.tablet}) {
     flex-direction: column;
-    margin-bottom: 80px;
-    margin-right: 120px;
+    justify-content: center;
+    margin-bottom: 180px;
     > h2 {
-      font-size: 60px;
+      font-size: 67px;
       letter-spacing: 5px;
     }
     > span {
@@ -215,13 +222,15 @@ const CalendarExample = styled.div`
 `;
 
 const SecondTitle = styled.div`
-  width: 100%;
-  font-size: 20px;
-  font-weight: 600;
-  margin-top: 40px;
+  /* width: 100%; */
+  font-size: 24px;
+  font-weight: 700;
+  margin: 40px 0 30px 40px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   padding-left: 4px;
+
   > p {
     color: #0c3505;
     text-align: center;
@@ -233,7 +242,7 @@ const SecondTitle = styled.div`
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
     font-size: 32px;
-    /* margin-left: 120px; */
+
     > p {
       text-align: left;
       :first-of-type {
@@ -242,8 +251,6 @@ const SecondTitle = styled.div`
     }
   }
 `;
-
-// const ExampleImage = styled.img``;
 
 const ThirdContainer = styled.div`
   position: relative;
@@ -298,7 +305,7 @@ const Landing = () => {
             <span>: 수모</span>
           </div>
           <p>나의 데일리 수영 기록 플랫폼</p>
-          <button onClick={() => nav('/signup')}>SooMo 시작하기</button>
+          <button onClick={() => nav('/login')}>SooMo 시작하기</button>
         </IntroduceContainer>
         <img src={Swimming} alt="수영장" />
       </FirstContainer>
@@ -313,7 +320,6 @@ const Landing = () => {
             <p>매일 나의 캘린더에 기록해보세요!</p>
           </SecondTitle>
         </SecondTextContainer>
-        {/* <ExampleImage src={CalendarExampleImage} alt="캘린더이미지예시" /> */}
         <img src={Iphone} alt="캘린더예시" />
       </SecondContainer>
       <ThirdContainer>

@@ -38,7 +38,7 @@ export const WarningToast = ({ setWarning, text }) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setWarning(true);
+      setWarning(false);
     }, 1500);
     return () => {
       clearTimeout(timer);

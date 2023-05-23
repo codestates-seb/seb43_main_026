@@ -299,6 +299,7 @@ const MyCalendar = () => {
         console.log(err);
       });
   }, [calendarYear, calendarMonth]);
+
   useEffect(() => {
     console.log(calendarData);
   }, [calendarData]);

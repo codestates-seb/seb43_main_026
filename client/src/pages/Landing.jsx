@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-// import SwimmingPool from '../assets/image/swimmingpool.png';
 import Swimming from '../assets/image/swimming.png';
 import Wave1 from '../assets/image/wave.png';
 import Wave2 from '../assets/image/wave2.png';

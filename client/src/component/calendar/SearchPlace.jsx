@@ -102,6 +102,11 @@ const SearchPlaceModal = styled.div`
   }
 `;
 
+const MapModal = styled.div`
+  width: 300px;
+  height: 400px;
+`;
+
 const SearchPlaceContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -118,44 +123,17 @@ const SearchPlaceContainer = styled.div`
   backdrop-filter: blur(5px);
 `;
 
-// component
-const SearchBar = ({ place, handlePlace, handleSearch, handleClickSearch }) => {
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleSearch();
-    }
-  };
-
-  return (
-    <SearchBarContainer>
-      <input
-        type="text"
-        value={place}
-        onChange={handlePlace}
-        onKeyDown={handleKeyDown}
-        placeholder="예시) 수원 수영장"
-      />
-      <AiOutlineSearch
-        size={26}
-        className="search-icon"
-        onClick={handleClickSearch}
-      />
-    </SearchBarContainer>
-  );
-};
-
 const SearchMap = ({ place, setPlace }) => {
   // 지도에 현재 위치 표시
   const [location, setLocation] = useState(null);
   // 클릭된 장소의 위치
   const [currentLocation, setCurrentLocation] = useState(null);
-  const [mapCenter, setMapCenter] = useState({
-    lat: location?.latitude || 0,
-    lng: location?.longitude || 0,
-  });
+  // const [mapCenter, setMapCenter] = useState({
+  //   lat: location?.latitude || 0,
+  //   lng: location?.longitude || 0,
+  // });
 
-  console.log(mapCenter);
+  // console.log(mapCenter);
   // 키워드 검색
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
@@ -165,6 +143,12 @@ const SearchMap = ({ place, setPlace }) => {
     navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
   }, []);
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSearch();
+    }
+  };
   const successHandler = (response) => {
     const { latitude, longitude } = response.coords;
     setLocation({ latitude, longitude });
@@ -195,20 +179,15 @@ const SearchMap = ({ place, setPlace }) => {
     }
   }, [map, handleSearch]);
 
-  useEffect(() => {
-    if (map && markers.length > 0) {
-      const firstMarker = markers[0];
-      setMapCenter({ lat: Number(firstMarker.y), lng: Number(firstMarker.x) });
-    }
-  }, [map, markers]);
+  // useEffect(() => {
+  //   if (map && markers.length > 0) {
+  //     const firstMarker = markers[0];
+  //     setMapCenter({ lat: Number(firstMarker.y), lng: Number(firstMarker.x) });
+  //   }
+  // }, [map, markers]);
 
   const handleClickSearch = (e) => {
     e.preventDefault();
-    // 처음 클릭 이벤트 발생 시 map이 undefined가 뜨기 때문에 검색이 되지 않음->일단 주석 처리
-    // if (!map) {
-    //   console.log('실패');
-    //   return;
-    // }
     handleSearch();
   };
 
@@ -219,61 +198,71 @@ const SearchMap = ({ place, setPlace }) => {
   return (
     <MapContainer>
       <p>💡 지역 + 수영장으로 입력해 주세요</p>
-      <SearchBar
-        place={place}
-        handlePlace={handlePlace}
-        handleSearch={handleSearch}
-        handleClickSearch={handleClickSearch}
-      />
+      <SearchBarContainer>
+        <input
+          type="text"
+          value={place}
+          onChange={handlePlace}
+          onKeyDown={handleKeyDown}
+          placeholder="예시) 수원 수영장"
+        />
+        <AiOutlineSearch
+          size={26}
+          className="search-icon"
+          onClick={handleClickSearch}
+        />
+      </SearchBarContainer>
       {location ? (
-        <Map
-          center={{ lat: location.latitude, lng: location.longitude }}
-          style={{ width: '300px', height: '400px' }}
-          level={7}
-          onLoad={(map) => setMap(map)}
-        >
-          {currentLocation ? (
-            <MapMarker
-              position={{
-                lat: currentLocation.latitude,
-                lng: currentLocation.longitude,
-              }}
-            />
-          ) : (
-            <MapMarker
-              position={{
-                lat: location.latitude,
-                lng: location.longitude,
-              }}
-            />
-          )}
-          {markers
-            ? markers.map((marker) => (
-                <MapMarker
-                  key={`marker-${marker.place_name}-${marker.x},${marker.y}`}
-                  position={{ lat: Number(marker.y), lng: Number(marker.x) }}
-                  onClick={() => setInfo(marker)}
-                >
-                  {info && info.content === marker.content && (
-                    <button
-                      style={{ color: '#000' }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setPlace(marker.place_name);
-                        setCurrentLocation({
-                          lat: Number(marker.y),
-                          lng: Number(marker.x),
-                        });
-                      }}
-                      value={marker.place_name}
-                    >
-                      {marker.place_name}
-                    </button>
-                  )}
-                </MapMarker>
-              ))
-            : null}
-        </Map>
+        <MapModal>
+          <Map
+            center={{ lat: location.latitude, lng: location.longitude }}
+            style={{ width: '100%', height: '100%' }}
+            level={7}
+            onLoad={(map) => setMap(map)}
+          >
+            {currentLocation ? (
+              <MapMarker
+                position={{
+                  lat: currentLocation.latitude,
+                  lng: currentLocation.longitude,
+                }}
+              />
+            ) : (
+              <MapMarker
+                position={{
+                  lat: location.latitude,
+                  lng: location.longitude,
+                }}
+              />
+            )}
+            {markers
+              ? markers.map((marker) => (
+                  <MapMarker
+                    key={`marker-${marker.place_name}-${marker.x},${marker.y}`}
+                    position={{ lat: Number(marker.y), lng: Number(marker.x) }}
+                    onClick={() => setInfo(marker)}
+                  >
+                    {info && info.content === marker.content && (
+                      <button
+                        style={{ color: '#000' }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setPlace(marker.place_name);
+                          setCurrentLocation({
+                            lat: Number(marker.y),
+                            lng: Number(marker.x),
+                          });
+                        }}
+                        value={marker.place_name}
+                      >
+                        {marker.place_name}
+                      </button>
+                    )}
+                  </MapMarker>
+                ))
+              : null}
+          </Map>
+        </MapModal>
       ) : (
         <Loading />
       )}
@@ -281,29 +270,38 @@ const SearchMap = ({ place, setPlace }) => {
   );
 };
 
-// 저장&닫기 버튼
-const SearchButtons = ({ handleSearchModal, setPlace }) => {
+const SearchPlace = ({ handleSearchModal, place, setPlace }) => {
   const handleResetPlace = () => {
     setPlace('');
     handleSearchModal();
   };
-  return (
-    <SearchButtonContainer>
-      <button onClick={handleResetPlace}>취소</button>
-      <button onClick={handleSearchModal}>저장</button>
-    </SearchButtonContainer>
-  );
-};
+  useEffect(() => {
+    const handleModalOpen = () => {
+      document.body.style.overflow = 'hidden';
+      window.scrollTo(0, 0);
+    };
 
-const SearchPlace = ({ handleSearchModal, place, setPlace }) => {
+    const handleModalClose = () => {
+      document.body.style.overflow = 'auto';
+    };
+
+    if (handleSearchModal) {
+      handleModalOpen();
+    }
+
+    return () => {
+      handleModalClose();
+    };
+  }, [handleSearchModal]);
+
   return (
     <SearchPlaceContainer>
       <SearchPlaceModal>
         <SearchMap place={place} setPlace={setPlace} />
-        <SearchButtons
-          handleSearchModal={handleSearchModal}
-          setPlace={setPlace}
-        />
+        <SearchButtonContainer>
+          <button onClick={handleResetPlace}>취소</button>
+          <button onClick={handleSearchModal}>저장</button>
+        </SearchButtonContainer>
       </SearchPlaceModal>
     </SearchPlaceContainer>
   );

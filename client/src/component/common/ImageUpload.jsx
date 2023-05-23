@@ -21,8 +21,12 @@ const UploadContainer = styled.div`
     justify-content: center;
     > img {
       max-width: 70%;
-      @media screen and (min-width: ${SIZE.desktop}) {
-        width: 60%;
+    }
+  }
+  @media screen and (min-width: ${SIZE.desktop}) {
+    > div {
+      > img {
+        width: 40%;
       }
     }
   }

@@ -1,17 +1,18 @@
 import styled from 'styled-components';
 import ImageUpload from '../../component/common/ImageUpload';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+// import DatePicker from 'react-datepicker';
+// import 'react-datepicker/dist/react-datepicker.css';
 import { useState, useEffect } from 'react';
-import { ko } from 'date-fns/esm/locale';
+// import { ko } from 'date-fns/esm/locale';
 import { COLOR, SIZE } from '../../style/theme';
 import SearchPlace from '../../component/Calendar/SearchPlace';
 import TimeDropDown from '../../component/Calendar/TimeDropDown';
-import BackButton from '../../component/common/BackButton';
-import { format } from 'date-fns';
+import NavToDetail from '../../component/Calendar/NavButton';
+// import { format } from 'date-fns';
 import { useParams } from 'react-router';
 import axios from 'axios';
-
+import { DoneEditModal } from '../../component/Calendar/DonePostModal';
+import { WarningToast } from '../../component/common/WarningToast';
 // styled-component
 const CalendarEditContainer = styled.main`
   width: 100%;
@@ -162,18 +163,22 @@ const CalendarEditBody = styled.form`
 `;
 
 const CalendarEdit = () => {
+  const [scheduleId, setScheduleId] = useState('');
   const [editImageUrl, setEditImageUrl] = useState(null);
-  const [editSelectedDate, setEditSelectedDate] = useState(new Date());
+  const [editImageData, setEditImageData] = useState(new FormData());
+  const [editSelectedDate, setEditSelectedDate] = useState('');
   const [editPlace, setEditPlace] = useState('');
   const [editStartTime, setEditStartTime] = useState('');
   const [editEndTime, setEditEndTime] = useState('');
   const [editDurationTime, setEditDurationTime] = useState('');
   const [editMemo, setEditMemo] = useState('');
-  const formattedDate = format(editSelectedDate, 'yyyy-MM-dd');
-  console.log(formattedDate);
+
+  const [timeAvailable, setTimeAvailable] = useState(true);
+  const [doneEdit, setDoneEdit] = useState(false);
 
   // const navigate = useNavigate();
   const { scheduleid } = useParams();
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/schedules/${scheduleid}`, {
@@ -183,9 +188,16 @@ const CalendarEdit = () => {
       })
       .then((res) => {
         console.log(res.data);
+        setScheduleId(res.data.scheduleId);
+        setEditImageUrl(res.data.imageAddress);
+        setEditSelectedDate(res.data.date);
+        setEditPlace(res.data.location);
+        setEditStartTime(res.data.startTime);
+        setEditEndTime(res.data.endTime);
+        setEditMemo(res.data.memo);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data.message);
       });
   }, [scheduleid]);
 
@@ -195,7 +207,7 @@ const CalendarEdit = () => {
     setOpenSearchModal(!openSearchModal);
   };
   const swimTimeProps = {
-    sterTime: editStartTime,
+    startTime: editStartTime,
     setStartTime: setEditStartTime,
     endTime: editEndTime,
     setEndTime: setEditEndTime,
@@ -222,26 +234,76 @@ const CalendarEdit = () => {
     console.log(editDurationTime);
   }, [editStartTime, editEndTime]);
 
+  const handleEdit = async () => {
+    if (!editDurationTime || editDurationTime <= 0) {
+      setTimeAvailable(false);
+      return;
+    }
+    const editScheduleData = {
+      date: editSelectedDate,
+      startTime: editStartTime,
+      endTime: editEndTime,
+      durationTime: editDurationTime,
+      location: editPlace,
+      memo: editMemo,
+    };
+
+    try {
+      const formData = new FormData();
+      const json = JSON.stringify(editScheduleData);
+      const blob = new Blob([json], { type: 'application/json' });
+      formData.append('schedule', blob);
+      formData.append('schedule', JSON.stringify(editScheduleData));
+      formData.append('image', editImageData.get('image'));
+
+      await axios({
+        method: 'PATCH',
+        url: `${process.env.REACT_APP_API_URL}/schedules/${scheduleId}`,
+        mode: 'cors',
+        headers: {
+          Authorization: localStorage.getItem('accessToken'),
+          'Content-Type': 'multipart/form-data',
+        },
+        data: formData,
+      });
+      setDoneEdit(true);
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+  };
+
   return (
     <CalendarEditContainer>
       <CalendarEditHeader>
-        <BackButton />
-        <CalendarSaveEditContainer>저장</CalendarSaveEditContainer>
+        <NavToDetail scheduleId={scheduleId} />
+        <CalendarSaveEditContainer onClick={handleEdit}>
+          저장
+        </CalendarSaveEditContainer>
       </CalendarEditHeader>
+      {!timeAvailable ? (
+        <WarningToast
+          setWarning={setTimeAvailable}
+          text={'운동 시간을 입력해 주세요.'}
+        />
+      ) : null}
+      {doneEdit ? (
+        <DoneEditModal
+          setDonePost={setDoneEdit}
+          text={'수정 완료!'}
+          scheduleId={scheduleid}
+        />
+      ) : null}
       <CalendarEditBody>
-        <ImageUpload imageUrl={editImageUrl} setImageUrl={setEditImageUrl} />
+        <ImageUpload
+          imageUrl={editImageUrl}
+          setImageUrl={setEditImageUrl}
+          imageData={editImageData}
+          setImageData={setEditImageData}
+        />
 
         <EditDateContainer>
           <span>날짜 </span>
-          <div>
-            <DatePicker
-              className="date-picker"
-              locale={ko}
-              selected={editSelectedDate}
-              onChange={(date) => setEditSelectedDate(date)}
-              dateFormat="yyyy-MM-dd"
-            />
-          </div>
+          <p>{editSelectedDate}</p>
         </EditDateContainer>
         <EditPlaceContainer>
           <span>장소 </span>

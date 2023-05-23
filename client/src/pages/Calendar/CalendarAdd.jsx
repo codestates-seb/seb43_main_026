@@ -8,9 +8,11 @@ import { WarningToast } from '../../component/common/WarningToast';
 import ImageUpload from '../../component/common/ImageUpload';
 import SearchPlace from '../../component/Calendar/SearchPlace';
 import TimeDropDown from '../../component/Calendar/TimeDropDown';
+import { DonePostModal } from '../../component/Calendar/DonePostModal';
 
 // 라이브러리
 import ReactDatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/esm/locale';
 import { format } from 'date-fns';
 import axios from 'axios';
@@ -181,10 +183,6 @@ const CalendarAdd = () => {
   const [differentDate, setDifferentDate] = useState(true);
   const [donePost, setDonePost] = useState(false);
 
-  // useEffect(() => {
-  //   console.log(imageData.get('image'));
-  // }, [imageData]);
-
   const swimTimeProps = {
     startTime,
     setStartTime,
@@ -216,7 +214,7 @@ const CalendarAdd = () => {
     if (!imageUrl) {
       setImageAvailavble(false);
       return;
-    } else if (!durationTime || durationTime === 0) {
+    } else if (!durationTime || durationTime <= 0) {
       setTimeAvailable(false);
       return;
     }
@@ -236,7 +234,7 @@ const CalendarAdd = () => {
       formData.append('schedule', JSON.stringify(scheduleData));
       formData.append('image', imageData.get('image'));
 
-      await axios({
+      const response = await axios({
         method: 'POST',
         url: `${process.env.REACT_APP_API_URL}/schedules`,
         mode: 'cors',
@@ -246,6 +244,9 @@ const CalendarAdd = () => {
         },
         data: formData,
       });
+      const responseData = response;
+
+      console.log(responseData); // 서버 응답 데이터 출력
       setDonePost(!donePost);
     } catch (err) {
       console.log(err.response.data.message);
@@ -292,7 +293,9 @@ const CalendarAdd = () => {
           text={'해당 날짜에는 이미 등록을 하셨어요!'}
         />
       )}
-      {donePost ? <WarningToast setDonePost={setDonePost} /> : null}
+      {donePost ? (
+        <DonePostModal setDonePost={setDonePost} text={'저장 완료!'} />
+      ) : null}
       <CalendarAddBodyContainer>
         <ImageUpload
           imageUrl={imageUrl}

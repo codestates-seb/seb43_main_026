@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import SwimmingPool from '../assets/image/swimmingpool.png';
+import Swimming from '../assets/image/swimming.png';
 import Wave1 from '../assets/image/wave.png';
 import Wave2 from '../assets/image/wave2.png';
 import { COLOR, SIZE } from '../style/theme';
@@ -25,20 +25,27 @@ const FirstContainer = styled.section`
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: contain;
+  display: flex;
+  flex-direction: column;
   > img {
-    width: 200px;
-    position: absolute;
-    right: 20px;
-    bottom: 5px;
+    width: 220px;
+    align-self: flex-end;
+    margin: 140px 30px 0px;
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     background-image: url(${Wave2});
     background-size: cover;
     height: 100vh;
     > img {
-      width: 400px;
-      right: 30px;
-      bottom: 200px;
+      width: 500px;
+      margin: 240px 60px 0;
+    }
+  }
+
+  @media screen and (min-width: ${SIZE.desktop}) {
+    > img {
+      width: 680px;
+      margin: 180px 100px 0;
     }
   }
 `;
@@ -65,11 +72,11 @@ const IntroduceContainer = styled.div`
   }
   @keyframes slide-in {
     0% {
-      left: 0px;
+      left: -180px;
       opacity: 0;
     }
-    60% {
-      left: 40px;
+    50% {
+      left: 100px;
       opacity: 1;
     }
     100% {
@@ -114,7 +121,7 @@ const IntroduceContainer = styled.div`
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     margin-top: 60px;
-    margin-left: 140px;
+    margin-left: 180px;
     font-size: 30px;
     font-weight: 600;
     position: absolute;
@@ -145,10 +152,10 @@ const SecondContainer = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 80px;
   background-color: #fffff7e0;
   > img {
     width: 120px;
+    /* position: absolute; */
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     height: 100vh;
@@ -156,12 +163,13 @@ const SecondContainer = styled.section`
     flex-direction: row;
 
     > img {
-      width: 420px;
+      width: 200px;
     }
   }
 `;
 
 const SecondTextContainer = styled.div`
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -292,7 +300,7 @@ const Landing = () => {
           <p>나의 데일리 수영 기록 플랫폼</p>
           <button onClick={() => nav('/signup')}>SooMo 시작하기</button>
         </IntroduceContainer>
-        <img src={SwimmingPool} alt="수영장" />
+        <img src={Swimming} alt="수영장" />
       </FirstContainer>
       <SecondContainer>
         <SecondTextContainer>

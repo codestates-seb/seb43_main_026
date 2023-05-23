@@ -36,6 +36,9 @@ public interface CommentMapper {
         commentResponseDto.setCommentContent(comment.getCommentContent());
         commentResponseDto.setCommentLikeCount(comment.getCommentLikeCount());
         commentResponseDto.setMemberId(comment.getMember().getMemberId());
+        commentResponseDto.setCreatedAt(comment.getCreatedAt());
+        commentResponseDto.setModifiedAt(comment.getModifiedAt());
+        commentResponseDto.setWriter(comment.getMember().getNickname());
         return commentResponseDto;
     }
 
@@ -44,7 +47,6 @@ public interface CommentMapper {
         CommentPostResponseDto commentPostResponseDto = new CommentPostResponseDto();
         commentPostResponseDto.setCommentId(comment.getCommentId());
         commentPostResponseDto.setMemberId(comment.getMember().getMemberId());
-
         return commentPostResponseDto;
     }
 

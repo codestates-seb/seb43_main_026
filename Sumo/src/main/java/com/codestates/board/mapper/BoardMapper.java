@@ -69,6 +69,7 @@ public interface BoardMapper {
         boardPagingResponseDto.setBoardLikeCount(board.getBoardLikeCount());
         boardPagingResponseDto.setCreatedAt(board.getCreatedAt());
         boardPagingResponseDto.setMemberId(board.getMember().getMemberId());
+        boardPagingResponseDto.setCommentCount(board.getCommentCount());
         return boardPagingResponseDto;
     }
 

@@ -129,7 +129,9 @@ const Comment = ({ comment, setComment, setCommentCount }) => {
       });
   };
 
-  const handleEditSubmit = async (commentId) => {
+  const handleEditSubmit = async (e, commentId) => {
+    e.preventDefault();
+
     try {
       await axios.patch(
         `${API_URL}/boards/${boardId}/${commentId}`,
@@ -173,7 +175,9 @@ const Comment = ({ comment, setComment, setCommentCount }) => {
                 </CommentInfo>
                 <CommentModify>
                   {editingCommentId === post.commentId ? (
-                    <button onClick={() => handleEditSubmit(post.commentId)}>
+                    <button
+                      onClick={(e) => handleEditSubmit(e, post.commentId)}
+                    >
                       완료
                     </button>
                   ) : (

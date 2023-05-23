@@ -274,11 +274,13 @@ const Toolbar = (props) => {
   );
 };
 
-const MyCalendar = () => {
+const MyCalendar = ({ loginUser }) => {
   const [calendarYear, setCalendarYear] = useState('');
   const [calendarMonth, setCalendarMonth] = useState('');
   const [calendarData, setCalendarData] = useState([]);
   const [selectedEventId, setSelectedEventId] = useState('');
+
+  const navigate = useNavigate();
 
   console.log(calendarYear, calendarMonth);
   useEffect(() => {
@@ -326,6 +328,9 @@ const MyCalendar = () => {
   // 슬롯을 두 번 클릭해야 페이지 이동이 됨 -> useEffect로 해결
   useEffect(() => {
     navToDetail();
+    if (!loginUser) {
+      navigate('/login');
+    }
   }, [selectedEventId]);
 
   //캡쳐

@@ -5,6 +5,7 @@ import Wave2 from '../assets/image/wave2.png';
 import { COLOR, SIZE } from '../style/theme';
 import { useNavigate } from 'react-router';
 import Iphone from '../assets/image/calendarEX.png';
+import Alert from '../assets/image/alert.png';
 // import CalendarExampleImage from '../assets/image/calendarImage.png';
 
 const LandingContainer = styled.main`
@@ -236,6 +237,47 @@ const SecondTitle = styled.div`
 
 // const ExampleImage = styled.img``;
 
+const ThirdContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff0fd;
+  img {
+    width: 420px;
+    margin-right: 5rem;
+  }
+`;
+
+const ThirdTextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  h2 {
+    color: #6a2c9b;
+    font-size: 50px;
+    font-weight: 600;
+    margin-bottom: 60px;
+    white-space: nowrap;
+    letter-spacing: 3px;
+    background-color: rgba(203, 140, 255, 0.4);
+    padding: 0.5rem 1rem;
+  }
+  p {
+    margin: 0.5rem 0;
+    color: #6a2c9b;
+    font-size: 30px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: center;
+    span {
+      color: #b865f9;
+    }
+  }
+`;
+
 const Landing = () => {
   const nav = useNavigate();
 
@@ -260,12 +302,23 @@ const Landing = () => {
           </CalendarExample>
           <SecondTitle>
             <p>오늘 수영 완료하셨나요?</p>
-            <p>매일 나의 캘린더에 기록해보세요</p>
+            <p>매일 나의 캘린더에 기록해보세요!</p>
           </SecondTitle>
         </SecondTextContainer>
         {/* <ExampleImage src={CalendarExampleImage} alt="캘린더이미지예시" /> */}
         <img src={Iphone} alt="캘린더예시" />
       </SecondContainer>
+      <ThirdContainer>
+        <img src={Alert} alt="캘린더등록알림창" />
+        <ThirdTextContainer>
+          <p>매달 25일부터 시작하는</p>
+          <h2>캘린더 자랑 ✨</h2>
+          <p>내 캘린더도 자랑하고</p>
+          <p>
+            다른 사람 캘린더 구경 <span>#가보자고</span>
+          </p>
+        </ThirdTextContainer>
+      </ThirdContainer>
     </LandingContainer>
   );
 };

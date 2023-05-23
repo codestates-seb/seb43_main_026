@@ -10,6 +10,7 @@ import { COLOR } from '../../style/theme';
 import { BiBell } from 'react-icons/bi';
 
 const Container = styled.section`
+  z-index: 999;
   position: absolute;
   top: 300px;
   display: flex;

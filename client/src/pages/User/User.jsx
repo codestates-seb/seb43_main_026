@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { COLOR } from '../../style/theme';
 import Button from '../../component/common/Button';
 import ProfileImage from '../../assets/image/headalee.png';
+import { useEffect } from 'react';
 
 // const SERVER_URL = process.env.REACT_APP_API_URL;
 
@@ -74,6 +75,12 @@ const Title = styled.h1`
 
 const User = ({ loginUser }) => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loginUser) {
+      navigate('/login');
+    }
+  }, []);
 
   return (
     <Container>

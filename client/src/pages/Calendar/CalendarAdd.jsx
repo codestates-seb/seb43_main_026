@@ -276,13 +276,13 @@ const CalendarAdd = () => {
         </CalendarSaveButtonContainer>
       </CalendarAddHeaderContainer>
       {!imageAvailable ? (
-        <WarningModal
+        <WarningToast
           setWarning={setImageAvailavble}
           text={'사진을 등록해 주세요.'}
         />
       ) : null}
       {!timeAvailable ? (
-        <WarningModal
+        <WarningToast
           setWarning={setTimeAvailable}
           text={'운동 시간을 입력해 주세요.'}
         />

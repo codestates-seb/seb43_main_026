@@ -26,40 +26,16 @@ import User from './pages/User/User';
 import EditUser from './pages/User/EditUser';
 
 import ScrollToTop from './component/common/ScrollToTop';
-// import axios from 'axios';
-
-// const SERVER_URL = process.env.REACT_APP_API_URL;
 
 function App() {
-  // const token = localStorage.getItem('accessToken');
-  // const memberId = localStorage.getItem('memberId');
   const [nav, setNav] = useState(false);
   const [loginUser, setLoginUser] = useState();
-  console.log(loginUser);
+  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
+  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
+
   const handleNav = () => {
     setNav(!nav);
   };
-
-  // useEffect(() => {
-  //   if (token) {
-  //     axios
-  //       .get(`${SERVER_URL}/members/${memberId}`, {
-  //         headers: {
-  //           Authorization: `${localStorage.getItem('accessToken')}`,
-  //         },
-  //       })
-  //       .then((res) => {
-  //         console.log(res.data);
-  //         console.log('hello');
-  //         setLoginUser(res.data);
-
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //         console.log('App.js 에러');
-  //       });
-  //   }
-  // }, []);
 
   return (
     <div className="App">
@@ -76,7 +52,16 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
 
-          <Route path="/calendar" element={<MyCalendar />} />
+          <Route
+            path="/calendar"
+            element={
+              <MyCalendar
+                loginUser={loginUser}
+                isLoginSuccess={isLoginSuccess}
+                setIsLoginSuccess={setIsLoginSuccess}
+              />
+            }
+          />
           <Route path="/calendar/add" element={<CalendarAdd />} />
           <Route path="/calendar/:scheduleid" element={<CalendarDetail />} />
           <Route path="/calendar/:scheduleid/edit" element={<CalendarEdit />} />
@@ -86,11 +71,24 @@ function App() {
           <Route path="/board/detail" element={<BoardDetail />} />
           <Route path="/board/detail/edit" element={<BoardEdit />} />
 
-          <Route path="/signup" element={<SignUp />} />
+          <Route
+            path="/signup"
+            element={
+              <SignUp
+                loginUser={loginUser}
+                setIsSignupSuccess={setIsSignupSuccess}
+              />
+            }
+          />
           <Route
             path="/login"
             element={
-              <Login loginUser={loginUser} setLoginUser={setLoginUser} />
+              <Login
+                loginUser={loginUser}
+                isSignupSuccess={isSignupSuccess}
+                setIsLoginSuccess={setIsLoginSuccess}
+                setLoginUser={setLoginUser}
+              />
             }
           />
           <Route path="/users/:id" element={<User loginUser={loginUser} />} />

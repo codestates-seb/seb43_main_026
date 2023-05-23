@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router';
 import { IoArrowBack } from 'react-icons/io5';
 import { COLOR } from '../../style/theme';
+import { useLocation } from 'react-router-dom';
 
-// 뒤로가기 버튼
 const Container = styled.button`
   border: none;
   background-color: inherit;
@@ -11,15 +11,20 @@ const Container = styled.button`
   color: ${COLOR.main_blue};
 `;
 
-const BackButton = ({ scheduleId }) => {
-  // 이전 페이지로 이동하기
+const NavToDetail = ({ scheduleId }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location.pathname.includes('edit'));
   const handleBackButton = () => {
-    if (!scheduleId) {
-      navigate(-1);
+    if (location.pathname.includes('edit')) {
+      // 이전 페이지로 돌아가는 대신 상세 페이지로 남아 있도록 처리
+      navigate(`/calendar/${scheduleId}`, { replace: true });
+    } else {
+      // 이전 페이지로 이동
+      navigate(`/calendar`);
     }
-    navigate(`/calendar/${scheduleId}`);
   };
+
   return (
     <Container onClick={handleBackButton}>
       <IoArrowBack size={30} />
@@ -27,4 +32,4 @@ const BackButton = ({ scheduleId }) => {
   );
 };
 
-export default BackButton;
+export default NavToDetail;

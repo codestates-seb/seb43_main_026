@@ -183,6 +183,7 @@ const CalendarContainer = styled.div`
   }
   .rbc-row-segment {
     min-height: 80px;
+    padding: 0 2px 0 1px;
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
@@ -233,7 +234,7 @@ const MyCalendarContainer = styled.div`
 `;
 
 const Toolbar = (props) => {
-  const { date, setCalendarMonth, setCalendarYear } = props;
+  const { date, setCalendarMonth, setCalendarYear, totalDuration } = props;
 
   useEffect(() => {
     setCalendarMonth(date.getMonth() + 1);
@@ -267,7 +268,8 @@ const Toolbar = (props) => {
           출석률:<span>80%</span>
         </p>
         <p>
-          <AiOutlineClockCircle size={16} />총 운동 :<span>20.5시간</span>
+          <AiOutlineClockCircle size={16} />총 운동 :
+          <span>{totalDuration} 시간</span>
         </p>
       </CalendarInfoContainer>
     </ToolbarContainer>
@@ -294,16 +296,24 @@ const MyCalendar = ({ loginUser }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setCalendarData(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [calendarYear, calendarMonth]);
+
   useEffect(() => {
     console.log(calendarData);
   }, [calendarData]);
+
+  // 총 운동 시간
+  const totalDuration = calendarData.reduce((total, el) => {
+    return total + el.durationTime;
+  }, 0);
+
+  const totalDurationString = totalDuration.toString();
+  console.log(totalDurationString);
 
   const nav = useNavigate();
   const navToDetail = () => {
@@ -334,17 +344,36 @@ const MyCalendar = ({ loginUser }) => {
   }, [selectedEventId]);
 
   //캡쳐
-  const onCapture = () => {
+  const onCapture = async () => {
     console.log('capture');
     const calMainElement = document.getElementById('calMain');
-    html2canvas(calMainElement, {
-      useCORS: true, // CORS 이슈 해결을 위해 사용
-      allowTaint: true, // 외부 도메인 이미지 포함을 위해 사용
-    }).then((canvas) => {
-      document.body.appendChild(canvas);
-      onSave(canvas.toDataURL(), 'calendar.png');
-      document.body.removeChild(canvas);
+    const images = calMainElement.getElementsByTagName('img');
+
+    // 이미지 로드를 기다리기 위한 Promise 배열 생성
+    const imagePromises = Array.from(images).map((image) => {
+      return new Promise((resolve, reject) => {
+        image.onload = () => resolve();
+        image.onerror = () => reject();
+      });
     });
+
+    try {
+      // 이미지 로딩이 완료될 때까지 기다림
+      await Promise.all(imagePromises);
+
+      // 이미지 로딩이 완료된 후에 캡처 수행
+      const canvas = await html2canvas(calMainElement, {
+        useCORS: true,
+        allowTaint: true,
+      });
+
+      // 캡처된 이미지 처리
+      document.body.appendChild(canvas);
+      onSave(canvas.toDataURL(), 'calendar_capture.png');
+      document.body.removeChild(canvas);
+    } catch (error) {
+      console.error('Image loading error:', error);
+    }
   };
   const onSave = (uri, filename) => {
     console.log('onSave');
@@ -377,17 +406,20 @@ const MyCalendar = ({ loginUser }) => {
                   {...props}
                   setCalendarMonth={setCalendarMonth}
                   setCalendarYear={setCalendarYear}
+                  totalDuration={totalDuration}
                 />
               ),
             }}
             eventPropGetter={(event) => ({
               style: {
                 backgroundImage: `url(${event.url})`, // 배경 이미지로 설정
-                backgroundSize: 'cover',
+                backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center',
+                backgroundColor: '#fff',
                 width: '100%',
                 height: '100%',
+                padding: '0px',
               },
             })}
             onSelectEvent={(event) => handleSelectEvent(event)}

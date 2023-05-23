@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { COLOR } from '../../style/theme';
 import { useEffect } from 'react';
 
-const WarningModalContainer = styled.div`
+const WarningToastContainer = styled.div`
   position: absolute;
   z-index: 99;
   width: 260px;
@@ -28,9 +28,9 @@ const WarningModalContainer = styled.div`
 export const WarningToast = ({ setWarning, text }) => {
   if (typeof setWarning !== 'function') {
     return (
-      <WarningModalContainer>
+      <WarningToastContainer>
         <p>{text}</p>
-      </WarningModalContainer>
+      </WarningToastContainer>
     );
   }
 
@@ -45,5 +45,9 @@ export const WarningToast = ({ setWarning, text }) => {
     };
   }, [setWarning]);
 
-  return null;
+  return (
+    <WarningToastContainer>
+      <p>{text}</p>
+    </WarningToastContainer>
+  );
 };

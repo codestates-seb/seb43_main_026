@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
-import { COLOR } from '../../../style/theme';
+import { COLOR } from '../../style/theme';
 
 const Container = styled.div`
   width: 280px;
@@ -40,18 +40,30 @@ const DoneButton = styled.button`
   }
 `;
 
-const DonePostModal = ({ setDonePost }) => {
+export const DonePostModal = ({ setDonePost, text }) => {
   const nav = useNavigate();
-  const handleDone = () => {
+  const handleDonePost = () => {
     setDonePost(false);
-    nav('/calendar');
+    nav(`/calendar`);
   };
   return (
     <Container>
-      <p>작성 완료!</p>
-      <DoneButton onClick={handleDone}>확인</DoneButton>
+      <p>{text}</p>
+      <DoneButton onClick={handleDonePost}>확인</DoneButton>
     </Container>
   );
 };
 
-export default DonePostModal;
+export const DoneEditModal = ({ setDonePost, text, scheduleId }) => {
+  const nav = useNavigate();
+  const handleDonePost = () => {
+    setDonePost(false);
+    nav(`/calendar/${scheduleId}`);
+  };
+  return (
+    <Container>
+      <p>{text}</p>
+      <DoneButton onClick={handleDonePost}>확인</DoneButton>
+    </Container>
+  );
+};

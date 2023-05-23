@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import BackButton from '../../component/common/BackButton';
+// import BackButton from '../../component/common/BackButton';
+import NavToDetail from '../../component/Calendar/NavButton';
 import { FaRegEdit } from 'react-icons/fa';
 import { BsTrash3 } from 'react-icons/bs';
 import { SIZE, COLOR } from '../../style/theme';
@@ -126,8 +127,8 @@ const CalendarDetail = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { scheduleid } = useParams();
   const [calendarData, setCalendarData] = useState({});
+  console.log(typeof scheduleid);
   console.log(scheduleid);
-
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/schedules/${scheduleid}`, {
@@ -151,13 +152,13 @@ const CalendarDetail = () => {
 
   const nav = useNavigate();
   const navToEdit = () => {
-    nav(`/calendar/:scheduleid/edit`);
+    nav(`/calendar/${calendarData.scheduleId}/edit`);
   };
   return (
     <CalendarDetailContainer>
       <CalendarDetailHeaderContainer>
-        <BackButton />
-        <p>2023.05.16</p>
+        <NavToDetail />
+        <p>{calendarData.date}</p>
         <CalendarDetailButtons>
           <FaRegEdit size={20} onClick={navToEdit} />
           <BsTrash3 size={20} color="red" onClick={handleDeleteModal} />

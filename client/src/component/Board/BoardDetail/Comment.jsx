@@ -2,6 +2,7 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 
 //공통 스타일
 import { COLOR } from '../../../style/theme';
@@ -70,10 +71,42 @@ const Text = styled.div`
   font-size: 14px;
 `;
 
+const FormModify = styled.form`
+  width: 100%;
+
+  textarea {
+    width: 100%;
+    resize: none;
+    width: 100%;
+    padding: 4px 10px;
+    height: 60px;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 1.3;
+    max-height: auto;
+    margin-bottom: 5px;
+    white-space: pre-line;
+
+    &:focus {
+      outline: none;
+    }
+  }
+`;
+
 const Comment = ({ comment, setComment, setCommentCount }) => {
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editedContent, setEditedContent] = useState('');
   const { boardId } = useParams();
 
-  const handleButtonModify = () => {};
+  console.log(comment);
+
+  const handleButtonModify = (commentId) => {
+    setEditingCommentId(commentId);
+    const editingComment = comment.find((c) => c.commentId === commentId);
+    if (editingComment) {
+      setEditedContent(editingComment.commentContent);
+    }
+  };
 
   const handleButtonDelete = (commentId) => {
     axios
@@ -83,12 +116,49 @@ const Comment = ({ comment, setComment, setCommentCount }) => {
         },
       })
       .then((response) => {
-        setComment(response.data);
-        setCommentCount(response.data.length);
+        const updatedComments = comment.filter(
+          (c) => c.commentId !== commentId
+        );
+        setComment(updatedComments);
+        setCommentCount(updatedComments.length);
+        console.log(response);
       })
+
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const handleEditSubmit = async (e, commentId) => {
+    e.preventDefault();
+
+    try {
+      await axios.patch(
+        `${API_URL}/boards/${boardId}/${commentId}`,
+        {
+          commentId: commentId,
+          commentContent: editedContent,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        }
+      );
+
+      const updatedComments = comment.map((c) => {
+        if (c.commentId === commentId) {
+          return { ...c, commentContent: editedContent };
+        }
+        return c;
+      });
+      setComment(updatedComments);
+
+      setEditingCommentId(null);
+      setEditedContent('');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -98,17 +168,46 @@ const Comment = ({ comment, setComment, setCommentCount }) => {
             <Container key={post.commentId}>
               <CommentTitle>
                 <CommentInfo>
-                  <CommentWriter>{post.title}</CommentWriter>
-                  <CreateAt>2023-05-10</CreateAt>
+                  <CommentWriter>{post.writer}</CommentWriter>
+                  <CreateAt>
+                    {post.createdAt ? post.createdAt.slice(0, 10) : ''}
+                  </CreateAt>
                 </CommentInfo>
                 <CommentModify>
-                  <button onClick={handleButtonModify}>수정</button>
-                  <button onClick={() => handleButtonDelete(post.commentId)}>
-                    삭제
-                  </button>
+                  {editingCommentId === post.commentId ? (
+                    <button
+                      onClick={(e) => handleEditSubmit(e, post.commentId)}
+                    >
+                      완료
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => handleButtonModify(post.commentId)}
+                      >
+                        수정
+                      </button>
+                      <button
+                        onClick={() => handleButtonDelete(post.commentId)}
+                      >
+                        삭제
+                      </button>
+                    </>
+                  )}
                 </CommentModify>
               </CommentTitle>
-              <Text>{post.commentContent}</Text>
+              {editingCommentId === post.commentId ? (
+                <FormModify
+                  onSubmit={(e) => handleEditSubmit(e, post.commentId)}
+                >
+                  <textarea
+                    value={editedContent}
+                    onChange={(e) => setEditedContent(e.target.value)}
+                  />
+                </FormModify>
+              ) : (
+                <Text>{post.commentContent}</Text>
+              )}
             </Container>
           ))
         : null}

@@ -7,7 +7,7 @@ import { COLOR, SIZE } from '../../style/theme';
 // styled-component
 const UploadContainer = styled.div`
   width: 100%;
-  height: 340px;
+  /* height: 340px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -20,10 +20,9 @@ const UploadContainer = styled.div`
     display: flex;
     justify-content: center;
     > img {
-      /* max-width: 100%;
-      max-height: 100%; */
+      max-width: 70%;
       @media screen and (min-width: ${SIZE.desktop}) {
-        width: 70%;
+        width: 60%;
       }
     }
   }

@@ -106,7 +106,7 @@ const Login = ({ loginUser, setLoginUser }) => {
               console.log(error);
             });
         }
-        navigate('/');
+        navigate('/calendar');
       })
       .catch((error) => {
         if (error.response.status === 401) {

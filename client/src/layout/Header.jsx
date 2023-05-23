@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { FiMenu } from 'react-icons/fi';
 import LogoImage from '../assets/image/logo.png';
 import { COLOR, SIZE } from '../style/theme';
+import { useNavigate } from 'react-router';
 
 const Container = styled.header`
   z-index: 1000;
@@ -20,20 +21,32 @@ const Container = styled.header`
   @media screen and (min-width: ${SIZE.tablet}) {
     padding: 0 15px;
   }
-  .logo_img {
+  > button {
     width: 120px;
-    margin-top: 10px;
-    cursor: pointer;
+    height: inherit;
+    border: none;
+    background-color: inherit;
+    > img {
+      width: 120px;
+      cursor: pointer;
+    }
   }
+
   .nav_icon {
     cursor: pointer;
     color: white;
   }
 `;
+
 const Header = ({ handleNav }) => {
+  const nav = useNavigate();
+
   return (
     <Container>
-      <img src={LogoImage} alt="로고" className="logo_img" />
+      <button onClick={() => nav('/')}>
+        <img src={LogoImage} alt="로고" className="logo_img" />
+      </button>
+
       <FiMenu size={30} className="nav_icon" onClick={handleNav} />
     </Container>
   );

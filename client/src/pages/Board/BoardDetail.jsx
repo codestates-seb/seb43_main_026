@@ -1,6 +1,8 @@
 //모듈
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -10,21 +12,23 @@ import BackButton from '../../component/common/BackButton';
 
 //컴포넌트
 import CommentForm from '../../component/Board/BoardDetail/CommentForm';
+import Comment from '../../component/Board/BoardDetail/Comment';
+import Record from '../../component/Board/BoardAdd/Record';
 
 //아이콘
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
 
+//서버 url
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Container = styled.main`
   margin: 0 auto;
-  margin-top: 30px;
   display: flex;
   max-width: 1200px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 0px;
-  width: 100%;
-  height: fit-content;
   width: 100%;
   height: fit-content;
 `;
@@ -61,7 +65,7 @@ const ModifyAndDelete = styled.div`
   justify-content: center;
   align-items: center;
   button {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 600;
     color: ${COLOR.main_dark_blue};
     &:hover {
@@ -72,7 +76,7 @@ const ModifyAndDelete = styled.div`
     }
 
     @media screen and (min-width: ${SIZE.mobileMax}) {
-      font-size: 20px;
+      font-size: 18px;
     }
   }
 `;
@@ -171,58 +175,6 @@ const LikeButton = styled.button`
   right: 15px;
 `;
 
-//운동기록 공유
-const Record = styled.section`
-  width: 100%;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  border-bottom: 1px solid ${COLOR.main_blue};
-  section {
-    width: 100%;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-`;
-
-const Current = styled.section`
-  height: 100%;
-  border-right: 1px solid ${COLOR.main_blue};
-  background-color: ${COLOR.main_gray};
-  span {
-    color: ${COLOR.main_dark_blue};
-  }
-`;
-
-const Year = styled.span`
-  margin-bottom: 4px;
-  font-size: 14px;
-`;
-const Month = styled.span`
-  font-size: 17px;
-`;
-
-const Attendance = styled.section`
-  height: 100%;
-`;
-const TotalTime = styled.section`
-  height: 100%;
-  border-left: 1px solid ${COLOR.main_blue};
-  background-color: ${COLOR.bg_comment};
-`;
-
-const Name = styled.span`
-  margin-bottom: 4px;
-  font-size: 14px;
-`;
-const Rate = styled.span`
-  font-size: 17px;
-`;
-
 // 내용
 const Content = styled.section`
   width: 100%;
@@ -258,76 +210,98 @@ const CommentList = styled.ul`
   height: fit-content;
 `;
 
-const Comment = styled.li`
-  width: 100%;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid ${COLOR.bg_comment};
-`;
-
-const CommentTitle = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const CommentInfo = styled.div`
-  width: 100%;
-  height: 35px;
-  display: flex;
-  padding: 3px 10px 0px;
-  display: flex;
-  align-items: center;
-`;
-
-const CommentModify = styled.div`
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 10px;
-
-  button {
-    border: none;
-    background-color: transparent;
-    width: 40px;
-  }
-`;
-
-const CommentWriter = styled.span`
-  font-size: 14px;
-  font-weight: 600;
-  margin-right: 4px;
-  color: ${COLOR.main_dark_blue};
-`;
-const CreateAt = styled.span`
-  font-size: 13px;
-  color: ${COLOR.font_comment};
-`;
-
-const Text = styled.div`
-  width: 100%;
-  min-height: 35px;
-  max-height: auto;
-  padding: 0px 10px 5px 10px;
-  line-height: 1.3;
-  white-space: pre-line;
-  font-size: 14px;
-`;
-
 const BoardDetail = () => {
-  const [liked, setLiked] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [liked, setLiked] = useState();
+  const [comment, setComment] = useState([]);
+  const [commentCount, setCommentCount] = useState([]);
 
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear(); // 현재 년도
-  const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
+  const { boardId } = useParams();
+
+  const navigate = useNavigate();
+
+  const createDate = posts.length > 0 ? posts[0].createdAt.slice(0, 10) : '';
 
   const handleButtonClick = () => {
-    setLiked((prevLiked) => !prevLiked);
+    const params = {
+      'member-id': posts.memberId,
+    };
+    axios
+      .post(`${API_URL}/boards/${boardId}/likes`, null, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+        params: params,
+      })
+      .then((response) => {
+        console.log(response.data);
+        navigate(`/board/${boardId}`);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
+
+  const handleButtonModify = () => {
+    navigate(`/board/${boardId}/edit`);
+  };
+
+  const handleButtonDelete = () => {
+    axios
+      .delete(`${API_URL}/boards/${boardId}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        setPosts(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/boards/${boardId}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setPosts(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (posts.length > 0) {
+      const localMemberId = localStorage.getItem('memberId');
+      const likedByCurrentUser =
+        posts.boardLikeId?.includes(localMemberId) || false;
+      setLiked(likedByCurrentUser);
+    }
+  }, [posts]);
+
+  //댓글
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/boards/${boardId}/comments`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setComment(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <Container>
@@ -336,20 +310,20 @@ const BoardDetail = () => {
           <BackButton />
         </Goback>
         <ModifyAndDelete>
-          <Modify>수정</Modify>
-          <Delete>삭제</Delete>
+          <Modify onClick={handleButtonModify}>수정</Modify>
+          <Delete onClick={handleButtonDelete}>삭제</Delete>
         </ModifyAndDelete>
       </GobackAndModify>
       <BoardInfo>
-        <Title>제목</Title>
+        <Title>{posts.title}</Title>
         <BoardCommentInfo>
-          <Writer>작성자</Writer>
-          <BoardCreateAt>2023.05.16</BoardCreateAt>
+          <Writer>{posts.writer}</Writer>
+          <BoardCreateAt>{createDate}</BoardCreateAt>
         </BoardCommentInfo>
       </BoardInfo>
       <ImageAndLike>
         <Image>
-          <img src="https://picsum.photos/id/1/500/500" alt="사진" />
+          <img src={posts.boardImageAddress} alt="사진" />
         </Image>
         <Like>
           <LikeButton onClick={handleButtonClick}>
@@ -361,40 +335,24 @@ const BoardDetail = () => {
           </LikeButton>
         </Like>
       </ImageAndLike>
-      <Record>
-        <Current>
-          <Year>{`${currentYear}년`}</Year>
-          <Month>{`${currentMonth}월`}</Month>
-        </Current>
-        <Attendance>
-          <Name>출석률</Name>
-          <Rate>80%</Rate>
-        </Attendance>
-        <TotalTime>
-          <Name>총 운동 시간</Name>
-          <Rate>40 시간</Rate>
-        </TotalTime>
-      </Record>
-      <Content>내용</Content>
+      {posts.workoutRecordShare && <Record />}
+      <Content>{posts.content}</Content>
       <CommentContainer>
         <CommentHeader>
-          댓글<CommentCount>{`(2)`}</CommentCount>
+          댓글<CommentCount>{commentCount}</CommentCount>
         </CommentHeader>
-        <CommentForm />
+        <CommentForm
+          boardId={boardId}
+          setComment={setComment}
+          setCommentCount={setCommentCount}
+        />
         <CommentList>
-          <Comment>
-            <CommentTitle>
-              <CommentInfo>
-                <CommentWriter>작성자</CommentWriter>
-                <CreateAt>2023.05.16</CreateAt>
-              </CommentInfo>
-              <CommentModify>
-                <button>수정</button>
-                <button>삭제</button>
-              </CommentModify>
-            </CommentTitle>
-            <Text>댓글 내용</Text>
-          </Comment>
+          <Comment
+            boardId={boardId}
+            comment={comment}
+            setComment={setComment}
+            setCommentCount={setCommentCount}
+          />
         </CommentList>
       </CommentContainer>
     </Container>

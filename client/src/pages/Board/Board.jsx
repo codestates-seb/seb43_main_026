@@ -20,17 +20,12 @@ import { RiListUnordered } from 'react-icons/ri';
 import { HiPlus } from 'react-icons/hi';
 import { BiCheckbox, BiCheckboxChecked } from 'react-icons/bi';
 
-//더미데이터
-import boardData from '../../component/Board/boardData';
-
 //서버 url
-// const API_URL = process.env.REACT_APP_API_URL;
-const API_URL = `a`;
+const API_URL = process.env.REACT_APP_API_URL;
 
 //전체 컨테이너
 const Container = styled.main`
   margin: 0 auto;
-  margin-top: 30px;
   background-color: ${(props) => (!props.isDash ? COLOR.bg : COLOR.bg_blue)};
   display: flex;
   max-width: 1200px;
@@ -40,7 +35,6 @@ const Container = styled.main`
   margin-top: 0px;
   width: 100%;
   max-height: fit-content;
-  width: 100%;
   min-height: 100vh;
 
   button {
@@ -50,7 +44,7 @@ const Container = styled.main`
     display: none;
   }
   @media screen and (min-width: ${SIZE.mobileMax}) {
-    margin-top: 15px;
+    margin-top: 20px;
   }
 `;
 
@@ -74,9 +68,12 @@ const Title = styled.div`
 `;
 
 const Community = styled.span`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 21px;
+  @media screen and (min-width: ${SIZE.mobileMax}) {
+    font-size: 20px;
+  }
 `;
 
 const CalendarShow = styled.button`
@@ -204,37 +201,52 @@ const ListBox = styled.section`
 `;
 
 const NoData = styled.span`
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 20px;
 `;
 
 const Board = () => {
-  const [posts, setPosts] = useState(boardData);
+  const [posts, setPosts] = useState([]);
   const [isDash, setIsDash] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [totalPosts, setTotalPosts] = useState(0);
   const [orderBy, setOrderBy] = useState('latest');
   const [calendarShow, setCalendarShow] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [isAfter25th, setIsAfter25th] = useState(false);
   const [isShareCalendar, setIsShareCalendar] = useState(false);
+  const [isCalendarPost, setIsCalendarPost] = useState(null);
+  const [canPost, setCanPost] = useState(null);
 
   const navigate = useNavigate();
 
   const modalRef = useRef(null);
+  const previousPage = useRef(1);
 
   const fetchPostsCalendar = async (value, page = 1) => {
     try {
       const params = {
         page: page,
-        size: pageSize,
+        size: 10,
         orderBy: value,
         calendarShow,
       };
 
-      const response = await axios.get(`${API_URL}/boards`, {
-        params: params,
-      });
-
+      const response = await axios.get(
+        `${API_URL}/boards/`,
+        {
+          params: params,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        }
+      );
       setPosts(response.data);
     } catch (error) {
       console.log(error);
@@ -245,23 +257,35 @@ const Board = () => {
     try {
       const params = {
         page: page,
-        size: pageSize,
+        size: 10,
         orderBy: value,
       };
 
-      const response = await axios.get(`${API_URL}/boards`, {
-        params: params,
-      });
+      const response = await axios.get(
+        `${API_URL}/boards/`,
+        {
+          params: params,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        }
+      );
 
       setPosts(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   const handlePaginationClick = (pageNumber) => {
+    if (pageNumber === previousPage.current) {
+      return;
+    }
+
     setCurrentPage(pageNumber);
-    setPageSize(10);
 
     if (calendarShow) {
       fetchPostsCalendar(orderBy, pageNumber);
@@ -275,7 +299,6 @@ const Board = () => {
     setOrderBy(orderByValue);
   };
 
-  //수정! 나중에 get요청으로 캘린더 공유 이력 확인
   const handleUploadClick = () => {
     if (isAfter25th) {
       setIsModal(true);
@@ -297,13 +320,54 @@ const Board = () => {
   //캘린더 모아보기 필터
   useEffect(() => {
     if (calendarShow) {
-      console.log('----1----');
-      fetchPostsCalendar(orderBy);
-    } else if (!calendarShow) {
-      console.log('----2----');
-      fetchPostsWithAll(orderBy);
+      fetchPostsCalendar(orderBy, currentPage);
+    } else {
+      fetchPostsWithAll(orderBy, currentPage);
     }
-  }, [calendarShow, orderBy, pageSize]);
+  }, [calendarShow, orderBy, currentPage]);
+
+  //캘린더 자랑 이력 조회
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/boards/canPost/${localStorage.getItem('memberId')}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        setIsCalendarPost(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  //캘린더 자랑 가능 조회
+  useEffect(() => {
+    if (isCalendarPost) {
+      setCanPost(false);
+    } else {
+      setCanPost(true);
+    }
+  }, [isCalendarPost]);
+
+  //총 게시글 수 조회
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/boards/count`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        setTotalPosts(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   //날짜 25일 이후인지 감지
   useEffect(() => {
@@ -349,9 +413,14 @@ const Board = () => {
     };
   }, []);
 
-  // 리스트 뷰가 바뀌면 다시 페이지 1로 세팅
+  useEffect(() => {
+    previousPage.current = currentPage;
+  }, [currentPage]);
+
+  //리스트 뷰 변경시 페이지 초기화
   useEffect(() => {
     setCurrentPage(1);
+    previousPage.current = 1;
   }, [isDash]);
 
   return (
@@ -388,7 +457,9 @@ const Board = () => {
         </View>
         <Sort>
           <SortBtn onClick={() => handleSortClick('latest')}>최신순</SortBtn>
-          <SortBtn onClick={() => handleSortClick('likes')}>추천순</SortBtn>
+          <SortBtn onClick={() => handleSortClick('boardLikes')}>
+            추천순
+          </SortBtn>
           <SortBtn onClick={() => handleSortClick('comments')}> 댓글순</SortBtn>
         </Sort>
       </SortBox>
@@ -397,7 +468,7 @@ const Board = () => {
           <UploadBtn onClick={handleUploadClick}>등록하기</UploadBtn>
         </Upload>
       )}
-      {isModal && isAfter25th && (
+      {isModal && isAfter25th && canPost && (
         <Modal
           ref={modalRef}
           setIsModal={setIsModal}
@@ -406,19 +477,21 @@ const Board = () => {
         />
       )}
       <ListBox>
-        {isDash && <Dash posts={posts} />}
-        {!isDash && <List posts={posts} />}
         {posts.length === 0 && <NoData>데이터가 없습니다</NoData>}
+        {isDash && (
+          <Dash posts={posts} setCurrentPage={setCurrentPage} isDash={isDash} />
+        )}
+        {isDash || <List posts={posts} />}
       </ListBox>
-      {isDash ? (
+      {isDash && (
         <UploadIconBtn onClick={handleUploadClick}>
           <PlusIcon size={32} color="#ffffff" />
         </UploadIconBtn>
-      ) : (
+      )}
+      {isDash || (
         <Pagination
           currentPage={currentPage}
-          pageSize={pageSize}
-          totalPosts={posts.length}
+          totalPosts={totalPosts}
           onPaginationClick={handlePaginationClick}
         />
       )}

@@ -35,12 +35,8 @@ const List = styled.li`
   }
 `;
 
-const Pagination = ({
-  currentPage,
-  pageSize,
-  totalPosts,
-  onPaginationClick,
-}) => {
+const Pagination = ({ currentPage, totalPosts, onPaginationClick }) => {
+  const pageSize = 10;
   const totalPages = Math.ceil(totalPosts / pageSize);
   const maxVisiblePages = 10;
   const halfVisiblePages = Math.floor(maxVisiblePages / 2);

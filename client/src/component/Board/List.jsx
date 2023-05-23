@@ -1,11 +1,6 @@
-//모듈
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-
-//공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
-
-//아이콘
 import { FaHeart } from 'react-icons/fa';
 import { BiComment } from 'react-icons/bi';
 
@@ -14,7 +9,7 @@ const Containter = styled.ul`
   height: 650px;
 `;
 
-const Lists = styled.li`
+const Item = styled.li`
   width: 100%;
   height: fit-content;
   padding: 13px 18px 13px 18px;
@@ -106,7 +101,7 @@ const List = ({ posts }) => {
     <Containter>
       {posts.length
         ? posts.map((post) => (
-            <Lists key={post.boardId}>
+            <Item key={post.boardId}>
               <Link to={`/board/${post.boardId}`}>
                 <TitleAndReaction>
                   <Title>{post.title}</Title>
@@ -126,7 +121,7 @@ const List = ({ posts }) => {
                   <CreatDate>{post.createdAt.slice(0, 10)}</CreatDate>
                 </WriterAndCreateAt>
               </Link>
-            </Lists>
+            </Item>
           ))
         : null}
     </Containter>

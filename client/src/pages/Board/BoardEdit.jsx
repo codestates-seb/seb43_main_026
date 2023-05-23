@@ -193,11 +193,12 @@ const ErrorMessage = styled.span`
 `;
 
 const BoardEdit = () => {
+  const [imageData, setImageData] = useState(new FormData());
   const [posts, setPosts] = useState([]);
   const [workoutRecordShare, setWorkoutRecordShare] = useState(
     posts && posts.workoutRecordShare
   );
-  const [editImageUrl, setEditImageUrl] = useState(null);
+  const [imageUrl, setImageUrl] = useState(posts && posts.boardImageAddress);
 
   const {
     register,
@@ -227,7 +228,7 @@ const BoardEdit = () => {
           type: 'application/json',
         })
       );
-      formData.append('image', data.image);
+      formData.append('image', imageData.get('image'));
 
       await axios.patch(`${API_URL}/boards/${boardId}`, formData, {
         headers: {
@@ -245,6 +246,10 @@ const BoardEdit = () => {
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
+
+  useEffect(() => {
+    console.log(imageData.get('image'));
+  }, [imageData]);
 
   useEffect(() => {
     axios
@@ -278,9 +283,11 @@ const BoardEdit = () => {
         <Image>
           <LabelHidden htmlFor="image">사진</LabelHidden>
           <ImageUpload
-            register={register}
-            imageUrl={editImageUrl}
-            setImageUrl={setEditImageUrl}
+            id="image"
+            imageUrl={imageUrl}
+            setImageUrl={setImageUrl}
+            imageData={imageData}
+            setImageData={setImageData}
           />
         </Image>
         <WorkOutContainer>

@@ -116,9 +116,14 @@ const Comment = ({ comment, setComment, setCommentCount }) => {
         },
       })
       .then((response) => {
-        setComment(response.data);
-        setCommentCount(response.data.length);
+        const updatedComments = comment.filter(
+          (c) => c.commentId !== commentId
+        );
+        setComment(updatedComments);
+        setCommentCount(updatedComments.length);
+        console.log(response);
       })
+
       .catch((error) => {
         console.error(error);
       });

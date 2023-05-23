@@ -198,17 +198,33 @@ const BoardEdit = () => {
   const [workoutRecordShare, setWorkoutRecordShare] = useState(
     posts && posts.workoutRecordShare
   );
-  const [imageUrl, setImageUrl] = useState(posts && posts.boardImageAddress);
+  const [imageUrl, setImageUrl] = useState(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
 
   const { boardId } = useParams();
 
   const navigate = useNavigate();
+
+  const fetchPostData = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/boards/${boardId}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      });
+      setPosts(response.data);
+      setImageUrl(response.data.boardImageAddress);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
@@ -228,15 +244,24 @@ const BoardEdit = () => {
           type: 'application/json',
         })
       );
-      formData.append('image', imageData.get('image'));
+      if (imageData.get('image')) {
+        formData.append('image', imageData.get('image'));
+      }
 
-      await axios.patch(`${API_URL}/boards/${boardId}`, formData, {
-        headers: {
-          Authorization: `${localStorage.getItem('accessToken')}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      navigate(`/board`);
+      const response = await axios.patch(
+        `${API_URL}/boards/${boardId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      console.log(response.data);
+
+      fetchPostData(); // 이동 후 다시 데이터 가져오기
+      navigate(`/board/${boardId}`);
     } catch (error) {
       console.log(error);
       console.log(data);
@@ -252,19 +277,14 @@ const BoardEdit = () => {
   }, [imageData]);
 
   useEffect(() => {
-    axios
-      .get(`${API_URL}/boards/${boardId}`, {
-        headers: {
-          Authorization: `${localStorage.getItem('accessToken')}`,
-        },
-      })
-      .then((response) => {
-        setPosts(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (posts) {
+      setValue('title', posts.title);
+      setValue('content', posts.content);
+    }
+  }, [posts, setValue]);
+
+  useEffect(() => {
+    fetchPostData();
   }, [boardId]);
 
   return (

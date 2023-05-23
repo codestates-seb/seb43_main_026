@@ -1,12 +1,7 @@
-//모듈
 import styled from 'styled-components';
 import { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-//공통 스타일
 import { COLOR } from '../../style/theme';
-
-//아이콘
 import { FaHeart } from 'react-icons/fa';
 import { BiComment } from 'react-icons/bi';
 
@@ -19,7 +14,7 @@ const Container = styled.ul`
   justify-content: center;
 `;
 
-const DashBorad = styled.li`
+const Item = styled.li`
   margin-top: 13px;
   padding: 0 1.5%;
   display: flex;
@@ -155,7 +150,7 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
     <Container>
       {data.length
         ? data.map((post) => (
-            <DashBorad key={post.boardId}>
+            <Item key={post.boardId}>
               <Link to={`/board/${post.boardId}`}>
                 <Image>
                   <img src={post.boardImageAddress} alt="캘린더 이미지" />
@@ -174,7 +169,7 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
                   </Reaction>
                 </Info>
               </Link>
-            </DashBorad>
+            </Item>
           ))
         : null}
       <EndDetect ref={sentinelRef} />

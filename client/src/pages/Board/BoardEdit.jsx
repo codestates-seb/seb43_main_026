@@ -1,24 +1,15 @@
-//모듈
 import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router';
-
-//공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
-
-//공통 컴포넌트
 import BackButton from '../../component/common/BackButton';
-
-//컴포넌트
 import ImageUpload from '../../component/common/ImageUpload';
 import Record from '../../component/Board/BoardAdd/Record';
 
-//서버 url
 const API_URL = process.env.REACT_APP_API_URL;
 
-//전체 컨테이너
 const Container = styled.main`
   margin: 0 auto;
   display: flex;
@@ -31,7 +22,6 @@ const Container = styled.main`
   height: fit-content;
 `;
 
-//보드 상단 헤더
 const GobackAndUpload = styled.section`
   width: 100%;
   height: 45px;
@@ -85,20 +75,17 @@ const UploadBtn = styled.button`
   }
 `;
 
-//게시글 입력폼
 const Form = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
 `;
 
-// 이미지 업로드
 const Image = styled.section`
   padding: 0 0 20px 0;
   border-bottom: 1px solid ${COLOR.main_blue};
 `;
 
-// 운동기록 공유
 const WorkOutContainer = styled.div`
   position: sticky;
   width: 100%;
@@ -123,7 +110,7 @@ const Sharecheckbox = styled.input`
   margin-right: 5px;
   cursor: pointer;
 `;
-//제목
+
 const TitleContainer = styled.section`
   width: 100%;
   height: fit-content;
@@ -145,7 +132,6 @@ const InputTitle = styled.input`
   }
 `;
 
-// 내용
 const Content = styled.section`
   display: flex;
   justify-content: center;
@@ -168,7 +154,6 @@ const Memo = styled.textarea`
   }
 `;
 
-// 캘린더 공유
 const Calendar = styled.div`
   width: 100%;
   height: 40px;
@@ -193,6 +178,8 @@ const ErrorMessage = styled.span`
 `;
 
 const BoardEdit = () => {
+  const { boardId } = useParams();
+  const navigate = useNavigate();
   const [imageData, setImageData] = useState(new FormData());
   const [posts, setPosts] = useState([]);
   const [workoutRecordShare, setWorkoutRecordShare] = useState(
@@ -206,10 +193,6 @@ const BoardEdit = () => {
     formState: { errors },
     setValue,
   } = useForm();
-
-  const { boardId } = useParams();
-
-  const navigate = useNavigate();
 
   const fetchPostData = async () => {
     try {

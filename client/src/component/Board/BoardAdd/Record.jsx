@@ -1,9 +1,6 @@
-//모듈
 import styled from 'styled-components';
 import { useEffect } from 'react';
 // import axios from 'axios';
-
-//공통 스타일
 import { COLOR } from '../../../style/theme';
 
 //서버 url

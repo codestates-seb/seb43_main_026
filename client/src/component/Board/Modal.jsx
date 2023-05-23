@@ -1,12 +1,9 @@
-//모듈
 import styled from 'styled-components';
 import { forwardRef } from 'react';
 import { useNavigate } from 'react-router';
 
-//공통 스타일
 import { COLOR } from '../../style/theme';
 
-//아이콘
 import { BiBell } from 'react-icons/bi';
 
 const Container = styled.section`

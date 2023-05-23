@@ -1,24 +1,14 @@
-//모듈
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
-//공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
-
-//공통 컴포넌트
 import BackButton from '../../component/common/BackButton';
-
-//컴포넌트
 import CommentForm from '../../component/Board/BoardDetail/CommentForm';
 import Comment from '../../component/Board/BoardDetail/Comment';
 import Record from '../../component/Board/BoardAdd/Record';
-
-//아이콘
 import { FaRegHeart, FaHeart } from 'react-icons/fa';
 
-//서버 url
 const API_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.main`
@@ -33,7 +23,6 @@ const Container = styled.main`
   height: fit-content;
 `;
 
-//뒤로가기 상단바
 const GobackAndModify = styled.section`
   width: 100%;
   height: 45px;
@@ -81,10 +70,6 @@ const ModifyAndDelete = styled.div`
   }
 `;
 
-const Modify = styled.button``;
-const Delete = styled.button``;
-
-//제목과 작성자
 const BoardInfo = styled.section`
   width: 100%;
   display: flex;
@@ -132,7 +117,6 @@ const BoardCreateAt = styled.span`
   color: ${COLOR.font_comment};
 `;
 
-//이미지
 const ImageAndLike = styled.section`
   width: 100%;
   height: fit-content;
@@ -175,7 +159,6 @@ const LikeButton = styled.button`
   right: 15px;
 `;
 
-// 내용
 const Content = styled.section`
   width: 100%;
   min-height: 200px;
@@ -186,7 +169,6 @@ const Content = styled.section`
   border-bottom: 1px solid ${COLOR.main_blue};
 `;
 
-//댓글
 const CommentContainer = styled.section`
   width: 100%;
   height: fit-content;
@@ -211,22 +193,20 @@ const CommentList = styled.ul`
 `;
 
 const BoardDetail = () => {
-  const [posts, setPosts] = useState([]);
-  const [liked, setLiked] = useState();
+  const localMemberId = localStorage.getItem('memberId');
+  const { boardId } = useParams();
+  const navigate = useNavigate();
+
+  const [post, setPost] = useState({});
+  const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState([]);
   const [commentCount, setCommentCount] = useState([]);
 
-  const localMemberId = localStorage.getItem('memberId');
+  const createDate = post.createdAt ? post.createdAt.slice(0, 10) : '';
 
-  const { boardId } = useParams();
-
-  const navigate = useNavigate();
-
-  const createDate = posts.length > 0 ? posts[0].createdAt.slice(0, 10) : '';
-
-  const handleButtonClick = () => {
+  const handleButtonLike = () => {
     const params = {
-      'member-id': posts.memberId,
+      'member-id': post.memberId,
     };
     axios
       .post(`${API_URL}/boards/${boardId}/likes`, null, {
@@ -256,7 +236,7 @@ const BoardDetail = () => {
         },
       })
       .then((response) => {
-        setPosts(response.data);
+        setPost(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -272,7 +252,7 @@ const BoardDetail = () => {
       })
       .then((response) => {
         console.log(response.data);
-        setPosts(response.data);
+        setPost(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -319,36 +299,36 @@ const BoardDetail = () => {
         <Goback>
           <BackButton />
         </Goback>
-        {posts.memberId === localMemberId && (
+        {post.memberId === localMemberId && (
           <ModifyAndDelete>
-            <Modify onClick={handleButtonModify}>수정</Modify>
-            <Delete onClick={handleButtonDelete}>삭제</Delete>
+            <button onClick={handleButtonModify}>수정</button>
+            <button onClick={handleButtonDelete}>삭제</button>
           </ModifyAndDelete>
         )}
       </GobackAndModify>
       <BoardInfo>
-        <Title>{posts.title}</Title>
+        <Title>{post.title}</Title>
         <BoardCommentInfo>
-          <Writer>{posts.writer}</Writer>
+          <Writer>{post.writer}</Writer>
           <BoardCreateAt>{createDate}</BoardCreateAt>
         </BoardCommentInfo>
       </BoardInfo>
       <ImageAndLike>
         <Image>
-          <img src={posts.boardImageAddress} alt="사진" />
+          <img src={post.boardImageAddress} alt="사진" />
         </Image>
         <Like>
-          <LikeButton onClick={handleButtonClick}>
+          <LikeButton onClick={handleButtonLike}>
             {liked ? (
-              <FaRegHeart size={25} color={COLOR.main_blue} />
-            ) : (
               <FaHeart size={25} color={COLOR.main_blue} />
+            ) : (
+              <FaRegHeart size={25} color={COLOR.main_blue} />
             )}
           </LikeButton>
         </Like>
       </ImageAndLike>
-      {posts.workoutRecordShare && <Record />}
-      <Content>{posts.content}</Content>
+      {post.workoutRecordShare && <Record />}
+      <Content>{post.content}</Content>
       <CommentContainer>
         <CommentHeader>
           댓글<CommentCount>{commentCount}</CommentCount>

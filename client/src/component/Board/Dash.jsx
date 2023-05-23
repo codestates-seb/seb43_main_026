@@ -1,5 +1,7 @@
 //모듈
 import styled from 'styled-components';
+import { useRef, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 //공통 스타일
 import { COLOR } from '../../style/theme';
@@ -13,6 +15,7 @@ const Container = styled.ul`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  min-height: 700px;
   justify-content: center;
 `;
 
@@ -27,6 +30,7 @@ const Image = styled.div`
   height: 288px;
   overflow: hidden;
   border-radius: 5px;
+  background-color: ${COLOR.bg};
   @media screen and (max-width: 385px) {
     width: 320px;
     height: 200px;
@@ -102,31 +106,78 @@ const CommentIcon = styled(BiComment)`
   color: ${COLOR.main_dark_blue};
 `;
 
-const Dash = ({ posts }) => {
+const EndDetect = styled.div`
+  width: 100%;
+  height: 20px;
+`;
+
+const Dash = ({ posts, setCurrentPage, isDash }) => {
+  const [data, setData] = useState([]);
+  const observer = useRef(null);
+  const sentinelRef = useRef(null);
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5, // 타겟의 50%가 보이는 시점에서 감지
+    };
+
+    const handleObserver = (entries) => {
+      const target = entries[0];
+      if (target.isIntersecting && isDash) {
+        // isDash가 true일 때만 처리
+        setCurrentPage((prev) => prev + 1);
+      }
+    };
+
+    observer.current = new IntersectionObserver(handleObserver, options);
+
+    // 컴포넌트가 마운트될 때 신호 타겟을 관찰
+    if (observer.current && sentinelRef.current) {
+      observer.current.observe(sentinelRef.current);
+    }
+
+    // 컴포넌트가 언마운트될 때 옵저버를 정리
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
+  }, [isDash, setCurrentPage]);
+
+  useEffect(() => {
+    // posts 상태가 업데이트될 때마다 `data`를 초기화하고 새로운 데이터로 설정
+    setData(posts);
+  }, [posts]);
+
   return (
     <Container>
-      {posts.length
-        ? posts.map((post) => (
-            <DashBorad key={post.id}>
-              <Image>
-                <img src={post.image} alt="캘린더 이미지" />
-              </Image>
-              <Info>
-                <Title>{post.title}</Title>
-                <Reaction>
-                  <Like>
-                    <HeartIcon size={15} />
-                    <span>{post.likeCount}</span>
-                  </Like>
-                  <Comment>
-                    <CommentIcon size={15} />
-                    <span>{post.commentCount}</span>
-                  </Comment>
-                </Reaction>
-              </Info>
+      {data.length
+        ? data.map((post) => (
+            <DashBorad key={post.boardId}>
+              <Link to={`/board/${post.boardId}`}>
+                <Image>
+                  <img src={post.boardImageAddress} alt="캘린더 이미지" />
+                </Image>
+                <Info>
+                  <Title>{post.title}</Title>
+                  <Reaction>
+                    <Like>
+                      <HeartIcon size={15} />
+                      <span>{post.boardLikeCount}</span>
+                    </Like>
+                    <Comment>
+                      <CommentIcon size={15} />
+                      <span>{post.commentCount}</span>
+                    </Comment>
+                  </Reaction>
+                </Info>
+              </Link>
             </DashBorad>
           ))
         : null}
+      <EndDetect ref={sentinelRef} />
     </Container>
   );
 };

@@ -4,11 +4,10 @@ import { useState, useEffect } from 'react';
 
 // 컴포넌트
 import BackButton from '../../component/common/BackButton';
-import { WarningModal } from '../../component/common/WarningToast';
+import { WarningToast } from '../../component/common/WarningToast';
 import ImageUpload from '../../component/common/ImageUpload';
 import SearchPlace from '../../component/Calendar/SearchPlace';
 import TimeDropDown from '../../component/Calendar/TimeDropDown';
-import DonePostModal from '../../component/Calendar/CalendarAddComponent/DonePostModal';
 
 // 라이브러리
 import ReactDatePicker from 'react-datepicker';
@@ -288,12 +287,12 @@ const CalendarAdd = () => {
         />
       ) : null}
       {differentDate ? null : (
-        <WarningModal
+        <WarningToast
           setWarning={setDifferentDate}
           text={'해당 날짜에는 이미 등록을 하셨어요!'}
         />
       )}
-      {donePost ? <DonePostModal setDonePost={setDonePost} /> : null}
+      {donePost ? <WarningToast setDonePost={setDonePost} /> : null}
       <CalendarAddBodyContainer>
         <ImageUpload
           imageUrl={imageUrl}

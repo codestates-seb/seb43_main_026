@@ -1,8 +1,13 @@
 //모듈
 import styled from 'styled-components';
+import { useEffect } from 'react';
+// import axios from 'axios';
 
 //공통 스타일
 import { COLOR } from '../../../style/theme';
+
+//서버 url
+// const API_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.section`
   width: 100%;
@@ -10,6 +15,7 @@ const Container = styled.section`
   display: flex;
   align-items: center;
   font-weight: 600;
+  background-color: ${COLOR.bg};
   border-bottom: 1px solid ${COLOR.main_blue};
 
   section {
@@ -59,10 +65,16 @@ const Rate = styled.span`
   font-size: 17px;
 `;
 
-const Record = () => {
+const Record = ({ isShareCalendar }) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear(); // 현재 년도
   const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
+
+  useEffect(() => {
+    if (isShareCalendar) {
+      console.log(`yes`);
+    }
+  }, [isShareCalendar]);
 
   return (
     <Container>

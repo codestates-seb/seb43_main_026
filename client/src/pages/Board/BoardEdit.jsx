@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams, useNavigate } from 'react-router';
 
 //공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
@@ -15,21 +16,17 @@ import ImageUpload from '../../component/common/ImageUpload';
 import Record from '../../component/Board/BoardAdd/Record';
 
 //서버 url
-// const API_URL = process.env.REACT_APP_API_URL;
-const API_URL = `a`;
+const API_URL = process.env.REACT_APP_API_URL;
 
 //전체 컨테이너
 const Container = styled.main`
   margin: 0 auto;
-  margin-top: 30px;
   display: flex;
   max-width: 1200px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 0px;
-  width: 100%;
-  height: fit-content;
   width: 100%;
   height: fit-content;
 `;
@@ -73,7 +70,7 @@ const Category = styled.span`
 `;
 
 const UploadBtn = styled.button`
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
   color: ${COLOR.main_dark_blue};
   &:hover {
@@ -84,7 +81,7 @@ const UploadBtn = styled.button`
   }
 
   @media screen and (min-width: ${SIZE.mobileMax}) {
-    font-size: 20px;
+    font-size: 18px;
   }
 `;
 
@@ -196,9 +193,11 @@ const ErrorMessage = styled.span`
 `;
 
 const BoardEdit = () => {
-  const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [imageData, setImageData] = useState(new FormData());
+  const [posts, setPosts] = useState([]);
+  const [workoutRecordShare, setWorkoutRecordShare] = useState(
+    posts && posts.workoutRecordShare
+  );
+  const [editImageUrl, setEditImageUrl] = useState(null);
 
   const {
     register,
@@ -206,24 +205,40 @@ const BoardEdit = () => {
     formState: { errors },
   } = useForm();
 
-  const { isShareCalendar } = false;
+  const { boardId } = useParams();
 
-  const isCalendarShareChecked = isShareCalendar ? true : false;
+  const navigate = useNavigate();
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
 
+    const boardPatchDto = {
+      title: data.title,
+      content: data.content,
+      calendarShare: data.calendarShare,
+      workoutRecordShare: data.workoutRecordShare,
+    };
+
     try {
       const formData = new FormData();
-      formData.append('title', data.title);
-      formData.append('content', data.content);
-      formData.append('image', imageData.get('image'));
+      formData.append(
+        'board',
+        new Blob([JSON.stringify(boardPatchDto)], {
+          type: 'application/json',
+        })
+      );
+      formData.append('image', data.image);
 
-      console.log(formData);
-      await axios.post(`${API_URL}/boards`, formData);
+      await axios.patch(`${API_URL}/boards/${boardId}`, formData, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      navigate(`/board`);
     } catch (error) {
-      console.log(data);
       console.log(error);
+      console.log(data);
     }
   };
 
@@ -232,8 +247,20 @@ const BoardEdit = () => {
   };
 
   useEffect(() => {
-    console.log(imageData.get('image'));
-  }, [imageData]);
+    axios
+      .get(`${API_URL}/boards/${boardId}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        setPosts(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [boardId]);
 
   return (
     <Container>
@@ -241,7 +268,7 @@ const BoardEdit = () => {
         <Goback>
           <BackButton />
         </Goback>
-        {isShareCalendar && <Category>{`< 캘린더 자랑 >`}</Category>}
+        {posts.calendarShare && <Category>{`< 캘린더 자랑 >`}</Category>}
         <UploadBtn type="submit" onClick={handleSubmit(onSubmit)}>
           등록
         </UploadBtn>
@@ -251,12 +278,9 @@ const BoardEdit = () => {
         <Image>
           <LabelHidden htmlFor="image">사진</LabelHidden>
           <ImageUpload
-            id="image"
             register={register}
-            imageUrl={imageUrl}
-            setImageUrl={setImageUrl}
-            imageData={imageData}
-            setImageData={setImageData}
+            imageUrl={editImageUrl}
+            setImageUrl={setEditImageUrl}
           />
         </Image>
         <WorkOutContainer>
@@ -273,7 +297,7 @@ const BoardEdit = () => {
             </label>
           </WorkOut>
         </WorkOutContainer>
-        {workoutRecordShare && <Record />}
+        {workoutRecordShare && <Record isShareCalendar={posts.calendarShare} />}
         <TitleContainer>
           {errors.title && (
             <ErrorContainer>
@@ -285,6 +309,7 @@ const BoardEdit = () => {
             id="title"
             type="text"
             placeholder="제목"
+            defaultValue={posts.title}
             {...register('title', { required: true })}
           />
         </TitleContainer>
@@ -298,6 +323,7 @@ const BoardEdit = () => {
           <Memo
             id="content"
             placeholder="내용"
+            defaultValue={posts.content}
             {...register('content', { required: true })}
           />
         </Content>
@@ -308,7 +334,7 @@ const BoardEdit = () => {
             id="calendarShare"
             type="checkbox"
             {...register('calendarShare')}
-            checked={isCalendarShareChecked}
+            checked={posts.calendarShare}
           />
         </Calendar>
       </Form>

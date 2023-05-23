@@ -1,7 +1,6 @@
 //모듈
 import styled from 'styled-components';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 //공통 스타일
@@ -71,8 +70,7 @@ const Text = styled.div`
   font-size: 14px;
 `;
 
-const Comment = () => {
-  const [posts, setPosts] = useState([]);
+const Comment = ({ comment, setComment }) => {
   const { boardId } = useParams();
 
   const handleButtonModify = () => {};
@@ -85,33 +83,17 @@ const Comment = () => {
         },
       })
       .then((response) => {
-        setPosts(response.data);
+        setComment(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/boards/${boardId}/comments`, {
-        headers: {
-          Authorization: `${localStorage.getItem('accessToken')}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setPosts(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
   return (
     <>
-      {posts.length
-        ? posts.map((post) => (
+      {comment.length
+        ? comment.map((post) => (
             <Container key={post.commentId}>
               <CommentTitle>
                 <CommentInfo>

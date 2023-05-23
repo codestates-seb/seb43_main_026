@@ -213,6 +213,7 @@ const CommentList = styled.ul`
 const BoardDetail = () => {
   const [posts, setPosts] = useState([]);
   const [liked, setLiked] = useState();
+  const [comment, setComment] = useState([]);
 
   const { boardId } = useParams();
 
@@ -284,6 +285,23 @@ const BoardDetail = () => {
     }
   }, [posts]);
 
+  //댓글
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/boards/${boardId}/comments`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setComment(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
     <Container>
       <GobackAndModify>
@@ -322,9 +340,13 @@ const BoardDetail = () => {
         <CommentHeader>
           댓글<CommentCount>{posts.commentCount}</CommentCount>
         </CommentHeader>
-        <CommentForm boardId={boardId} />
+        <CommentForm boardId={boardId} setComment={setComment} />
         <CommentList>
-          <Comment boardId={boardId} />
+          <Comment
+            boardId={boardId}
+            comment={comment}
+            setComment={setComment}
+          />
         </CommentList>
       </CommentContainer>
     </Container>

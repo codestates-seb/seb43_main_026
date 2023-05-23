@@ -193,12 +193,11 @@ const ErrorMessage = styled.span`
 `;
 
 const BoardEdit = () => {
-  const [imageData, setImageData] = useState(new FormData());
   const [posts, setPosts] = useState([]);
   const [workoutRecordShare, setWorkoutRecordShare] = useState(
     posts && posts.workoutRecordShare
   );
-  const [imageUrl, setImageUrl] = useState(posts && posts.boardImageAddress);
+  const [editImageUrl, setEditImageUrl] = useState(null);
 
   const {
     register,
@@ -213,7 +212,7 @@ const BoardEdit = () => {
   const onSubmit = async (data, e) => {
     e.preventDefault();
 
-    const boardPostDto = {
+    const boardPatchDto = {
       title: data.title,
       content: data.content,
       calendarShare: data.calendarShare,
@@ -223,14 +222,14 @@ const BoardEdit = () => {
     try {
       const formData = new FormData();
       formData.append(
-        'boardPostDto',
-        new Blob([JSON.stringify(boardPostDto)], {
+        'board',
+        new Blob([JSON.stringify(boardPatchDto)], {
           type: 'application/json',
         })
       );
       formData.append('image', data.image);
 
-      await axios.patch(`${API_URL}/boards`, formData, {
+      await axios.patch(`${API_URL}/boards/${boardId}`, formData, {
         headers: {
           Authorization: `${localStorage.getItem('accessToken')}`,
           'Content-Type': 'multipart/form-data',
@@ -246,10 +245,6 @@ const BoardEdit = () => {
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
-
-  useEffect(() => {
-    console.log(imageData.get('image'));
-  }, [imageData]);
 
   useEffect(() => {
     axios
@@ -283,12 +278,9 @@ const BoardEdit = () => {
         <Image>
           <LabelHidden htmlFor="image">사진</LabelHidden>
           <ImageUpload
-            id="image"
             register={register}
-            imageUrl={imageUrl || posts.imageAddress}
-            setImageUrl={setImageUrl}
-            imageData={imageData}
-            setImageData={setImageData}
+            imageUrl={editImageUrl}
+            setImageUrl={setEditImageUrl}
           />
         </Image>
         <WorkOutContainer>

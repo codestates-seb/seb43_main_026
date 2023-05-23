@@ -50,7 +50,7 @@ const InputComment = styled.textarea`
   }
 `;
 
-function CommentForm() {
+function CommentForm({ setComment }) {
   const { register, handleSubmit, reset } = useForm();
   const { boardId } = useParams();
 
@@ -71,6 +71,21 @@ function CommentForm() {
           },
         }
       );
+
+      axios
+        .get(`${API_URL}/boards/${boardId}/comments`, {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          setComment(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
       reset();
     } catch (error) {
       console.log(error);

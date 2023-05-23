@@ -216,6 +216,8 @@ const BoardDetail = () => {
   const [comment, setComment] = useState([]);
   const [commentCount, setCommentCount] = useState([]);
 
+  const localMemberId = localStorage.getItem('memberId');
+
   const { boardId } = useParams();
 
   const navigate = useNavigate();
@@ -277,14 +279,22 @@ const BoardDetail = () => {
       });
   }, []);
 
+  //좋아요
   useEffect(() => {
-    if (posts.length > 0) {
-      const localMemberId = localStorage.getItem('memberId');
-      const likedByCurrentUser =
-        posts.boardLikeId?.includes(localMemberId) || false;
-      setLiked(likedByCurrentUser);
-    }
-  }, [posts]);
+    axios
+      .get(`${API_URL}/boards/${boardId}/isliked`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setLiked(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   //댓글
   useEffect(() => {
@@ -309,10 +319,12 @@ const BoardDetail = () => {
         <Goback>
           <BackButton />
         </Goback>
-        <ModifyAndDelete>
-          <Modify onClick={handleButtonModify}>수정</Modify>
-          <Delete onClick={handleButtonDelete}>삭제</Delete>
-        </ModifyAndDelete>
+        {posts.memberId === localMemberId && (
+          <ModifyAndDelete>
+            <Modify onClick={handleButtonModify}>수정</Modify>
+            <Delete onClick={handleButtonDelete}>삭제</Delete>
+          </ModifyAndDelete>
+        )}
       </GobackAndModify>
       <BoardInfo>
         <Title>{posts.title}</Title>
@@ -328,9 +340,9 @@ const BoardDetail = () => {
         <Like>
           <LikeButton onClick={handleButtonClick}>
             {liked ? (
-              <FaHeart size={25} color={COLOR.main_blue} />
-            ) : (
               <FaRegHeart size={25} color={COLOR.main_blue} />
+            ) : (
+              <FaHeart size={25} color={COLOR.main_blue} />
             )}
           </LikeButton>
         </Like>
@@ -352,6 +364,7 @@ const BoardDetail = () => {
             comment={comment}
             setComment={setComment}
             setCommentCount={setCommentCount}
+            localMemberId={localMemberId}
           />
         </CommentList>
       </CommentContainer>

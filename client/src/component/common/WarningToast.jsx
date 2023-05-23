@@ -8,6 +8,8 @@ const WarningModalContainer = styled.div`
   width: 260px;
   height: 70px;
   top: 80px;
+  left: 50%;
+  transform: translate(-50%, 0%);
   text-align: center;
   display: flex;
   justify-content: center;
@@ -23,8 +25,17 @@ const WarningModalContainer = styled.div`
   }
 `;
 
-export const WarningModal = ({ setWarning, text }) => {
+export const WarningToast = ({ setWarning, text }) => {
+  if (typeof setWarning !== 'function') {
+    return (
+      <WarningModalContainer>
+        <p>{text}</p>
+      </WarningModalContainer>
+    );
+  }
+
   console.log(text);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setWarning(true);
@@ -34,9 +45,5 @@ export const WarningModal = ({ setWarning, text }) => {
     };
   }, [setWarning]);
 
-  return (
-    <WarningModalContainer>
-      <p>{text}</p>
-    </WarningModalContainer>
-  );
+  return null;
 };

@@ -2,11 +2,11 @@
 import styled from 'styled-components';
 import { useForm, Controller } from 'react-hook-form';
 
-import LogoImg from '../../assets/image/logo2.png';
-import { COLOR } from '../../style/theme';
+import SignupTitle from '../../assets/image/signup_title.png';
+import { COLOR, SIZE } from '../../style/theme';
 
 // 컴포넌트
-import GoogleLogin from '../../component/oAuth/GoogleLogin';
+import GoogleLogin from '../../component/OAuth/GoogleLogin';
 import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
 
@@ -14,30 +14,38 @@ import { userAPI } from '../../assets/api';
 import { useNavigate } from 'react-router';
 
 const Container = styled.div`
-  width: 100vw;
-  height: 100%;
-  padding-top: 50px;
+  width: 100%;
+  height: 80vh;
   background-color: ${COLOR.bg_light_blue};
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media screen and (max-width: ${SIZE.mobileMax}) {
+    height: 100vh;
+  }
 `;
 
-const Logo = styled.img`
-  width: 10rem;
+const Title = styled.img`
+  width: 130px;
+  margin-top: 3rem;
 `;
-
-const Title = styled.h1``;
 
 const Form = styled.form`
-  margin-top: 4rem;
-  width: 100%;
-  height: 100%;
+  margin-top: 2.5rem;
+  width: 50%;
+  height: inherit;
+  overflow-y: hidden;
   border-top-right-radius: 40px;
   border-top-left-radius: 40px;
   background-color: white;
   border: 1px solid ${COLOR.main_blue};
-  padding: 6rem 2rem;
+  border-bottom: none;
+  padding: 5rem 2rem;
+  box-shadow: rgba(133, 182, 255, 0.2) 0px 8px 24px;
+
+  @media screen and (max-width: ${SIZE.mobileMax}) {
+    width: 100vw;
+  }
 `;
 
 const OAuthContainer = styled.div`
@@ -51,7 +59,7 @@ const OAuthContainer = styled.div`
   }
 `;
 
-const SignUp = () => {
+const SignUp = ({ setIsSignupSuccess }) => {
   const { handleSubmit, control, getValues } = useForm();
   const navigate = useNavigate();
 
@@ -65,16 +73,18 @@ const SignUp = () => {
   const emailOptions = {
     required: '이메일을 입력해주세요.',
     pattern: {
-      value: /@/,
-      message: '@를 포함한 주소를 적어주세요.',
+      value:
+        /^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
+      message: '@를 포함한 이메일 주소를 적어주세요.',
     },
   };
   const passwordOptions = {
     required: '비밀번호를 입력해주세요.',
     pattern: {
-      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      value:
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
       message:
-        '비밀번호는 8자 이상으로 하나 이상의 숫자와 문자,특수문자를 포함해주세요.',
+        '비밀번호는 8자 이상으로 하나 이상의 대문자, 소문자, 숫자, 특수문자를 포함해주세요.',
     },
   };
   const passwordCheckOptions = {
@@ -89,15 +99,16 @@ const SignUp = () => {
   };
 
   // 회원가입 완료 시
-  const onSubmit = (data) => {
-    console.log(data);
-    userAPI.signup(data);
-    console.log('회원가입 성공');
-    navigate('/login');
-    // axios
-    //   .post(`${SERVER_URL}/members/signup`, { data })
-    //   .then((res) => console.log(res))
-    //   .catch((error) => console.log(error));
+  const onSubmit = async (data) => {
+    const response = await userAPI.signup(data);
+    if (response.status === 409) {
+      // 회원가입 실패 에러 메시지
+      console.log(response.data.message);
+    } else {
+      console.log('회원가입 성공');
+      setIsSignupSuccess(true);
+      navigate('/login');
+    }
   };
 
   // 에러 발생 시
@@ -105,8 +116,7 @@ const SignUp = () => {
 
   return (
     <Container>
-      <Logo src={LogoImg} alt="logo" />
-      <Title>회원가입</Title>
+      <Title src={SignupTitle} alt="타이틀" />
       <Form onSubmit={handleSubmit(onSubmit, onError)}>
         <Controller
           name={'email'}

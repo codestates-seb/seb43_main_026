@@ -13,7 +13,7 @@ const Label = styled.label`
 `;
 
 const InputComponent = styled.input`
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   height: 4.5vh;
   border-radius: 10px;
   border: 1px solid ${COLOR.input_border};
@@ -23,6 +23,7 @@ const InputComponent = styled.input`
 const AlertMessage = styled.span`
   color: red;
   font-size: 0.9rem;
+  margin-bottom: 0.8rem;
 `;
 
 const Input = ({

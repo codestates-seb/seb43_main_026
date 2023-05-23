@@ -340,9 +340,9 @@ const BoardDetail = () => {
         <Like>
           <LikeButton onClick={handleButtonClick}>
             {liked ? (
-              <FaRegHeart size={25} color={COLOR.main_blue} />
-            ) : (
               <FaHeart size={25} color={COLOR.main_blue} />
+            ) : (
+              <FaRegHeart size={25} color={COLOR.main_blue} />
             )}
           </LikeButton>
         </Like>

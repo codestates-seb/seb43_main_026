@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 
 // 컴포넌트
 import BackButton from '../../component/common/BackButton';
-import { WarningToast } from '../../component/common/WarningToast';
+import { WarningModal } from '../../component/common/WarningToast';
 import ImageUpload from '../../component/common/ImageUpload';
 import SearchPlace from '../../component/Calendar/SearchPlace';
 import TimeDropDown from '../../component/Calendar/TimeDropDown';
+import DonePostModal from '../../component/Calendar/CalendarAddComponent/DonePostModal';
 
 // 라이브러리
 import ReactDatePicker from 'react-datepicker';
@@ -178,10 +179,12 @@ const CalendarAdd = () => {
   // 경고창
   const [imageAvailable, setImageAvailavble] = useState(true);
   const [timeAvailable, setTimeAvailable] = useState(true);
+  const [differentDate, setDifferentDate] = useState(true);
+  const [donePost, setDonePost] = useState(false);
 
-  useEffect(() => {
-    console.log(imageData.get('image'));
-  }, [imageData]);
+  // useEffect(() => {
+  //   console.log(imageData.get('image'));
+  // }, [imageData]);
 
   const swimTimeProps = {
     startTime,
@@ -207,12 +210,10 @@ const CalendarAdd = () => {
   useEffect(() => {
     const durationInMinutes = calculateDuration();
     setDurationTime(durationInMinutes);
-    console.log(durationTime);
   }, [startTime, endTime]);
   const formattedDate = format(selectedDate, 'yyyy-MM-dd');
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async () => {
     if (!imageUrl) {
       setImageAvailavble(false);
       return;
@@ -225,29 +226,34 @@ const CalendarAdd = () => {
       startTime: startTime,
       endTime: endTime,
       durationTime: durationTime,
-      location: location,
+      location: place,
       memo: memo,
     };
+    try {
+      const formData = new FormData();
+      const json = JSON.stringify(scheduleData);
+      const blob = new Blob([json], { type: 'application/json' });
+      formData.append('schedule', blob);
+      formData.append('schedule', JSON.stringify(scheduleData));
+      formData.append('image', imageData.get('image'));
 
-    const formData = new FormData();
-    formData.append('image', imageData.get('image'));
-    // formData.append('schedule', JSON.stringify(scheduleData));
-    const blob = new Blob([JSON.stringify(scheduleData)], {
-      type: 'application/json',
-    });
-    formData.append('data', blob);
-    console.log(scheduleData, imageData.get('image'));
-    const postCalendar = await axios({
-      method: 'POST',
-      url: `${process.env.REACT_APP_API_URL}/schedules`,
-      mode: 'cors',
-      headers: {
-        Authorization: localStorage.getItem('accessToken'),
-        'Content-Type': 'multipart/form-data',
-      },
-      data: formData,
-    });
-    console.log(postCalendar);
+      await axios({
+        method: 'POST',
+        url: `${process.env.REACT_APP_API_URL}/schedules`,
+        mode: 'cors',
+        headers: {
+          Authorization: localStorage.getItem('accessToken'),
+          'Content-Type': 'multipart/form-data',
+        },
+        data: formData,
+      });
+      setDonePost(!donePost);
+    } catch (err) {
+      console.log(err.response.data.message);
+      if (err.response.status === 409) {
+        setDifferentDate(false);
+      }
+    }
   };
 
   // 장소 등록
@@ -261,20 +267,11 @@ const CalendarAdd = () => {
     setMemo(e.target.value);
   };
 
-  // 저장
-  // const navigate = useNavigate();
-  const handleSubmit = () => {
-    onSubmit();
-    // navigate('/');
-  };
-  console.log(durationTime);
-  // const token = localStorage.getItem('accessToken');
-  // console.log(token);
   return (
     <CalendarAddContainer>
       <CalendarAddHeaderContainer>
         <BackButton />
-        <CalendarSaveButtonContainer type="submit" onClick={handleSubmit}>
+        <CalendarSaveButtonContainer type="submit" onClick={() => onSubmit()}>
           저 장
         </CalendarSaveButtonContainer>
       </CalendarAddHeaderContainer>
@@ -290,6 +287,13 @@ const CalendarAdd = () => {
           text={'운동 시간을 입력해 주세요.'}
         />
       ) : null}
+      {differentDate ? null : (
+        <WarningModal
+          setWarning={setDifferentDate}
+          text={'해당 날짜에는 이미 등록을 하셨어요!'}
+        />
+      )}
+      {donePost ? <DonePostModal setDonePost={setDonePost} /> : null}
       <CalendarAddBodyContainer>
         <ImageUpload
           imageUrl={imageUrl}

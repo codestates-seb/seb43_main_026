@@ -63,8 +63,8 @@ function App() {
             }
           />
           <Route path="/calendar/add" element={<CalendarAdd />} />
-          <Route path="/calendar/:calendarid" element={<CalendarDetail />} />
-          <Route path="/calendar/:calendarid/edit" element={<CalendarEdit />} />
+          <Route path="/calendar/:scheduleid" element={<CalendarDetail />} />
+          <Route path="/calendar/:scheduleid/edit" element={<CalendarEdit />} />
 
           <Route path="/board" element={<Board />} />
           <Route path="/board/add" element={<BoardAdd />} />

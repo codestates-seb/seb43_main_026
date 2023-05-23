@@ -155,4 +155,12 @@ public class BoardController {
         return new ResponseEntity<>(boardCount, HttpStatus.OK);
     }
 
+    //하나의 게시글에 좋아요 여부 확인 요청
+    @GetMapping("/{boardId}/isliked")
+    public ResponseEntity<Boolean> isLikedByMember(@PathVariable Long boardId){
+        boolean isLiked = boardService.isLikedByMember(boardId);
+        return new ResponseEntity<>(isLiked, HttpStatus.OK);
+    }
+
+
 }

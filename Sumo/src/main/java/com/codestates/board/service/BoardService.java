@@ -310,6 +310,15 @@ public class BoardService {
     }
 
 
+    public boolean isLikedByMember(Long boardId) {
+        Member currentMember = getCurrentMember();
+        Board verifiedBoard = findVerifiedBoard(boardId);
+        return boardLikeRepository.findByBoardAndMember(verifiedBoard, currentMember)
+                .map(boardLike -> boardLike.getBoardLikeStatus() == BoardLike.BoardLikeStatus.LIKE)
+                .orElse(false);
+    }
+
+
 
 
 

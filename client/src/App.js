@@ -56,6 +56,7 @@ function App() {
             path="/calendar"
             element={
               <MyCalendar
+                loginUser={loginUser}
                 isLoginSuccess={isLoginSuccess}
                 setIsLoginSuccess={setIsLoginSuccess}
               />
@@ -72,7 +73,12 @@ function App() {
 
           <Route
             path="/signup"
-            element={<SignUp setIsSignupSuccess={setIsSignupSuccess} />}
+            element={
+              <SignUp
+                loginUser={loginUser}
+                setIsSignupSuccess={setIsSignupSuccess}
+              />
+            }
           />
           <Route
             path="/login"

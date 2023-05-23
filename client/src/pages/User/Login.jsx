@@ -3,17 +3,17 @@ import styled from 'styled-components';
 // import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { useEffect } from 'react';
 
 import LoginTitle from '../../assets/image/login_title.png';
 import { COLOR, SIZE } from '../../style/theme';
+import { userAPI } from '../../assets/api';
 
 // 컴포넌트
-import GoogleLogin from '../../component/oAuth/GoogleLogin';
+import GoogleLogin from '../../component/OAuth/GoogleLogin';
 import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
-
 import { WarningToast } from '../../component/common/WarningToast';
-import { userAPI } from '../../assets/api';
 
 const Container = styled.div`
   width: 100%;
@@ -70,8 +70,6 @@ const Login = ({
   const { handleSubmit, control } = useForm();
   const navigate = useNavigate();
 
-  loginUser;
-
   const emailOptions = {
     required: '이메일을 입력해주세요.',
     pattern: {
@@ -98,13 +96,10 @@ const Login = ({
     } else if (response.status === 500) {
       // 서버 에러 메세지 출력
     } else {
-      const memberId = localStorage.getItem('memberId');
-      if (memberId) {
-        const user = await userAPI.isLogin(memberId);
-        setLoginUser(user);
-        setIsLoginSuccess(true);
-        navigate('/calendar');
-      }
+      const user = await userAPI.isLogin();
+      setLoginUser(user);
+      setIsLoginSuccess(true);
+      navigate('/calendar');
     }
   };
 
@@ -112,6 +107,13 @@ const Login = ({
   const onFormError = (error) => {
     console.log(error, '에러');
   };
+
+  useEffect(() => {
+    if (loginUser) {
+      navigate('/calendar');
+    }
+  }, [loginUser]);
+
   return (
     <>
       {isSignupSuccess && <WarningToast text={'회원가입에 성공하였습니다.'} />}

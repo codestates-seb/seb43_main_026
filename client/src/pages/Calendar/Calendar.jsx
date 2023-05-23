@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import CalendarComponent from '../../component/Calendar/CalendarComponent';
 import { SIZE, COLOR } from '../../style/theme';
 import { WarningToast } from '../../component/common/WarningToast';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 const MyCalendarContainer = styled.div`
   background-color: #fff;
@@ -24,7 +26,14 @@ const MyCalendarContainer = styled.div`
   }
 `;
 
-const MyCalendar = ({ isLoginSuccess, setIsLoginSuccess }) => {
+const MyCalendar = ({ loginUser, isLoginSuccess, setIsLoginSuccess }) => {
+  const navigate = useNavigate();
+  console.log(loginUser);
+  useEffect(() => {
+    if (!loginUser) {
+      navigate('/login');
+    }
+  }, []);
   return (
     <>
       {isLoginSuccess && (

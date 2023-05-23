@@ -6,7 +6,7 @@ import SignupTitle from '../../assets/image/signup_title.png';
 import { COLOR, SIZE } from '../../style/theme';
 
 // 컴포넌트
-import GoogleLogin from '../../component/oAuth/GoogleLogin';
+import GoogleLogin from '../../component/OAuth/GoogleLogin';
 import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
 

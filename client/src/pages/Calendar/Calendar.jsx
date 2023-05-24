@@ -4,7 +4,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
 import html2canvas from 'html2canvas';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 //아이콘
@@ -212,6 +212,16 @@ const CalendarContainer = styled.div`
   }
 `;
 
+const calendarStyle = {
+  backgroundSize: 'contain',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center',
+  backgroundColor: '#fff',
+  width: '100%',
+  height: '100%',
+  padding: '0px',
+};
+
 const MyCalendarContainer = styled.div`
   background-color: #fff;
   height: 100%;
@@ -234,7 +244,13 @@ const MyCalendarContainer = styled.div`
 `;
 
 const Toolbar = (props) => {
-  const { date, setCalendarMonth, setCalendarYear, totalDuration } = props;
+  const {
+    date,
+    setCalendarYear,
+    setCalendarMonth,
+    totalDuration,
+    attendanceRate,
+  } = props;
 
   useEffect(() => {
     setCalendarMonth(date.getMonth() + 1);
@@ -265,7 +281,7 @@ const Toolbar = (props) => {
       <CalendarInfoContainer>
         <p>
           <MdOutlineCalendarMonth size={16} />
-          출석률:<span>80%</span>
+          출석률:<span>{attendanceRate}</span>
         </p>
         <p>
           <AiOutlineClockCircle size={16} />총 운동 :
@@ -277,45 +293,44 @@ const Toolbar = (props) => {
 };
 
 const MyCalendar = ({ loginUser }) => {
+  const nav = useNavigate();
   const [calendarYear, setCalendarYear] = useState('');
   const [calendarMonth, setCalendarMonth] = useState('');
   const [calendarData, setCalendarData] = useState([]);
   const [selectedEventId, setSelectedEventId] = useState('');
 
-  const navigate = useNavigate();
-
-  console.log(calendarYear, calendarMonth);
-  useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_API_URL}/schedules?year=${calendarYear}&month=${calendarMonth}`,
-        {
-          headers: {
-            Authorization: `${localStorage.getItem('accessToken')}`,
-          },
-        }
-      )
-      .then((res) => {
-        setCalendarData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [calendarYear, calendarMonth]);
-
-  useEffect(() => {
-    console.log(calendarData);
-  }, [calendarData]);
-
-  // 총 운동 시간
   const totalDuration = calendarData.reduce((total, el) => {
     return total + el.durationTime;
   }, 0);
-
   const totalDurationString = totalDuration.toString();
   console.log(totalDurationString);
+  const calculateAttendanceRate = () => {
+    const totalDaysInMonth = new Date(calendarYear, calendarMonth, 0).getDate();
+    const totalEvents = calendarData.length;
 
-  const nav = useNavigate();
+    if (totalDaysInMonth === 0) {
+      return 0;
+    }
+
+    const attendanceRate = (totalEvents / totalDaysInMonth) * 100;
+    return attendanceRate.toFixed(0) + '%';
+  };
+
+  const attendanceRate = calculateAttendanceRate();
+
+  const events = useMemo(
+    () =>
+      calendarData.map((schedule) => ({
+        title: '',
+        start: new Date(schedule.date),
+        end: new Date(schedule.date),
+        url: schedule.imageAddress,
+        id: schedule.scheduleId,
+        tile: schedule.scheduleId,
+      })),
+    [calendarData]
+  );
+
   const navToDetail = () => {
     if (selectedEventId) {
       nav(`/calendar/${selectedEventId}`);
@@ -335,15 +350,6 @@ const MyCalendar = ({ loginUser }) => {
     }
   };
 
-  // 슬롯을 두 번 클릭해야 페이지 이동이 됨 -> useEffect로 해결
-  useEffect(() => {
-    navToDetail();
-    if (!loginUser) {
-      navigate('/login');
-    }
-  }, [selectedEventId]);
-
-  //캡쳐
   const onCapture = async () => {
     console.log('capture');
     const calMainElement = document.getElementById('calMain');
@@ -366,7 +372,6 @@ const MyCalendar = ({ loginUser }) => {
         useCORS: true,
         allowTaint: true,
       });
-
       // 캡처된 이미지 처리
       document.body.appendChild(canvas);
       onSave(canvas.toDataURL(), 'calendar_capture.png');
@@ -385,6 +390,35 @@ const MyCalendar = ({ loginUser }) => {
     document.body.removeChild(link);
   };
 
+  useEffect(() => {
+    axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/schedules?year=${calendarYear}&month=${calendarMonth}`,
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        }
+      )
+      .then((res) => {
+        setCalendarData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [calendarYear, calendarMonth]);
+
+  useEffect(() => {
+    console.log(calendarData);
+  }, [calendarData]);
+
+  useEffect(() => {
+    navToDetail();
+    if (!loginUser) {
+      nav('/login');
+    }
+  }, [selectedEventId]);
+
   return (
     <MyCalendarContainer>
       <CalendarContainer>
@@ -392,14 +426,7 @@ const MyCalendar = ({ loginUser }) => {
           <Calendar
             localizer={localizer}
             views={['month']}
-            events={calendarData.map((schedule) => ({
-              title: '',
-              start: new Date(schedule.date),
-              end: new Date(schedule.date),
-              url: schedule.imageAddress,
-              id: schedule.scheduleId,
-              tile: schedule.scheduleId,
-            }))}
+            events={events}
             components={{
               toolbar: (props) => (
                 <Toolbar
@@ -407,19 +434,14 @@ const MyCalendar = ({ loginUser }) => {
                   setCalendarMonth={setCalendarMonth}
                   setCalendarYear={setCalendarYear}
                   totalDuration={totalDuration}
+                  attendanceRate={attendanceRate}
                 />
               ),
             }}
             eventPropGetter={(event) => ({
               style: {
-                backgroundImage: `url(${event.url})`, // 배경 이미지로 설정
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-                backgroundColor: '#fff',
-                width: '100%',
-                height: '100%',
-                padding: '0px',
+                ...calendarStyle,
+                backgroundImage: `url(${event.url})`,
               },
             })}
             onSelectEvent={(event) => handleSelectEvent(event)}

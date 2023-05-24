@@ -202,6 +202,16 @@ const BoardDetail = () => {
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
+  const [totalWorkoutTime, setTotalWorkoutTime] = useState(0);
+  const [todayWorkoutTime, setTodayWorkoutTime] = useState(0);
+  const [workoutLocation, setWorkoutLocation] = useState('');
+  const [attendance, setAttendance] = useState(0);
+
+  //eslint 오류
+  console.log(totalWorkoutTime);
+  console.log(todayWorkoutTime);
+  console.log(workoutLocation);
+  console.log(attendance);
 
   const createDate = post.createdAt ? post.createdAt.slice(0, 10) : '';
 
@@ -327,7 +337,15 @@ const BoardDetail = () => {
           </LikeButton>
         </Like>
       </ImageAndLike>
-      {post.workoutRecordShare && <Record post={post} />}
+      {post.workoutRecordShare && (
+        <Record
+          post={post}
+          setTotalWorkoutTime={setTotalWorkoutTime}
+          setTodayWorkoutTime={setTodayWorkoutTime}
+          setWorkoutLocation={setWorkoutLocation}
+          setAttendance={setAttendance}
+        />
+      )}
       <Content>{post.content}</Content>
       <CommentContainer>
         <CommentHeader>

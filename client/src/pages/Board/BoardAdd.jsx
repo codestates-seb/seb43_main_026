@@ -210,7 +210,7 @@ const BoardAdd = () => {
   const [totalWorkoutTime, setTotalWorkoutTime] = useState(0);
   const [todayWorkoutTime, setTodayWorkoutTime] = useState(0);
   const [workoutLocation, setWorkoutLocation] = useState('');
-  const [attendanceRate, setAttendanceRate] = useState(0);
+  const [attendance, setAttendance] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
   const [imageData, setImageData] = useState(new FormData());
 
@@ -227,7 +227,7 @@ const BoardAdd = () => {
     if (isShareCalendar) {
       boardPostDto = {
         ...boardPostDto,
-        attendanceRate: attendanceRate,
+        attendanceRate: attendance,
         totalWorkoutTime: totalWorkoutTime,
       };
     } else {
@@ -311,7 +311,7 @@ const BoardAdd = () => {
             setTotalWorkoutTime={setTotalWorkoutTime}
             setTodayWorkoutTime={setTodayWorkoutTime}
             setWorkoutLocation={setWorkoutLocation}
-            setAttendanceRate={setAttendanceRate}
+            setAttendance={setAttendance}
           />
         )}
         <TitleContainer>

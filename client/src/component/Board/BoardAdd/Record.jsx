@@ -67,7 +67,7 @@ const Record = ({
   setTotalWorkoutTime,
   setTodayWorkoutTime,
   setWorkoutLocation,
-  setAttendanceRate,
+  setAttendance,
 }) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear(); // 현재 년도
@@ -85,7 +85,7 @@ const Record = ({
   // 이번 달의 출석률 계산
   const totalDays = getTotalDaysInMonth(currentYear, currentMonth);
   const workoutRate = Math.round(calendarData.length / totalDays);
-  setAttendanceRate(workoutRate);
+  setAttendance(workoutRate);
 
   // 총 운동 시간
   const totalDuration = calendarData.reduce((total, el) => {
@@ -101,7 +101,7 @@ const Record = ({
     '0'
   )}-${String(currentDate.getDate()).padStart(2, '0')}`;
   setTodayWorkoutTime(
-    todayData.length > 0 ? `${todayData[0].durationTime} 시간` : '기록 없음'
+    todayData.length > 0 ? `${todayData[0].durationTime} 시간` : 0
   );
   setWorkoutLocation(
     todayData.length > 0 ? `${todayData[0].location}` : '기록 없음'
@@ -149,9 +149,7 @@ const Record = ({
       {isShareCalendar ? (
         <TotalTime>
           <Name>총 운동 시간</Name>
-          <Rate>
-            {post ? post.totalWorkoutTime : { totalDurationString }} 시간
-          </Rate>
+          <Rate>{post ? post.totalWorkoutTime : totalDurationString} 시간</Rate>
         </TotalTime>
       ) : (
         <TotalTime>

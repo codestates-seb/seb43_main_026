@@ -186,6 +186,15 @@ const BoardEdit = () => {
     post && post.workoutRecordShare
   );
   const [imageUrl, setImageUrl] = useState(null);
+  const [totalWorkoutTime, setTotalWorkoutTime] = useState(0);
+  const [todayWorkoutTime, setTodayWorkoutTime] = useState(0);
+  const [workoutLocation, setWorkoutLocation] = useState('');
+  const [attendance, setAttendance] = useState(0);
+
+  console.log(totalWorkoutTime);
+  console.log(todayWorkoutTime);
+  console.log(workoutLocation);
+  console.log(attendance);
 
   const {
     register,
@@ -211,11 +220,15 @@ const BoardEdit = () => {
   const onSubmit = async (data, e) => {
     e.preventDefault();
 
-    const boardPatchDto = {
+    let boardPatchDto = {
       title: data.title,
       content: data.content,
       calendarShare: data.calendarShare,
       workoutRecordShare: data.workoutRecordShare,
+      attendanceRate: attendance,
+      totalWorkoutTime: totalWorkoutTime,
+      todayWorkoutTime: todayWorkoutTime,
+      workoutLocation: workoutLocation,
     };
 
     try {
@@ -306,7 +319,14 @@ const BoardEdit = () => {
           </WorkOut>
         </WorkOutContainer>
         {workoutRecordShare && (
-          <Record isShareCalendar={post.calendarShare} post={post} />
+          <Record
+            isShareCalendar={post.calendarShare}
+            post={post}
+            setTotalWorkoutTime={setTotalWorkoutTime}
+            setTodayWorkoutTime={setTodayWorkoutTime}
+            setWorkoutLocation={setWorkoutLocation}
+            setAttendance={setAttendance}
+          />
         )}
         <TitleContainer>
           {errors.title && (

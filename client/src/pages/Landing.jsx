@@ -246,16 +246,27 @@ const SecondTitle = styled.div`
 // const ExampleImage = styled.img``;
 
 const ThirdContainer = styled.div`
-  position: relative;
   width: 100%;
   height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #fff0fd;
+
+  @media screen and (max-width: ${SIZE.tablet}) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
   img {
     width: 420px;
     margin-right: 5rem;
+
+    @media screen and (max-width: ${SIZE.tablet}) {
+      margin-right: 0;
+      position: absolute;
+      margin-top: 50px;
+    }
   }
 `;
 
@@ -263,6 +274,10 @@ const ThirdTextContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  @media screen and (max-width: ${SIZE.tablet}) {
+    justify-content: center;
+    align-items: center;
+  }
   h2 {
     color: #6a2c9b;
     font-size: 50px;
@@ -272,6 +287,10 @@ const ThirdTextContainer = styled.div`
     letter-spacing: 3px;
     background-color: rgba(203, 140, 255, 0.4);
     padding: 0.5rem 1rem;
+
+    @media screen and (max-width: ${SIZE.tablet}) {
+      margin-bottom: 280px;
+    }
   }
   p {
     margin: 0.5rem 0;

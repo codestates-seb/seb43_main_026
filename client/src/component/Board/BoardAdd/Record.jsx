@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import { useEffect } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import { COLOR } from '../../../style/theme';
 
-//서버 url
-// const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.section`
   width: 100%;
@@ -68,9 +67,18 @@ const Record = ({ isShareCalendar }) => {
   const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
 
   useEffect(() => {
-    if (isShareCalendar) {
-      console.log(`yes`);
-    }
+    axios
+      .get(`${API_URL}/schedules?year=${currentYear}&month=${currentMonth}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [isShareCalendar]);
 
   return (

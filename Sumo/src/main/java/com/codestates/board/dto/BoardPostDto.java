@@ -24,5 +24,13 @@ public class BoardPostDto {
 
     private MultipartFile image;
 
+    private float totalWorkoutTime;
+
+    private float todayWorkoutTime;
+
+    private String workoutLocation;
+
+    private int attendanceRate;
+
 
 }

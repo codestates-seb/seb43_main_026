@@ -38,5 +38,13 @@ public class BoardResponseDto {
 
     private Boolean workoutRecordShare;
 
+    private float totalWorkoutTime;
+
+    private float todayWorkoutTime;
+
+    private String workoutLocation;
+
+    private int attendanceRate;
+
 
 }

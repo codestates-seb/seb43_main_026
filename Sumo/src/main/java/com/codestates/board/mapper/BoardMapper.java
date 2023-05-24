@@ -25,6 +25,10 @@ public interface BoardMapper {
         board.setContent(boardPostDto.getContent());
         board.setWorkoutRecordShare(boardPostDto.getWorkoutRecordShare());
         board.setCalendarShare(boardPostDto.getCalendarShare());
+        board.setTotalWorkoutTime(boardPostDto.getTotalWorkoutTime());
+        board.setTodayWorkoutTime(boardPostDto.getTodayWorkoutTime());
+        board.setWorkoutLocation(boardPostDto.getWorkoutLocation());
+        board.setAttendanceRate(boardPostDto.getAttendanceRate());
         return board;
     }
 
@@ -37,6 +41,10 @@ public interface BoardMapper {
         board.setContent(boardPatchDto.getContent());
         board.setWorkoutRecordShare(boardPatchDto.getWorkoutRecordShare());
         board.setCalendarShare(boardPatchDto.getCalendarShare());
+        board.setTotalWorkoutTime(boardPatchDto.getTotalWorkoutTime());
+        board.setTodayWorkoutTime(boardPatchDto.getTodayWorkoutTime());
+        board.setWorkoutLocation(boardPatchDto.getWorkoutLocation());
+        board.setAttendanceRate(boardPatchDto.getAttendanceRate());
         return board;
     }
 
@@ -56,6 +64,10 @@ public interface BoardMapper {
         boardResponseDto.setWorkoutRecordShare(board.getWorkoutRecordShare());
         boardResponseDto.setCommentCount(board.getCommentCount());
         boardResponseDto.setMemberId(board.getMember().getMemberId());
+        boardResponseDto.setTotalWorkoutTime(board.getTotalWorkoutTime());
+        boardResponseDto.setTodayWorkoutTime(board.getTodayWorkoutTime());
+        boardResponseDto.setWorkoutLocation(board.getWorkoutLocation());
+        boardResponseDto.setAttendanceRate(board.getAttendanceRate());
 
         return boardResponseDto;
     }

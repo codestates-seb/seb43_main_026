@@ -60,31 +60,6 @@ const IntroduceContainer = styled.div`
   font-weight: 600;
   animation: slide-up 1s linear 0s 1;
 
-  @keyframes slide-up {
-    0% {
-      bottom: -100px;
-      opacity: 0;
-    }
-    100% {
-      bottom: 150px;
-      opacity: 1;
-    }
-  }
-  @keyframes slide-in {
-    0% {
-      left: -180px;
-      opacity: 0;
-    }
-    50% {
-      left: 100px;
-      opacity: 1;
-    }
-    100% {
-      left: 0px;
-      opacity: 1;
-    }
-  }
-
   > div {
     display: flex;
     flex-direction: row;
@@ -121,7 +96,7 @@ const IntroduceContainer = styled.div`
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     margin-top: 55px;
-    margin-left: 180px;
+    margin-left: 100px;
     font-size: 30px;
     font-weight: 600;
     position: absolute;
@@ -142,150 +117,61 @@ const IntroduceContainer = styled.div`
       font-size: 22px;
     }
   }
+  @media screen and (min-width: ${SIZE.desktop}) {
+    margin-left: 180px;
+  }
+  @keyframes slide-up {
+    0% {
+      bottom: -100px;
+      opacity: 0;
+    }
+    100% {
+      bottom: 150px;
+      opacity: 1;
+    }
+  }
+  @keyframes slide-in {
+    0% {
+      left: -180px;
+      opacity: 0;
+    }
+    50% {
+      left: 100px;
+      opacity: 1;
+    }
+    100% {
+      left: 0px;
+      opacity: 1;
+    }
+  }
 `;
 
-// const SecondContainer = styled.section`
-//   position: relative;
-//   width: 100%;
-//   height: 80vh;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: center;
-//   background-color: #fffff7e0;
-//   > img {
-//     width: 250px;
-//     /* position: absolute; */
-//   }
-//   @media screen and (min-width: ${SIZE.tablet}) {
-//     height: 100vh;
-//     padding: 0 30px;
-//     flex-direction: row;
-//     justify-content: space-between;
-//     > img {
-//       width: 340px;
-//       right: 60px;
-//       top: 140px;
-//     }
-//   }
-//   @media screen and (min-width: ${SIZE.desktop}) {
-//     > img {
-//       width: 400px;
-//       right: 100px;
-//       top: 100px;
-//     }
-//   }
-// `;
-
-// const SecondTextContainer = styled.div`
-//   /* width: inherit;
-//   height: inherit;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: space-between;
-//   align-items: center; */
-//   z-index: 1;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   @media screen and (min-width: ${SIZE.tablet}) {
-//     margin-left: 60px;
-//     justify-content: center;
-//   }
-// `;
-
-// const CalendarExample = styled.div`
-//   /* width: 100%; */
-//   /* display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   margin: 100px auto 0 30px; */
-//   width: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   z-index: 10;
-//   > h2 {
-//     color: #1b4f13;
-//     font-size: 50px;
-//     font-weight: 600;
-//     margin-bottom: 20px;
-//     white-space: nowrap;
-//     letter-spacing: 3px;
-//   }
-//   > span {
-//     color: #1b4f13;
-//     font-size: 25px;
-//     font-weight: 600;
-//     white-space: nowrap;
-//     text-align: center;
-//     margin-right: 10px;
-//   }
-
-//   @media screen and (min-width: ${SIZE.tablet}) {
-//     flex-direction: column;
-//     justify-content: center;
-//     margin-bottom: 180px;
-//     > h2 {
-//       font-size: 67px;
-//       letter-spacing: 5px;
-//     }
-//     > span {
-//       font-size: 28px;
-//     }
-//   }
-// `;
-
-// const SecondTitle = styled.div`
-//   width: 100%;
-//   font-size: 28px;
-//   font-weight: 600;
-//   margin: 50px 0px 20px 0px;
-//   display: flex;
-//   flex-direction: column;
-//   /* align-items: flex-start; */
-//   padding-left: 4px;
-
-//   > p {
-//     color: #0c3505;
-//     text-align: center;
-//     white-space: nowrap;
-//     :first-of-type {
-//       margin-bottom: 10px;
-//     }
-//   }
-//   @media screen and (min-width: ${SIZE.tablet}) {
-//     width: 100%;
-//     font-size: 32px;
-//     > p {
-//       text-align: left;
-//       :first-of-type {
-//         margin-bottom: 30px;
-//       }
-//     }
-//   }
-// `;
 const SecondContainer = styled.section`
   position: relative;
   width: 100%;
-  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #fffff7e0;
+  padding: 40px 0;
   > img {
     width: 250px;
-    /* position: absolute; */
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     height: 100vh;
     padding: 0 30px;
     flex-direction: row;
-
+    justify-content: center;
     > img {
-      width: 350px;
-      margin-left: 30px;
+      width: 310px;
+      margin-bottom: 100px;
+    }
+  }
+  @media screen and (min-width: ${SIZE.desktop}) {
+    > img {
+      width: 460px;
+      margin: 0 0 0 50px;
     }
   }
 `;
@@ -296,7 +182,12 @@ const SecondTextContainer = styled.div`
   flex-direction: column;
   align-items: center;
   @media screen and (min-width: ${SIZE.tablet}) {
-    margin-right: 70px;
+    margin-left: 60px;
+    justify-content: center;
+    padding-top: 50px;
+  }
+  @media screen and (min-width: ${SIZE.desktop}) {
+    margin-left: 180px;
   }
 `;
 
@@ -325,11 +216,10 @@ const CalendarExample = styled.div`
 
   @media screen and (min-width: ${SIZE.tablet}) {
     flex-direction: column;
-    margin-bottom: 80px;
-    margin-right: 120px;
-
+    align-items: flex-start;
+    margin-bottom: 180px;
     > h2 {
-      font-size: 60px;
+      font-size: 67px;
       letter-spacing: 5px;
     }
     > span {
@@ -340,7 +230,7 @@ const CalendarExample = styled.div`
 
 const SecondTitle = styled.div`
   width: 100%;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 600;
   margin: 50px 0px 20px 0px;
   display: flex;
@@ -356,38 +246,41 @@ const SecondTitle = styled.div`
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
-    font-size: 32px;
-    margin: 20px 0px 0px 0px;
-    /* margin-left: 120px; */
+    font-size: 30px;
     > p {
       text-align: left;
-      :first-of-type {
-        margin-bottom: 30px;
+      :last-of-type {
+        margin: 10px 0 50px;
       }
     }
   }
 `;
+
 const ThirdContainer = styled.div`
   width: 100%;
-  height: 80vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: #fff0fd;
-
-  @media screen and (max-width: ${SIZE.tablet}) {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+  padding: 50px 0;
   img {
-    width: 420px;
-    margin-right: 5rem;
-
-    @media screen and (max-width: ${SIZE.tablet}) {
-      margin-right: 0;
-      position: absolute;
-      margin-top: 50px;
+    width: 340px;
+    position: absolute;
+    margin-top: 50px;
+  }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    height: 100vh;
+    flex-direction: row;
+    > img {
+      position: initial;
+      width: 420px;
+      margin-top: 0px;
+    }
+  }
+  @media screen and (min-width: ${SIZE.desktop}) {
+    > img {
+      width: 480px;
     }
   }
 `;
@@ -395,34 +288,48 @@ const ThirdContainer = styled.div`
 const ThirdTextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  @media screen and (max-width: ${SIZE.tablet}) {
-    justify-content: center;
-    align-items: center;
-  }
+  justify-content: center;
+  align-items: center;
+
   h2 {
     color: #6a2c9b;
-    font-size: 50px;
+    font-size: 48px;
     font-weight: 600;
     margin-bottom: 60px;
     white-space: nowrap;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     background-color: rgba(203, 140, 255, 0.4);
     padding: 0.5rem 1rem;
-
-    @media screen and (max-width: ${SIZE.tablet}) {
-      margin-bottom: 280px;
-    }
+    margin-bottom: 280px;
   }
   p {
     margin: 0.5rem 0;
     color: #6a2c9b;
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 600;
     white-space: nowrap;
     text-align: center;
     span {
       color: #b865f9;
+    }
+  }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    > h2 {
+      margin-bottom: 60px;
+      font-size: 44px;
+    }
+    > p {
+      font-size: 26px;
+    }
+  }
+  @media screen and (min-width: ${SIZE.desktop}) {
+    margin-left: 20px;
+    > h2 {
+      margin-bottom: 100px;
+      font-size: 60px;
+    }
+    > p {
+      font-size: 28px;
     }
   }
 `;
@@ -460,7 +367,7 @@ const Landing = () => {
         <img src={Alert} alt="캘린더등록알림창" />
         <ThirdTextContainer>
           <p>매달 25일부터 시작하는</p>
-          <h2>캘린더 자랑 ✨</h2>
+          <h2>캘린더 자랑✨</h2>
           <p>내 캘린더도 자랑하고</p>
           <p>
             다른 사람 캘린더 구경 <span>#가보자고</span>

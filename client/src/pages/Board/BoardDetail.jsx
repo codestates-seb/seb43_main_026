@@ -216,8 +216,7 @@ const BoardDetail = () => {
         },
         params: params,
       })
-      .then((response) => {
-        console.log(response.data);
+      .then(() => {
         setLiked((prevLiked) => !prevLiked); // 상태를 반전시킴
       })
       .catch((error) => {
@@ -254,10 +253,8 @@ const BoardDetail = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setPost(response.data);
         setIsSamePerson(response.data.memberId === localMemberId);
-        console.log(isSamePerson);
       })
       .catch((error) => {
         console.error(error);
@@ -273,7 +270,6 @@ const BoardDetail = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setLiked(response.data);
       })
       .catch((error) => {
@@ -290,7 +286,6 @@ const BoardDetail = () => {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setComment(response.data);
       })
       .catch((error) => {

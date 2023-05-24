@@ -203,7 +203,6 @@ const BoardEdit = () => {
       });
       setPosts(response.data);
       setImageUrl(response.data.boardImageAddress);
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -241,23 +240,17 @@ const BoardEdit = () => {
           },
         }
       );
-      console.log(response.data);
 
       fetchPostData(); // 이동 후 다시 데이터 가져오기
       navigate(`/board/${boardId}`);
     } catch (error) {
       console.log(error);
-      console.log(data);
     }
   };
 
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
-
-  useEffect(() => {
-    console.log(imageData.get('image'));
-  }, [imageData]);
 
   useEffect(() => {
     if (posts) {

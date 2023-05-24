@@ -109,13 +109,12 @@ const Comment = ({ comment, setComment, setCommentCount, localMemberId }) => {
           Authorization: `${localStorage.getItem('accessToken')}`,
         },
       })
-      .then((response) => {
+      .then(() => {
         const updatedComments = comment.filter(
           (c) => c.commentId !== commentId
         );
         setComment(updatedComments);
         setCommentCount(updatedComments.length);
-        console.log(response);
       })
 
       .catch((error) => {

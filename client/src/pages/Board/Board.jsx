@@ -194,6 +194,7 @@ const PlusIcon = styled(HiPlus)`
 const ListBox = styled.section`
   width: 100%;
   min-height: 580px;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -474,16 +475,18 @@ const Board = () => {
         />
       )}
       <ListBox>
-        {posts.length === 0 && <NoData>데이터가 없습니다</NoData>}
         {isDash && (
           <Dash
             posts={posts}
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
-            isDash={isDash}
           />
         )}
-        {isDash || <List posts={posts} />}
+        {!isDash && posts.length === 0 ? (
+          <NoData>데이터가 없습니다</NoData>
+        ) : (
+          <List posts={posts} />
+        )}
       </ListBox>
       {isDash && (
         <UploadIconBtn onClick={handleUploadClick}>

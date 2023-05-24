@@ -60,7 +60,9 @@ function App() {
           })
           .catch((err) => console.log(err));
       } else if (expires) {
+        console.log('----1----');
         await userAPI.isLogin().then((res) => {
+          console.log('----2----', res);
           setLoginUser(res);
         });
       }

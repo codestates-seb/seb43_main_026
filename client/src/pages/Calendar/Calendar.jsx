@@ -293,7 +293,7 @@ const Toolbar = (props) => {
   );
 };
 
-const MyCalendar = ({ loginUser, isLoginSuccess }) => {
+const MyCalendar = ({ loginUser, isLoginSuccess, setIsLoginSuccess }) => {
   const nav = useNavigate();
   const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
   const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth() + 1);
@@ -422,6 +422,7 @@ const MyCalendar = ({ loginUser, isLoginSuccess }) => {
     if (isLoginSuccess) {
       setVisible(true);
       setMessage('로그인에 성공하였습니다.');
+      setIsLoginSuccess(false);
     }
   }, [isLoginSuccess]);
 

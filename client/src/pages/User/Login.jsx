@@ -79,7 +79,7 @@ const Login = ({
     const response = await userAPI.login(username, password);
     if (response.status === 401) {
       setVisible(true);
-      setMessage('로그인에 실패했습니다.');
+      setMessage('이메일과 비밀번호를 확인해주세요.');
     } else if (response.status === 500) {
       setVisible(true);
       setMessage('서버와 통신에 실패했습니다.');

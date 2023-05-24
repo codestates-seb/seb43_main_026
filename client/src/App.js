@@ -39,35 +39,32 @@ function App() {
   const handleNav = () => {
     setNav(!nav);
   };
+  const checkLoginStatus = async () => {
+    const expires = localStorage.getItem('expires');
+    const currentTime = new Date();
+    if (expires && new Date(expires) <= currentTime) {
+      await userAPI
+        .refresh()
+        .then(async (res) => {
+          if (res.status === 201) {
+            localStorage.setItem('accessToken', res.headers.authorization);
+            localStorage.setItem('expires', res.headers.authexpiration);
+            const user = await userAPI.isLogin();
+            setLoginUser(user);
+          } else {
+            userAPI.logout();
+            navigate('/login');
+          }
+        })
+        .catch((err) => console.log(err));
+    } else if (expires) {
+      await userAPI.isLogin().then((res) => {
+        setLoginUser(res);
+      });
+    }
+  };
 
   useEffect(() => {
-    const checkLoginStatus = async () => {
-      const expires = localStorage.getItem('expires');
-      const currentTime = new Date();
-      if (expires && new Date(expires) <= currentTime) {
-        await userAPI
-          .refresh()
-          .then(async (res) => {
-            if (res.status === 201) {
-              localStorage.setItem('accessToken', res.headers.authorization);
-              localStorage.setItem('expires', res.headers.authexpiration);
-              const user = await userAPI.isLogin();
-              setLoginUser(user);
-            } else {
-              userAPI.logout();
-              navigate('/login');
-            }
-          })
-          .catch((err) => console.log(err));
-      } else if (expires) {
-        console.log('----1----');
-        await userAPI.isLogin().then((res) => {
-          console.log('----2----', res);
-          setLoginUser(res);
-        });
-      }
-    };
-
     checkLoginStatus();
   }, []);
 

@@ -413,9 +413,7 @@ const MyCalendar = ({ loginUser, isLoginSuccess, setIsLoginSuccess }) => {
       .then((res) => {
         setCalendarData(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(async (err) => console.log(err));
   }, [calendarYear, calendarMonth]);
 
   useEffect(() => {

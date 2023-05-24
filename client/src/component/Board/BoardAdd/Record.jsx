@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { COLOR } from '../../../style/theme';
 
@@ -65,6 +65,32 @@ const Record = ({ isShareCalendar }) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear(); // 현재 년도
   const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
+  const [calendarData, setCalendarData] = useState([]);
+  const [todayData, setTodayData] = useState([]);
+
+  console.log(todayData.location);
+
+  //이번 달 총 일수
+  function getTotalDaysInMonth(year, month) {
+    return new Date(year, month, 0).getDate();
+  }
+
+  // 이번 달의 출석률 계산
+  const totalDays = getTotalDaysInMonth(currentYear, currentMonth);
+  const workoutRate = Math.round(calendarData.length / totalDays);
+
+  // 총 운동 시간
+  const totalDuration = calendarData.reduce((total, el) => {
+    return total + el.durationTime;
+  }, 0);
+
+  const totalDurationString = totalDuration.toString();
+
+  //하루 기록 추출
+  const todayDateString = `${currentYear}-${String(currentMonth).padStart(
+    2,
+    '0'
+  )}-${String(currentDate.getDate()).padStart(2, '0')}`;
 
   useEffect(() => {
     axios
@@ -74,12 +100,14 @@ const Record = ({ isShareCalendar }) => {
         },
       })
       .then((res) => {
+        setCalendarData(res.data);
+        setTodayData(res.data.filter((el) => el.date === todayDateString));
         console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [isShareCalendar]);
+  }, []);
 
   return (
     <Container>
@@ -87,14 +115,36 @@ const Record = ({ isShareCalendar }) => {
         <Year>{`${currentYear}년`}</Year>
         <Month>{`${currentMonth}월`}</Month>
       </Current>
-      <Attendance>
-        <Name>출석률</Name>
-        <Rate>80%</Rate>
-      </Attendance>
-      <TotalTime>
-        <Name>총 운동 시간</Name>
-        <Rate>40 시간</Rate>
-      </TotalTime>
+      {isShareCalendar ? (
+        <Attendance>
+          <Name>출석률</Name>
+          <Rate>{workoutRate}%</Rate>
+        </Attendance>
+      ) : (
+        <Attendance>
+          <Name>장소</Name>
+          <Rate>
+            {todayData.length > 0
+              ? `${todayData[0].location} 시간`
+              : '기록 없음'}
+          </Rate>
+        </Attendance>
+      )}
+      {isShareCalendar ? (
+        <TotalTime>
+          <Name>총 운동 시간</Name>
+          <Rate>{totalDurationString} 시간</Rate>
+        </TotalTime>
+      ) : (
+        <TotalTime>
+          <Name>오늘 운동 시간</Name>
+          <Rate>
+            {todayData.length > 0
+              ? `${todayData[0].durationTime} 시간`
+              : '기록 없음'}
+          </Rate>
+        </TotalTime>
+      )}
     </Container>
   );
 };

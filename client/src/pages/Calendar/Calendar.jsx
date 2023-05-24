@@ -348,10 +348,9 @@ const MyCalendar = ({ loginUser }) => {
   };
 
   const onCapture = async () => {
-    console.log('capture');
     const calMainElement = document.getElementById('calMain');
     const images = calMainElement.getElementsByTagName('img');
-
+    console.log(images);
     // 이미지 로드를 기다리기 위한 Promise 배열 생성
     const imagePromises = Array.from(images).map((image) => {
       return new Promise((resolve, reject) => {
@@ -366,25 +365,30 @@ const MyCalendar = ({ loginUser }) => {
 
       // 이미지 로딩이 완료된 후에 캡처 수행
       const canvas = await html2canvas(calMainElement, {
-        useCORS: true,
+        useCORS: true, // CORS 에러 우회
         allowTaint: true,
       });
       // 캡처된 이미지 처리
       document.body.appendChild(canvas);
-      onSave(canvas.toDataURL(), 'calendar_capture.png');
+      await onSave(canvas.toDataURL(), 'calendar_capture.png');
       document.body.removeChild(canvas);
+      console.log('capture');
     } catch (error) {
       console.error('Image loading error:', error);
     }
   };
+
   const onSave = (uri, filename) => {
-    console.log('onSave');
-    const link = document.createElement('a');
-    document.body.appendChild(link);
-    link.href = uri;
-    link.download = filename;
-    link.click();
-    document.body.removeChild(link);
+    return new Promise((resolve) => {
+      const link = document.createElement('a');
+      document.body.appendChild(link);
+      link.href = uri;
+      link.download = filename;
+      link.click();
+      document.body.removeChild(link);
+      console.log('onSave');
+      resolve();
+    });
   };
 
   useEffect(() => {

@@ -6,12 +6,13 @@ import SignupTitle from '../../assets/image/signup_title.png';
 import { COLOR, SIZE } from '../../style/theme';
 
 // 컴포넌트
-import GoogleLogin from '../../component/OAuth/GoogleLogin';
 import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
 
 import { userAPI } from '../../assets/api';
 import { useNavigate } from 'react-router';
+import { WarningToast } from '../../component/common/WarningToast';
+import { useState } from 'react';
 
 const Container = styled.div`
   width: 100%;
@@ -48,45 +49,38 @@ const Form = styled.form`
   }
 `;
 
-const OAuthContainer = styled.div`
-  width: 100%;
-  margin-top: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  svg {
-    cursor: pointer;
-  }
-`;
+const nicknameOptions = {
+  required: '닉네임을 입력해주세요.',
+  minLength: {
+    value: 2,
+    message: '닉네임은 두글자 이상이어야 합니다.',
+  },
+};
+const emailOptions = {
+  required: '이메일을 입력해주세요.',
+  pattern: {
+    value:
+      /^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
+    message: '@를 포함한 이메일 주소를 적어주세요.',
+  },
+};
+const passwordOptions = {
+  required: '비밀번호를 입력해주세요.',
+  pattern: {
+    value:
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+    message:
+      '비밀번호는 8자 이상으로 하나 이상의 대문자, 소문자, 숫자, 특수문자를 포함해주세요.',
+  },
+};
 
 const SignUp = ({ setIsSignupSuccess }) => {
   const { handleSubmit, control, getValues } = useForm();
   const navigate = useNavigate();
 
-  const nicknameOptions = {
-    required: '닉네임을 입력해주세요.',
-    minLength: {
-      value: 2,
-      message: '닉네임은 두글자 이상이어야 합니다.',
-    },
-  };
-  const emailOptions = {
-    required: '이메일을 입력해주세요.',
-    pattern: {
-      value:
-        /^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
-      message: '@를 포함한 이메일 주소를 적어주세요.',
-    },
-  };
-  const passwordOptions = {
-    required: '비밀번호를 입력해주세요.',
-    pattern: {
-      value:
-        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      message:
-        '비밀번호는 8자 이상으로 하나 이상의 대문자, 소문자, 숫자, 특수문자를 포함해주세요.',
-    },
-  };
+  const [errorMessage, setErrorMessage] = useState('');
+  const [visible, setVisible] = useState(false);
+
   const passwordCheckOptions = {
     required: '비밀번호를 재입력해주세요.',
     validate: {
@@ -101,9 +95,12 @@ const SignUp = ({ setIsSignupSuccess }) => {
   // 회원가입 완료 시
   const onSubmit = async (data) => {
     const response = await userAPI.signup(data);
+    console.log(response.status);
+    // console.log(errorMessage);
     if (response.status === 409) {
       // 회원가입 실패 에러 메시지
-      console.log(response.data.message);
+      setErrorMessage(response.data.message);
+      // console.log(response.data.message);
     } else {
       console.log('회원가입 성공');
       setIsSignupSuccess(true);
@@ -115,82 +112,87 @@ const SignUp = ({ setIsSignupSuccess }) => {
   const onError = (error) => console.log(error);
 
   return (
-    <Container>
-      <Title src={SignupTitle} alt="타이틀" />
-      <Form onSubmit={handleSubmit(onSubmit, onError)}>
-        <Controller
-          name={'email'}
-          control={control}
-          rules={emailOptions}
-          render={({ field, fieldState: { error } }) => (
-            <Input
-              id="email"
-              label="이메일"
-              type="text"
-              errorMessage={error?.message}
-              onChange={field.onChange}
-              value={field.value || ''}
-            />
-          )}
+    <>
+      {visible ? (
+        <WarningToast
+          text={errorMessage}
+          setWarning={setVisible}
+          visible={visible}
         />
-        <Controller
-          name={'nickname'}
-          control={control}
-          rules={nicknameOptions}
-          render={({ field, fieldState: { error } }) => (
-            <Input
-              id="nickname"
-              label="닉네임"
-              type="text"
-              errorMessage={error?.message}
-              onChange={field.onChange}
-              value={field.value || ''}
-            />
-          )}
-        />
-        <Controller
-          name={'password'}
-          control={control}
-          rules={passwordOptions}
-          render={({ field, fieldState: { error } }) => (
-            <Input
-              id="password"
-              label="비밀번호"
-              type="password"
-              errorMessage={error?.message}
-              onChange={field.onChange}
-              value={field.value || ''}
-            />
-          )}
-        />
-        <Controller
-          name={'passwordCheck'}
-          control={control}
-          rules={passwordCheckOptions}
-          render={({ field, fieldState: { error } }) => (
-            <Input
-              id="passwordCheck"
-              label="비밀번호 확인"
-              type="password"
-              errorMessage={error?.message}
-              onChange={field.onChange}
-              value={field.value || ''}
-            />
-          )}
-        />
+      ) : null}
+      <Container>
+        <Title src={SignupTitle} alt="타이틀" />
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
+          <Controller
+            name={'email'}
+            control={control}
+            rules={emailOptions}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                id="email"
+                label="이메일"
+                type="text"
+                errorMessage={error?.message}
+                onChange={field.onChange}
+                value={field.value || ''}
+              />
+            )}
+          />
+          <Controller
+            name={'nickname'}
+            control={control}
+            rules={nicknameOptions}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                id="nickname"
+                label="닉네임"
+                type="text"
+                errorMessage={error?.message}
+                onChange={field.onChange}
+                value={field.value || ''}
+              />
+            )}
+          />
+          <Controller
+            name={'password'}
+            control={control}
+            rules={passwordOptions}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                id="password"
+                label="비밀번호"
+                type="password"
+                errorMessage={error?.message}
+                onChange={field.onChange}
+                value={field.value || ''}
+              />
+            )}
+          />
+          <Controller
+            name={'passwordCheck'}
+            control={control}
+            rules={passwordCheckOptions}
+            render={({ field, fieldState: { error } }) => (
+              <Input
+                id="passwordCheck"
+                label="비밀번호 확인"
+                type="password"
+                errorMessage={error?.message}
+                onChange={field.onChange}
+                value={field.value || ''}
+              />
+            )}
+          />
 
-        <Button
-          text={'회원가입'}
-          width={'100%'}
-          height={'5vh'}
-          style={{ marginTop: '20px' }}
-        />
-
-        <OAuthContainer>
-          <GoogleLogin />
-        </OAuthContainer>
-      </Form>
-    </Container>
+          <Button
+            text={'회원가입'}
+            width={'100%'}
+            height={'5vh'}
+            style={{ marginTop: '20px' }}
+          />
+        </Form>
+      </Container>
+    </>
   );
 };
 export default SignUp;

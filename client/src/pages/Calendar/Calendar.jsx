@@ -4,7 +4,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import { useNavigate } from 'react-router';
 import html2canvas from 'html2canvas';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 //아이콘
@@ -20,6 +20,16 @@ import axios from 'axios';
 
 moment.locale('ko-KR');
 const localizer = momentLocalizer(moment);
+
+const calanderStyle = {
+  backgroundSize: 'contain',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center',
+  backgroundColor: '#fff',
+  width: '100%',
+  height: '100%',
+  padding: '0px',
+};
 
 // styled-component
 const ToolbarButtonsContainer = styled.div`
@@ -313,6 +323,18 @@ const MyCalendar = ({ loginUser }) => {
   }, 0);
 
   const totalDurationString = totalDuration.toString();
+  const events = useMemo(
+    () =>
+      calendarData.map((schedule) => ({
+        title: '',
+        start: new Date(schedule.date),
+        end: new Date(schedule.date),
+        url: schedule.imageAddress,
+        id: schedule.scheduleId,
+        tile: schedule.scheduleId,
+      })),
+    [calendarData]
+  );
   console.log(totalDurationString);
 
   const nav = useNavigate();
@@ -392,14 +414,7 @@ const MyCalendar = ({ loginUser }) => {
           <Calendar
             localizer={localizer}
             views={['month']}
-            events={calendarData.map((schedule) => ({
-              title: '',
-              start: new Date(schedule.date),
-              end: new Date(schedule.date),
-              url: schedule.imageAddress,
-              id: schedule.scheduleId,
-              tile: schedule.scheduleId,
-            }))}
+            events={events}
             components={{
               toolbar: (props) => (
                 <Toolbar
@@ -412,14 +427,8 @@ const MyCalendar = ({ loginUser }) => {
             }}
             eventPropGetter={(event) => ({
               style: {
+                ...calanderStyle,
                 backgroundImage: `url(${event.url})`, // 배경 이미지로 설정
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-                backgroundColor: '#fff',
-                width: '100%',
-                height: '100%',
-                padding: '0px',
               },
             })}
             onSelectEvent={(event) => handleSelectEvent(event)}

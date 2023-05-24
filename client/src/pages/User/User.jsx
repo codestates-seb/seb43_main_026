@@ -75,36 +75,39 @@ const Title = styled.h1`
 
 const User = ({ loginUser }) => {
   const navigate = useNavigate();
+  console.log(loginUser);
 
   useEffect(() => {
     if (!loginUser) {
       navigate('/login');
     }
-  }, []);
+  }, [loginUser]);
 
   return (
-    <Container>
-      <UserProfile>
-        <UserImage src={ProfileImage} alt="프로필 사진" />
-        <UserInfo>
-          <Nickname>{loginUser.nickname}</Nickname>
-          <AttendanceRate>이번달 출석률 80%</AttendanceRate>
-          <ExerciseTime>이번달 운동시간 100시간</ExerciseTime>
-          <Button
-            text={'프로필 설정'}
-            width={'6rem'}
-            height={'25px'}
-            style={{ paddingLeft: '10px' }}
-            handleClick={() => {
-              navigate('/edit/profile');
-            }}
-          />
-        </UserInfo>
-      </UserProfile>
-      <UserCalendarList>
-        <Title>🗓️ 내가 자랑한 캘린더</Title>
-      </UserCalendarList>
-    </Container>
+    loginUser && (
+      <Container>
+        <UserProfile>
+          <UserImage src={ProfileImage} alt="프로필 사진" />
+          <UserInfo>
+            <Nickname>{loginUser.nickname}</Nickname>
+            <AttendanceRate>이번달 출석률 80%</AttendanceRate>
+            <ExerciseTime>이번달 운동시간 100시간</ExerciseTime>
+            <Button
+              text={'프로필 설정'}
+              width={'6rem'}
+              height={'25px'}
+              style={{ paddingLeft: '10px' }}
+              handleClick={() => {
+                navigate('/edit/profile');
+              }}
+            />
+          </UserInfo>
+        </UserProfile>
+        <UserCalendarList>
+          <Title>🗓️ 내가 자랑한 캘린더</Title>
+        </UserCalendarList>
+      </Container>
+    )
   );
 };
 

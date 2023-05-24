@@ -203,7 +203,6 @@ const BoardEdit = () => {
       });
       setPosts(response.data);
       setImageUrl(response.data.boardImageAddress);
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -247,7 +246,6 @@ const BoardEdit = () => {
       navigate(`/board/${boardId}`);
     } catch (error) {
       console.log(error);
-      console.log(data);
     }
   };
 

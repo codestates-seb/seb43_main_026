@@ -274,7 +274,6 @@ const Board = () => {
       );
 
       setPosts(response.data);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -336,7 +335,6 @@ const Board = () => {
       })
       .then((response) => {
         setIsCalendarPost(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -362,7 +360,6 @@ const Board = () => {
       })
       .then((response) => {
         setTotalPosts(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);

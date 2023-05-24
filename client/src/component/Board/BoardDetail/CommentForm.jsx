@@ -50,7 +50,6 @@ function CommentForm({ setComment, setCommentCount }) {
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
-    console.log(data);
 
     try {
       await axios
@@ -74,7 +73,6 @@ function CommentForm({ setComment, setCommentCount }) {
               },
             })
             .then((response) => {
-              console.log(response.data);
               setComment(response.data);
               setCommentCount(response.data.length);
             })

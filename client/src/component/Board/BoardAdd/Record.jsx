@@ -68,8 +68,6 @@ const Record = ({ isShareCalendar }) => {
   const [calendarData, setCalendarData] = useState([]);
   const [todayData, setTodayData] = useState([]);
 
-  console.log(todayData.location);
-
   //이번 달 총 일수
   function getTotalDaysInMonth(year, month) {
     return new Date(year, month, 0).getDate();
@@ -102,7 +100,6 @@ const Record = ({ isShareCalendar }) => {
       .then((res) => {
         setCalendarData(res.data);
         setTodayData(res.data.filter((el) => el.date === todayDateString));
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -124,9 +121,7 @@ const Record = ({ isShareCalendar }) => {
         <Attendance>
           <Name>장소</Name>
           <Rate>
-            {todayData.length > 0
-              ? `${todayData[0].location} 시간`
-              : '기록 없음'}
+            {todayData.length > 0 ? `${todayData[0].location}` : '기록 없음'}
           </Rate>
         </Attendance>
       )}

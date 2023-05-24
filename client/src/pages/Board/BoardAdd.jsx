@@ -242,6 +242,7 @@ const BoardAdd = () => {
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
+
   useEffect(() => {
     console.log(imageData.get('image'));
   }, [imageData]);

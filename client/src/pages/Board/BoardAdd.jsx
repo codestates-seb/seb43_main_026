@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { COLOR, SIZE } from '../../style/theme';
-import { IoArrowBack } from 'react-icons/io5';
+import BackButton from '../../component/common/BackButton';
 import ImageUpload from '../../component/common/ImageUpload';
 import Record from '../../component/Board/BoardAdd/Record';
 const API_URL = process.env.REACT_APP_API_URL;
@@ -263,7 +263,7 @@ const BoardAdd = () => {
     <Container>
       <GobackAndUpload>
         <Goback>
-          <IoArrowBack />
+          <BackButton />
         </Goback>
         {isShareCalendar && <Category>{`< 캘린더 자랑 >`}</Category>}
         <UploadBtn type="submit" onClick={handleSubmit(onSubmit)}>

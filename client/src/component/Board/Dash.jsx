@@ -137,7 +137,6 @@ const Dash = ({ posts, setCurrentPage, isDash, orderBy }) => {
   }, [isDash, setCurrentPage]);
 
   useEffect(() => {
-    setData([]);
     const existingIds = data.map((item) => item.boardId);
     const newPosts = posts.filter(
       (post) => !existingIds.includes(post.boardId)

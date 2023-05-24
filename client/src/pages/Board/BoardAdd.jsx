@@ -207,20 +207,39 @@ const BoardAdd = () => {
   const isCalendarShareChecked = isShareCalendar ? true : false;
 
   const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
+  const [totalWorkoutTime, setTotalWorkoutTime] = useState(0);
+  const [todayWorkoutTime, setTodayWorkoutTime] = useState(0);
+  const [workoutLocation, setWorkoutLocation] = useState('');
+  const [attendance, setAttendance] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
   const [imageData, setImageData] = useState(new FormData());
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
-    const boardPostDto = {
+
+    let boardPostDto = {
       title: data.title,
       content: data.content,
       calendarShare: data.calendarShare,
       workoutRecordShare: data.workoutRecordShare,
     };
+
+    if (isShareCalendar) {
+      boardPostDto = {
+        ...boardPostDto,
+        attendanceRate: attendance,
+        totalWorkoutTime: totalWorkoutTime,
+      };
+    } else {
+      boardPostDto = {
+        ...boardPostDto,
+        todayWorkoutTime: todayWorkoutTime,
+        workoutLocation: workoutLocation,
+      };
+    }
+
     try {
       const formData = new FormData();
-
       formData.append(
         'board',
         new Blob([JSON.stringify(boardPostDto)], {
@@ -228,6 +247,7 @@ const BoardAdd = () => {
         })
       );
       formData.append('image', data.image);
+
       await axios.post(`${API_URL}/boards`, formData, {
         headers: {
           Authorization: `${localStorage.getItem('accessToken')}`,
@@ -239,6 +259,7 @@ const BoardAdd = () => {
       console.log(error);
     }
   };
+
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
@@ -284,7 +305,15 @@ const BoardAdd = () => {
             </label>
           </WorkOut>
         </WorkOutContainer>
-        {workoutRecordShare && <Record isShareCalendar={isShareCalendar} />}
+        {workoutRecordShare && (
+          <Record
+            isShareCalendar={isShareCalendar}
+            setTotalWorkoutTime={setTotalWorkoutTime}
+            setTodayWorkoutTime={setTodayWorkoutTime}
+            setWorkoutLocation={setWorkoutLocation}
+            setAttendance={setAttendance}
+          />
+        )}
         <TitleContainer>
           {errors.title && (
             <ErrorContainer>

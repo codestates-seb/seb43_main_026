@@ -193,14 +193,18 @@ const CommentList = styled.ul`
 `;
 
 const BoardDetail = () => {
-  const localMemberId = localStorage.getItem('memberId');
+  const localMemberId = parseInt(localStorage.getItem('memberId'));
   const { boardId } = useParams();
   const navigate = useNavigate();
 
   const [post, setPost] = useState({});
+  const [isSamePerson, setIsSamePerson] = useState(false);
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState([]);
-  const [commentCount, setCommentCount] = useState([]);
+  const [commentCount, setCommentCount] = useState(0);
+
+  console.log(localMemberId);
+  console.log(isSamePerson);
 
   const createDate = post.createdAt ? post.createdAt.slice(0, 10) : '';
 
@@ -254,6 +258,8 @@ const BoardDetail = () => {
       .then((response) => {
         console.log(response.data);
         setPost(response.data);
+        setIsSamePerson(response.data.memberId === localMemberId);
+        console.log(isSamePerson);
       })
       .catch((error) => {
         console.error(error);
@@ -300,7 +306,7 @@ const BoardDetail = () => {
         <Goback>
           <BackButton />
         </Goback>
-        {post.memberId === localMemberId && (
+        {isSamePerson && (
           <ModifyAndDelete>
             <button onClick={handleButtonModify}>수정</button>
             <button onClick={handleButtonDelete}>삭제</button>

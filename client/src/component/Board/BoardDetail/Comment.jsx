@@ -89,12 +89,10 @@ const FormModify = styled.form`
   }
 `;
 
-const Comment = ({ comment, setComment, setCommentCount }) => {
+const Comment = ({ comment, setComment, setCommentCount, localMemberId }) => {
   const { boardId } = useParams();
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedContent, setEditedContent] = useState('');
-
-  console.log(comment);
 
   const handleButtonModify = (commentId) => {
     setEditingCommentId(commentId);
@@ -149,7 +147,6 @@ const Comment = ({ comment, setComment, setCommentCount }) => {
         return c;
       });
       setComment(updatedComments);
-
       setEditingCommentId(null);
       setEditedContent('');
     } catch (error) {
@@ -159,18 +156,19 @@ const Comment = ({ comment, setComment, setCommentCount }) => {
 
   return (
     <>
-      {comment.length
-        ? comment.map((post) => (
-            <Container key={post.commentId}>
-              <CommentTitle>
-                <CommentInfo>
-                  <CommentWriter>{post.writer}</CommentWriter>
-                  <CreateAt>
-                    {post.createdAt ? post.createdAt.slice(0, 10) : ''}
-                  </CreateAt>
-                </CommentInfo>
-                <CommentModify>
-                  {editingCommentId === post.commentId ? (
+      {comment &&
+        comment.map((post) => (
+          <Container key={post.commentId}>
+            <CommentTitle>
+              <CommentInfo>
+                <CommentWriter>{post.writer}</CommentWriter>
+                <CreateAt>
+                  {post.createdAt ? post.createdAt.slice(0, 10) : ''}
+                </CreateAt>
+              </CommentInfo>
+              <CommentModify>
+                {post.memberId === localMemberId ? (
+                  editingCommentId === post.commentId ? (
                     <button
                       onClick={(e) => handleEditSubmit(e, post.commentId)}
                     >
@@ -189,24 +187,22 @@ const Comment = ({ comment, setComment, setCommentCount }) => {
                         삭제
                       </button>
                     </>
-                  )}
-                </CommentModify>
-              </CommentTitle>
-              {editingCommentId === post.commentId ? (
-                <FormModify
-                  onSubmit={(e) => handleEditSubmit(e, post.commentId)}
-                >
-                  <textarea
-                    value={editedContent}
-                    onChange={(e) => setEditedContent(e.target.value)}
-                  />
-                </FormModify>
-              ) : (
-                <Text>{post.commentContent}</Text>
-              )}
-            </Container>
-          ))
-        : null}
+                  )
+                ) : null}
+              </CommentModify>
+            </CommentTitle>
+            {editingCommentId === post.commentId ? (
+              <FormModify onSubmit={(e) => handleEditSubmit(e, post.commentId)}>
+                <textarea
+                  value={editedContent}
+                  onChange={(e) => setEditedContent(e.target.value)}
+                />
+              </FormModify>
+            ) : (
+              <Text>{post.commentContent}</Text>
+            )}
+          </Container>
+        ))}
     </>
   );
 };

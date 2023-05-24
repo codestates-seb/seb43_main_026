@@ -105,6 +105,9 @@ const SearchPlaceModal = styled.div`
 const MapModal = styled.div`
   width: 260px;
   height: 350px;
+  > MapMarker {
+    pointer-events: auto;
+  }
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 300px;
     height: 350px;
@@ -132,12 +135,7 @@ const SearchMap = ({ place, setPlace }) => {
   const [location, setLocation] = useState(null);
   // 클릭된 장소의 위치
   const [currentLocation, setCurrentLocation] = useState(null);
-  // const [mapCenter, setMapCenter] = useState({
-  //   lat: location?.latitude || 0,
-  //   lng: location?.longitude || 0,
-  // });
 
-  // console.log(mapCenter);
   // 키워드 검색
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
@@ -167,9 +165,6 @@ const SearchMap = ({ place, setPlace }) => {
 
     const callback = function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
-        // result.map((data) => {
-        //   console.log(data);
-        // });
         setMarkers(result);
       }
     };
@@ -178,17 +173,9 @@ const SearchMap = ({ place, setPlace }) => {
 
   useEffect(() => {
     if (map) {
-      console.log(map);
       handleSearch();
     }
   }, [map, handleSearch]);
-
-  // useEffect(() => {
-  //   if (map && markers.length > 0) {
-  //     const firstMarker = markers[0];
-  //     setMapCenter({ lat: Number(firstMarker.y), lng: Number(firstMarker.x) });
-  //   }
-  // }, [map, markers]);
 
   const handleClickSearch = (e) => {
     e.preventDefault();

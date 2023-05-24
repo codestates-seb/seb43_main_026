@@ -61,12 +61,21 @@ const Rate = styled.span`
   font-size: 17px;
 `;
 
-const Record = ({ isShareCalendar }) => {
+const Record = ({
+  isShareCalendar,
+  post,
+  setTotalWorkoutTime,
+  setTodayWorkoutTime,
+  setWorkoutLocation,
+  setAttendance,
+}) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear(); // 현재 년도
   const currentMonth = currentDate.getMonth() + 1; // 현재 월 (0부터 시작하므로 +1 필요)
   const [calendarData, setCalendarData] = useState([]);
   const [todayData, setTodayData] = useState([]);
+
+  console.log(post);
 
   //이번 달 총 일수
   function getTotalDaysInMonth(year, month) {
@@ -76,6 +85,7 @@ const Record = ({ isShareCalendar }) => {
   // 이번 달의 출석률 계산
   const totalDays = getTotalDaysInMonth(currentYear, currentMonth);
   const workoutRate = Math.round(calendarData.length / totalDays);
+  setAttendance(workoutRate);
 
   // 총 운동 시간
   const totalDuration = calendarData.reduce((total, el) => {
@@ -83,12 +93,19 @@ const Record = ({ isShareCalendar }) => {
   }, 0);
 
   const totalDurationString = totalDuration.toString();
+  setTotalWorkoutTime(totalDurationString);
 
   //하루 기록 추출
   const todayDateString = `${currentYear}-${String(currentMonth).padStart(
     2,
     '0'
   )}-${String(currentDate.getDate()).padStart(2, '0')}`;
+  setTodayWorkoutTime(
+    todayData.length > 0 ? `${todayData[0].durationTime} 시간` : 0
+  );
+  setWorkoutLocation(
+    todayData.length > 0 ? `${todayData[0].location}` : '기록 없음'
+  );
 
   useEffect(() => {
     axios
@@ -115,26 +132,32 @@ const Record = ({ isShareCalendar }) => {
       {isShareCalendar ? (
         <Attendance>
           <Name>출석률</Name>
-          <Rate>{workoutRate}%</Rate>
+          <Rate> {post ? post.totalWorkoutTime : { workoutRate }}%</Rate>
         </Attendance>
       ) : (
         <Attendance>
           <Name>장소</Name>
           <Rate>
-            {todayData.length > 0 ? `${todayData[0].location}` : '기록 없음'}
+            {post
+              ? post.workoutLocation
+              : todayData.length > 0
+              ? `${todayData[0].location}`
+              : '기록 없음'}
           </Rate>
         </Attendance>
       )}
       {isShareCalendar ? (
         <TotalTime>
           <Name>총 운동 시간</Name>
-          <Rate>{totalDurationString} 시간</Rate>
+          <Rate>{post ? post.totalWorkoutTime : totalDurationString} 시간</Rate>
         </TotalTime>
       ) : (
         <TotalTime>
           <Name>오늘 운동 시간</Name>
           <Rate>
-            {todayData.length > 0
+            {post
+              ? post.todayWorkoutTime
+              : todayData.length > 0
               ? `${todayData[0].durationTime} 시간`
               : '기록 없음'}
           </Rate>

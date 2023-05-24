@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { COLOR, SIZE } from '../../style/theme';
-import BackButton from '../../component/common/BackButton';
+import { IoArrowBack } from 'react-icons/io5';
 import CommentForm from '../../component/Board/BoardDetail/CommentForm';
 import Comment from '../../component/Board/BoardDetail/Comment';
 import Record from '../../component/Board/BoardAdd/Record';
@@ -202,6 +202,13 @@ const BoardDetail = () => {
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
+  const [totalWorkoutTime, setTotalWorkoutTime] = useState(0);
+  const [todayWorkoutTime, setTodayWorkoutTime] = useState(0);
+  const [workoutLocation, setWorkoutLocation] = useState('');
+  const [attendance, setAttendance] = useState(0);
+
+  //eslint 오류
+  console.log(totalWorkoutTime, todayWorkoutTime, workoutLocation, attendance);
 
   const createDate = post.createdAt ? post.createdAt.slice(0, 10) : '';
 
@@ -217,7 +224,7 @@ const BoardDetail = () => {
         params: params,
       })
       .then(() => {
-        setLiked((prevLiked) => !prevLiked); // 상태를 반전시킴
+        setLiked((prevLiked) => !prevLiked);
       })
       .catch((error) => {
         console.error(error);
@@ -243,6 +250,10 @@ const BoardDetail = () => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const handleBackButton = () => {
+    navigate(`/board`);
   };
 
   useEffect(() => {
@@ -297,7 +308,11 @@ const BoardDetail = () => {
     <Container>
       <GobackAndModify>
         <Goback>
-          <BackButton />
+          <IoArrowBack
+            size={27}
+            color={COLOR.main_blue}
+            onClick={handleBackButton}
+          />
         </Goback>
         {isSamePerson && (
           <ModifyAndDelete>
@@ -327,7 +342,15 @@ const BoardDetail = () => {
           </LikeButton>
         </Like>
       </ImageAndLike>
-      {post.workoutRecordShare && <Record />}
+      {post.workoutRecordShare && (
+        <Record
+          post={post}
+          setTotalWorkoutTime={setTotalWorkoutTime}
+          setTodayWorkoutTime={setTodayWorkoutTime}
+          setWorkoutLocation={setWorkoutLocation}
+          setAttendance={setAttendance}
+        />
+      )}
       <Content>{post.content}</Content>
       <CommentContainer>
         <CommentHeader>

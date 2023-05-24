@@ -1,21 +1,12 @@
-//모듈
 import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-//공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
-
-//공통 컴포넌트
 import BackButton from '../../component/common/BackButton';
-
-//컴포넌트
 import ImageUpload from '../../component/common/ImageUpload';
 import Record from '../../component/Board/BoardAdd/Record';
-
-//서버 url
 const API_URL = process.env.REACT_APP_API_URL;
 
 //전체 컨테이너
@@ -207,20 +198,39 @@ const BoardAdd = () => {
   const isCalendarShareChecked = isShareCalendar ? true : false;
 
   const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
+  const [totalWorkoutTime, setTotalWorkoutTime] = useState(0);
+  const [todayWorkoutTime, setTodayWorkoutTime] = useState(0);
+  const [workoutLocation, setWorkoutLocation] = useState('');
+  const [attendance, setAttendance] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
   const [imageData, setImageData] = useState(new FormData());
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
-    const boardPostDto = {
+
+    let boardPostDto = {
       title: data.title,
       content: data.content,
       calendarShare: data.calendarShare,
       workoutRecordShare: data.workoutRecordShare,
     };
+
+    if (isShareCalendar) {
+      boardPostDto = {
+        ...boardPostDto,
+        attendanceRate: attendance,
+        totalWorkoutTime: totalWorkoutTime,
+      };
+    } else {
+      boardPostDto = {
+        ...boardPostDto,
+        todayWorkoutTime: todayWorkoutTime,
+        workoutLocation: workoutLocation,
+      };
+    }
+
     try {
       const formData = new FormData();
-
       formData.append(
         'board',
         new Blob([JSON.stringify(boardPostDto)], {
@@ -228,6 +238,7 @@ const BoardAdd = () => {
         })
       );
       formData.append('image', data.image);
+
       await axios.post(`${API_URL}/boards`, formData, {
         headers: {
           Authorization: `${localStorage.getItem('accessToken')}`,
@@ -239,6 +250,7 @@ const BoardAdd = () => {
       console.log(error);
     }
   };
+
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
@@ -284,7 +296,15 @@ const BoardAdd = () => {
             </label>
           </WorkOut>
         </WorkOutContainer>
-        {workoutRecordShare && <Record isShareCalendar={isShareCalendar} />}
+        {workoutRecordShare && (
+          <Record
+            isShareCalendar={isShareCalendar}
+            setTotalWorkoutTime={setTotalWorkoutTime}
+            setTodayWorkoutTime={setTodayWorkoutTime}
+            setWorkoutLocation={setWorkoutLocation}
+            setAttendance={setAttendance}
+          />
+        )}
         <TitleContainer>
           {errors.title && (
             <ErrorContainer>

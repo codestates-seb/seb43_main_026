@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { SIZE, COLOR } from '../../style/theme';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
-import { useNavigate } from 'react-router';
 import html2canvas from 'html2canvas';
 import { useState, useEffect, useMemo } from 'react';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-
+import { useNavigate } from 'react-router';
+import axios from 'axios';
 //아이콘
 import {
   IoIosArrowBack,
@@ -16,7 +16,6 @@ import {
 import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { TbCapture } from 'react-icons/tb';
-import axios from 'axios';
 import { WarningToast } from '../../component/common/WarningToast';
 
 moment.locale('ko-KR');
@@ -353,7 +352,7 @@ const MyCalendar = ({ loginUser, isLoginSuccess, setIsLoginSuccess }) => {
   const onCapture = async () => {
     const calMainElement = document.getElementById('calMain');
     const images = calMainElement.getElementsByTagName('img');
-    console.log(images);
+
     // 이미지 로드를 기다리기 위한 Promise 배열 생성
     const imagePromises = Array.from(images).map((image) => {
       return new Promise((resolve, reject) => {
@@ -365,7 +364,6 @@ const MyCalendar = ({ loginUser, isLoginSuccess, setIsLoginSuccess }) => {
     try {
       // 이미지 로딩이 완료될 때까지 기다림
       await Promise.all(imagePromises);
-
       // 이미지 로딩이 완료된 후에 캡처 수행
       const canvas = await html2canvas(calMainElement, {
         useCORS: true, // CORS 에러 우회
@@ -375,7 +373,6 @@ const MyCalendar = ({ loginUser, isLoginSuccess, setIsLoginSuccess }) => {
       document.body.appendChild(canvas);
       await onSave(canvas.toDataURL(), 'calendar_capture.png');
       document.body.removeChild(canvas);
-      console.log('capture');
     } catch (error) {
       console.error('Image loading error:', error);
     }
@@ -389,7 +386,7 @@ const MyCalendar = ({ loginUser, isLoginSuccess, setIsLoginSuccess }) => {
       link.download = filename;
       link.click();
       document.body.removeChild(link);
-      console.log('onSave');
+
       resolve();
     });
   };

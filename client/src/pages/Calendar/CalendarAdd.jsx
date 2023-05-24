@@ -1,16 +1,12 @@
 import styled from 'styled-components';
 import { SIZE, COLOR } from '../../style/theme';
 import { useState, useEffect } from 'react';
-
-// 컴포넌트
 import BackButton from '../../component/common/BackButton';
 import { WarningToast } from '../../component/common/WarningToast';
 import ImageUpload from '../../component/common/ImageUpload';
 import SearchPlace from '../../component/Calendar/SearchPlace';
 import TimeDropDown from '../../component/Calendar/TimeDropDown';
 import { DonePostModal } from '../../component/Calendar/DonePostModal';
-
-// 라이브러리
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/esm/locale';
@@ -60,13 +56,13 @@ const InputDateContainer = styled.div`
   border-bottom: 1px solid ${COLOR.main_blue};
   > span {
     margin-right: 20px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
   }
   .date-picker {
     width: 130px;
     border: none;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     text-align: center;
     :focus {
@@ -85,6 +81,9 @@ const InputDateContainer = styled.div`
       font-size: 20px;
       margin-right: 30px;
     }
+    > .date-picker {
+      font-size: 20px;
+    }
   }
 `;
 
@@ -98,11 +97,12 @@ const InputPlaceContainer = styled.div`
   border-bottom: 1px solid ${COLOR.main_blue};
   > span {
     margin-right: 20px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
   }
   > input {
-    font-size: 20px;
+    width: 80%;
+    font-size: 18px;
     font-weight: 600;
     margin-right: 10px;
     border: none;
@@ -114,6 +114,10 @@ const InputPlaceContainer = styled.div`
     > span {
       font-size: 20px;
       margin-right: 30px;
+    }
+    > input {
+      width: 90%;
+      font-size: 20px;
     }
   }
 `;
@@ -127,7 +131,7 @@ const SwimTimeContainer = styled.div`
   margin-top: 40px;
   padding: 0 20px 10px 10px;
   > span {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
   }
 
@@ -149,7 +153,7 @@ const InputMemoContainer = styled.div`
   padding-left: 10px;
   font-size: 18px;
   > span {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
   }
   > textarea {
@@ -202,20 +206,22 @@ const CalendarAdd = () => {
   const [endTime, setEndTime] = useState('');
   const [durationTime, setDurationTime] = useState('');
   const [memo, setMemo] = useState('');
-
-  // 경고창
-  const [imageAvailable, setImageAvailavble] = useState(true);
-  const [timeAvailable, setTimeAvailable] = useState(true);
-  const [differentDate, setDifferentDate] = useState(true);
-  const [donePost, setDonePost] = useState(false);
-
+  const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+  const [openSearchModal, setOpenSearchModal] = useState(false);
   const swimTimeProps = {
     startTime,
     setStartTime,
     endTime,
     setEndTime,
   };
-  // 지속 시간 계산
+
+  // 경고창
+  const [visible, setVisible] = useState(false);
+  const [imageAvailable, setImageAvailavble] = useState(true);
+  const [timeAvailable, setTimeAvailable] = useState(true);
+  const [differentDate, setDifferentDate] = useState(true);
+  const [donePost, setDonePost] = useState(false);
+
   const calculateDuration = () => {
     if (!startTime || !endTime) return 0;
 
@@ -230,18 +236,22 @@ const CalendarAdd = () => {
     return (endInMinutes - startInMinutes) / 60;
   };
 
-  useEffect(() => {
-    const durationInMinutes = calculateDuration();
-    setDurationTime(durationInMinutes);
-  }, [startTime, endTime]);
-  const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+  const handleSearchModal = () => {
+    setOpenSearchModal(!openSearchModal);
+  };
+
+  const handleChangeMemo = (e) => {
+    setMemo(e.target.value);
+  };
 
   const onSubmit = async () => {
     if (!imageUrl) {
       setImageAvailavble(false);
+      setVisible(true);
       return;
     } else if (!durationTime || durationTime <= 0) {
       setTimeAvailable(false);
+      setVisible(true);
       return;
     }
     const scheduleData = {
@@ -260,38 +270,25 @@ const CalendarAdd = () => {
       formData.append('schedule', JSON.stringify(scheduleData));
       formData.append('image', imageData.get('image'));
 
-      const response = await axios({
-        method: 'POST',
-        url: `${process.env.REACT_APP_API_URL}/schedules`,
-        mode: 'cors',
+      await axios.post(`${process.env.REACT_APP_API_URL}/schedules`, formData, {
         headers: {
           Authorization: localStorage.getItem('accessToken'),
           'Content-Type': 'multipart/form-data',
         },
-        data: formData,
       });
-      const responseData = response;
-
-      console.log(responseData); // 서버 응답 데이터 출력
       setDonePost(!donePost);
     } catch (err) {
-      console.log(err.response.data.message);
       if (err.response.status === 409) {
         setDifferentDate(false);
+        setVisible(true);
       }
     }
   };
 
-  // 장소 등록
-  const [openSearchModal, setOpenSearchModal] = useState(false);
-  const handleSearchModal = () => {
-    setOpenSearchModal(!openSearchModal);
-  };
-
-  // 메모 등록
-  const handleChangeMemo = (e) => {
-    setMemo(e.target.value);
-  };
+  useEffect(() => {
+    const durationInMinutes = calculateDuration();
+    setDurationTime(durationInMinutes);
+  }, [startTime, endTime]);
 
   return (
     <CalendarAddContainer>
@@ -303,20 +300,23 @@ const CalendarAdd = () => {
       </CalendarAddHeaderContainer>
       {!imageAvailable ? (
         <WarningToast
-          setWarning={setImageAvailavble}
+          setWarning={setVisible}
           text={'사진을 등록해 주세요.'}
+          visible={visible}
         />
       ) : null}
       {!timeAvailable ? (
         <WarningToast
-          setWarning={setTimeAvailable}
+          setWarning={setVisible}
           text={'운동 시간을 입력해 주세요.'}
+          visible={visible}
         />
       ) : null}
       {differentDate ? null : (
         <WarningToast
-          setWarning={setDifferentDate}
+          setWarning={setVisible}
           text={'해당 날짜에는 이미 등록을 하셨어요!'}
+          visible={visible}
         />
       )}
       {donePost ? (

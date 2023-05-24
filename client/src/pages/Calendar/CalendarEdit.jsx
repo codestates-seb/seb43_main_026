@@ -178,6 +178,7 @@ const CalendarEditBody = styled.form`
 `;
 
 const CalendarEdit = () => {
+  const { scheduleid } = useParams();
   const [scheduleId, setScheduleId] = useState('');
   const [editImageUrl, setEditImageUrl] = useState(null);
   const [editImageData, setEditImageData] = useState(new FormData());
@@ -187,40 +188,7 @@ const CalendarEdit = () => {
   const [editEndTime, setEditEndTime] = useState('');
   const [editDurationTime, setEditDurationTime] = useState('');
   const [editMemo, setEditMemo] = useState('');
-
-  const [timeAvailable, setTimeAvailable] = useState(true);
-  const [doneEdit, setDoneEdit] = useState(false);
-
-  // const navigate = useNavigate();
-  const { scheduleid } = useParams();
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/schedules/${scheduleid}`, {
-        headers: {
-          Authorization: localStorage.getItem('accessToken'),
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setScheduleId(res.data.scheduleId);
-        setEditImageUrl(res.data.imageAddress);
-        setEditSelectedDate(res.data.date);
-        setEditPlace(res.data.location);
-        setEditStartTime(res.data.startTime);
-        setEditEndTime(res.data.endTime);
-        setEditMemo(res.data.memo);
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-      });
-  }, [scheduleid]);
-
-  // 장소 검색
   const [openSearchModal, setOpenSearchModal] = useState(false);
-  const handleSearchModal = () => {
-    setOpenSearchModal(!openSearchModal);
-  };
   const swimTimeProps = {
     startTime: editStartTime,
     setStartTime: setEditStartTime,
@@ -228,7 +196,14 @@ const CalendarEdit = () => {
     setEndTime: setEditEndTime,
   };
 
-  // 지속시간 계산
+  const [visible, setVisible] = useState(false);
+  const [timeAvailable, setTimeAvailable] = useState(true);
+  const [doneEdit, setDoneEdit] = useState(false);
+
+  const handleSearchModal = () => {
+    setOpenSearchModal(!openSearchModal);
+  };
+
   const calculateDuration = () => {
     if (!editStartTime || !editEndTime) return 0;
 
@@ -244,14 +219,35 @@ const CalendarEdit = () => {
   };
 
   useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/schedules/${scheduleid}`, {
+        headers: {
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      })
+      .then((res) => {
+        setScheduleId(res.data.scheduleId);
+        setEditImageUrl(res.data.imageAddress);
+        setEditSelectedDate(res.data.date);
+        setEditPlace(res.data.location);
+        setEditStartTime(res.data.startTime);
+        setEditEndTime(res.data.endTime);
+        setEditMemo(res.data.memo);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+      });
+  }, [scheduleid]);
+
+  useEffect(() => {
     const durationInMinutes = calculateDuration();
     setEditDurationTime(durationInMinutes);
-    console.log(editDurationTime);
   }, [editStartTime, editEndTime]);
 
   const handleEdit = async () => {
     if (!editDurationTime || editDurationTime <= 0) {
       setTimeAvailable(false);
+      setVisible(true);
       return;
     }
     const editScheduleData = {
@@ -271,16 +267,16 @@ const CalendarEdit = () => {
       formData.append('schedule', JSON.stringify(editScheduleData));
       formData.append('image', editImageData.get('image'));
 
-      await axios({
-        method: 'PATCH',
-        url: `${process.env.REACT_APP_API_URL}/schedules/${scheduleId}`,
-        mode: 'cors',
-        headers: {
-          Authorization: localStorage.getItem('accessToken'),
-          'Content-Type': 'multipart/form-data',
-        },
-        data: formData,
-      });
+      await axios.patch(
+        `${process.env.REACT_APP_API_URL}/schedules/${scheduleId}`,
+        formData,
+        {
+          headers: {
+            Authorization: localStorage.getItem('accessToken'),
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
       setDoneEdit(true);
     } catch (err) {
       console.log(err.response.data.message);
@@ -297,8 +293,9 @@ const CalendarEdit = () => {
       </CalendarEditHeader>
       {!timeAvailable ? (
         <WarningToast
-          setWarning={setTimeAvailable}
+          setWarning={setVisible}
           text={'운동 시간을 입력해 주세요.'}
+          visible={visible}
         />
       ) : null}
       {doneEdit ? (

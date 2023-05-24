@@ -14,13 +14,12 @@ const Container = styled.button`
 const NavToDetail = ({ scheduleId }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location.pathname.includes('edit'));
+
   const handleBackButton = () => {
     if (location.pathname.includes('edit')) {
       // 이전 페이지로 돌아가는 대신 상세 페이지로 남아 있도록 처리
       navigate(`/calendar/${scheduleId}`, { replace: true });
     } else {
-      // 이전 페이지로 이동
       navigate(`/calendar`);
     }
   };

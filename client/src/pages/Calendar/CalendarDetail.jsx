@@ -1,13 +1,12 @@
 import styled from 'styled-components';
-// import BackButton from '../../component/common/BackButton';
-import NavToDetail from '../../component/Calendar/NavButton';
-import { FaRegEdit } from 'react-icons/fa';
-import { BsTrash3 } from 'react-icons/bs';
 import { SIZE, COLOR } from '../../style/theme';
-import { useState, useEffect } from 'react';
+import NavToDetail from '../../component/Calendar/NavButton';
 import CalendarDeleteModal from '../../component/Calendar/CalendarDetailComponent/CalendarDeleteModal';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import axios from 'axios';
+import { FaRegEdit } from 'react-icons/fa';
+import { BsTrash3 } from 'react-icons/bs';
 
 const CalendarDetailContainer = styled.div`
   max-width: 1200px;
@@ -115,17 +114,29 @@ const CalendarInfoGroup = styled.div`
     justify-content: start;
     > p {
       width: 100px;
-      margin-right: 35%;
+      margin-right: 30%;
+    }
+    > span {
+      min-width: 200px;
+      text-align: center;
     }
   }
 `;
 
 const CalendarDetail = () => {
+  const nav = useNavigate();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const { scheduleid } = useParams();
   const [calendarData, setCalendarData] = useState({});
-  console.log(typeof scheduleid);
-  console.log(scheduleid);
+
+  const handleDeleteModal = () => {
+    setOpenDeleteModal(!openDeleteModal);
+  };
+
+  const navToEdit = () => {
+    nav(`/calendar/${calendarData.scheduleId}/edit`);
+  };
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/schedules/${scheduleid}`, {
@@ -141,16 +152,6 @@ const CalendarDetail = () => {
       });
   }, [scheduleid]);
 
-  console.log(calendarData);
-
-  const handleDeleteModal = () => {
-    setOpenDeleteModal(!openDeleteModal);
-  };
-
-  const nav = useNavigate();
-  const navToEdit = () => {
-    nav(`/calendar/${calendarData.scheduleId}/edit`);
-  };
   return (
     <CalendarDetailContainer>
       <CalendarDetailHeaderContainer>

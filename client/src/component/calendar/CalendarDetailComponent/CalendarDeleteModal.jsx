@@ -2,6 +2,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { COLOR } from '../../../style/theme';
 import { useNavigate } from 'react-router';
+import { useState, useEffect } from 'react';
 
 const CalendarDeleteModalContainer = styled.div`
   width: 100%;
@@ -68,6 +69,7 @@ const DeleteModalButtons = styled.div`
 
 const CalendarDeleteModal = ({ handleDeleteModal, scheduleId }) => {
   const nav = useNavigate();
+  const [deleted, setDeleted] = useState(false);
   const handleSubmitDelete = () => {
     axios
       .delete(`${process.env.REACT_APP_API_URL}/schedules/${scheduleId}`, {
@@ -76,15 +78,18 @@ const CalendarDeleteModal = ({ handleDeleteModal, scheduleId }) => {
         },
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        setDeleted(true);
       })
       .catch((err) => {
         console.log(err);
       });
-
-    nav('/calendar');
   };
-
+  useEffect(() => {
+    if (deleted) {
+      nav('/calendar'); // 페이지 이동
+    }
+  }, [deleted, nav]);
   return (
     <CalendarDeleteModalContainer>
       <DeleteModal>

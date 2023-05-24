@@ -70,10 +70,10 @@ public class SecurityConfiguration{
                         .antMatchers(HttpMethod.PATCH,"/boards/**").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/boards/**").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/boards/**").permitAll()
-                        .antMatchers(HttpMethod.POST, "/calendars/**").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH,"/calendars/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE, "/calendars/**").hasRole("USER")
-                        .antMatchers(HttpMethod.GET,"/calendars/**").hasAnyRole("USER","ADMIN")
+                        .antMatchers(HttpMethod.POST, "/schedules/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/schedules/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/schedules/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET,"/schedules/**").hasAnyRole("USER","ADMIN")
                         .antMatchers(HttpMethod.OPTIONS,"/members/signup").permitAll()
                         .anyRequest().permitAll());
 

@@ -11,14 +11,11 @@ const Container = styled.button`
   color: ${COLOR.main_blue};
 `;
 
-const BackButton = ({ scheduleId }) => {
+const BackButton = () => {
   // 이전 페이지로 이동하기
   const navigate = useNavigate();
   const handleBackButton = () => {
-    if (!scheduleId) {
-      navigate(-1);
-    }
-    navigate(`/calendar/${scheduleId}`);
+    navigate(-1);
   };
   return (
     <Container onClick={handleBackButton}>

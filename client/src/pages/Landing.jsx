@@ -16,6 +16,7 @@ const LandingContainer = styled.main`
 `;
 
 const FirstContainer = styled.section`
+  overflow: hidden;
   position: relative;
   width: 100%;
   height: 400px;
@@ -92,7 +93,7 @@ const IntroduceContainer = styled.div`
     margin-bottom: 15px;
     > h1 {
       color: ${COLOR.main_dark_blue};
-      font-size: 38px;
+      font-size: 50px;
       font-weight: 700;
     }
     > span {
@@ -120,7 +121,7 @@ const IntroduceContainer = styled.div`
     }
   }
   @media screen and (min-width: ${SIZE.tablet}) {
-    margin-top: 60px;
+    margin-top: 55px;
     margin-left: 180px;
     font-size: 30px;
     font-weight: 600;
@@ -147,14 +148,14 @@ const IntroduceContainer = styled.div`
 const SecondContainer = styled.section`
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #fffff7e0;
   > img {
-    width: 120px;
+    width: 250px;
     /* position: absolute; */
   }
   @media screen and (min-width: ${SIZE.tablet}) {
@@ -163,7 +164,8 @@ const SecondContainer = styled.section`
     flex-direction: row;
 
     > img {
-      width: 200px;
+      width: 350px;
+      margin-left: 30px;
     }
   }
 `;
@@ -174,7 +176,7 @@ const SecondTextContainer = styled.div`
   flex-direction: column;
   align-items: center;
   @media screen and (min-width: ${SIZE.tablet}) {
-    margin-right: 100px;
+    margin-right: 70px;
   }
 `;
 
@@ -186,7 +188,7 @@ const CalendarExample = styled.div`
 
   > h2 {
     color: #1b4f13;
-    font-size: 38px;
+    font-size: 50px;
     font-weight: 600;
     margin-bottom: 20px;
     white-space: nowrap;
@@ -194,16 +196,18 @@ const CalendarExample = styled.div`
   }
   > span {
     color: #1b4f13;
-    font-size: 18px;
+    font-size: 25px;
     font-weight: 600;
     white-space: nowrap;
     text-align: center;
+    margin-right: 10px;
   }
 
   @media screen and (min-width: ${SIZE.tablet}) {
     flex-direction: column;
     margin-bottom: 80px;
     margin-right: 120px;
+
     > h2 {
       font-size: 60px;
       letter-spacing: 5px;
@@ -216,9 +220,9 @@ const CalendarExample = styled.div`
 
 const SecondTitle = styled.div`
   width: 100%;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 600;
-  margin-top: 40px;
+  margin: 50px 0px 20px 0px;
   display: flex;
   flex-direction: column;
   padding-left: 4px;
@@ -233,6 +237,7 @@ const SecondTitle = styled.div`
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
     font-size: 32px;
+    margin: 20px 0px 0px 0px;
     /* margin-left: 120px; */
     > p {
       text-align: left;
@@ -246,16 +251,27 @@ const SecondTitle = styled.div`
 // const ExampleImage = styled.img``;
 
 const ThirdContainer = styled.div`
-  position: relative;
   width: 100%;
   height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #fff0fd;
+
+  @media screen and (max-width: ${SIZE.tablet}) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
   img {
     width: 420px;
     margin-right: 5rem;
+
+    @media screen and (max-width: ${SIZE.tablet}) {
+      margin-right: 0;
+      position: absolute;
+      margin-top: 50px;
+    }
   }
 `;
 
@@ -263,6 +279,10 @@ const ThirdTextContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  @media screen and (max-width: ${SIZE.tablet}) {
+    justify-content: center;
+    align-items: center;
+  }
   h2 {
     color: #6a2c9b;
     font-size: 50px;
@@ -272,6 +292,10 @@ const ThirdTextContainer = styled.div`
     letter-spacing: 3px;
     background-color: rgba(203, 140, 255, 0.4);
     padding: 0.5rem 1rem;
+
+    @media screen and (max-width: ${SIZE.tablet}) {
+      margin-bottom: 280px;
+    }
   }
   p {
     margin: 0.5rem 0;

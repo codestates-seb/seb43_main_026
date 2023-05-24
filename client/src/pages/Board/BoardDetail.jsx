@@ -217,11 +217,12 @@ const BoardDetail = () => {
       })
       .then((response) => {
         console.log(response.data);
-        navigate(`/board/${boardId}`);
+        setLiked((prevLiked) => !prevLiked); // 상태를 반전시킴
       })
       .catch((error) => {
         console.error(error);
       });
+    navigate(`/board/${boardId}`);
   };
 
   const handleButtonModify = () => {

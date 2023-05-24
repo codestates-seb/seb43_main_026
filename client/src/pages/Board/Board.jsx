@@ -457,9 +457,7 @@ const Board = () => {
         </View>
         <Sort>
           <SortBtn onClick={() => handleSortClick('latest')}>최신순</SortBtn>
-          <SortBtn onClick={() => handleSortClick('boardLikes')}>
-            추천순
-          </SortBtn>
+          <SortBtn onClick={() => handleSortClick('boardLike')}>추천순</SortBtn>
           <SortBtn onClick={() => handleSortClick('comments')}> 댓글순</SortBtn>
         </Sort>
       </SortBox>

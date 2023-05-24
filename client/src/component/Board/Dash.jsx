@@ -120,10 +120,10 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
   useEffect(() => {
     const handleObserver = (entries) => {
       const target = entries[0];
-      // if (target.isIntersecting && isDash) {
-      // isDash가 true일 때만 처리
-      setCurrentPage((prev) => prev + 1);
-      // }
+      if (target.isIntersecting && isDash) {
+        // isDash가 true일 때만 처리
+        setCurrentPage((prev) => prev + 1);
+      }
     };
 
     observer.current = new IntersectionObserver(handleObserver, options);
@@ -142,7 +142,13 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
   }, [isDash, setCurrentPage]);
 
   useEffect(() => {
-    setData((prevData) => [...prevData, ...posts]);
+    setData((prevData) => {
+      const existingIds = prevData.map((item) => item.boardId);
+      const newPosts = posts.filter(
+        (post) => !existingIds.includes(post.boardId)
+      );
+      return [...prevData, ...newPosts];
+    });
   }, [posts]);
 
   return (

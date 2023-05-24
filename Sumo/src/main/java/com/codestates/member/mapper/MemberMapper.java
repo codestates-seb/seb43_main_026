@@ -1,6 +1,8 @@
 package com.codestates.member.mapper;
 
+import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
+import com.codestates.board.mapper.BoardMapper;
 import com.codestates.member.dto.MemberDto;
 import com.codestates.member.entity.Member;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,12 @@ import java.util.List;
 
 @Component
 public class MemberMapper {
+    private final BoardMapper boardMapper;
+
+    public MemberMapper(BoardMapper boardMapper) {
+        this.boardMapper = boardMapper;
+    }
+
     public Member memberPostDtoToMember(MemberDto.Post postDto){
         if (postDto == null){
             return null;
@@ -49,7 +57,14 @@ public class MemberMapper {
             nickname = member.getNickname();
             boardCount = member.getBoards().size();
             boards = member.getBoards();
-            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname, boardCount,boards);
+
+            List<BoardResponseDto> boardResponseDtos = new ArrayList<>();
+            for(Board i : boards){
+                BoardResponseDto boardDto = boardMapper.boardToBoardResponseDto(i);
+                boardResponseDtos.add(boardDto);
+            }
+
+            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname, boardCount,boardResponseDtos);
             return response;
         }
     }

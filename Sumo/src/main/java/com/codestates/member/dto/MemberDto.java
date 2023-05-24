@@ -1,5 +1,6 @@
 package com.codestates.member.dto;
 
+import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,6 +53,6 @@ public class MemberDto {
         private String email;
         private String nickname;
         private int boardCount;
-        private List<Board> boards;
+        private List<BoardResponseDto> boards;
     }
 }

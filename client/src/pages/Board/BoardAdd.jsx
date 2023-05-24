@@ -194,10 +194,6 @@ const ErrorMessage = styled.span`
 `;
 
 const BoardAdd = () => {
-  const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [imageData, setImageData] = useState(new FormData());
-
   const navigate = useNavigate();
 
   const {
@@ -209,6 +205,10 @@ const BoardAdd = () => {
   const location = useLocation();
   const { isShareCalendar } = location.state;
   const isCalendarShareChecked = isShareCalendar ? true : false;
+
+  const [workoutRecordShare, setWorkoutRecordShare] = useState(true);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [imageData, setImageData] = useState(new FormData());
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
@@ -237,7 +237,6 @@ const BoardAdd = () => {
       navigate(`/board`);
     } catch (error) {
       console.log(error);
-      console.log(data);
     }
   };
   const handleWorkoutRecordShareChange = (e) => {

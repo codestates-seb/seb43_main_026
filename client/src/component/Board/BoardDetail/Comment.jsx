@@ -1,13 +1,9 @@
-//모듈
 import styled from 'styled-components';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
-
-//공통 스타일
 import { COLOR } from '../../../style/theme';
 
-//서버 url
 const API_URL = process.env.REACT_APP_API_URL;
 
 const Container = styled.li`
@@ -94,9 +90,9 @@ const FormModify = styled.form`
 `;
 
 const Comment = ({ comment, setComment, setCommentCount }) => {
+  const { boardId } = useParams();
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedContent, setEditedContent] = useState('');
-  const { boardId } = useParams();
 
   console.log(comment);
 

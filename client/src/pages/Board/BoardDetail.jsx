@@ -203,9 +203,6 @@ const BoardDetail = () => {
   const [comment, setComment] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
 
-  console.log(localMemberId);
-  console.log(isSamePerson);
-
   const createDate = post.createdAt ? post.createdAt.slice(0, 10) : '';
 
   const handleButtonLike = () => {
@@ -242,6 +239,7 @@ const BoardDetail = () => {
       })
       .then((response) => {
         setPost(response.data);
+        navigate(`/board`);
       })
       .catch((error) => {
         console.error(error);

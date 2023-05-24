@@ -61,7 +61,6 @@ public class ScheduleService {
         String emailFromSchedule = findSchedule.getMember().getEmail();
         checkAccessibleUser(emailFromToken, emailFromSchedule);
 
-        Optional.ofNullable(schedule.getImageAddress()).ifPresent(imageAddress -> findSchedule.setImageAddress(imageAddress));
         Optional.ofNullable(schedule.getMemo()).ifPresent(memo -> findSchedule.setMemo(memo));
         Optional.ofNullable(schedule.getLocation()).ifPresent(location -> findSchedule.setLocation(location));
         Optional.ofNullable(schedule.getStartTime()).ifPresent(startTime -> findSchedule.setStartTime(startTime));
@@ -71,7 +70,7 @@ public class ScheduleService {
         float durationTime = calculateDurationTime(findSchedule.getStartTime(), findSchedule.getEndTime());
         findSchedule.setDurationTime(durationTime);
 
-        if (!image.isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             Member member = memberRepository.findByEmail(emailFromToken).get();
 
             uploadImageToS3(findSchedule, image, member);

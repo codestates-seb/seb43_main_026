@@ -49,7 +49,7 @@ public class ScheduleController {
 
     @PatchMapping("/{schedule-id}")
     public ResponseEntity patchSchedule(@Valid @RequestPart("schedule") ScheduleDto.Patch schedulePatchDto,
-                                        @RequestPart("image")MultipartFile image,
+                                        @RequestPart(value = "image", required = false) MultipartFile image,
                                         @PathVariable("schedule-id") @Positive long scheduleId) throws IOException {
         schedulePatchDto.setScheduleId(scheduleId);
 

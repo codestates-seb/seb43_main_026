@@ -1,5 +1,6 @@
 package com.codestates.member.dto;
 
+import com.codestates.board.entity.Board;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Getter
 @Setter
@@ -50,5 +52,6 @@ public class MemberDto {
         private String email;
         private String nickname;
         private int boardCount;
+        private List<Board> boards;
     }
 }

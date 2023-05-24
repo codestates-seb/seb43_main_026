@@ -106,7 +106,16 @@ const EndDetect = styled.div`
   height: 20px;
 `;
 
-const Dash = ({ posts, setCurrentPage, isDash, orderBy }) => {
+const NoData = styled.span`
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+`;
+
+const Dash = ({ posts, setCurrentPage, orderBy }) => {
   const [data, setData] = useState([]);
   const sentinelRef = useRef(null);
 
@@ -134,7 +143,7 @@ const Dash = ({ posts, setCurrentPage, isDash, orderBy }) => {
         observer.current.disconnect();
       }
     };
-  }, [isDash, setCurrentPage]);
+  }, [setCurrentPage]);
 
   useEffect(() => {
     const existingIds = data.map((item) => item.boardId);
@@ -146,30 +155,32 @@ const Dash = ({ posts, setCurrentPage, isDash, orderBy }) => {
 
   return (
     <Container>
-      {data.length
-        ? data.map((post) => (
-            <Item key={post.boardId}>
-              <Link to={`/board/${post.boardId}`}>
-                <Image>
-                  <img src={post.boardImageAddress} alt="캘린더 이미지" />
-                </Image>
-                <Info>
-                  <Title>{post.title}</Title>
-                  <Reaction>
-                    <Like>
-                      <HeartIcon size={15} />
-                      <span>{post.boardLikeCount}</span>
-                    </Like>
-                    <Comment>
-                      <CommentIcon size={15} />
-                      <span>{post.commentCount}</span>
-                    </Comment>
-                  </Reaction>
-                </Info>
-              </Link>
-            </Item>
-          ))
-        : null}
+      {data.length ? (
+        data.map((post) => (
+          <Item key={post.boardId}>
+            <Link to={`/board/${post.boardId}`}>
+              <Image>
+                <img src={post.boardImageAddress} alt="캘린더 이미지" />
+              </Image>
+              <Info>
+                <Title>{post.title}</Title>
+                <Reaction>
+                  <Like>
+                    <HeartIcon size={15} />
+                    <span>{post.boardLikeCount}</span>
+                  </Like>
+                  <Comment>
+                    <CommentIcon size={15} />
+                    <span>{post.commentCount}</span>
+                  </Comment>
+                </Reaction>
+              </Info>
+            </Link>
+          </Item>
+        ))
+      ) : (
+        <NoData>데이터가 없습니다</NoData>
+      )}
       <EndDetect ref={sentinelRef} />
     </Container>
   );

@@ -1,21 +1,12 @@
-//모듈
 import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-//공통 스타일
 import { COLOR, SIZE } from '../../style/theme';
-
-//공통 컴포넌트
-import BackButton from '../../component/common/BackButton';
-
-//컴포넌트
+import { IoArrowBack } from 'react-icons/io5';
 import ImageUpload from '../../component/common/ImageUpload';
 import Record from '../../component/Board/BoardAdd/Record';
-
-//서버 url
 const API_URL = process.env.REACT_APP_API_URL;
 
 //전체 컨테이너
@@ -272,7 +263,7 @@ const BoardAdd = () => {
     <Container>
       <GobackAndUpload>
         <Goback>
-          <BackButton />
+          <IoArrowBack />
         </Goback>
         {isShareCalendar && <Category>{`< 캘린더 자랑 >`}</Category>}
         <UploadBtn type="submit" onClick={handleSubmit(onSubmit)}>

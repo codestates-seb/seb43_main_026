@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { COLOR, SIZE } from '../../style/theme';
-import BackButton from '../../component/common/BackButton';
+import { IoArrowBack } from 'react-icons/io5';
 import CommentForm from '../../component/Board/BoardDetail/CommentForm';
 import Comment from '../../component/Board/BoardDetail/Comment';
 import Record from '../../component/Board/BoardAdd/Record';
@@ -224,7 +224,7 @@ const BoardDetail = () => {
         params: params,
       })
       .then(() => {
-        setLiked((prevLiked) => !prevLiked); // 상태를 반전시킴
+        setLiked((prevLiked) => !prevLiked);
       })
       .catch((error) => {
         console.error(error);
@@ -250,6 +250,10 @@ const BoardDetail = () => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const handleBackButton = () => {
+    navigate(`/board`);
   };
 
   useEffect(() => {
@@ -304,7 +308,11 @@ const BoardDetail = () => {
     <Container>
       <GobackAndModify>
         <Goback>
-          <BackButton />
+          <IoArrowBack
+            size={27}
+            color={COLOR.main_blue}
+            onClick={handleBackButton}
+          />
         </Goback>
         {isSamePerson && (
           <ModifyAndDelete>

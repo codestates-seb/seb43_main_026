@@ -183,7 +183,7 @@ const CalendarContainer = styled.div`
   }
   .rbc-row-segment {
     min-height: 80px;
-    padding: 0 2px 0 1px;
+    padding: 0 1.2px 0 1.2px;
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
@@ -294,16 +294,15 @@ const Toolbar = (props) => {
 
 const MyCalendar = ({ loginUser }) => {
   const nav = useNavigate();
-  const [calendarYear, setCalendarYear] = useState('');
-  const [calendarMonth, setCalendarMonth] = useState('');
+  const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
+  const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth() + 1);
   const [calendarData, setCalendarData] = useState([]);
   const [selectedEventId, setSelectedEventId] = useState('');
 
   const totalDuration = calendarData.reduce((total, el) => {
     return total + el.durationTime;
   }, 0);
-  const totalDurationString = totalDuration.toString();
-  console.log(totalDurationString);
+
   const calculateAttendanceRate = () => {
     const totalDaysInMonth = new Date(calendarYear, calendarMonth, 0).getDate();
     const totalEvents = calendarData.length;
@@ -315,7 +314,6 @@ const MyCalendar = ({ loginUser }) => {
     const attendanceRate = (totalEvents / totalDaysInMonth) * 100;
     return attendanceRate.toFixed(0) + '%';
   };
-
   const attendanceRate = calculateAttendanceRate();
 
   const events = useMemo(
@@ -326,7 +324,6 @@ const MyCalendar = ({ loginUser }) => {
         end: new Date(schedule.date),
         url: schedule.imageAddress,
         id: schedule.scheduleId,
-        tile: schedule.scheduleId,
       })),
     [calendarData]
   );
@@ -346,7 +343,7 @@ const MyCalendar = ({ loginUser }) => {
     );
     if (clickedEvent) {
       setSelectedEventId(clickedEvent.scheduleId);
-      console.log(clickedEvent.scheduleId);
+      navToDetail();
     }
   };
 
@@ -409,10 +406,6 @@ const MyCalendar = ({ loginUser }) => {
   }, [calendarYear, calendarMonth]);
 
   useEffect(() => {
-    console.log(calendarData);
-  }, [calendarData]);
-
-  useEffect(() => {
     navToDetail();
     if (!loginUser) {
       nav('/login');
@@ -445,7 +438,7 @@ const MyCalendar = ({ loginUser }) => {
               },
             })}
             onSelectEvent={(event) => handleSelectEvent(event)}
-            onSelectSlot={(slotInfo) => handleSelectEvent(slotInfo)}
+            // onSelectSlot={(slotInfo) => handleSelectEvent(slotInfo)}
           />
         </div>
         <CalendarBottomContainer>

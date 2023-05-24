@@ -28,6 +28,9 @@ const DropdownContainer = styled.ul`
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 200px;
+    > button {
+      font-size: 18px;
+    }
   }
 `;
 
@@ -60,7 +63,6 @@ const DropdownItem = styled.div`
 `;
 
 const TimeDropDownContainer = styled.section`
-  /* width: 60%; */
   display: flex;
   flex-direction: column;
   align-items: end;
@@ -86,19 +88,26 @@ const TimeDropDownContainer = styled.section`
 
   @media screen and (min-width: ${SIZE.tablet}) {
     > div {
-      width: 100%;
+      width: 80%;
       display: flex;
       flex-direction: row;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
-      margin-top: 30px;
-      > section:last-of-type {
-        margin-top: 0px;
+      margin: 30px 30px 0 0;
+      > section {
+        :last-of-type {
+          margin-top: 0px;
+        }
+        > label {
+          font-size: 18px;
+          font-weight: 600;
+        }
       }
     }
     > p {
       width: 100%;
       text-align: center;
+      font-size: 18px;
     }
   }
 `;

@@ -168,6 +168,13 @@ const SecondContainer = styled.section`
       top: 140px;
     }
   }
+  @media screen and (min-width: ${SIZE.desktop}) {
+    > img {
+      width: 400px;
+      right: 100px;
+      top: 100px;
+    }
+  }
 `;
 
 const SecondTextContainer = styled.div`

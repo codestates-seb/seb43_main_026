@@ -18,7 +18,6 @@ const CalendarDetailContainer = styled.div`
   margin: 0 auto 30px;
 `;
 
-// 상세 페이지 헤더
 const CalendarDetailHeaderContainer = styled.header`
   width: 100%;
   height: 48px;
@@ -40,7 +39,6 @@ const CalendarDetailHeaderContainer = styled.header`
   }
 `;
 
-// 수정 & 삭제 버튼
 const CalendarDetailButtons = styled.div`
   margin-left: auto;
   > :first-child {
@@ -52,7 +50,6 @@ const CalendarDetailButtons = styled.div`
   }
 `;
 
-// 상세 페이지 바디
 const CalendarDetailBodyContainer = styled.section`
   width: 100%;
   display: flex;
@@ -66,7 +63,6 @@ const CalendarDetailBodyContainer = styled.section`
   }
 `;
 
-// 상세페이지 정보
 const CalendarDetailInfoContainer = styled.div`
   width: 100%;
   display: flex;
@@ -118,7 +114,8 @@ const CalendarInfoGroup = styled.div`
     width: 100%;
     justify-content: start;
     > p {
-      margin-right: 40%;
+      width: 100px;
+      margin-right: 35%;
     }
   }
 `;

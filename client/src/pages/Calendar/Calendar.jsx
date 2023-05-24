@@ -21,7 +21,7 @@ import axios from 'axios';
 moment.locale('ko-KR');
 const localizer = momentLocalizer(moment);
 
-const calanderStyle = {
+const calenderStyle = {
   backgroundSize: 'contain',
   backgroundRepeat: 'no-repeat',
   backgroundPosition: 'center',
@@ -193,7 +193,7 @@ const CalendarContainer = styled.div`
   }
   .rbc-row-segment {
     min-height: 80px;
-    padding: 0 2px 0 1px;
+    padding: 0 1.2px 0 1.2px;
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
@@ -244,7 +244,13 @@ const MyCalendarContainer = styled.div`
 `;
 
 const Toolbar = (props) => {
-  const { date, setCalendarMonth, setCalendarYear, totalDuration } = props;
+  const {
+    date,
+    setCalendarYear,
+    setCalendarMonth,
+    totalDuration,
+    attendanceRate,
+  } = props;
 
   useEffect(() => {
     setCalendarMonth(date.getMonth() + 1);
@@ -275,7 +281,7 @@ const Toolbar = (props) => {
       <CalendarInfoContainer>
         <p>
           <MdOutlineCalendarMonth size={16} />
-          출석률:<span>80%</span>
+          출석률:<span>{attendanceRate}</span>
         </p>
         <p>
           <AiOutlineClockCircle size={16} />총 운동 :
@@ -287,42 +293,29 @@ const Toolbar = (props) => {
 };
 
 const MyCalendar = ({ loginUser }) => {
-  const [calendarYear, setCalendarYear] = useState('');
-  const [calendarMonth, setCalendarMonth] = useState('');
+  const nav = useNavigate();
+  const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
+  const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth() + 1);
   const [calendarData, setCalendarData] = useState([]);
   const [selectedEventId, setSelectedEventId] = useState('');
 
-  const navigate = useNavigate();
-
-  console.log(calendarYear, calendarMonth);
-  useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_API_URL}/schedules?year=${calendarYear}&month=${calendarMonth}`,
-        {
-          headers: {
-            Authorization: `${localStorage.getItem('accessToken')}`,
-          },
-        }
-      )
-      .then((res) => {
-        setCalendarData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [calendarYear, calendarMonth]);
-
-  useEffect(() => {
-    console.log(calendarData);
-  }, [calendarData]);
-
-  // 총 운동 시간
   const totalDuration = calendarData.reduce((total, el) => {
     return total + el.durationTime;
   }, 0);
 
-  const totalDurationString = totalDuration.toString();
+  const calculateAttendanceRate = () => {
+    const totalDaysInMonth = new Date(calendarYear, calendarMonth, 0).getDate();
+    const totalEvents = calendarData.length;
+
+    if (totalDaysInMonth === 0) {
+      return 0;
+    }
+
+    const attendanceRate = (totalEvents / totalDaysInMonth) * 100;
+    return attendanceRate.toFixed(0) + '%';
+  };
+  const attendanceRate = calculateAttendanceRate();
+
   const events = useMemo(
     () =>
       calendarData.map((schedule) => ({
@@ -331,13 +324,10 @@ const MyCalendar = ({ loginUser }) => {
         end: new Date(schedule.date),
         url: schedule.imageAddress,
         id: schedule.scheduleId,
-        tile: schedule.scheduleId,
       })),
     [calendarData]
   );
-  console.log(totalDurationString);
 
-  const nav = useNavigate();
   const navToDetail = () => {
     if (selectedEventId) {
       nav(`/calendar/${selectedEventId}`);
@@ -353,19 +343,10 @@ const MyCalendar = ({ loginUser }) => {
     );
     if (clickedEvent) {
       setSelectedEventId(clickedEvent.scheduleId);
-      console.log(clickedEvent.scheduleId);
+      navToDetail();
     }
   };
 
-  // 슬롯을 두 번 클릭해야 페이지 이동이 됨 -> useEffect로 해결
-  useEffect(() => {
-    navToDetail();
-    if (!loginUser) {
-      navigate('/login');
-    }
-  }, [selectedEventId]);
-
-  //캡쳐
   const onCapture = async () => {
     console.log('capture');
     const calMainElement = document.getElementById('calMain');
@@ -388,7 +369,6 @@ const MyCalendar = ({ loginUser }) => {
         useCORS: true,
         allowTaint: true,
       });
-
       // 캡처된 이미지 처리
       document.body.appendChild(canvas);
       onSave(canvas.toDataURL(), 'calendar_capture.png');
@@ -407,6 +387,31 @@ const MyCalendar = ({ loginUser }) => {
     document.body.removeChild(link);
   };
 
+  useEffect(() => {
+    axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/schedules?year=${calendarYear}&month=${calendarMonth}`,
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('accessToken')}`,
+          },
+        }
+      )
+      .then((res) => {
+        setCalendarData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [calendarYear, calendarMonth]);
+
+  useEffect(() => {
+    navToDetail();
+    if (!loginUser) {
+      nav('/login');
+    }
+  }, [selectedEventId]);
+
   return (
     <MyCalendarContainer>
       <CalendarContainer>
@@ -422,17 +427,18 @@ const MyCalendar = ({ loginUser }) => {
                   setCalendarMonth={setCalendarMonth}
                   setCalendarYear={setCalendarYear}
                   totalDuration={totalDuration}
+                  attendanceRate={attendanceRate}
                 />
               ),
             }}
             eventPropGetter={(event) => ({
               style: {
-                ...calanderStyle,
-                backgroundImage: `url(${event.url})`, // 배경 이미지로 설정
+                ...calenderStyle,
+                backgroundImage: `url(${event.url})`,
               },
             })}
             onSelectEvent={(event) => handleSelectEvent(event)}
-            onSelectSlot={(slotInfo) => handleSelectEvent(slotInfo)}
+            // onSelectSlot={(slotInfo) => handleSelectEvent(slotInfo)}
           />
         </div>
         <CalendarBottomContainer>

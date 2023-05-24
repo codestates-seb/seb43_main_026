@@ -13,6 +13,7 @@ import { useParams } from 'react-router';
 import axios from 'axios';
 import { DoneEditModal } from '../../component/Calendar/DonePostModal';
 import { WarningToast } from '../../component/common/WarningToast';
+
 // styled-component
 const CalendarEditContainer = styled.main`
   width: 100%;
@@ -43,6 +44,7 @@ const CalendarSaveEditContainer = styled.button`
   font-weight: 600;
   color: ${COLOR.main_dark_blue};
   cursor: pointer;
+  letter-spacing: 2px;
   @media screen and (min-width: ${SIZE.tablet}) {
     font-size: 20px;
   }
@@ -61,22 +63,15 @@ const EditDateContainer = styled.div`
     font-size: 18px;
     font-weight: 600;
   }
-  .date-picker {
-    width: 130px;
-    border: none;
+  > p {
     font-size: 20px;
     font-weight: 600;
-    text-align: center;
-    :focus {
-      outline: none;
+  }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    > span {
+      font-size: 20px;
+      margin-right: 30px;
     }
-  }
-  .react-datepicker__navigation {
-    color: ${COLOR.main_blue};
-  }
-  .react-datepicker__day--selected {
-    border-radius: 25px;
-    background-color: ${COLOR.main_blue};
   }
 `;
 
@@ -102,6 +97,12 @@ const EditPlaceContainer = styled.div`
       outline: none;
     }
   }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    > span {
+      font-size: 20px;
+      margin-right: 30px;
+    }
+  }
 `;
 
 const EditSwimTimeContainer = styled.div`
@@ -121,12 +122,16 @@ const EditSwimTimeContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     margin-top: 50px;
+    > span {
+      font-size: 20px;
+    }
   }
 `;
 
 const EditMemoContainer = styled.div`
   width: 100%;
   margin-top: 20px;
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
   padding-left: 10px;
@@ -143,10 +148,20 @@ const EditMemoContainer = styled.div`
     border-radius: 10px;
     box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     background-color: ${COLOR.bg_light_blue};
-    padding: 10px;
-    font-size: 14px;
+    padding: 10px 20px;
+    font-size: 16px;
     :focus {
       outline: 2px solid ${COLOR.main_blue};
+    }
+  }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    > span {
+      font-size: 20px;
+    }
+    > textarea {
+      margin-right: 0px;
+      padding: 20px 20px 10px;
+      font-size: 18px;
     }
   }
 `;

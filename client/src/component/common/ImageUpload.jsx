@@ -13,6 +13,7 @@ const UploadContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin: 30px 0 20px;
+  padding: 0 60px;
   > div {
     width: 100%;
     height: 100%;
@@ -23,10 +24,19 @@ const UploadContainer = styled.div`
       max-width: 70%;
     }
   }
-  @media screen and (min-width: ${SIZE.desktop}) {
+  @media screen and (min-width: ${SIZE.tablet}) {
+    padding: 0 100px;
     > div {
       > img {
-        width: 40%;
+        width: 60%;
+      }
+    }
+  }
+  @media screen and (min-width: ${SIZE.desktop}) {
+    padding: 0 200px;
+    > div {
+      > img {
+        width: 50%;
       }
     }
   }
@@ -43,14 +53,19 @@ const DropZoneContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   > p {
     font-size: 16px;
     margin-top: 20px;
+    white-space: nowrap;
   }
 
-  /* 태블릿 버전 */
   @media screen and (min-width: ${SIZE.tablet}) {
-    padding: 50px;
+    height: 300px;
+    padding: 30px;
+    > p {
+      font-size: 20px;
+    }
   }
 `;
 

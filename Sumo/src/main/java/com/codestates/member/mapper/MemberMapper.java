@@ -1,8 +1,12 @@
 package com.codestates.member.mapper;
 
+import com.codestates.board.entity.Board;
 import com.codestates.member.dto.MemberDto;
 import com.codestates.member.entity.Member;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class MemberMapper {
@@ -39,11 +43,13 @@ public class MemberMapper {
             String email = null;
             String nickname = null;
             int boardCount = 0;
+            List<Board> boards = new ArrayList<>();
             memberId = member.getMemberId();
             email = member.getEmail();
             nickname = member.getNickname();
             boardCount = member.getBoards().size();
-            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname, boardCount);
+            boards = member.getBoards();
+            MemberDto.Response response = new MemberDto.Response(memberId,email,nickname, boardCount,boards);
             return response;
         }
     }

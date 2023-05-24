@@ -15,6 +15,7 @@ const LandingContainer = styled.main`
 `;
 
 const FirstContainer = styled.section`
+  overflow: hidden;
   position: relative;
   width: 100%;
   height: 400px;
@@ -91,7 +92,7 @@ const IntroduceContainer = styled.div`
     margin-bottom: 15px;
     > h1 {
       color: ${COLOR.main_dark_blue};
-      font-size: 38px;
+      font-size: 50px;
       font-weight: 700;
     }
     > span {
@@ -119,7 +120,7 @@ const IntroduceContainer = styled.div`
     }
   }
   @media screen and (min-width: ${SIZE.tablet}) {
-    margin-top: 60px;
+    margin-top: 55px;
     margin-left: 180px;
     font-size: 30px;
     font-weight: 600;
@@ -143,65 +144,171 @@ const IntroduceContainer = styled.div`
   }
 `;
 
+// const SecondContainer = styled.section`
+//   position: relative;
+//   width: 100%;
+//   height: 80vh;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   background-color: #fffff7e0;
+//   > img {
+//     width: 250px;
+//     /* position: absolute; */
+//   }
+//   @media screen and (min-width: ${SIZE.tablet}) {
+//     height: 100vh;
+//     padding: 0 30px;
+//     flex-direction: row;
+//     justify-content: space-between;
+//     > img {
+//       width: 340px;
+//       right: 60px;
+//       top: 140px;
+//     }
+//   }
+//   @media screen and (min-width: ${SIZE.desktop}) {
+//     > img {
+//       width: 400px;
+//       right: 100px;
+//       top: 100px;
+//     }
+//   }
+// `;
+
+// const SecondTextContainer = styled.div`
+//   /* width: inherit;
+//   height: inherit;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between;
+//   align-items: center; */
+//   z-index: 1;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   @media screen and (min-width: ${SIZE.tablet}) {
+//     margin-left: 60px;
+//     justify-content: center;
+//   }
+// `;
+
+// const CalendarExample = styled.div`
+//   /* width: 100%; */
+//   /* display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   margin: 100px auto 0 30px; */
+//   width: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   z-index: 10;
+//   > h2 {
+//     color: #1b4f13;
+//     font-size: 50px;
+//     font-weight: 600;
+//     margin-bottom: 20px;
+//     white-space: nowrap;
+//     letter-spacing: 3px;
+//   }
+//   > span {
+//     color: #1b4f13;
+//     font-size: 25px;
+//     font-weight: 600;
+//     white-space: nowrap;
+//     text-align: center;
+//     margin-right: 10px;
+//   }
+
+//   @media screen and (min-width: ${SIZE.tablet}) {
+//     flex-direction: column;
+//     justify-content: center;
+//     margin-bottom: 180px;
+//     > h2 {
+//       font-size: 67px;
+//       letter-spacing: 5px;
+//     }
+//     > span {
+//       font-size: 28px;
+//     }
+//   }
+// `;
+
+// const SecondTitle = styled.div`
+//   width: 100%;
+//   font-size: 28px;
+//   font-weight: 600;
+//   margin: 50px 0px 20px 0px;
+//   display: flex;
+//   flex-direction: column;
+//   /* align-items: flex-start; */
+//   padding-left: 4px;
+
+//   > p {
+//     color: #0c3505;
+//     text-align: center;
+//     white-space: nowrap;
+//     :first-of-type {
+//       margin-bottom: 10px;
+//     }
+//   }
+//   @media screen and (min-width: ${SIZE.tablet}) {
+//     width: 100%;
+//     font-size: 32px;
+//     > p {
+//       text-align: left;
+//       :first-of-type {
+//         margin-bottom: 30px;
+//       }
+//     }
+//   }
+// `;
 const SecondContainer = styled.section`
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 80vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   background-color: #fffff7e0;
   > img {
-    position: absolute;
-    width: 200px;
-    right: 10px;
-    top: 50px;
+    width: 250px;
+    /* position: absolute; */
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     height: 100vh;
     padding: 0 30px;
     flex-direction: row;
-    justify-content: space-between;
+
     > img {
-      width: 340px;
-      right: 60px;
-      top: 140px;
-    }
-  }
-  @media screen and (min-width: ${SIZE.desktop}) {
-    > img {
-      width: 400px;
-      right: 100px;
-      top: 100px;
+      width: 350px;
+      margin-left: 30px;
     }
   }
 `;
 
 const SecondTextContainer = styled.div`
-  width: inherit;
-  height: inherit;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
-
   @media screen and (min-width: ${SIZE.tablet}) {
-    margin-left: 60px;
-    justify-content: center;
+    margin-right: 70px;
   }
 `;
 
 const CalendarExample = styled.div`
-  /* width: 100%; */
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  margin: 100px auto 0 30px;
+  align-items: center;
 
-  z-index: 10;
   > h2 {
     color: #1b4f13;
-    font-size: 38px;
+    font-size: 50px;
     font-weight: 600;
     margin-bottom: 20px;
     white-space: nowrap;
@@ -209,17 +316,20 @@ const CalendarExample = styled.div`
   }
   > span {
     color: #1b4f13;
-    font-size: 18px;
+    font-size: 25px;
     font-weight: 600;
     white-space: nowrap;
+    text-align: center;
+    margin-right: 10px;
   }
 
   @media screen and (min-width: ${SIZE.tablet}) {
     flex-direction: column;
-    justify-content: center;
-    margin-bottom: 180px;
+    margin-bottom: 80px;
+    margin-right: 120px;
+
     > h2 {
-      font-size: 67px;
+      font-size: 60px;
       letter-spacing: 5px;
     }
     > span {
@@ -229,15 +339,13 @@ const CalendarExample = styled.div`
 `;
 
 const SecondTitle = styled.div`
-  /* width: 100%; */
-  font-size: 24px;
-  font-weight: 700;
-  margin: 40px 0 30px 40px;
+  width: 100%;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 50px 0px 20px 0px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   padding-left: 4px;
-
   > p {
     color: #0c3505;
     text-align: center;
@@ -249,7 +357,8 @@ const SecondTitle = styled.div`
   @media screen and (min-width: ${SIZE.tablet}) {
     width: 100%;
     font-size: 32px;
-
+    margin: 20px 0px 0px 0px;
+    /* margin-left: 120px; */
     > p {
       text-align: left;
       :first-of-type {
@@ -258,18 +367,28 @@ const SecondTitle = styled.div`
     }
   }
 `;
-
 const ThirdContainer = styled.div`
-  position: relative;
   width: 100%;
   height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #fff0fd;
+
+  @media screen and (max-width: ${SIZE.tablet}) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
   img {
     width: 420px;
     margin-right: 5rem;
+
+    @media screen and (max-width: ${SIZE.tablet}) {
+      margin-right: 0;
+      position: absolute;
+      margin-top: 50px;
+    }
   }
 `;
 
@@ -277,6 +396,10 @@ const ThirdTextContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  @media screen and (max-width: ${SIZE.tablet}) {
+    justify-content: center;
+    align-items: center;
+  }
   h2 {
     color: #6a2c9b;
     font-size: 50px;
@@ -286,6 +409,10 @@ const ThirdTextContainer = styled.div`
     letter-spacing: 3px;
     background-color: rgba(203, 140, 255, 0.4);
     padding: 0.5rem 1rem;
+
+    @media screen and (max-width: ${SIZE.tablet}) {
+      margin-bottom: 280px;
+    }
   }
   p {
     margin: 0.5rem 0;

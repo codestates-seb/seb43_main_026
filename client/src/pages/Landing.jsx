@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Swimming from '../assets/image/swimming.png';
 import Wave1 from '../assets/image/wave.png';
 import Wave2 from '../assets/image/wave2.png';
@@ -6,6 +6,17 @@ import { COLOR, SIZE } from '../style/theme';
 import { useNavigate } from 'react-router';
 import Iphone from '../assets/image/calendarEX.png';
 import Alert from '../assets/image/alert.png';
+
+const slideUp = keyframes`
+    0% {
+      bottom: -100px;
+      opacity: 0;
+    }
+    100% {
+      bottom: 150px;
+      opacity: 1;
+    }
+`;
 
 const LandingContainer = styled.main`
   width: 100%;
@@ -58,7 +69,7 @@ const IntroduceContainer = styled.div`
   margin-left: 30px;
   font-size: 24px;
   font-weight: 600;
-  animation: slide-up 1s linear 0s 1;
+  animation: ${slideUp} 1s linear 0s 1;
 
   > div {
     display: flex;
@@ -120,16 +131,7 @@ const IntroduceContainer = styled.div`
   @media screen and (min-width: ${SIZE.desktop}) {
     margin-left: 180px;
   }
-  @keyframes slide-up {
-    0% {
-      bottom: -100px;
-      opacity: 0;
-    }
-    100% {
-      bottom: 150px;
-      opacity: 1;
-    }
-  }
+
   @keyframes slide-in {
     0% {
       left: -180px;
@@ -157,6 +159,7 @@ const SecondContainer = styled.section`
   padding: 40px 0;
   > img {
     width: 250px;
+    animation: ${slideUp} 1s linear 0s 1;
   }
   @media screen and (min-width: ${SIZE.tablet}) {
     height: 100vh;

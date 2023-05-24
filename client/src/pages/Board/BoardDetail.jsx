@@ -327,7 +327,7 @@ const BoardDetail = () => {
           </LikeButton>
         </Like>
       </ImageAndLike>
-      {post.workoutRecordShare && <Record />}
+      {post.workoutRecordShare && <Record post={post} />}
       <Content>{post.content}</Content>
       <CommentContainer>
         <CommentHeader>

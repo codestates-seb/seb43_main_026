@@ -181,9 +181,9 @@ const BoardEdit = () => {
   const { boardId } = useParams();
   const navigate = useNavigate();
   const [imageData, setImageData] = useState(new FormData());
-  const [posts, setPosts] = useState([]);
+  const [post, setPost] = useState([]);
   const [workoutRecordShare, setWorkoutRecordShare] = useState(
-    posts && posts.workoutRecordShare
+    post && post.workoutRecordShare
   );
   const [imageUrl, setImageUrl] = useState(null);
 
@@ -201,7 +201,7 @@ const BoardEdit = () => {
           Authorization: `${localStorage.getItem('accessToken')}`,
         },
       });
-      setPosts(response.data);
+      setPost(response.data);
       setImageUrl(response.data.boardImageAddress);
     } catch (error) {
       console.error(error);
@@ -258,11 +258,11 @@ const BoardEdit = () => {
   }, [imageData]);
 
   useEffect(() => {
-    if (posts) {
-      setValue('title', posts.title);
-      setValue('content', posts.content);
+    if (post) {
+      setValue('title', post.title);
+      setValue('content', post.content);
     }
-  }, [posts, setValue]);
+  }, [post, setValue]);
 
   useEffect(() => {
     fetchPostData();
@@ -274,7 +274,7 @@ const BoardEdit = () => {
         <Goback>
           <BackButton />
         </Goback>
-        {posts.calendarShare && <Category>{`< 캘린더 자랑 >`}</Category>}
+        {post.calendarShare && <Category>{`< 캘린더 자랑 >`}</Category>}
         <UploadBtn type="submit" onClick={handleSubmit(onSubmit)}>
           등록
         </UploadBtn>
@@ -305,7 +305,9 @@ const BoardEdit = () => {
             </label>
           </WorkOut>
         </WorkOutContainer>
-        {workoutRecordShare && <Record isShareCalendar={posts.calendarShare} />}
+        {workoutRecordShare && (
+          <Record isShareCalendar={post.calendarShare} post={post} />
+        )}
         <TitleContainer>
           {errors.title && (
             <ErrorContainer>
@@ -317,7 +319,7 @@ const BoardEdit = () => {
             id="title"
             type="text"
             placeholder="제목"
-            defaultValue={posts.title}
+            defaultValue={post.title}
             {...register('title', { required: true })}
           />
         </TitleContainer>
@@ -331,7 +333,7 @@ const BoardEdit = () => {
           <Memo
             id="content"
             placeholder="내용"
-            defaultValue={posts.content}
+            defaultValue={post.content}
             {...register('content', { required: true })}
           />
         </Content>
@@ -342,7 +344,7 @@ const BoardEdit = () => {
             id="calendarShare"
             type="checkbox"
             {...register('calendarShare')}
-            checked={posts.calendarShare}
+            checked={post.calendarShare}
           />
         </Calendar>
       </Form>

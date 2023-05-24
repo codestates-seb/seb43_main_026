@@ -88,6 +88,9 @@ export const userAPI = {
       })
       .then((res) => {
         return res.data;
+      })
+      .catch((error) => {
+        return error;
       });
   },
 

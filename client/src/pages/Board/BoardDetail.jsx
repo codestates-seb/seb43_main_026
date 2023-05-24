@@ -208,10 +208,7 @@ const BoardDetail = () => {
   const [attendance, setAttendance] = useState(0);
 
   //eslint 오류
-  console.log(totalWorkoutTime);
-  console.log(todayWorkoutTime);
-  console.log(workoutLocation);
-  console.log(attendance);
+  console.log(totalWorkoutTime, todayWorkoutTime, workoutLocation, attendance);
 
   const createDate = post.createdAt ? post.createdAt.slice(0, 10) : '';
 

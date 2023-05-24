@@ -53,6 +53,10 @@ public class Board extends Auditable {
     @Column
     private int attendanceRate;
 
+    @Column
+    private int commentCount = 0;
+
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -63,10 +67,6 @@ public class Board extends Auditable {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    public void addComment(Comment comment){
-        this.comments.add(comment);
-        comment.setBoard(this);
-    }
 
     public int getBoardLikeCount() {
         return (int) boardLike.stream()
@@ -74,8 +74,15 @@ public class Board extends Auditable {
                 .count();
     }
 
-    public int getCommentCount() {
-        return comments.size();
+    public void addComment(Comment comment){
+        this.comments.add(comment);
+        comment.setBoard(this);
+        this.commentCount++;  // 댓글을 추가할 때마다 카운트 증가
+    }
+
+    public void removeComment(Comment comment){
+        this.comments.remove(comment);
+        this.commentCount--;  // 댓글을 삭제할 때마다 카운트 감소
     }
 
 

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Positive;
 
 
 @Getter
@@ -23,4 +22,13 @@ public class BoardPatchDto {
     private Boolean calendarShare;
 
     private Boolean workoutRecordShare;
+
+    private float totalWorkoutTime;
+
+    private float todayWorkoutTime;
+
+    private String workoutLocation;
+
+    private int attendanceRate;
+
 }

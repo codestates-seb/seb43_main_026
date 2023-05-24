@@ -41,6 +41,18 @@ public class Board extends Auditable {
     @Column
     private Boolean workoutRecordShare = false;
 
+    @Column
+    private float totalWorkoutTime;
+
+    @Column
+    private float todayWorkoutTime;
+
+    @Column
+    private String workoutLocation;
+
+    @Column
+    private int attendanceRate;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;

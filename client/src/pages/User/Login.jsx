@@ -3,14 +3,13 @@ import styled from 'styled-components';
 // import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import LoginTitle from '../../assets/image/login_title.png';
 import { COLOR, SIZE } from '../../style/theme';
 import { userAPI } from '../../assets/api';
 
 // 컴포넌트
-import GoogleLogin from '../../component/OAuth/GoogleLogin';
 import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
 import { WarningToast } from '../../component/common/WarningToast';
@@ -50,17 +49,6 @@ const Form = styled.form`
   }
 `;
 
-const OAuthContainer = styled.div`
-  width: 100%;
-  margin-top: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  svg {
-    cursor: pointer;
-  }
-`;
-
 const Login = ({
   loginUser,
   setLoginUser,
@@ -69,6 +57,7 @@ const Login = ({
 }) => {
   const { handleSubmit, control } = useForm();
   const navigate = useNavigate();
+  const [visible, setVisible] = useState(isSignupSuccess);
 
   const emailOptions = {
     required: '이메일을 입력해주세요.',
@@ -113,10 +102,20 @@ const Login = ({
       navigate('/calendar');
     }
   }, [loginUser]);
-
+  useEffect(() => {
+    if (isSignupSuccess) {
+      setVisible(true);
+    }
+  }, [isSignupSuccess]);
   return (
     <>
-      {isSignupSuccess && <WarningToast text={'회원가입에 성공하였습니다.'} />}
+      {visible ? (
+        <WarningToast
+          text={'회원가입에 성공하였습니다.'}
+          setWarning={setVisible}
+          visible={visible}
+        />
+      ) : null}
       <Container>
         <Title src={LoginTitle} alt="타이틀" />
         <Form onSubmit={handleSubmit(onFormSubmit, onFormError)}>
@@ -164,9 +163,6 @@ const Login = ({
               navigate('/signup');
             }}
           />
-          <OAuthContainer>
-            <GoogleLogin />
-          </OAuthContainer>
         </Form>
       </Container>
     </>

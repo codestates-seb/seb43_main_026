@@ -108,32 +108,27 @@ const EndDetect = styled.div`
 
 const Dash = ({ posts, setCurrentPage, isDash }) => {
   const [data, setData] = useState([]);
-  const observer = useRef(null);
   const sentinelRef = useRef(null);
 
   const options = {
     root: null,
     rootMargin: '0px',
-    threshold: 0.5,
+    threshold: 1,
   };
 
-  useEffect(() => {
-    const handleObserver = (entries) => {
-      const target = entries[0];
-      if (target.isIntersecting && isDash) {
-        // isDash가 true일 때만 처리
+  const observer = useRef(
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
         setCurrentPage((prev) => prev + 1);
       }
-    };
+    }, options)
+  );
 
-    observer.current = new IntersectionObserver(handleObserver, options);
-
-    // 컴포넌트가 마운트될 때 신호 타겟을 관찰
+  useEffect(() => {
     if (observer.current && sentinelRef.current) {
       observer.current.observe(sentinelRef.current);
     }
 
-    // 컴포넌트가 언마운트될 때 옵저버를 정리
     return () => {
       if (observer.current) {
         observer.current.disconnect();

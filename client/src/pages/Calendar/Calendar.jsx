@@ -21,6 +21,16 @@ import axios from 'axios';
 moment.locale('ko-KR');
 const localizer = momentLocalizer(moment);
 
+const calenderStyle = {
+  backgroundSize: 'contain',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center',
+  backgroundColor: '#fff',
+  width: '100%',
+  height: '100%',
+  padding: '0px',
+};
+
 // styled-component
 const ToolbarButtonsContainer = styled.div`
   display: flex;
@@ -211,16 +221,6 @@ const CalendarContainer = styled.div`
     }
   }
 `;
-
-const calendarStyle = {
-  backgroundSize: 'contain',
-  backgroundRepeat: 'no-repeat',
-  backgroundPosition: 'center',
-  backgroundColor: '#fff',
-  width: '100%',
-  height: '100%',
-  padding: '0px',
-};
 
 const MyCalendarContainer = styled.div`
   background-color: #fff;
@@ -433,7 +433,7 @@ const MyCalendar = ({ loginUser }) => {
             }}
             eventPropGetter={(event) => ({
               style: {
-                ...calendarStyle,
+                ...calenderStyle,
                 backgroundImage: `url(${event.url})`,
               },
             })}

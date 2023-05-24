@@ -247,6 +247,7 @@ const Board = () => {
           },
         }
       );
+      console.log(response.data);
       setPosts(response.data);
     } catch (error) {
       console.log(error);
@@ -273,6 +274,7 @@ const Board = () => {
         }
       );
 
+      console.log(response.data);
       setPosts(response.data);
     } catch (error) {
       console.log(error);
@@ -474,7 +476,12 @@ const Board = () => {
       <ListBox>
         {posts.length === 0 && <NoData>데이터가 없습니다</NoData>}
         {isDash && (
-          <Dash posts={posts} setCurrentPage={setCurrentPage} isDash={isDash} />
+          <Dash
+            posts={posts}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            isDash={isDash}
+          />
         )}
         {isDash || <List posts={posts} />}
       </ListBox>

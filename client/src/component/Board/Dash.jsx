@@ -106,7 +106,7 @@ const EndDetect = styled.div`
   height: 20px;
 `;
 
-const Dash = ({ posts, setCurrentPage, isDash }) => {
+const Dash = ({ posts, setCurrentPage, isDash, orderBy }) => {
   const [data, setData] = useState([]);
   const sentinelRef = useRef(null);
 
@@ -137,14 +137,13 @@ const Dash = ({ posts, setCurrentPage, isDash }) => {
   }, [isDash, setCurrentPage]);
 
   useEffect(() => {
-    setData((prevData) => {
-      const existingIds = prevData.map((item) => item.boardId);
-      const newPosts = posts.filter(
-        (post) => !existingIds.includes(post.boardId)
-      );
-      return [...prevData, ...newPosts];
-    });
-  }, [posts]);
+    setData([]);
+    const existingIds = data.map((item) => item.boardId);
+    const newPosts = posts.filter(
+      (post) => !existingIds.includes(post.boardId)
+    );
+    setData((prevData) => [...prevData, ...newPosts]);
+  }, [posts, orderBy]);
 
   return (
     <Container>

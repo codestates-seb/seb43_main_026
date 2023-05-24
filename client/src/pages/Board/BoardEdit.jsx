@@ -240,6 +240,7 @@ const BoardEdit = () => {
           },
         }
       );
+      console.log(response.data);
 
       fetchPostData(); // 이동 후 다시 데이터 가져오기
       navigate(`/board/${boardId}`);
@@ -251,6 +252,10 @@ const BoardEdit = () => {
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
+
+  useEffect(() => {
+    console.log(imageData.get('image'));
+  }, [imageData]);
 
   useEffect(() => {
     if (posts) {

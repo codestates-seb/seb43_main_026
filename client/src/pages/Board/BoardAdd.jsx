@@ -243,6 +243,10 @@ const BoardAdd = () => {
     setWorkoutRecordShare(e.target.checked);
   };
 
+  useEffect(() => {
+    console.log(imageData.get('image'));
+  }, [imageData]);
+
   return (
     <Container>
       <GobackAndUpload>

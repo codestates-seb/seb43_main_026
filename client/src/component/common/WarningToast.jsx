@@ -26,26 +26,12 @@ const WarningToastContainer = styled.div`
 `;
 
 export const WarningToast = ({ setWarning, text, visible }) => {
-  if (typeof setWarning !== 'function') {
-    return (
-      <WarningToastContainer>
-        <p>{text}</p>
-      </WarningToastContainer>
-    );
-  }
-
-  console.log(visible);
-
   useEffect(() => {
     if (visible) {
       setTimeout(() => {
         setWarning(false);
       }, 1500);
     }
-
-    // return () => {
-    //   clearTimeout(timer);
-    // };
   }, [setWarning, visible]);
 
   return visible ? (

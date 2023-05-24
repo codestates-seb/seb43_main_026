@@ -5,13 +5,13 @@ import { COLOR } from '../../style/theme';
 const Container = styled.div`
   width: 280px;
   height: 150px;
-  position: absolute;
+  position: fixed;
   z-index: 100;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  top: 120px;
+  top: 80px;
   border: 2px solid ${COLOR.main_dark_blue};
   border-radius: 20px;
   background-color: #fff;

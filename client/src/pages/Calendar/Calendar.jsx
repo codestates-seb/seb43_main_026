@@ -17,6 +17,7 @@ import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { TbCapture } from 'react-icons/tb';
 import axios from 'axios';
+import { WarningToast } from '../../component/common/WarningToast';
 
 moment.locale('ko-KR');
 const localizer = momentLocalizer(moment);
@@ -292,12 +293,14 @@ const Toolbar = (props) => {
   );
 };
 
-const MyCalendar = ({ loginUser }) => {
+const MyCalendar = ({ loginUser, isLoginSuccess }) => {
   const nav = useNavigate();
   const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
   const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth() + 1);
   const [calendarData, setCalendarData] = useState([]);
   const [selectedEventId, setSelectedEventId] = useState('');
+  const [visible, setVisible] = useState(isLoginSuccess);
+  const [message, setMessage] = useState('');
 
   const totalDuration = calendarData.reduce((total, el) => {
     return total + el.durationTime;
@@ -388,6 +391,12 @@ const MyCalendar = ({ loginUser }) => {
   };
 
   useEffect(() => {
+    if (!loginUser) {
+      nav('/login');
+    }
+  }, []);
+
+  useEffect(() => {
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/schedules?year=${calendarYear}&month=${calendarMonth}`,
@@ -407,48 +416,65 @@ const MyCalendar = ({ loginUser }) => {
 
   useEffect(() => {
     navToDetail();
-    if (!loginUser) {
-      nav('/login');
-    }
   }, [selectedEventId]);
 
+  useEffect(() => {
+    if (isLoginSuccess) {
+      setVisible(true);
+      setMessage('로그인에 성공하였습니다.');
+    }
+  }, [isLoginSuccess]);
+
   return (
-    <MyCalendarContainer>
-      <CalendarContainer>
-        <div id="calMain">
-          <Calendar
-            localizer={localizer}
-            views={['month']}
-            events={events}
-            components={{
-              toolbar: (props) => (
-                <Toolbar
-                  {...props}
-                  setCalendarMonth={setCalendarMonth}
-                  setCalendarYear={setCalendarYear}
-                  totalDuration={totalDuration}
-                  attendanceRate={attendanceRate}
-                />
-              ),
-            }}
-            eventPropGetter={(event) => ({
-              style: {
-                ...calenderStyle,
-                backgroundImage: `url(${event.url})`,
-              },
-            })}
-            onSelectEvent={(event) => handleSelectEvent(event)}
-            // onSelectSlot={(slotInfo) => handleSelectEvent(slotInfo)}
-          />
-        </div>
-        <CalendarBottomContainer>
-          <button className="cal-cap" onClick={onCapture}>
-            <TbCapture size={33} />
-          </button>
-          <IoMdAddCircle className="cal-add-btn" size={50} onClick={navToAdd} />
-        </CalendarBottomContainer>
-      </CalendarContainer>
-    </MyCalendarContainer>
+    <>
+      {visible ? (
+        <WarningToast
+          text={message}
+          setWarning={setVisible}
+          visible={visible}
+        />
+      ) : null}
+      <MyCalendarContainer>
+        <CalendarContainer>
+          <div id="calMain">
+            <Calendar
+              localizer={localizer}
+              views={['month']}
+              events={events}
+              components={{
+                toolbar: (props) => (
+                  <Toolbar
+                    {...props}
+                    setCalendarMonth={setCalendarMonth}
+                    setCalendarYear={setCalendarYear}
+                    totalDuration={totalDuration}
+                    attendanceRate={attendanceRate}
+                  />
+                ),
+              }}
+              eventPropGetter={(event) => ({
+                style: {
+                  ...calenderStyle,
+                  backgroundImage: `url(${event.url})`,
+                },
+              })}
+              onSelectEvent={(event) => handleSelectEvent(event)}
+              // onSelectSlot={(slotInfo) => handleSelectEvent(slotInfo)}
+            />
+          </div>
+          <CalendarBottomContainer>
+            <button className="cal-cap" onClick={onCapture}>
+              <TbCapture size={33} />
+            </button>
+            <IoMdAddCircle
+              className="cal-add-btn"
+              size={50}
+              onClick={navToAdd}
+            />
+          </CalendarBottomContainer>
+        </CalendarContainer>
+      </MyCalendarContainer>
+    </>
   );
 };
 

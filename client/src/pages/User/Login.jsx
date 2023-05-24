@@ -1,6 +1,4 @@
-// 라이브러리
 import styled from 'styled-components';
-// import axios from 'axios';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { useEffect, useState } from 'react';
@@ -9,7 +7,6 @@ import LoginTitle from '../../assets/image/login_title.png';
 import { COLOR, SIZE } from '../../style/theme';
 import { userAPI } from '../../assets/api';
 
-// 컴포넌트
 import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
 import { WarningToast } from '../../component/common/WarningToast';
@@ -58,6 +55,7 @@ const Login = ({
   const { handleSubmit, control } = useForm();
   const navigate = useNavigate();
   const [visible, setVisible] = useState(isSignupSuccess);
+  const [message, setMessage] = useState('');
 
   const emailOptions = {
     required: '이메일을 입력해주세요.',
@@ -77,13 +75,14 @@ const Login = ({
     },
   };
 
-  // 로그인 완료 시
   const onFormSubmit = async ({ username, password }) => {
     const response = await userAPI.login(username, password);
     if (response.status === 401) {
-      // 로그인 실패 에러메세지 출력
+      setVisible(true);
+      setMessage('로그인에 실패했습니다.');
     } else if (response.status === 500) {
-      // 서버 에러 메세지 출력
+      setVisible(true);
+      setMessage('서버와 통신에 실패했습니다.');
     } else {
       const user = await userAPI.isLogin();
       setLoginUser(user);
@@ -92,10 +91,7 @@ const Login = ({
     }
   };
 
-  // 폼 작성시 에러
-  const onFormError = (error) => {
-    console.log(error, '에러');
-  };
+  const onFormError = (error) => console.log(error);
 
   useEffect(() => {
     if (loginUser) {
@@ -105,13 +101,14 @@ const Login = ({
   useEffect(() => {
     if (isSignupSuccess) {
       setVisible(true);
+      setMessage('회원가입에 성공하였습니다.');
     }
   }, [isSignupSuccess]);
   return (
     <>
       {visible ? (
         <WarningToast
-          text={'회원가입에 성공하였습니다.'}
+          text={message}
           setWarning={setVisible}
           visible={visible}
         />

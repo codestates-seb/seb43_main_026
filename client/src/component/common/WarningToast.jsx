@@ -34,18 +34,12 @@ export const WarningToast = ({ setWarning, text, visible }) => {
     );
   }
 
-  console.log(visible);
-
   useEffect(() => {
     if (visible) {
       setTimeout(() => {
         setWarning(false);
       }, 1500);
     }
-
-    // return () => {
-    //   clearTimeout(timer);
-    // };
   }, [setWarning, visible]);
 
   return visible ? (

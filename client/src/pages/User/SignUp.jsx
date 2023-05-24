@@ -1,18 +1,15 @@
-// 라이브러리
 import styled from 'styled-components';
 import { useForm, Controller } from 'react-hook-form';
+import { useNavigate } from 'react-router';
+import { useState } from 'react';
 
 import SignupTitle from '../../assets/image/signup_title.png';
 import { COLOR, SIZE } from '../../style/theme';
+import { userAPI } from '../../assets/api';
 
-// 컴포넌트
 import Input from '../../component/common/Input';
 import Button from '../../component/common/Button';
-
-import { userAPI } from '../../assets/api';
-import { useNavigate } from 'react-router';
 import { WarningToast } from '../../component/common/WarningToast';
-import { useState } from 'react';
 
 const Container = styled.div`
   width: 100%;
@@ -92,23 +89,17 @@ const SignUp = ({ setIsSignupSuccess }) => {
     },
   };
 
-  // 회원가입 완료 시
   const onSubmit = async (data) => {
     const response = await userAPI.signup(data);
-    console.log(response.status);
-    // console.log(errorMessage);
     if (response.status === 409) {
-      // 회원가입 실패 에러 메시지
+      setVisible(true);
       setErrorMessage(response.data.message);
-      // console.log(response.data.message);
-    } else {
-      console.log('회원가입 성공');
+    } else if (response.status === 201) {
       setIsSignupSuccess(true);
       navigate('/login');
     }
   };
 
-  // 에러 발생 시
   const onError = (error) => console.log(error);
 
   return (

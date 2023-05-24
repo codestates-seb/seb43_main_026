@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
-import { COLOR } from '../../style/theme';
-import Button from '../../component/common/Button';
-import ProfileImage from '../../assets/image/headalee.png';
 import { useEffect } from 'react';
 
-// const SERVER_URL = process.env.REACT_APP_API_URL;
+import ProfileImage from '../../assets/image/headalee.png';
+import { COLOR } from '../../style/theme';
+
+import Button from '../../component/common/Button';
+import Pagination from '../../component/Board/Pagination';
 
 const Container = styled.div`
   width: 100vw;
@@ -73,6 +74,20 @@ const Title = styled.h1`
   border-bottom: 1px solid ${COLOR.main_blue};
 `;
 
+const Lists = styled.ul`
+  width: 100%;
+  height: 100%;
+`;
+
+const NoList = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+  /* align-items: center; */
+`;
+
 const User = ({ loginUser }) => {
   const navigate = useNavigate();
   console.log(loginUser);
@@ -104,7 +119,15 @@ const User = ({ loginUser }) => {
           </UserInfo>
         </UserProfile>
         <UserCalendarList>
-          <Title>🗓️ 내가 자랑한 캘린더</Title>
+          <Title>🗓️ 내가 작성한 게시글</Title>
+          <Lists>
+            {loginUser.boardCount === 0 ? (
+              <NoList>작성한 게시글이 없습니다.</NoList>
+            ) : (
+              <div></div>
+            )}
+          </Lists>
+          <Pagination />
         </UserCalendarList>
       </Container>
     )

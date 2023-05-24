@@ -11,6 +11,7 @@ import Input from '../../component/common/Input';
 import { useNavigate } from 'react-router';
 
 import { userAPI } from '../../assets/api';
+import { WarningToast } from '../../component/common/WarningToast';
 
 const Container = styled.div`
   width: 100vw;
@@ -116,6 +117,8 @@ const EditUser = ({ loginUser, setLoginUser }) => {
   const navigate = useNavigate();
 
   const [isModal, setIsModal] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [message, setMessage] = useState('');
 
   const nicknameOptions = {
     minLength: {
@@ -142,30 +145,35 @@ const EditUser = ({ loginUser, setLoginUser }) => {
     },
   };
 
-  // 프로필 수정 적용
   const onSubmit = async ({ nickname, newPassword }) => {
-    console.log(nickname, newPassword);
-    // 바꾸려는 닉네임이 지금 닉네임과 일치할 때
-    if (loginUser.nickname === nickname) {
-      await userAPI.editProfile(null, newPassword);
-      console.log('비밀번호 변경 완료');
-    } else {
-      // 닉네임 변경이 있을 때
+    if (nickname && newPassword) {
       const response = await userAPI.editProfile(nickname, newPassword);
-      console.log(response);
       if (response.status === 409) {
-        // 이미 존재하는 닉네임 에러 메세지 출력
-      } else {
-        console.log('닉네임, 비밀번호 변경 완료');
-        // navigate('/edit/profile');
+        setVisible(true);
+        setMessage('이미 사용중인 닉네임 입니다.');
+      } else if (response.status === 200) {
+        setVisible(true);
+        setMessage('회원정보가 변경되었습니다.');
+      }
+    } else if (nickname) {
+      const nicknameResponse = await userAPI.editProfile(nickname, null);
+      if (nicknameResponse.status === 409) {
+        setVisible(true);
+        setMessage('이미 사용중인 닉네임 입니다.');
+      } else if (nicknameResponse.status === 200) {
+        setVisible(true);
+        setMessage('닉네임이 변경되었습니다.');
+      }
+    } else if (newPassword) {
+      const passwordResponse = await userAPI.editProfile(null, newPassword);
+      if (passwordResponse.status === 200) {
+        setVisible(true);
+        setMessage('비밀번호가 변경되었습니다.');
       }
     }
   };
 
-  // 폼 작성시 에러
-  const onError = (error) => {
-    console.log(error);
-  };
+  const onError = (error) => console.log(error);
 
   const handleDeleteUser = async () => {
     await userAPI.deleteUser();
@@ -182,85 +190,78 @@ const EditUser = ({ loginUser, setLoginUser }) => {
   return (
     <>
       {loginUser && (
-        <Container>
-          <Title src={EditProfileTitle} alt="타이틀" />
-          <Form onSubmit={handleSubmit(onSubmit, onError)}>
-            <Image src={ProfileImage} alt="프로필사진" />
-            <Email>{loginUser.email}</Email>
-            <Controller
-              name={'nickname'}
-              control={control}
-              rules={nicknameOptions}
-              render={({ field, fieldState: { error } }) => (
-                <Input
-                  id="nickname"
-                  label="닉네임"
-                  type="text"
-                  errorMessage={error?.message}
-                  onChange={field.onChange}
-                  value={field.value || ''}
-                  style={{ marginTop: '10px' }}
-                />
-              )}
+        <>
+          {visible ? (
+            <WarningToast
+              text={message}
+              setWarning={setVisible}
+              visible={visible}
             />
-            {/* <Controller
-              name={'password'}
-              control={control}
-              rules={passwordOptions}
-              render={({ field, fieldState: { error } }) => (
-                <Input
-                  id="password"
-                  label="비밀번호"
-                  type="password"
-                  errorMessage={error?.message}
-                  onChange={field.onChange}
-                  value={field.value || ''}
-                  style={{ marginTop: '10px' }}
-                />
-              )}
-            /> */}
-            <Controller
-              name={'newPassword'}
-              control={control}
-              rules={passwordOptions}
-              render={({ field, fieldState: { error } }) => (
-                <Input
-                  id="newPassword"
-                  label="새 비밀번호"
-                  type="password"
-                  errorMessage={error?.message}
-                  onChange={field.onChange}
-                  value={field.value || ''}
-                  style={{ marginTop: '10px' }}
-                />
-              )}
-            />
-            <Controller
-              name={'newPasswordCheck'}
-              control={control}
-              rules={passwordCheckOptions}
-              render={({ field, fieldState: { error } }) => (
-                <Input
-                  id="newPasswordCheck"
-                  label="새 비밀번호 확인"
-                  type="password"
-                  errorMessage={error?.message}
-                  onChange={field.onChange}
-                  value={field.value || ''}
-                  style={{ marginTop: '10px' }}
-                />
-              )}
-            />
-            <Button text={'적용'} style={{ marginTop: '10px' }} />
-          </Form>
-          <DeleteProfileLink
-            onClick={() => {
-              setIsModal(true);
-            }}
-          >
-            회원 탈퇴하기
-          </DeleteProfileLink>
-        </Container>
+          ) : null}
+          <Container>
+            <Title src={EditProfileTitle} alt="타이틀" />
+            <Form onSubmit={handleSubmit(onSubmit, onError)}>
+              <Image src={ProfileImage} alt="프로필사진" />
+              <Email>{loginUser.email}</Email>
+              <Controller
+                name={'nickname'}
+                control={control}
+                rules={nicknameOptions}
+                render={({ field, fieldState: { error } }) => (
+                  <Input
+                    id="nickname"
+                    label="닉네임"
+                    type="text"
+                    errorMessage={error?.message}
+                    onChange={field.onChange}
+                    value={field.value || ''}
+                    style={{ marginTop: '10px' }}
+                  />
+                )}
+              />
+              <Controller
+                name={'newPassword'}
+                control={control}
+                rules={passwordOptions}
+                render={({ field, fieldState: { error } }) => (
+                  <Input
+                    id="newPassword"
+                    label="새 비밀번호"
+                    type="password"
+                    errorMessage={error?.message}
+                    onChange={field.onChange}
+                    value={field.value || ''}
+                    style={{ marginTop: '10px' }}
+                  />
+                )}
+              />
+              <Controller
+                name={'newPasswordCheck'}
+                control={control}
+                rules={passwordCheckOptions}
+                render={({ field, fieldState: { error } }) => (
+                  <Input
+                    id="newPasswordCheck"
+                    label="새 비밀번호 확인"
+                    type="password"
+                    errorMessage={error?.message}
+                    onChange={field.onChange}
+                    value={field.value || ''}
+                    style={{ marginTop: '10px' }}
+                  />
+                )}
+              />
+              <Button text={'적용'} style={{ marginTop: '10px' }} />
+            </Form>
+            <DeleteProfileLink
+              onClick={() => {
+                setIsModal(true);
+              }}
+            >
+              회원 탈퇴하기
+            </DeleteProfileLink>
+          </Container>
+        </>
       )}
       {isModal && (
         <>

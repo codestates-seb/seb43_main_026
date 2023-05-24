@@ -124,9 +124,7 @@ const Record = ({ isShareCalendar }) => {
         <Attendance>
           <Name>장소</Name>
           <Rate>
-            {todayData.length > 0
-              ? `${todayData[0].location} 시간`
-              : '기록 없음'}
+            {todayData.length > 0 ? `${todayData[0].location}` : '기록 없음'}
           </Rate>
         </Attendance>
       )}

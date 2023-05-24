@@ -7,7 +7,6 @@ import { COLOR, SIZE } from '../../style/theme';
 // styled-component
 const UploadContainer = styled.div`
   width: 100%;
-  /* height: 340px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -68,8 +67,6 @@ const DropZoneContainer = styled.div`
     }
   }
 `;
-
-// component
 
 const ImageUpload = ({
   imageUrl,

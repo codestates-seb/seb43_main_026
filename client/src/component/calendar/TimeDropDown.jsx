@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import { SIZE } from '../../style/theme';
 import { useState } from 'react';
 
-// styled-component
-// dropdown
 const DropdownContainer = styled.ul`
   position: relative;
   margin-left: 18px;
@@ -112,14 +110,11 @@ const TimeDropDownContainer = styled.section`
   }
 `;
 
-// component
-// dropdown
 const Dropdown = ({ times, timeValue, setTimeValue }) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleDropdown = (e) => {
     setTimeValue(e.target.value);
-    console.log(timeValue);
     setShowDropdown(!showDropdown);
   };
   return (
@@ -150,6 +145,7 @@ const Dropdown = ({ times, timeValue, setTimeValue }) => {
 
 const TimeDropDown = ({ ...swimTimeProps }) => {
   const { startTime, setStartTime, endTime, setEndTime } = swimTimeProps;
+
   // 00시 부터 24시까지의 시간
   // 25개의 빈 배열을 만들어 안에 요소를 넣음
   const hours = [...Array(25).keys()].map((h) => {

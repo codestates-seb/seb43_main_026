@@ -20,9 +20,8 @@ const LoadingSpinner = styled.div`
   height: 220px;
   display: inline-block;
   overflow: hidden;
-  /* background: #ffffff; */
 
-  @keyframes ldio-wr8k7g4l3sh {
+  @keyframes loading {
     0% {
       opacity: 1;
       backface-visibility: hidden;
@@ -40,7 +39,7 @@ const LoadingSpinner = styled.div`
     height: 19.7px;
     border-radius: 50%;
     background: #85b6ff;
-    animation: ldio-wr8k7g4l3sh 1.639344262295082s linear infinite;
+    animation: loading 1.639344262295082s linear infinite;
   }
   section div:nth-child(1) > div {
     left: 169.5px;

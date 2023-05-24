@@ -44,6 +44,7 @@ const CalendarSaveButtonContainer = styled.button`
   font-weight: 600;
   color: ${COLOR.main_dark_blue};
   cursor: pointer;
+  letter-spacing: 2px;
   @media screen and (min-width: ${SIZE.tablet}) {
     font-size: 20px;
   }
@@ -79,6 +80,12 @@ const InputDateContainer = styled.div`
     border-radius: 25px;
     background-color: ${COLOR.main_blue};
   }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    > span {
+      font-size: 20px;
+      margin-right: 30px;
+    }
+  }
 `;
 
 const InputPlaceContainer = styled.div`
@@ -103,6 +110,12 @@ const InputPlaceContainer = styled.div`
       outline: none;
     }
   }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    > span {
+      font-size: 20px;
+      margin-right: 30px;
+    }
+  }
 `;
 
 const SwimTimeContainer = styled.div`
@@ -122,6 +135,9 @@ const SwimTimeContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     margin-top: 50px;
+    > span {
+      font-size: 20px;
+    }
   }
 `;
 
@@ -144,10 +160,20 @@ const InputMemoContainer = styled.div`
     border-radius: 10px;
     box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
     background-color: ${COLOR.bg_light_blue};
-    padding: 10px;
+    padding: 10px 20px;
     font-size: 14px;
     :focus {
       outline: 2px solid ${COLOR.main_blue};
+    }
+  }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    > span {
+      font-size: 20px;
+    }
+    > textarea {
+      margin-right: 0px;
+      padding: 20px 20px 10px;
+      font-size: 18px;
     }
   }
 `;

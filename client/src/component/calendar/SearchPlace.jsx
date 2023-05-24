@@ -103,8 +103,12 @@ const SearchPlaceModal = styled.div`
 `;
 
 const MapModal = styled.div`
-  width: 300px;
-  height: 400px;
+  width: 260px;
+  height: 350px;
+  @media screen and (min-width: ${SIZE.tablet}) {
+    width: 300px;
+    height: 350px;
+  }
 `;
 
 const SearchPlaceContainer = styled.div`

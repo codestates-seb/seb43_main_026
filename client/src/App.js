@@ -40,87 +40,29 @@ function App() {
     setNav(!nav);
   };
 
-  // useEffect(() => {
-  //   const checkLoginStatus = async () => {
-  //     const memberId = localStorage.getItem('memberId');
-  //     if (memberId) {
-  //       try {
-  //         const loggedIn = await userAPI.isLogin();
-  //         if (loggedIn) {
-  //           // 로그인 상태 처리
-  //           setLoginUser(loggedIn);
-  //         } else {
-  //           // 비로그인 상태 처리
-  //           const refresh = await userAPI.refresh();
-  //           if (refresh.status === 401) {
-  //             // 리프래시 토큰도 만료됨
-  //             navigate('/login');
-  //           } else if (refresh.status === 201) {
-  //             // 액세스 토큰 갱신 성공
-  //             const newAccessToken = refresh.data.accessToken;
-  //             userAPI.setAccessToken(newAccessToken);
-
-  //             // 유저 정보 다시 요청
-  //             const loggedIn = await userAPI.isLogin();
-  //             setLoginUser(loggedIn);
-  //           }
-  //         }
-  //       } catch (error) {
-  //         // isLogin 함수 실행 중 에러 발생
-  //         console.log('isLogin 함수 실행 중 에러:', error);
-  //         // refresh 함수 실행
-  //         const refresh = await userAPI.refresh();
-  //         if (refresh.status === 401) {
-  //           // 리프래시 토큰도 만료됨
-  //           navigate('/login');
-  //         } else if (refresh.status === 201) {
-  //           // 액세스 토큰 갱신 성공
-  //           const newAccessToken = refresh.data.accessToken;
-  //           userAPI.setAccessToken(newAccessToken);
-
-  //           // 유저 정보 다시 요청
-  //           const loggedIn = await userAPI.isLogin();
-  //           setLoginUser(loggedIn);
-  //         }
-  //       }
-  //     }
-  //   };
-  //   checkLoginStatus();
-  // }, []);
-
   useEffect(() => {
     const checkLoginStatus = async () => {
-      const memberId = localStorage.getItem('memberId');
-      if (memberId) {
-        try {
-          const loggedIn = await userAPI.isLogin();
-          if (loggedIn) {
-            // 로그인 상태 처리
-            setLoginUser(loggedIn);
-          }
-        } catch (error) {
-          const refresh = await userAPI.refresh();
-          console.log(refresh, '갱신된 토큰 나와주세요!!!!!');
-          if (refresh && refresh.status === 401) {
-            // 리프래시 토큰도 만료됨
-            userAPI.logout();
-            navigate('/login');
-          }
-        }
-        // const loggedIn = await userAPI.isLogin();
-        // if (loggedIn) {
-        //   // 로그인 상태 처리
-        //   setLoginUser(loggedIn);
-        // } else {
-        //   // 비로그인 상태 처리
-        //   const refresh = await userAPI.refresh();
-        //   console.log(refresh);
-        //   if (refresh && refresh.status === 401) {
-        //     // 리프래시 토큰도 만료됨
-        //     userAPI.logout();
-        //     navigate('/login');
-        //   }
-        // }
+      const expires = localStorage.getItem('expires');
+      const currentTime = new Date();
+      if (expires && new Date(expires) <= currentTime) {
+        await userAPI
+          .refresh()
+          .then(async (res) => {
+            if (res.status === 201) {
+              localStorage.setItem('accessToken', res.headers.authorization);
+              localStorage.setItem('expires', res.headers.authexpiration);
+              const user = await userAPI.isLogin();
+              setLoginUser(user);
+            } else {
+              userAPI.logout();
+              navigate('/login');
+            }
+          })
+          .catch((err) => console.log(err));
+      } else if (expires) {
+        await userAPI.isLogin().then((res) => {
+          setLoginUser(res);
+        });
       }
     };
 

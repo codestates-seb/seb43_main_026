@@ -12,15 +12,18 @@ import com.codestates.exception.ExceptionCode;
 import com.codestates.member.entity.Member;
 import com.codestates.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -195,69 +198,37 @@ public class BoardService {
 
         board.setBoardLike(boardLikeRepository.findByBoard(board));
     }
-  
 
 
-    public List<Board> findBoardsSortedByLike(){
-        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "boardLike"));
 
+    public Page<Board> getGeneralSortedBoards(PageRequest pageRequest, String orderBy) {
+        return boardRepository.findAll(getPageableWithSort(pageRequest, orderBy));
     }
 
-    public List<Board> findBoardsSortedByComments(){
-
-        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "commentCount"));
+    public Page<Board> getBoardsWithCheckbox(boolean calendarShare, PageRequest pageRequest, String orderBy) {
+        return calendarShare ? boardRepository.findAllByCalendarShareTrue(getPageableWithSort(pageRequest, orderBy))
+                : boardRepository.findAllByCalendarShareFalse(getPageableWithSort(pageRequest, orderBy));
     }
 
-    public List<Board> findBoardsSortedByLatest(){
-        return boardRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+    private Pageable getPageableWithSort(PageRequest pageRequest, String orderBy) {
+        Sort sort = getSort(orderBy);
+        return PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), sort);
     }
 
-    public List<Board> findBoardsSortedByOldest(){
-        return boardRepository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
-    }
-
-
-    public List<Board> getGeneralSortedBoards(String orderBy){
+    private Sort getSort(String orderBy) {
         if(orderBy == null || orderBy.equalsIgnoreCase("latest")){
-            return findBoardsSortedByLatest();
+            return Sort.by(Sort.Direction.DESC, "createdAt");
         } else if (orderBy.equalsIgnoreCase("oldest")){
-            return findBoardsSortedByOldest();
+            return Sort.by(Sort.Direction.ASC, "createdAt");
         } else if (orderBy.equalsIgnoreCase("boardLike")){
-            return findBoardsSortedByLike();
+            return Sort.by(Sort.Direction.DESC, "boardLike");
         } else if (orderBy.equalsIgnoreCase("comments")){
-            return findBoardsSortedByComments();
+            return Sort.by(Sort.Direction.DESC, "commentCount");
         } else {
             throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
         }
     }
 
-
-    public List<Board> getBoardsWithCheckbox(boolean calendarShare, String orderBy) {
-        return getCheckboxSortedBoards(calendarShare, orderBy);
-    }
-
-    private List<Board> getCheckboxSortedBoards(boolean checkBoxValue, String orderBy) {
-        if (orderBy == null || orderBy.equalsIgnoreCase("latest")){
-            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "createdAt"))
-                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC, "createdAt"));
-        }
-        else if (orderBy.equalsIgnoreCase("oldest")){
-            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.ASC, "createdAt"))
-                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.ASC,"createdAt"));
-        }
-        else if (orderBy.equalsIgnoreCase("boardLike")){
-            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "boardLike"))
-                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC, "boardLike"));
-        }
-        else if (orderBy.equalsIgnoreCase("comments")){
-            return checkBoxValue ? boardRepository.findAllByCalendarShareTrue(Sort.by(Sort.Direction.DESC, "commentCount"))
-                                 : boardRepository.findAllByCalendarShareFalse(Sort.by(Sort.Direction.DESC, "commentCount"));
-        }
-        else {
-            throw new BusinessLogicException(ExceptionCode.INVALID_ORDER_BY_PARAMETER);
-        }
-
-    }
 
     //현재 로그인한 회원 정보 가지고오기
     private Member getCurrentMember() {

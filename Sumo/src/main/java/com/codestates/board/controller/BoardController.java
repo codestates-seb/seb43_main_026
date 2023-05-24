@@ -8,6 +8,8 @@ import com.codestates.board.dto.BoardResponseDto;
 import com.codestates.board.entity.Board;
 import com.codestates.board.mapper.BoardMapper;
 import com.codestates.board.service.BoardService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -102,19 +104,17 @@ public class BoardController {
                                     @Positive @RequestParam int size,
                                     @RequestParam(required = false) String orderBy,
                                     @RequestParam(required = false) Boolean calendarShare) {
-        List<Board> boards;
 
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        Page<Board> boards;
 
         if(calendarShare == null) {
-            boards = boardService.getGeneralSortedBoards(orderBy);
-        } else if (calendarShare) {
-            boards = boardService.getBoardsWithCheckbox(true, orderBy);
+            boards = boardService.getGeneralSortedBoards(pageRequest, orderBy);
         } else {
-            boards = boardService.getBoardsWithCheckbox(false, orderBy);
+            boards = boardService.getBoardsWithCheckbox(calendarShare, pageRequest, orderBy);
         }
 
-
-        List<BoardResponseDto> responses = boards.stream()
+        List<BoardResponseDto> responses = boards.getContent().stream()
                 .map(boardMapper::boardToBoardPagingResponseDto)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(responses, HttpStatus.OK);

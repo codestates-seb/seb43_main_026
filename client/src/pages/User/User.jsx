@@ -1,11 +1,15 @@
 import styled from 'styled-components';
+import Pagination from 'react-js-pagination';
 import { useNavigate } from 'react-router';
-import { COLOR } from '../../style/theme';
-import Button from '../../component/common/Button';
-import ProfileImage from '../../assets/image/headalee.png';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-// const SERVER_URL = process.env.REACT_APP_API_URL;
+import ProfileImage from '../../assets/image/headalee.png';
+import { COLOR } from '../../style/theme';
+import { FaHeart } from 'react-icons/fa';
+import { BiComment } from 'react-icons/bi';
+
+import Button from '../../component/common/Button';
 
 const Container = styled.div`
   width: 100vw;
@@ -62,20 +66,163 @@ const ExerciseTime = styled.span`
 
 const UserCalendarList = styled.ul`
   width: 100%;
-  height: 100%;
+  height: 200vh;
   background-color: white;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    li:first-child,
+    li:last-child {
+      display: none;
+    }
+
+    li {
+      font-weight: 500;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: transparent;
+      color: ${COLOR.main_dark_blue};
+      margin: 0 2px;
+      padding: 5px;
+    }
+    li.active {
+      background-color: ${COLOR.main_blue};
+      color: ${COLOR.bg};
+    }
+  }
 `;
 
-const Title = styled.h1`
+const MainTitle = styled.h1`
   width: 100%;
   padding-bottom: 1rem;
   border-bottom: 1px solid ${COLOR.main_blue};
 `;
 
+const Lists = styled.ul`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+`;
+
+const NoList = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+`;
+
+const Item = styled.li`
+  margin-top: 13px;
+  padding: 0 1.5%;
+  display: flex;
+  flex-direction: column;
+`;
+const Image = styled.div`
+  width: 180px;
+  height: 288px;
+  overflow: hidden;
+  border-radius: 5px;
+  background-color: ${COLOR.bg};
+  @media screen and (max-width: 385px) {
+    width: 320px;
+    height: 200px;
+  }
+  img {
+    width: 180px;
+    height: 288px;
+    object-fit: cover;
+    @media screen and (max-width: 385px) {
+      width: 320px;
+      height: 200px;
+    }
+  }
+  img:hover {
+    opacity: 0.8;
+  }
+`;
+const Info = styled.div`
+  margin: 5px 0px;
+  width: 177px;
+  display: flex;
+  justify-content: space-between;
+  @media screen and (max-width: 385px) {
+    width: 320px;
+  }
+`;
+
+const Title = styled.h2`
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const Reaction = styled.div`
+  display: flex;
+  span {
+    font-size: 13px;
+    color: ${COLOR.font_comment};
+  }
+  div {
+    margin-right: 4px;
+  }
+`;
+
+const Like = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    line-height: 20px;
+  }
+`;
+
+const HeartIcon = styled(FaHeart)`
+  margin-right: 2px;
+  color: ${COLOR.main_dark_blue};
+`;
+
+const Comment = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    line-height: 20px;
+  }
+`;
+
+const CommentIcon = styled(BiComment)`
+  margin-right: 2px;
+  transform: scaleX(-1);
+  color: ${COLOR.main_dark_blue};
+`;
+
 const User = ({ loginUser }) => {
   const navigate = useNavigate();
   console.log(loginUser);
+
+  const [boards, setBoards] = useState([]);
+  const [currentBoards, setCurrentBoards] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  const [postPerPage] = useState(6);
+  const indexOfLast = currentPage * postPerPage; // 현재 페이지의 마지막 아이템 인덱스
+  const indexOfFirst = indexOfLast - postPerPage; // 현재 페이지의 첫번째 아이템 인덱스
 
   useEffect(() => {
     if (!loginUser) {
@@ -83,6 +230,11 @@ const User = ({ loginUser }) => {
     }
   }, [loginUser]);
 
+  useEffect(() => {
+    setBoards([...loginUser.boards].reverse());
+    setCurrentBoards(boards.slice(indexOfFirst, indexOfLast));
+  }, [indexOfFirst, indexOfLast]);
+  console.log(currentBoards);
   return (
     loginUser && (
       <Container>
@@ -104,7 +256,44 @@ const User = ({ loginUser }) => {
           </UserInfo>
         </UserProfile>
         <UserCalendarList>
-          <Title>🗓️ 내가 자랑한 캘린더</Title>
+          <MainTitle>🗓️ 내가 작성한 게시글</MainTitle>
+          <Lists>
+            {boards.length === 0 ? (
+              <NoList>작성한 게시글이 없습니다.</NoList>
+            ) : (
+              currentBoards.map((board) => (
+                <Item key={board.boardId}>
+                  <Link to={`/board/${board.boardId}`}>
+                    <Image>
+                      <img src={board.boardImageAddress} alt="캘린더 이미지" />
+                    </Image>
+                    <Info>
+                      <Title>{board.title}</Title>
+                      <Reaction>
+                        <Like>
+                          <HeartIcon size={15} />
+                          <span>{board.boardLikeCount}</span>
+                        </Like>
+                        <Comment>
+                          <CommentIcon size={15} />
+                          <span>{board.commentCount}</span>
+                        </Comment>
+                      </Reaction>
+                    </Info>
+                  </Link>
+                </Item>
+              ))
+            )}
+          </Lists>
+          <Pagination
+            totalItemsCount={boards.length}
+            activePage={currentPage}
+            postPerPage={postPerPage}
+            pageRangeDisplayed={5}
+            prevPageText={'<'}
+            nextPageText={'>'}
+            onChange={handlePageChange}
+          />
         </UserCalendarList>
       </Container>
     )

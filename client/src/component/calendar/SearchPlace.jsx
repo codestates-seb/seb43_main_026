@@ -160,13 +160,16 @@ const SearchMap = ({ place, setPlace }) => {
 
     const callback = function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
-        // 여기서 필터링하여 원하는 카테고리만 선택할 수 있습니다.
         const filteredResult = result.filter(
           (item) => item.category_name === '스포츠,레저 > 수영,수상 > 수영장'
         );
         setMarkers(filteredResult);
         if (filteredResult.length > 0) {
           setInfo(filteredResult[0]);
+        }
+        setMarkers(result);
+        if (result.length > 0) {
+          setInfo(result[0]);
         }
       }
     };

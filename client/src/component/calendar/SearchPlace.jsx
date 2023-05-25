@@ -44,9 +44,10 @@ const MapContainer = styled.div`
     margin-bottom: 30px;
     font-size: 18px;
     font-weight: 700;
-    color: black;
+    color: ${COLOR.main_dark_blue};
     border-bottom: 2px dashed ${COLOR.main_dark_blue};
-    padding-bottom: 5px;
+    padding: 8px 4px 5px;
+    background-color: #fff;
   }
   button {
     border: none;
@@ -141,10 +142,6 @@ const SearchMap = ({ place, setPlace }) => {
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
-  }, []);
-
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -154,6 +151,27 @@ const SearchMap = ({ place, setPlace }) => {
   const successHandler = (response) => {
     const { latitude, longitude } = response.coords;
     setLocation({ latitude, longitude });
+    const ps = new kakao.maps.services.Places();
+
+    const options = {
+      location: new kakao.maps.LatLng(latitude, longitude),
+      radius: 5000, // 0.5km 반경 내 검색
+    };
+
+    const callback = function (result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        // 여기서 필터링하여 원하는 카테고리만 선택할 수 있습니다.
+        const filteredResult = result.filter(
+          (item) => item.category_name === '스포츠,레저 > 수영,수상 > 수영장'
+        );
+        setMarkers(filteredResult);
+        if (filteredResult.length > 0) {
+          setInfo(filteredResult[0]);
+        }
+      }
+    };
+
+    ps.keywordSearch('수영장', callback, options);
   };
 
   const errorHandler = (error) => {
@@ -168,11 +186,22 @@ const SearchMap = ({ place, setPlace }) => {
         setMarkers(result);
       }
     };
-    ps.keywordSearch(place, callback);
+    // 현재 위치 기반으로 "스포츠,레저 > 수영,수상 > 수영장" 카테고리 검색
+    if (place && location) {
+      // 키워드 검색
+      const options = {
+        location: new kakao.maps.LatLng(location.latitude, location.longitude),
+      };
+      ps.keywordSearch(place, callback, options);
+    }
   }, [map, place, kakao.maps.services.Places, kakao.maps.services.Status.OK]);
 
   useEffect(() => {
-    if (map) {
+    navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
+  }, []);
+
+  useEffect(() => {
+    if (map && location) {
       handleSearch();
     }
   }, [map, handleSearch]);
@@ -185,6 +214,16 @@ const SearchMap = ({ place, setPlace }) => {
   const handlePlace = (e) => {
     setPlace(e.target.value);
   };
+
+  useEffect(() => {
+    if (markers.length > 0) {
+      setInfo(markers[0]);
+      setCurrentLocation({
+        lat: Number(markers[0].y),
+        lng: Number(markers[0].x),
+      });
+    }
+  }, [markers]);
 
   return (
     <MapContainer>

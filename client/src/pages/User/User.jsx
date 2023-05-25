@@ -212,7 +212,6 @@ const CommentIcon = styled(BiComment)`
 
 const User = ({ loginUser }) => {
   const navigate = useNavigate();
-  console.log(loginUser);
 
   const [boards, setBoards] = useState([]);
   const [currentBoards, setCurrentBoards] = useState([]);

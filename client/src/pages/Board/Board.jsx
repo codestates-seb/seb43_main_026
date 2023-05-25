@@ -248,7 +248,6 @@ const Board = () => {
           },
         }
       );
-      console.log(response.data);
       setPosts(response.data);
     } catch (error) {
       console.log(error);
@@ -274,8 +273,6 @@ const Board = () => {
           },
         }
       );
-
-      console.log(response.data);
       setPosts(response.data);
     } catch (error) {
       console.log(error);

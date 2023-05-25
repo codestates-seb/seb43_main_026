@@ -191,11 +191,6 @@ const BoardEdit = () => {
   const [workoutLocation, setWorkoutLocation] = useState('');
   const [attendance, setAttendance] = useState(0);
 
-  console.log(totalWorkoutTime);
-  console.log(todayWorkoutTime);
-  console.log(workoutLocation);
-  console.log(attendance);
-
   const {
     register,
     handleSubmit,
@@ -243,17 +238,12 @@ const BoardEdit = () => {
         formData.append('image', imageData.get('image'));
       }
 
-      const response = await axios.patch(
-        `${API_URL}/boards/${boardId}`,
-        formData,
-        {
-          headers: {
-            Authorization: `${localStorage.getItem('accessToken')}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-      console.log(response.data);
+      await axios.patch(`${API_URL}/boards/${boardId}`, formData, {
+        headers: {
+          Authorization: `${localStorage.getItem('accessToken')}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       fetchPostData(); // 이동 후 다시 데이터 가져오기
       navigate(`/board/${boardId}`);
@@ -265,10 +255,6 @@ const BoardEdit = () => {
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
-
-  useEffect(() => {
-    console.log(imageData.get('image'));
-  }, [imageData]);
 
   useEffect(() => {
     if (post) {

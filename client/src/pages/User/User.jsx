@@ -217,24 +217,25 @@ const User = ({ loginUser }) => {
   const [boards, setBoards] = useState([]);
   const [currentBoards, setCurrentBoards] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-  const [postPerPage] = useState(6);
-  const indexOfLast = currentPage * postPerPage; // 현재 페이지의 마지막 아이템 인덱스
-  const indexOfFirst = indexOfLast - postPerPage; // 현재 페이지의 첫번째 아이템 인덱스
+
+  const postPerPage = 6;
 
   useEffect(() => {
     if (!loginUser) {
       navigate('/login');
+    } else {
+      setBoards([...loginUser.boards]);
     }
-  }, [loginUser]);
+  }, [loginUser, navigate]);
 
   useEffect(() => {
-    setBoards([...loginUser.boards].reverse());
+    const indexOfLast = currentPage * postPerPage; // 현재 페이지의 마지막 아이템 인덱스
+    const indexOfFirst = indexOfLast - postPerPage; // 현재 페이지의 첫번째 아이템 인덱스
     setCurrentBoards(boards.slice(indexOfFirst, indexOfLast));
-  }, [indexOfFirst, indexOfLast]);
-  console.log(currentBoards);
+  }, [boards, currentPage, postPerPage]);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   return (
     loginUser && (
       <Container>
@@ -285,15 +286,20 @@ const User = ({ loginUser }) => {
               ))
             )}
           </Lists>
-          <Pagination
-            totalItemsCount={boards.length}
-            activePage={currentPage}
-            postPerPage={postPerPage}
-            pageRangeDisplayed={5}
-            prevPageText={'<'}
-            nextPageText={'>'}
-            onChange={handlePageChange}
-          />
+          {boards.length !== 0 ? (
+            <Pagination
+              totalItemsCount={boards.length}
+              activePage={currentPage}
+              itemsCountPerPage={postPerPage}
+              pageRangeDisplayed={5}
+              prevPageText="<"
+              nextPageText=">"
+              onChange={handlePageChange}
+              itemClass="page-item"
+              linkClass="page-link"
+              innerClass="pagination"
+            />
+          ) : null}
         </UserCalendarList>
       </Container>
     )

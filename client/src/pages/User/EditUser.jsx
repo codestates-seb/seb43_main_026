@@ -156,13 +156,15 @@ const EditUser = ({ loginUser, setLoginUser }) => {
         setMessage('회원정보가 변경되었습니다.');
       }
     } else if (nickname) {
-      const nicknameResponse = await userAPI.editProfile(nickname, null);
-      if (nicknameResponse.status === 409) {
-        setVisible(true);
-        setMessage('이미 사용중인 닉네임 입니다.');
-      } else if (nicknameResponse.status === 200) {
-        setVisible(true);
-        setMessage('닉네임이 변경되었습니다.');
+      if (nickname !== loginUser.nickname) {
+        const nicknameResponse = await userAPI.editProfile(nickname, null);
+        if (nicknameResponse.status === 409) {
+          setVisible(true);
+          setMessage('이미 사용중인 닉네임 입니다.');
+        } else if (nicknameResponse.status === 200) {
+          setVisible(true);
+          setMessage('닉네임이 변경되었습니다.');
+        }
       }
     } else if (newPassword) {
       const passwordResponse = await userAPI.editProfile(null, newPassword);

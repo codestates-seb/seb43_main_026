@@ -9,6 +9,52 @@ const api = axios.create(
   { withCredentials: true }
 );
 
+// api.interceptors.request.use(function (config) {
+//   const accessToken = localStorage.get('accessToken');
+
+//   if (!accessToken) {
+//     config.headers['Authorization'] = undefined;
+//     return config;
+//   }
+//   if (accessToken) {
+//     config.headers['Authorization'] = `${accessToken}`;
+//     return config;
+//   }
+// });
+
+// api.interceptors.response.use(
+//   function (response) {
+//     return response;
+//   },
+//   async function (error) {
+//     const accessToken = localStorage.get('accessToken');
+//     const refreshToken = localStorage.get('refreshToken');
+//     const originalConfig = error.config;
+
+//     if (error.response.status === 401 && !originalConfig.sent) {
+//       originalConfig.sent = true;
+
+//       try {
+//         const response = await axios.get(`/members/refresh`, {
+//           headers: {
+//             Authorization: accessToken,
+//             Refresh: refreshToken,
+//           },
+//         });
+//         const newAccessToken = response.headers.authorization;
+//         const expires = response.headers.authexpiration;
+
+//         localStorage.set('accessToken', newAccessToken);
+//         localStorage.set('expires', expires);
+//         return await api.request(originalConfig);
+//       } catch (error) {
+//         console.log('토큰 갱신 에러');
+//       }
+//     }
+//     return Promise.reject(error);
+//   }
+// );
+
 // 유저정보 관련 API
 export const userAPI = {
   //일반 로그인

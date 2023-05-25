@@ -75,8 +75,6 @@ const Record = ({
   const [calendarData, setCalendarData] = useState([]);
   const [todayData, setTodayData] = useState([]);
 
-  console.log(post);
-
   //이번 달 총 일수
   function getTotalDaysInMonth(year, month) {
     return new Date(year, month, 0).getDate();

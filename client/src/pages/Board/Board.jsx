@@ -475,14 +475,13 @@ const Board = () => {
         />
       )}
       <ListBox>
-        {isDash && (
+        {isDash ? (
           <Dash
             posts={posts}
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
           />
-        )}
-        {!isDash && posts.length === 0 ? (
+        ) : posts.length === 0 ? (
           <NoData>데이터가 없습니다</NoData>
         ) : (
           <List posts={posts} />

@@ -88,7 +88,7 @@ public class SecurityConfiguration{
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://43.200.94.136:8080","http://ec2-43-200-94-136.ap-northeast-2.compute.amazonaws.com:8080","https://seb43-main-026-soomo.s3.ap-northeast-2.amazonaws.com"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://43.200.94.136:8080","http://ec2-43-200-94-136.ap-northeast-2.compute.amazonaws.com:8080","https://seb43-main-026-soomo.s3.ap-northeast-2.amazonaws.com", "http://soomo-s3-bucket.s3-website.ap-northeast-2.amazonaws.com"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.addExposedHeader("Authorization");

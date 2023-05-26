@@ -119,9 +119,6 @@ const Dash = ({ posts, setCurrentPage, orderBy, currentPage, isDash }) => {
   const [data, setData] = useState([]);
   const sentinelRef = useRef(null);
 
-  console.log(currentPage);
-  console.log(data.length);
-
   const options = {
     root: null,
     rootMargin: '0px',
@@ -131,7 +128,12 @@ const Dash = ({ posts, setCurrentPage, orderBy, currentPage, isDash }) => {
   const observer = useRef(
     new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        if (data.length >= 10) {
+        const existingIds = data.map((item) => item.boardId);
+        const newPosts = posts.filter(
+          (post) => !existingIds.includes(post.boardId)
+        );
+
+        if (newPosts.length > 0) {
           setCurrentPage((prev) => prev + 1);
         }
       }
@@ -168,7 +170,7 @@ const Dash = ({ posts, setCurrentPage, orderBy, currentPage, isDash }) => {
   }, [orderBy]);
 
   useEffect(() => {
-    setData([...posts]);
+    setData((prevData) => [...prevData, ...posts]);
   }, [isDash]);
 
   return (

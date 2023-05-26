@@ -115,9 +115,12 @@ const NoData = styled.span`
   font-size: 20px;
 `;
 
-const Dash = ({ posts, setCurrentPage, orderBy }) => {
+const Dash = ({ posts, setCurrentPage, orderBy, currentPage, isDash }) => {
   const [data, setData] = useState([]);
   const sentinelRef = useRef(null);
+
+  console.log(currentPage);
+  console.log(data.length);
 
   const options = {
     root: null,
@@ -128,7 +131,9 @@ const Dash = ({ posts, setCurrentPage, orderBy }) => {
   const observer = useRef(
     new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        setCurrentPage((prev) => prev + 1);
+        if (data.length >= 10) {
+          setCurrentPage((prev) => prev + 1);
+        }
       }
     }, options)
   );
@@ -150,39 +155,56 @@ const Dash = ({ posts, setCurrentPage, orderBy }) => {
     const newPosts = posts.filter(
       (post) => !existingIds.includes(post.boardId)
     );
-    setData((prevData) => [...prevData, ...newPosts]);
-  }, [posts, orderBy]);
+    if (orderBy === 'latest') {
+      setData((prevData) => [...newPosts, ...prevData]);
+    } else {
+      setData((prevData) => [...prevData, ...newPosts]);
+    }
+  }, [posts, orderBy, currentPage]);
+
+  useEffect(() => {
+    setData([]);
+    setCurrentPage(1);
+  }, [orderBy]);
+
+  useEffect(() => {
+    setData([...posts]);
+  }, [isDash]);
 
   return (
-    <Container>
-      {data.length ? (
-        data.map((post) => (
-          <Item key={post.boardId}>
-            <Link to={`/board/${post.boardId}`}>
-              <Image>
-                <img src={post.boardImageAddress} alt="캘린더 이미지" />
-              </Image>
-              <Info>
-                <Title>{post.title}</Title>
-                <Reaction>
-                  <Like>
-                    <HeartIcon size={15} />
-                    <span>{post.boardLikeCount}</span>
-                  </Like>
-                  <Comment>
-                    <CommentIcon size={15} />
-                    <span>{post.commentCount}</span>
-                  </Comment>
-                </Reaction>
-              </Info>
-            </Link>
-          </Item>
-        ))
-      ) : (
-        <NoData>데이터가 없습니다</NoData>
-      )}
-      <EndDetect ref={sentinelRef} />
-    </Container>
+    <>
+      <Container>
+        {data.length ? (
+          data.map((post) => (
+            <Item key={post.boardId}>
+              <Link to={`/board/${post.boardId}`}>
+                <Image>
+                  <img src={post.boardImageAddress} alt="캘린더 이미지" />
+                </Image>
+                <Info>
+                  <Title>{post.title}</Title>
+                  <Reaction>
+                    <Like>
+                      <HeartIcon size={15} />
+                      <span>{post.boardLikeCount}</span>
+                    </Like>
+                    <Comment>
+                      <CommentIcon size={15} />
+                      <span>{post.commentCount}</span>
+                    </Comment>
+                  </Reaction>
+                </Info>
+              </Link>
+            </Item>
+          ))
+        ) : (
+          <NoData>
+            {posts.length > 0 ? '데이터가 없습니다' : '로딩 중...'}
+          </NoData>
+        )}
+        <EndDetect ref={sentinelRef} />
+      </Container>
+    </>
   );
 };
 

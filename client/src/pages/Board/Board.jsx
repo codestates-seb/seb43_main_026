@@ -480,6 +480,8 @@ const Board = () => {
             posts={posts}
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
+            orderBy={orderBy}
+            isDash={isDash}
           />
         ) : posts.length === 0 ? (
           <NoData>데이터가 없습니다</NoData>

@@ -1,46 +1,54 @@
-// eslint-disable-next-line import/no-unresolved
-import styled from "styled-components";
-// eslint-disable-next-line import/no-unresolved
-import { FiMenu } from "react-icons/fi";
-// eslint-disable-next-line import/no-unresolved
-import { useState } from "react";
-// eslint-disable-next-line import/no-unresolved
-import LogoImage from "../assets/images/로고.png";
+import styled from 'styled-components';
+import { FiMenu } from 'react-icons/fi';
+import LogoImage from '../assets/image/logo.png';
+import { COLOR, SIZE } from '../style/theme';
+import { useNavigate } from 'react-router';
 
-const HeaderCon = styled.header`
+const Container = styled.header`
+  z-index: 1000;
   width: 100%;
   min-width: 360px;
   height: 50px;
-  background-color: ${(props) => props.theme.color.main_blue};
-  box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.3);
-  position: fixed;
+  background-color: ${COLOR.main_blue};
+  box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 30px;
-  .logo_img {
-    width: 120px;
-    margin-top: 10px;
-    cursor: pointer;
+  padding: 0 20px 0 15px;
+  @media screen and (min-width: ${SIZE.tablet}) {
+    padding: 0 15px;
   }
+  > button {
+    width: 120px;
+    height: inherit;
+    border: none;
+    background-color: inherit;
+    > img {
+      width: 120px;
+      cursor: pointer;
+    }
+  }
+
   .nav_icon {
     cursor: pointer;
     color: white;
   }
 `;
-const Header = () => {
-  const [nav, setNav] = useState(false);
 
-  const handleNav = () => {
-    setNav(!nav);
-  };
+const Header = ({ handleNav }) => {
+  const nav = useNavigate();
 
   return (
-    <HeaderCon>
-      <img src={LogoImage} alt="로고" className="logo_img" />
+    <Container>
+      <button onClick={() => nav('/')}>
+        <img src={LogoImage} alt="로고" className="logo_img" />
+      </button>
+
       <FiMenu size={30} className="nav_icon" onClick={handleNav} />
-    </HeaderCon>
+    </Container>
   );
 };
 

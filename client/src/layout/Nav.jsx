@@ -115,9 +115,6 @@ const Nav = ({ nav, handleNav, loginUser, setLoginUser }) => {
           <MenuList to="/calendar" onClick={handleNav}>
             내 캘린더
           </MenuList>
-          <MenuList to="" onClick={handleNav}>
-            이번달 수영왕
-          </MenuList>
           <MenuList to="/board" onClick={handleNav}>
             커뮤니티
           </MenuList>

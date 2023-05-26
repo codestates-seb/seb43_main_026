@@ -248,7 +248,6 @@ const Board = () => {
           },
         }
       );
-      console.log(response.data);
       setPosts(response.data);
     } catch (error) {
       console.log(error);
@@ -274,8 +273,6 @@ const Board = () => {
           },
         }
       );
-
-      console.log(response.data);
       setPosts(response.data);
     } catch (error) {
       console.log(error);
@@ -480,6 +477,8 @@ const Board = () => {
             posts={posts}
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
+            orderBy={orderBy}
+            isDash={isDash}
           />
         ) : posts.length === 0 ? (
           <NoData>데이터가 없습니다</NoData>

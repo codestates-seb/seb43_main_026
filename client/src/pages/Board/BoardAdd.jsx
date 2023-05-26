@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { COLOR, SIZE } from '../../style/theme';
@@ -254,10 +254,6 @@ const BoardAdd = () => {
   const handleWorkoutRecordShareChange = (e) => {
     setWorkoutRecordShare(e.target.checked);
   };
-
-  useEffect(() => {
-    console.log(imageData.get('image'));
-  }, [imageData]);
 
   return (
     <Container>

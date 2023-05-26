@@ -136,24 +136,25 @@ const ToolbarContainer = styled.div`
   }
 `;
 
+const CaptureButton = styled.button`
+  height: 44px;
+  width: 44px;
+  border-radius: 50%;
+  border: none;
+  padding-top: 4px;
+  padding-left: 4.5px;
+  background-color: ${COLOR.main_blue};
+  text-align: center;
+  color: #ffff;
+  cursor: pointer;
+`;
+
 const CalendarBottomContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin: 20px;
-
-  .cal-cap {
-    height: 44px;
-    width: 44px;
-    border-radius: 50%;
-    border: none;
-    padding-top: 5px;
-    background-color: ${COLOR.main_blue};
-    text-align: center;
-    color: #ffff;
-    cursor: pointer;
-  }
 
   .cal-add-btn {
     color: ${COLOR.main_blue};
@@ -168,7 +169,9 @@ const CalendarBottomContainer = styled.div`
 const CalendarContainer = styled.div`
   width: 100%;
   background-color: #fff;
-
+  > div {
+    padding-bottom: 20px;
+  }
   .rbc-calendar {
     height: 650px;
     .rbc-month-view {
@@ -463,9 +466,9 @@ const MyCalendar = ({ loginUser, isLoginSuccess, setIsLoginSuccess }) => {
             />
           </div>
           <CalendarBottomContainer>
-            <button className="cal-cap" onClick={onCapture}>
+            <CaptureButton onClick={onCapture}>
               <TbCapture size={33} />
-            </button>
+            </CaptureButton>
             <IoMdAddCircle
               className="cal-add-btn"
               size={50}

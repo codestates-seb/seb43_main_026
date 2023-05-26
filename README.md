@@ -35,8 +35,9 @@
 <br>
 
 ## 🛠️ Tech Stack    
-
-
+<div>
+<img src="https://github.com/codestates-seb/seb43_main_026/assets/119961147/8ae2a6cc-6cc5-4252-8519-93d181a61428" width='70%' />
+</div>
 
 <br>
 

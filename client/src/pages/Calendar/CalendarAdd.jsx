@@ -65,6 +65,7 @@ const InputDateContainer = styled.div`
     font-size: 18px;
     font-weight: 600;
     text-align: center;
+    cursor: pointer;
     :focus {
       outline: none;
     }
@@ -106,6 +107,7 @@ const InputPlaceContainer = styled.div`
     font-weight: 600;
     margin-right: 10px;
     border: none;
+    cursor: pointer;
     :focus {
       outline: none;
     }

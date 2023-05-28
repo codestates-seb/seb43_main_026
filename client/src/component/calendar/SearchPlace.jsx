@@ -42,17 +42,23 @@ const MapContainer = styled.div`
   align-items: center;
   > p {
     margin-bottom: 30px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     color: ${COLOR.main_dark_blue};
     border-bottom: 2px dashed ${COLOR.main_dark_blue};
-    padding: 8px 4px 5px;
+    padding: 8px 6px 5px;
     background-color: #fff;
+    border-radius: 10px 10px 0 0;
   }
   button {
     border: none;
     background-color: inherit;
     text-align: center;
+  }
+  @media screen and (min-width: ${SIZE.tablet}) {
+    > p {
+      font-size: 18px;
+    }
   }
 `;
 
@@ -148,38 +154,38 @@ const SearchMap = ({ place, setPlace }) => {
       handleSearch();
     }
   };
-  const successHandler = (response) => {
-    const { latitude, longitude } = response.coords;
-    setLocation({ latitude, longitude });
-    const ps = new kakao.maps.services.Places();
+  // const successHandler = (response) => {
+  //   const { latitude, longitude } = response.coords;
+  //   setLocation({ latitude, longitude });
+  //   const ps = new kakao.maps.services.Places();
 
-    const options = {
-      location: new kakao.maps.LatLng(latitude, longitude),
-      radius: 5000, // 0.5km 반경 내 검색
-    };
+  //   const options = {
+  //     location: new kakao.maps.LatLng(latitude, longitude),
+  //     radius: 5000, // 0.5km 반경 내 검색
+  //   };
 
-    const callback = function (result, status) {
-      if (status === kakao.maps.services.Status.OK) {
-        const filteredResult = result.filter(
-          (item) => item.category_name === '스포츠,레저 > 수영,수상 > 수영장'
-        );
-        setMarkers(filteredResult);
-        if (filteredResult.length > 0) {
-          setInfo(filteredResult[0]);
-        }
-        setMarkers(result);
-        if (result.length > 0) {
-          setInfo(result[0]);
-        }
-      }
-    };
+  //   const callback = function (result, status) {
+  //     if (status === kakao.maps.services.Status.OK) {
+  //       const filteredResult = result.filter(
+  //         (item) => item.category_name === '스포츠,레저 > 수영,수상 > 수영장'
+  //       );
+  //       setMarkers(filteredResult);
+  //       if (filteredResult.length > 0) {
+  //         setInfo(filteredResult[0]);
+  //       }
+  //       setMarkers(result);
+  //       if (result.length > 0) {
+  //         setInfo(result[0]);
+  //       }
+  //     }
+  //   };
 
-    ps.keywordSearch('수영장', callback, options);
-  };
+  //   ps.keywordSearch('수영장', callback, options);
+  // };
 
-  const errorHandler = (error) => {
-    console.log(error);
-  };
+  // const errorHandler = (error) => {
+  //   console.log(error);
+  // };
 
   const handleSearch = useCallback(() => {
     const ps = new kakao.maps.services.Places();
@@ -200,7 +206,11 @@ const SearchMap = ({ place, setPlace }) => {
   }, [map, place, kakao.maps.services.Places, kakao.maps.services.Status.OK]);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
+    // navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
+    setLocation({
+      latitude: 37.26662467237472,
+      longitude: 126.99970405832299,
+    });
   }, []);
 
   useEffect(() => {
@@ -230,7 +240,7 @@ const SearchMap = ({ place, setPlace }) => {
 
   return (
     <MapContainer>
-      <p>💡 지역 + 수영장으로 입력해 주세요</p>
+      <p>💡 지역 + 수영장으로도 입력이 가능합니다.</p>
       <SearchBarContainer>
         <input
           type="text"

@@ -260,7 +260,7 @@ const SearchMap = ({ place, setPlace }) => {
           <Map
             center={{ lat: location.latitude, lng: location.longitude }}
             style={{ width: '100%', height: '100%' }}
-            level={7}
+            level={12}
             onLoad={(map) => setMap(map)}
           >
             {currentLocation ? (

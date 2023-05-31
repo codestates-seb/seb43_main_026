@@ -98,7 +98,9 @@ const Record = ({
     2,
     '0'
   )}-${String(currentDate.getDate()).padStart(2, '0')}`;
-  setTodayWorkoutTime(todayData.length > 0 ? todayData[0].durationTime : 0);
+  setTodayWorkoutTime(
+    todayData.length > 0 ? `${todayData[0].durationTime} 시간` : 0
+  );
   setWorkoutLocation(
     todayData.length > 0 ? `${todayData[0].location}` : '기록 없음'
   );

@@ -5,13 +5,13 @@ import ImageUpload from '../../component/common/ImageUpload';
 import { useState, useEffect } from 'react';
 // import { ko } from 'date-fns/esm/locale';
 import { COLOR, SIZE } from '../../style/theme';
-import SearchPlace from '../../component/Calendar/SearchPlace';
-import TimeDropDown from '../../component/Calendar/TimeDropDown';
-import NavToDetail from '../../component/Calendar/NavButton';
+import SearchPlace from '../../component/calendar/SearchPlace';
+import TimeDropDown from '../../component/calendar/TimeDropDown';
+import NavToDetail from '../../component/calendar/NavButton';
 // import { format } from 'date-fns';
 import { useParams } from 'react-router';
 import axios from 'axios';
-import { DoneEditModal } from '../../component/Calendar/DonePostModal';
+import { DoneEditModal } from '../../component/calendar/DonePostModal';
 import { WarningToast } from '../../component/common/WarningToast';
 
 // styled-component

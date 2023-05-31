@@ -295,7 +295,12 @@ const Toolbar = (props) => {
   );
 };
 
-const MyCalendar = ({ loginUser, isLoginSuccess, setIsLoginSuccess }) => {
+const MyCalendar = ({
+  loginUser,
+  isLoginSuccess,
+  setIsLoginSuccess,
+  setUserinfo,
+}) => {
   const nav = useNavigate();
   const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
   const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth() + 1);
@@ -399,6 +404,13 @@ const MyCalendar = ({ loginUser, isLoginSuccess, setIsLoginSuccess }) => {
       nav('/login');
     }
   }, []);
+
+  useEffect(() => {
+    setUserinfo({
+      totalDuration,
+      attendanceRate,
+    });
+  }, [totalDuration, attendanceRate]);
 
   useEffect(() => {
     axios

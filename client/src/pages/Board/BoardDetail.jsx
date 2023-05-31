@@ -265,7 +265,6 @@ const BoardDetail = () => {
       })
       .then((response) => {
         setPost(response.data);
-        setCommentCount(response.data.commentCount);
         setIsSamePerson(response.data.memberId === localMemberId);
       })
       .catch((error) => {

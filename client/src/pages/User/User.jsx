@@ -210,7 +210,7 @@ const CommentIcon = styled(BiComment)`
   color: ${COLOR.main_dark_blue};
 `;
 
-const User = ({ loginUser }) => {
+const User = ({ loginUser, userinfo }) => {
   const navigate = useNavigate();
 
   const [boards, setBoards] = useState([]);
@@ -242,8 +242,8 @@ const User = ({ loginUser }) => {
           <UserImage src={ProfileImage} alt="프로필 사진" />
           <UserInfo>
             <Nickname>{loginUser.nickname}</Nickname>
-            <AttendanceRate>이번달 출석률 80%</AttendanceRate>
-            <ExerciseTime>이번달 운동시간 100시간</ExerciseTime>
+            <AttendanceRate>{`이번달 출석률 ${userinfo.attendanceRate}`}</AttendanceRate>
+            <ExerciseTime>{`이번달 운동시간 ${userinfo.totalDuration}시간`}</ExerciseTime>
             <Button
               text={'프로필 설정'}
               width={'6rem'}

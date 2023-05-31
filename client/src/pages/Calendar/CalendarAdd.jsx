@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import BackButton from '../../component/common/BackButton';
 import { WarningToast } from '../../component/common/WarningToast';
 import ImageUpload from '../../component/common/ImageUpload';
-import SearchPlace from '../../component/Calendar/SearchPlace';
-import TimeDropDown from '../../component/Calendar/TimeDropDown';
-import { DonePostModal } from '../../component/Calendar/DonePostModal';
+import SearchPlace from '../../component/calendar/SearchPlace';
+import TimeDropDown from '../../component/calendar/TimeDropDown';
+import { DonePostModal } from '../../component/calendar/DonePostModal';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/esm/locale';
@@ -65,7 +65,6 @@ const InputDateContainer = styled.div`
     font-size: 18px;
     font-weight: 600;
     text-align: center;
-    cursor: pointer;
     :focus {
       outline: none;
     }
@@ -107,7 +106,6 @@ const InputPlaceContainer = styled.div`
     font-weight: 600;
     margin-right: 10px;
     border: none;
-    cursor: pointer;
     :focus {
       outline: none;
     }

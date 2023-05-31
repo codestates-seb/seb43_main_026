@@ -35,6 +35,7 @@ function App() {
   const [loginUser, setLoginUser] = useState();
   const [isSignupSuccess, setIsSignupSuccess] = useState(false);
   const [isLoginSuccess, setIsLoginSuccess] = useState(false);
+  const [userinfo, setUserinfo] = useState({});
 
   const handleNav = () => {
     setNav(!nav);
@@ -89,6 +90,7 @@ function App() {
               loginUser={loginUser}
               isLoginSuccess={isLoginSuccess}
               setIsLoginSuccess={setIsLoginSuccess}
+              setUserinfo={setUserinfo}
             />
           }
         />
@@ -121,7 +123,10 @@ function App() {
             />
           }
         />
-        <Route path="/users/:id" element={<User loginUser={loginUser} />} />
+        <Route
+          path="/users/:id"
+          element={<User loginUser={loginUser} userinfo={userinfo} />}
+        />
         <Route
           path="/edit/profile"
           element={

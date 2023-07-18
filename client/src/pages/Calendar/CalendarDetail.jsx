@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { SIZE, COLOR } from '../../style/theme';
-import NavToDetail from '../../component/calendar/NavButton';
-import CalendarDeleteModal from '../../component/calendar/CalendarDetailComponent/CalendarDeleteModal';
+import NavToDetail from '../../component/Calendar/NavButton';
+import CalendarDeleteModal from '../../component/Calendar/CalendarDetailComponent/CalendarDeleteModal';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import axios from 'axios';

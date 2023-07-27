@@ -212,7 +212,7 @@ const NoData = styled.span`
 
 const Board = () => {
   const [posts, setPosts] = useState([]);
-  const [isDash, setIsDash] = useState(true);
+  const [isDash, setIsDash] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [orderBy, setOrderBy] = useState('latest');

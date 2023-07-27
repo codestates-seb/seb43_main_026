@@ -4,7 +4,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import html2canvas from 'html2canvas';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 //아이콘
@@ -357,23 +357,10 @@ const MyCalendar = ({
     }
   };
 
+  const calMainElement = useRef(null);
   const onCapture = async () => {
-    const calMainElement = document.getElementById('calMain');
-    const images = calMainElement.getElementsByTagName('img');
-
-    // 이미지 로드를 기다리기 위한 Promise 배열 생성
-    const imagePromises = Array.from(images).map((image) => {
-      return new Promise((resolve, reject) => {
-        image.onload = () => resolve();
-        image.onerror = () => reject();
-      });
-    });
-
     try {
-      // 이미지 로딩이 완료될 때까지 기다림
-      await Promise.all(imagePromises);
-      // 이미지 로딩이 완료된 후에 캡처 수행
-      const canvas = await html2canvas(calMainElement, {
+      const canvas = await html2canvas(calMainElement.current, {
         useCORS: true, // CORS 에러 우회
         allowTaint: true,
       });
@@ -382,7 +369,7 @@ const MyCalendar = ({
       await onSave(canvas.toDataURL(), 'calendar_capture.png');
       document.body.removeChild(canvas);
     } catch (error) {
-      console.error('Image loading error:', error);
+      console.error('캘린더 캡쳐 실패:', error);
     }
   };
 
@@ -451,7 +438,7 @@ const MyCalendar = ({
       ) : null}
       <MyCalendarContainer>
         <CalendarContainer>
-          <div id="calMain">
+          <div ref={calMainElement}>
             <Calendar
               localizer={localizer}
               views={['month']}
@@ -474,7 +461,6 @@ const MyCalendar = ({
                 },
               })}
               onSelectEvent={(event) => handleSelectEvent(event)}
-              // onSelectSlot={(slotInfo) => handleSelectEvent(slotInfo)}
             />
           </div>
           <CalendarBottomContainer>

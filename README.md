@@ -9,7 +9,7 @@
  `팀 명` : 세상에 나쁜 코드는 없다 (세나코) <br>
  `프로젝트명` : 수모 : SooMo  <br>
  `프로젝트 기간` : 2023.04.28 - 2023.05.25  <br>
- `배포 링크` : [수모 : SooMo](http://soo-mo.s3-website.ap-northeast-2.amazonaws.com/)
+ `배포 링크` : ~~[수모 : SooMo](http://soo-mo.s3-website.ap-northeast-2.amazonaws.com/)~~ -> 서비스 종료 😢
  
  <br><br>
 꾸준한 수영 기록으로 나만의 특별한 캘린더를 꾸며 보세요
